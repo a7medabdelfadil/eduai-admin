@@ -1,0 +1,52 @@
+name: CD for Admin App
+
+on:
+  workflow_run:
+    workflows: ["CI for Admin App"]
+    types:
+      - completed
+
+jobs:
+  deploy:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Kubernetes CLI (kubectl)
+        run: |
+          curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+          chmod +x kubectl
+          sudo mv kubectl /usr/local/bin/
+
+      - name: Extract Git commit hash
+        id: vars
+        run: echo "COMMIT_HASH=$(echo $GITHUB_SHA | cut -c1-5)" >> $GITHUB_ENV
+
+      - name: Update Kubernetes deployment with new image tag
+        env:
+          KUBECONFIG: ${{ secrets.KUBECONFIG }}
+        run: |
+          # Create .kube directory
+          mkdir -p $HOME/.kube
+          
+          # Write the kubeconfig content to a file
+          echo "${{ secrets.KUBECONFIG }}" | base64 --decode > $HOME/.kube/config
+          
+          # Verify the kubeconfig file exists and has correct content
+          ls -la $HOME/.kube
+          
+          # Set the appropriate file permissions
+          chmod 600 $HOME/.kube/config
+          
+          # Update the Kubernetes deployment file with the new image tag
+          sed -i "s|image: expotechx/admin:.*|image: expotechx/admin:${COMMIT_HASH}|" k8s/admin-app.yaml
+          
+          # Apply the updated Kubernetes deployment
+          kubectl apply -f k8s/admin-app.yaml
+          
+          # Wait for the rollout to complete
+          kubectl rollout status deployment admin-deploy
+        shell: bash

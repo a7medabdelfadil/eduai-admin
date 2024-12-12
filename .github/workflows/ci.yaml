@@ -1,0 +1,58 @@
+name: CI for Admin App
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Cache Docker layers
+        uses: actions/cache@v3
+        with:
+          path: /tmp/.buildx-cache
+          key: ${{ runner.os }}-buildx-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-buildx-
+
+      - name: Extract Git commit hash
+        id: vars
+        run: echo "COMMIT_HASH=$(echo $GITHUB_SHA | cut -c1-5)" >> $GITHUB_ENV
+
+      - name: Build Docker image
+        run: docker build -t expotechx/admin:${{ env.COMMIT_HASH }} .
+
+      - name: Push to Docker Hub
+        env:
+          DOCKER_HUB_USERNAME: ${{ secrets.DOCKER_HUB_USERNAME }}
+          DOCKER_HUB_TOKEN: ${{ secrets.DOCKER_HUB_TOKEN }}
+        run: |
+          echo $DOCKER_HUB_TOKEN | docker login -u $DOCKER_HUB_USERNAME --password-stdin
+          docker push $DOCKER_HUB_USERNAME/admin:${{ env.COMMIT_HASH }}
+      - name: Update Kubernetes deployment with new image tag
+        run: |
+          sed -i "s|image: expotechx/admin:.*|image: expotechx/admin:${COMMIT_HASH}|" k8s/admin-app.yaml
+
+
+
+      - name: Commit and push changes
+        env:
+          GITHUB_TOKEN: ${{ secrets.TOKEN_GITHUB }}
+        run: |
+          git config --global user.name "Mahmoud-Medany"
+          git config --global user.email "mt7033706@gmail.com"
+          git add k8s/admin-app.yaml
+          git commit -m "Update deployment file with new image tag"
+          git push -f https://${{ secrets.TOKEN_GITHUB }}@github.com/M0staphaTaha/EduAI-Admin.git HEAD:main      

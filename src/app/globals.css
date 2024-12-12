@@ -1,0 +1,124 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  background-color: #f5f6fa;
+  display: grid;
+}
+
+.light {
+  --primary: #3e5af0;
+  --bg-primary: #ffffff;
+  --bg-secondary: #f5f6fa;
+  --text-primary: #041631;
+  --text-secondary: #89939e;
+  --warning: #f4bd0e;
+  --error: #e53835;
+  --success: #1ee0ac;
+  --info: #09c2de;
+  --border-primary: #d9d9d9;
+  --thead: #daeafb;
+  --black-or-white: black;
+  --chat: #ffead1;
+}
+
+.dark {
+  --primary: #566df2;
+  --bg-primary: #0d0d0d;
+  --bg-secondary: #171c23;
+  --text-primary: #cee0fb;
+  --text-secondary: #526484;
+  --warning: #f89b22;
+  --error: #eb675e;
+  --success: #1ac877;
+  --info: #34e4b5;
+  --border-primary: #2a2d32;
+  --thead: #071f3a;
+  --black-or-white: white;
+  --notification: #0f0f0f;
+  --chat: #dfbd90;
+}
+/* Chart */
+
+div.apexcharts-menu.apexcharts-menu-open {
+  background-color: var(--bg-primary);
+  border: var(--border-primary) 1px solid;
+}
+
+div.apexcharts-menu.apexcharts-menu-open > div:hover {
+  background-color: var(--bg-secondary);
+}
+
+div.apexcharts-tooltip.apexcharts-active,
+div.apexcharts-tooltip.apexcharts-active.apexcharts-tooltip-title {
+  background-color: var(--bg-primary) !important;
+  border: var(--border-primary) 1px solid;
+}
+
+div.apexcharts-tooltip-title {
+  background-color: transparent !important;
+  border: var(--border-primary) 1px solid;
+}
+
+.apexcharts-tooltip.apexcharts-theme-light .apexcharts-tooltip-title {
+  border-bottom: var(--border-primary) 1px solid !important;
+}
+
+div.apexcharts-xaxistooltip.apexcharts-xaxistooltip-bottom.apexcharts-theme-light {
+  background-color: var(--bg-primary) !important;
+  border: var(--border-primary) 1px solid !important;
+  color: var(--secondary) !important;
+}
+
+.css-13cymwt-control {
+  background-color: var(--bg-primary) !important;
+  border: 1px solid var(--border-primary) !important;
+}
+
+.css-t3ipsp-control {
+  background-color: var(--bg-primary) !important;
+}
+
+.css-1nmdiq5-menu {
+  background-color: var(--bg-primary) !important;
+}
+
+.css-1nmdiq5-menu div > div:hover {
+  background-color: var(--thead) !important;
+}
+
+.css-1nmdiq5-menu div > div {
+  background-color: var(--bg-primary) !important;
+}
+
+.editor-content ol {
+  list-style-type: decimal;
+  padding-left: 40px;
+  margin: 1em 0;
+}
+
+.editor-content ul {
+  list-style-type: disc;
+  padding-left: 40px;
+  margin: 1em 0;
+}
+
+.editor-content li {
+  margin-bottom: 0.5em;
+}
+
+.editor-content h1 {
+  font-size: 2em;
+  margin: 0.67em 0;
+}
+
+.editor-content h2 {
+  font-size: 1.5em;
+  margin: 0.75em 0;
+}
+
+.editor-content h3 {
+  font-size: 1.17em;
+  margin: 0.83em 0;
+}

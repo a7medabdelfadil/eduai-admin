@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: admin-deploy
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: admin
+  template:
+    metadata:
+      labels:
+        app: admin
+    spec:
+      containers:
+      - name: admin
+        image: expotechx/admin:1455a
+        ports:
+        - containerPort: 3000
+        resources:
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
+          requests:
+            memory: "256Mi"
+            cpu: "250m"
+
+        # Uncomment and configure environment variables if needed
+        # env:
+        # - name: NEXT_PUBLIC_API_URL
+        #   value: "http://57.152.16.89:8092"
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: admin-svc
+spec:
+  type: ClusterIP
+  ports:
+  - port: 80
+    targetPort: 3000
+  selector:
+    app: admin
