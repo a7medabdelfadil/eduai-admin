@@ -16,7 +16,7 @@ export const schoolApi = createApi({
   reducerPath: "schoolApi",
   baseQuery: fetchBaseQuery({
     baseUrl: baseUrl,
-    prepareHeaders: (headers) => {
+    prepareHeaders: headers => {
       const token = getTokenFromCookie();
 
       if (token) {
@@ -26,14 +26,14 @@ export const schoolApi = createApi({
       return headers;
     },
   }),
-  endpoints: (builder) => ({
+  endpoints: builder => ({
     // New query to get the school logo name
     getSchoolLogoName: builder.query({
       query: () => "/api/v1/school-logo/name-logo",
     }),
 
     uploadSchoolLogo: builder.mutation({
-      query: (logoFile) => {
+      query: logoFile => {
         const formData = new FormData();
         formData.append("logo", logoFile);
 
@@ -48,6 +48,6 @@ export const schoolApi = createApi({
 });
 
 export const {
-  useGetSchoolLogoNameQuery,  // Export the new query hook
+  useGetSchoolLogoNameQuery, // Export the new query hook
   useUploadSchoolLogoMutation, // Export the new mutation hook
 } = schoolApi;

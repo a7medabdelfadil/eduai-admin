@@ -5,9 +5,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import Spinner from "@/components/spinner";
 import { toast } from "react-toastify";
-import {
-  useCreateScholarshipMutation,
-} from "@/features/Financial/feesApi";
+import { useCreateScholarshipMutation } from "@/features/Financial/feesApi";
 import BreadCrumbs from "@/components/BreadCrumbs";
 import { RootState } from "@/GlobalRedux/store";
 import { useSelector } from "react-redux";
@@ -74,14 +72,17 @@ const NewScholarship = () => {
   });
   const onSubmit = async (data: any) => {
     const formData = new FormData();
-    formData.append("request", JSON.stringify({
-      studentId: data.studentId,
-      scholarshipName: data.scholarshipName,
-      scholarshipType: data.scholarshipType,
-      paidInvoices: data.paidInvoices,
-      startDate: data.startDate,
-      expirationDate: data.expirationDate,
-    }));
+    formData.append(
+      "request",
+      JSON.stringify({
+        studentId: data.studentId,
+        scholarshipName: data.scholarshipName,
+        scholarshipType: data.scholarshipType,
+        paidInvoices: data.paidInvoices,
+        startDate: data.startDate,
+        expirationDate: data.expirationDate,
+      }),
+    );
     if (data.file) {
       formData.append("file", data.file[0]);
     }
@@ -115,8 +116,8 @@ const NewScholarship = () => {
               ? "lg:mr-[100px]"
               : "lg:mr-[270px]"
             : booleanValue
-            ? "lg:ml-[100px]"
-            : "lg:ml-[270px]"
+              ? "lg:ml-[100px]"
+              : "lg:ml-[270px]"
         } mx-3 mt-[40px] grid h-[850px] items-center justify-center`}
       >
         <form onSubmit={handleSubmit(onSubmit)} encType="multipart/form-data">
@@ -126,8 +127,8 @@ const NewScholarship = () => {
                 {currentLanguage === "en"
                   ? "Scholarship Information"
                   : currentLanguage === "ar"
-                  ? "معلومات المنحة الدراسية"
-                  : "Informations sur la bourse"}
+                    ? "معلومات المنحة الدراسية"
+                    : "Informations sur la bourse"}
               </h1>
             </div>
             <div className="grid grid-cols-2 gap-4 max-[1278px]:grid-cols-1">
@@ -139,45 +140,42 @@ const NewScholarship = () => {
                 {currentLanguage === "en"
                   ? "Student ID"
                   : currentLanguage === "ar"
-                  ? "رقم الطالب"
-                  : "ID de l'étudiant"}
+                    ? "رقم الطالب"
+                    : "ID de l'étudiant"}
 
-<select                   id="studentId"
+                <select
+                  id="studentId"
                   {...register("studentId")}
-            className="h-full w-[400px] rounded-xl border px-4 py-3 text-[18px] text-black outline-none max-[458px]:w-[350px]"
-          >
-            <option value="">
-              {currentLanguage === "en"
-                ? "Select Student"
-                : currentLanguage === "ar"
-                  ? "اختر الطالب"
-                  : "Sélectionner Étudiant"}
-            </option>
-            {students?.data.content.map(
-              (student: {
-                id: string | null | undefined;
-                name:
-                  | string
-                  | number
-                  | bigint
-                  | boolean
-                  | null
-                  | undefined;
-              }) => (
-                <option key={student.id} value={student.id ?? ""}>
-                  {String(student.name)}
-                </option>
-              ),
-            )}
-          </select>
+                  className="h-full w-[400px] rounded-xl border px-4 py-3 text-[18px] text-black outline-none max-[458px]:w-[350px]"
+                >
+                  <option value="">
+                    {currentLanguage === "en"
+                      ? "Select Student"
+                      : currentLanguage === "ar"
+                        ? "اختر الطالب"
+                        : "Sélectionner Étudiant"}
+                  </option>
+                  {students?.data.content.map(
+                    (student: {
+                      id: string | null | undefined;
+                      name:
+                        | string
+                        | number
+                        | bigint
+                        | boolean
+                        | null
+                        | undefined;
+                    }) => (
+                      <option key={student.id} value={student.id ?? ""}>
+                        {String(student.name)}
+                      </option>
+                    ),
+                  )}
+                </select>
                 {errors.studentId && (
-                  <span className="text-error">
-                    {errors.studentId.message}
-                  </span>
+                  <span className="text-error">{errors.studentId.message}</span>
                 )}
               </label>
-
-              
 
               {/* Scholarship Name Field */}
               <label
@@ -187,8 +185,8 @@ const NewScholarship = () => {
                 {currentLanguage === "en"
                   ? "Scholarship Name"
                   : currentLanguage === "ar"
-                  ? "اسم المنحة"
-                  : "Nom de la bourse"}
+                    ? "اسم المنحة"
+                    : "Nom de la bourse"}
                 <input
                   id="scholarshipName"
                   {...register("scholarshipName")}
@@ -210,10 +208,10 @@ const NewScholarship = () => {
                 {currentLanguage === "en"
                   ? "Scholarship Type"
                   : currentLanguage === "ar"
-                  ? "نوع المنحة"
-                  : "Type de bourse"}
+                    ? "نوع المنحة"
+                    : "Type de bourse"}
 
-<select
+                <select
                   id="scholarshipType"
                   className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                   {...register("scholarshipType", { required: true })}
@@ -249,8 +247,8 @@ const NewScholarship = () => {
                 {currentLanguage === "en"
                   ? "Start Date"
                   : currentLanguage === "ar"
-                  ? "تاريخ البدء"
-                  : "Date de début"}
+                    ? "تاريخ البدء"
+                    : "Date de début"}
                 <input
                   id="startDate"
                   {...register("startDate")}
@@ -258,9 +256,7 @@ const NewScholarship = () => {
                   className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                 />
                 {errors.startDate && (
-                  <span className="text-error">
-                    {errors.startDate.message}
-                  </span>
+                  <span className="text-error">{errors.startDate.message}</span>
                 )}
               </label>
 
@@ -272,8 +268,8 @@ const NewScholarship = () => {
                 {currentLanguage === "en"
                   ? "Expiration Date"
                   : currentLanguage === "ar"
-                  ? "تاريخ الانتهاء"
-                  : "Date d'expiration"}
+                    ? "تاريخ الانتهاء"
+                    : "Date d'expiration"}
                 <input
                   id="expirationDate"
                   {...register("expirationDate")}
@@ -287,63 +283,86 @@ const NewScholarship = () => {
                 )}
               </label>
               <div className="grid font-sans text-[18px] font-semibold">
-  {currentLanguage === "en"
-    ? "Paid Invoices"
-    : currentLanguage === "ar"
-    ? "الفواتير المدفوعة"
-    : "Factures payées"}
-  <div className="grid grid-cols-4 gap-4">
-    <label className="flex gap-2">
-      <input type="checkbox" value="TUITION" {...register("paidInvoices")} />
-      {currentLanguage === "en"
-        ? "Tuition"
-        : currentLanguage === "ar"
-        ? "الرسوم الدراسية"
-        : "Frais de scolarité"}
-    </label>
-    <label className="flex gap-2">
-      <input type="checkbox" value="UNIFORM" {...register("paidInvoices")} />
-      {currentLanguage === "en"
-        ? "Uniform"
-        : currentLanguage === "ar"
-        ? "الزي الدراسي"
-        : "Uniforme"}
-    </label>
-    <label className="flex gap-2">
-      <input type="checkbox" value="ACTIVITY" {...register("paidInvoices")} />
-      {currentLanguage === "en"
-        ? "Activity"
-        : currentLanguage === "ar"
-        ? "الحضور"
-        : "Activité"}
-    </label>
-    <label className="flex gap-2">
-      <input type="checkbox" value="MATERIAL" {...register("paidInvoices")} />
-      {currentLanguage === "en"
-        ? "Material"
-        : currentLanguage === "ar"
-        ? "المواد الدراسية"
-        : "Matériel"}
-    </label>
-    <label className="flex gap-2">
-      <input type="checkbox" value="UNIFORM" {...register("paidInvoices")} />
-      {currentLanguage === "en"
-        ? "Uniform"
-        : currentLanguage === "ar"
-        ? "الرسوم الدراسية"
-        : "Uniforme"}
-    </label>
-    <label className="flex gap-2">
-      <input type="checkbox" value="TRANSPORT" {...register("paidInvoices")} />
-      {currentLanguage === "en"
-        ? "Transport"
-        : currentLanguage === "ar"
-        ? "النقل"
-        : "Transport"}
-    </label>
-  </div>
-</div>
-
+                {currentLanguage === "en"
+                  ? "Paid Invoices"
+                  : currentLanguage === "ar"
+                    ? "الفواتير المدفوعة"
+                    : "Factures payées"}
+                <div className="grid grid-cols-4 gap-4">
+                  <label className="flex gap-2">
+                    <input
+                      type="checkbox"
+                      value="TUITION"
+                      {...register("paidInvoices")}
+                    />
+                    {currentLanguage === "en"
+                      ? "Tuition"
+                      : currentLanguage === "ar"
+                        ? "الرسوم الدراسية"
+                        : "Frais de scolarité"}
+                  </label>
+                  <label className="flex gap-2">
+                    <input
+                      type="checkbox"
+                      value="UNIFORM"
+                      {...register("paidInvoices")}
+                    />
+                    {currentLanguage === "en"
+                      ? "Uniform"
+                      : currentLanguage === "ar"
+                        ? "الزي الدراسي"
+                        : "Uniforme"}
+                  </label>
+                  <label className="flex gap-2">
+                    <input
+                      type="checkbox"
+                      value="ACTIVITY"
+                      {...register("paidInvoices")}
+                    />
+                    {currentLanguage === "en"
+                      ? "Activity"
+                      : currentLanguage === "ar"
+                        ? "الحضور"
+                        : "Activité"}
+                  </label>
+                  <label className="flex gap-2">
+                    <input
+                      type="checkbox"
+                      value="MATERIAL"
+                      {...register("paidInvoices")}
+                    />
+                    {currentLanguage === "en"
+                      ? "Material"
+                      : currentLanguage === "ar"
+                        ? "المواد الدراسية"
+                        : "Matériel"}
+                  </label>
+                  <label className="flex gap-2">
+                    <input
+                      type="checkbox"
+                      value="UNIFORM"
+                      {...register("paidInvoices")}
+                    />
+                    {currentLanguage === "en"
+                      ? "Uniform"
+                      : currentLanguage === "ar"
+                        ? "الرسوم الدراسية"
+                        : "Uniforme"}
+                  </label>
+                  <label className="flex gap-2">
+                    <input
+                      type="checkbox"
+                      value="TRANSPORT"
+                      {...register("paidInvoices")}
+                    />
+                    {currentLanguage === "en"
+                      ? "Transport"
+                      : currentLanguage === "ar"
+                        ? "النقل"
+                        : "Transport"}
+                  </label>
+                </div>
+              </div>
 
               {/* File Upload Field */}
               <label
@@ -353,8 +372,8 @@ const NewScholarship = () => {
                 {currentLanguage === "en"
                   ? "Upload File"
                   : currentLanguage === "ar"
-                  ? "تحميل ملف"
-                  : "Télécharger le fichier"}
+                    ? "تحميل ملف"
+                    : "Télécharger le fichier"}
                 <input
                   id="file"
                   {...register("file")}
@@ -362,9 +381,7 @@ const NewScholarship = () => {
                   className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                 />
                 {errors.file && (
-                  <span className="text-error">
-                    {errors.file.message}
-                  </span>
+                  <span className="text-error">{errors.file.message}</span>
                 )}
               </label>
             </div>
@@ -379,8 +396,8 @@ const NewScholarship = () => {
                   {currentLanguage === "en"
                     ? "Add Scholarship"
                     : currentLanguage === "ar"
-                    ? "إضافة منحة دراسية"
-                    : "Ajouter une bourse"}
+                      ? "إضافة منحة دراسية"
+                      : "Ajouter une bourse"}
                 </button>
               )}
             </div>

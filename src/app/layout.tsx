@@ -35,8 +35,18 @@ const RootLayout: React.FC<RootLayoutProps> = ({ children }) => {
   return (
     <html lang="ar" suppressHydrationWarning>
       <head>
-        <title>Edu AI-Admin</title>
-        <meta name="description" content="Edu AI-Admin" />
+        <title>Admin Dashboard</title>
+        <meta
+          name="description"
+          content="Manage your EduAI tech settings and configurations from the Admin Dashboard."
+        />
+        <meta property="og:title" content="Admin Dashboard" />
+        <meta
+          property="og:description"
+          content="Manage your EduAI tech settings and configurations from the Admin Dashboard."
+        />
+        <meta property="og:url" content="https://admin.eduai.tech/" />
+        <meta property="og:type" content="website" />
         <link rel="icon" type="image/x-icon" href="/images/Login.png" />
       </head>
       <body className="bg-bgSecondary">

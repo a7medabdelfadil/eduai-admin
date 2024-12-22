@@ -11,7 +11,6 @@ const LoginForm = ({ onClose }: { onClose: () => void }) => {
       console.log("User logged in successfully");
       onClose(); // Close the modal after successful login
     } catch (error) {
-      console.error("Error logging in user:", error);
     }
   };
 

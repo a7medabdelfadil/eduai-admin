@@ -90,9 +90,7 @@ const EditParent: React.FC<ViewParentProps> = ({ params }) => {
       setValue("name_fr", "");
       setValue("birthDate", data.data.birthDate);
     }
-    if (error) {
-      console.error("Error:", error);
-    }
+
   }, [data, error]);
 
   const onSubmit = async (data: any) => {

@@ -28,11 +28,6 @@ const Infrastructure = () => {
   const { data, error, isLoading } = useGetAllClasssQuery(null);
   const [search, setSearch] = useState("");
 
-  useEffect(() => {
-    if (data) console.log("Response Data:", data);
-    if (error) console.log("Error:", error);
-  }, [data, error]);
-
   const { language: currentLanguage, loading } = useSelector(
     (state: RootState) => state.language,
   );

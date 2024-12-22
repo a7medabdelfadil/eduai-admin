@@ -42,10 +42,7 @@ const ComplaintParent = () => {
   });
   const [selectAll, setSelectAll] = useState(false);
 
-  useEffect(() => {
-    if (data) console.log("Response Data:", data);
-    if (error) console.log("Error:", error);
-  }, [data, error]);
+
 
   const [deleteDepartment, { isLoading: isDeleting }] =
     useDeleteComplainsMutation();

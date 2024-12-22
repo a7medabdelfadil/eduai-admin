@@ -35,7 +35,9 @@ const classDetails: React.FC<ViewDriverProps> = ({ params }) => {
     },
   ];
 
-  const tableHeaders: { [key: string]: { en: string; ar: string; fr: string } } = {
+  const tableHeaders: {
+    [key: string]: { en: string; ar: string; fr: string };
+  } = {
     buildingNumber: {
       en: "Building Number",
       ar: "رقم المبنى",
@@ -99,9 +101,9 @@ const classDetails: React.FC<ViewDriverProps> = ({ params }) => {
   const handleSelectAll = () => {
     setSelectAll(!selectAll);
     const checkboxes = document.querySelectorAll<HTMLInputElement>(
-      'input[type="checkbox"]:not(#checkbox-all-search)'
+      'input[type="checkbox"]:not(#checkbox-all-search)',
     );
-    checkboxes.forEach((checkbox) => {
+    checkboxes.forEach(checkbox => {
       checkbox.checked = !selectAll;
     });
   };
@@ -109,13 +111,13 @@ const classDetails: React.FC<ViewDriverProps> = ({ params }) => {
   useEffect(() => {
     const handleOtherCheckboxes = () => {
       const allCheckboxes = document.querySelectorAll<HTMLInputElement>(
-        'input[type="checkbox"]:not(#checkbox-all-search)'
+        'input[type="checkbox"]:not(#checkbox-all-search)',
       );
       const allChecked = Array.from(allCheckboxes).every(
-        (checkbox) => checkbox.checked
+        checkbox => checkbox.checked,
       );
       const selectAllCheckbox = document.getElementById(
-        "checkbox-all-search"
+        "checkbox-all-search",
       ) as HTMLInputElement | null;
       if (selectAllCheckbox) {
         selectAllCheckbox.checked = allChecked;
@@ -124,14 +126,14 @@ const classDetails: React.FC<ViewDriverProps> = ({ params }) => {
     };
 
     const otherCheckboxes = document.querySelectorAll<HTMLInputElement>(
-      'input[type="checkbox"]:not(#checkbox-all-search)'
+      'input[type="checkbox"]:not(#checkbox-all-search)',
     );
-    otherCheckboxes.forEach((checkbox) => {
+    otherCheckboxes.forEach(checkbox => {
       checkbox.addEventListener("change", handleOtherCheckboxes);
     });
 
     return () => {
-      otherCheckboxes.forEach((checkbox) => {
+      otherCheckboxes.forEach(checkbox => {
         checkbox.removeEventListener("change", handleOtherCheckboxes);
       });
     };
@@ -139,7 +141,7 @@ const classDetails: React.FC<ViewDriverProps> = ({ params }) => {
 
   const { data, isLoading } = useGetClassByIdQuery(params.classId);
   const { language: currentLanguage, loading } = useSelector(
-    (state: RootState) => state.language
+    (state: RootState) => state.language,
   );
 
   if (loading || isLoading)
@@ -160,8 +162,8 @@ const classDetails: React.FC<ViewDriverProps> = ({ params }) => {
               ? "lg:mr-[100px]"
               : "lg:mr-[270px]"
             : booleanValue
-            ? "lg:ml-[100px]"
-            : "lg:ml-[270px]"
+              ? "lg:ml-[100px]"
+              : "lg:ml-[270px]"
         } relative mx-3 mt-10 h-screen overflow-x-auto bg-transparent sm:rounded-lg`}
       >
         <div className="flex justify-between text-center max-[502px]:grid max-[502px]:justify-center">
@@ -181,13 +183,17 @@ const classDetails: React.FC<ViewDriverProps> = ({ params }) => {
                     />
                   </div>
                 </th>
-                {Object.keys(tableHeaders).map((key) => (
+                {Object.keys(tableHeaders).map(key => (
                   <th
                     key={key}
                     scope="col"
                     className="whitespace-nowrap px-6 py-3"
                   >
-                    {tableHeaders[key][currentLanguage as keyof typeof tableHeaders[typeof key]]}
+                    {
+                      tableHeaders[key][
+                        currentLanguage as keyof (typeof tableHeaders)[typeof key]
+                      ]
+                    }
                   </th>
                 ))}
               </tr>
@@ -244,10 +250,10 @@ const classDetails: React.FC<ViewDriverProps> = ({ params }) => {
               {currentLanguage === "en"
                 ? "There is No Data"
                 : currentLanguage === "ar"
-                ? "لا توجد بيانات"
-                : currentLanguage === "fr"
-                ? "Il n'y a pas de données"
-                : "There is No Data"}
+                  ? "لا توجد بيانات"
+                  : currentLanguage === "fr"
+                    ? "Il n'y a pas de données"
+                    : "There is No Data"}
             </div>
           )}
         </div>

@@ -3,13 +3,12 @@
 import Link from "next/link";
 import { useCreateNotificationsMutation } from "@/features/communication/notficationsApi";
 import Spinner from "@/components/spinner";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { toast } from "react-toastify";
 import TextEditor from "@/components/textEditor";
 import BreadCrumbs from "@/components/BreadCrumbs";
 import { useSelector } from "react-redux";
 import { RootState } from "@/GlobalRedux/store";
-//
 
 const SendNotifications = () => {
   const breadcrumbs = [
@@ -36,6 +35,7 @@ const SendNotifications = () => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [roles, setRoles] = useState<string[]>([]);
+  const [isAllRolesChecked, setIsAllRolesChecked] = useState(false);
   const [createNotification, { isLoading }] = useCreateNotificationsMutation();
 
   const roleOptions = [
@@ -55,6 +55,21 @@ const SendNotifications = () => {
         ? prevRoles.filter(r => r !== role)
         : [...prevRoles, role],
     );
+    // Uncheck "All Roles" if not all roles are selected
+    setIsAllRolesChecked(false);
+  };
+
+  const handleAllRolesChange = () => {
+    const newIsAllRolesChecked = !isAllRolesChecked;
+    setIsAllRolesChecked(newIsAllRolesChecked);
+
+    if (newIsAllRolesChecked) {
+      // Select all roles
+      setRoles([...roleOptions]);
+    } else {
+      // Deselect all roles
+      setRoles([]);
+    }
   };
 
   const handleSubmit = async (e: { preventDefault: () => void }) => {
@@ -69,6 +84,7 @@ const SendNotifications = () => {
       setTitle("");
       setDescription("");
       setRoles([]);
+      setIsAllRolesChecked(false);
     } catch (error) {
       toast.error("Failed to send notification. Please try again.");
     }
@@ -92,6 +108,26 @@ const SendNotifications = () => {
         className={`mt-12 flex gap-10 max-[1500px]:grid ${booleanValue ? "lg:ml-[120px]" : "lg:ml-[290px]"}`}
       >
         <div className="grid h-full w-full items-center gap-3 rounded-xl bg-bgPrimary p-5">
+          {/* All Roles Checkbox */}
+          <label
+            key="ALL_ROLES"
+            htmlFor="ALL_ROLES"
+            className="flex items-center gap-2 text-[18px] font-semibold"
+          >
+            <input
+              type="checkbox"
+              name="ALL_ROLES"
+              id="ALL_ROLES"
+              checked={isAllRolesChecked}
+              onChange={handleAllRolesChange}
+            />
+            {currentLanguage === "ar"
+              ? "جميع الأدوار"
+              : currentLanguage === "fr"
+                ? "Tous les rôles"
+                : "All Roles"}
+          </label>
+
           {roleOptions.map(role => (
             <label
               key={role}

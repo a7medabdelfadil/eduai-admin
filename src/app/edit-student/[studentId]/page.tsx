@@ -3,14 +3,18 @@ import { RootState } from "@/GlobalRedux/store";
 import BreadCrumbs from "@/components/BreadCrumbs";
 import SearchableSelect from "@/components/select";
 import Spinner from "@/components/spinner";
-import { useUpdateStudentsMutation } from "@/features/User-Management/studentApi";
+import {
+  useUpdateStudentsMutation,
+  useGetStudentByIdUpdateQuery,
+} from "@/features/User-Management/studentApi";
 import {
   useGetAllNationalitysQuery,
-  useGetAllReginionIDQuery
+  useGetAllReginionIDQuery,
 } from "@/features/signupApi";
-import { useForm } from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
 import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
+import { useEffect, useState } from "react";
 
 interface Params {
   studentId: string;
@@ -37,13 +41,30 @@ const EditStudent = ({ params }: { params: Params }) => {
       href: `/edit-student/${params.studentId}`,
     },
   ];
+
+  const { data, isLoading: isStudent } = useGetStudentByIdUpdateQuery(
+    params.studentId,
+  );
+
   const { language: currentLanguage, loading } = useSelector(
     (state: RootState) => state.language,
   );
-  const { data: nationalityData } =
-    useGetAllNationalitysQuery(null);
-
+  const { data: nationalityData } = useGetAllNationalitysQuery(null);
   const { data: regionData } = useGetAllReginionIDQuery(null);
+
+  // State for each field
+  const [email, setEmail] = useState("");
+  const [nid, setNid] = useState("");
+  const [gender, setGender] = useState("");
+  const [nationality, setNationality] = useState("");
+  const [regionId, setRegionId] = useState("");
+  const [graduated, setGraduated] = useState("false");
+  const [name_en, setNameEn] = useState("");
+  const [name_ar, setNameAr] = useState("");
+  const [name_fr, setNameFr] = useState("");
+  const [about, setAbout] = useState("");
+  const [birthDate, setBirthDate] = useState("");
+
   const optionsRigon =
     regionData?.data?.map(
       (rigion: {
@@ -58,17 +79,33 @@ const EditStudent = ({ params }: { params: Params }) => {
       }),
     ) || [];
 
-  const {
-    register,
-    handleSubmit,
-    control,
-    formState: { errors },
-  } = useForm();
+  // Pre-fill form fields when data is loaded
+  useEffect(() => {
+    if (data?.data) {
+      const studentData = data.data;
+      // Set each state variable with the corresponding value
+      setEmail(studentData.email);
+      setNid(studentData.nid);
+      setGender(studentData.gender);
+      setNationality(studentData.nationality);
+      setRegionId(studentData.regionId);
+      setGraduated(studentData.graduated.toString());
+      setNameEn(studentData.name_en);
+      setNameAr(studentData.name_ar);
+      setNameFr(studentData.name_fr);
+      setAbout(studentData.about);
+      setBirthDate(studentData.birthDate);
+      console.log("👾 ~ useEffect ~ studentData:", studentData)
+    }
+  }, [data]);
 
   const booleanValue = useSelector((state: RootState) => state.boolean.value);
   const [updateSudent, { isLoading }] = useUpdateStudentsMutation();
+
+  const { handleSubmit } = useForm(); // handleSubmit here
+
   const onSubmit = async (data: any) => {
-    const formData = { ...data, religion: "OTHERS" }
+    const formData = { ...data, religion: "OTHERS" };
     try {
       await updateSudent({ id: params.studentId, formData: formData }).unwrap();
       toast.success("Student Updated successfully");
@@ -77,26 +114,27 @@ const EditStudent = ({ params }: { params: Params }) => {
     }
   };
 
-  if (loading)
+  if (loading || isStudent)
     return (
       <div className="flex h-screen w-full items-center justify-center">
         <Spinner />
       </div>
     );
+
   return (
     <>
       <BreadCrumbs breadcrumbs={breadcrumbs} />
-
       <div
         dir={currentLanguage === "ar" ? "rtl" : "ltr"}
-        className={`${currentLanguage === "ar"
+        className={`${
+          currentLanguage === "ar"
             ? booleanValue
               ? "lg:mr-[100px]"
               : "lg:mr-[270px]"
             : booleanValue
               ? "lg:ml-[100px]"
               : "lg:ml-[270px]"
-          } mx-3 mt-5 grid h-[850px] items-center justify-center`}
+        } mx-3 mt-5 grid h-[850px] items-center justify-center`}
       >
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="my-10 grid items-center justify-center gap-5 rounded-xl bg-bgPrimary p-10 sm:w-[500px] md:w-[600px] lg:w-[750px] xl:w-[1000px]">
@@ -115,15 +153,10 @@ const EditStudent = ({ params }: { params: Params }) => {
                   id="email"
                   type="email"
                   className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
-                  {...register("email", { required: true })}
+                  value={email || ""}
+                  onChange={(e) => setEmail(e.target.value)}
                 />
-                {errors.email && (
-                  <span className="text-error">
-                    {currentLanguage === "en"
-                      ? "This field is required"
-                      : "هذا الحقل مطلوب"}
-                  </span>
-                )}
+                {/* Validation error */}
               </label>
 
               {/* NID */}
@@ -140,15 +173,10 @@ const EditStudent = ({ params }: { params: Params }) => {
                   id="nid"
                   type="number"
                   className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
-                  {...register("nid", { required: true })}
+                  value={nid}
+                  onChange={(e) => setNid(e.target.value)}
                 />
-                {errors.nid && (
-                  <span className="text-error">
-                    {currentLanguage === "en"
-                      ? "This field is required"
-                      : "هذا الحقل مطلوب"}
-                  </span>
-                )}
+                {/* Validation error */}
               </label>
 
               {/* Gender */}
@@ -164,7 +192,8 @@ const EditStudent = ({ params }: { params: Params }) => {
                 <select
                   id="gender"
                   className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
-                  {...register("gender", { required: true })}
+                  value={gender}
+                  onChange={(e) => setGender(e.target.value)}
                 >
                   <option value="">
                     {currentLanguage === "en"
@@ -180,49 +209,7 @@ const EditStudent = ({ params }: { params: Params }) => {
                     {currentLanguage === "en" ? "Female" : "أنثى"}
                   </option>
                 </select>
-                {errors.gender && (
-                  <span className="text-error">
-                    {currentLanguage === "en"
-                      ? "This field is required"
-                      : "هذا الحقل مطلوب"}
-                  </span>
-                )}
-              </label>
-              <label
-                htmlFor="graduated"
-                className="grid font-sans text-[18px] font-semibold"
-              >
-                {currentLanguage === "ar"
-                  ? "الجنس"
-                  : currentLanguage === "fr"
-                    ? "Sexe"
-                    : "Gender"}
-                <select
-                  id="graduated"
-                  className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
-                  {...register("graduated", { required: true })}
-                >
-                  <option value="">
-                    {currentLanguage === "en"
-                      ? "Is Graduated ?"
-                      : currentLanguage === "ar"
-                        ? "هل هو خريج"
-                        : "Est-ce que tu es diplômé ?"}
-                  </option>
-                  <option value="true">
-                    {currentLanguage === "en" ? "Yes" : "نعم"}
-                  </option>
-                  <option value="false">
-                    {currentLanguage === "en" ? "No" : "لا"}
-                  </option>
-                </select>
-                {errors.gender && (
-                  <span className="text-error">
-                    {currentLanguage === "en"
-                      ? "This field is required"
-                      : "هذا الحقل مطلوب"}
-                  </span>
-                )}
+                {/* Validation error */}
               </label>
 
               {/* Nationality */}
@@ -238,7 +225,8 @@ const EditStudent = ({ params }: { params: Params }) => {
                 <select
                   id="nationality"
                   className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
-                  {...register("nationality", { required: true })}
+                  value={nationality}
+                  onChange={(e) => setNationality(e.target.value)}
                 >
                   <option value="">
                     {currentLanguage === "ar"
@@ -254,13 +242,7 @@ const EditStudent = ({ params }: { params: Params }) => {
                       </option>
                     ))}
                 </select>
-                {errors.nationality && (
-                  <span className="text-error">
-                    {currentLanguage === "en"
-                      ? "This field is required"
-                      : "هذا الحقل مطلوب"}
-                  </span>
-                )}
+                {/* Validation error */}
               </label>
 
               {/* Region */}
@@ -268,97 +250,115 @@ const EditStudent = ({ params }: { params: Params }) => {
                 htmlFor="regionId"
                 className="grid font-sans text-[18px] font-semibold"
               >
-                {currentLanguage === "en"
-                  ? "Region Id"
-                  : currentLanguage === "ar"
-                    ? "معرف المنطقة"
-                    : currentLanguage === "fr"
-                      ? "ID de la région"
-                      : "Region Id"}{" "}
-                {/* default */}
-                <SearchableSelect
-                  name="regionId"
-                  control={control}
-                  errors={errors}
-                  options={optionsRigon}
-                  currentLanguage={currentLanguage}
-                  placeholder="Select Region"
-                />
+                {currentLanguage === "ar"
+                  ? "المنطقة"
+                  : currentLanguage === "fr"
+                    ? "Région"
+                    : "Region"}
+                <select
+                  id="regionId"
+                  className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  value={regionId}
+                  onChange={(e) => setRegionId(e.target.value)}
+                >
+                  <option value="">
+                    {currentLanguage === "ar"
+                      ? "اختر المنطقة"
+                      : currentLanguage === "fr"
+                        ? "Sélectionner la région"
+                        : "Select Region"}
+                  </option>
+                  {optionsRigon.map((option: any) => (
+                    <option key={option.value} value={option.value}>
+                      {option.label}
+                    </option>
+                  ))}
+                </select>
               </label>
 
-              {/* Name (English) */}
+              {/* Graduation Status */}
+              <label
+                htmlFor="graduated"
+                className="grid font-sans text-[18px] font-semibold"
+              >
+                {currentLanguage === "ar"
+                  ? "تخرج"
+                  : currentLanguage === "fr"
+                    ? "Diplômé"
+                    : "Graduated"}
+                <select
+                  id="graduated"
+                  className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  value={graduated}
+                  onChange={(e) => setGraduated(e.target.value)}
+                >
+                  <option value="false">
+                    {currentLanguage === "ar" ? "لا" : "No"}
+                  </option>
+                  <option value="true">
+                    {currentLanguage === "ar" ? "نعم" : "Yes"}
+                  </option>
+                </select>
+              </label>
+
+              {/* Name in English */}
               <label
                 htmlFor="name_en"
                 className="grid font-sans text-[18px] font-semibold"
               >
                 {currentLanguage === "ar"
-                  ? "الاسم (إنجليزي)"
+                  ? "الاسم بالإنجليزي"
                   : currentLanguage === "fr"
-                    ? "Nom (EN)"
-                    : "Name (EN)"}
+                    ? "Nom en anglais"
+                    : "Name in English"}
                 <input
                   id="name_en"
                   type="text"
                   className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
-                  {...register("name_en", { required: true })}
+                  value={name_en}
+                  onChange={(e) => setNameEn(e.target.value)}
                 />
-                {errors.name_en && (
-                  <span className="text-error">
-                    {currentLanguage === "en"
-                      ? "This field is required"
-                      : "هذا الحقل مطلوب"}
-                  </span>
-                )}
+                {/* Validation error */}
               </label>
 
-              {/* Name (Arabic) */}
+              {/* Name in Arabic */}
               <label
                 htmlFor="name_ar"
                 className="grid font-sans text-[18px] font-semibold"
               >
                 {currentLanguage === "ar"
-                  ? "الاسم (عربي)"
+                  ? "الاسم بالعربي"
                   : currentLanguage === "fr"
-                    ? "Nom (AR)"
-                    : "Name (AR)"}
+                    ? "Nom en arabe"
+                    : "Name in Arabic"}
                 <input
                   id="name_ar"
                   type="text"
                   className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
-                  {...register("name_ar", { required: true })}
+                  value={name_ar}
+                  onChange={(e) => setNameAr(e.target.value)}
                 />
-                {errors.name_ar && (
-                  <span className="text-error">
-                    {currentLanguage === "en"
-                      ? "This field is required"
-                      : "هذا الحقل مطلوب"}
-                  </span>
-                )}
+                {/* Validation error */}
               </label>
 
-              {/* Name (French) */}
+              {/* Name in French */}
               <label
                 htmlFor="name_fr"
                 className="grid font-sans text-[18px] font-semibold"
               >
                 {currentLanguage === "ar"
-                  ? "الاسم (فرنسي)"
+                  ? "الاسم بالفرنسي"
                   : currentLanguage === "fr"
-                    ? "Nom (FR)"
-                    : "Name (FR)"}
+                    ? "Nom en français"
+                    : "Name in French"}
                 <input
                   id="name_fr"
                   type="text"
                   className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
-                  {...register("name_fr", { required: true })}
+                  value={name_fr}
+                  onChange={(e) => setNameFr(e.target.value)}
                 />
-                {errors.name_fr && (
-                  <span className="text-error">
-                    {currentLanguage === "en"
-                      ? "This field is required"
-                      : "هذا الحقل مطلوب"}
-                  </span>
-                )}
+                {/* Validation error */}
               </label>
 
               {/* About */}
@@ -366,23 +366,17 @@ const EditStudent = ({ params }: { params: Params }) => {
                 htmlFor="about"
                 className="grid font-sans text-[18px] font-semibold"
               >
-                {currentLanguage === "en"
-                  ? "About"
-                  : currentLanguage === "ar"
-                    ? "نبذة"
-                    : "À propos"}
+                {currentLanguage === "ar"
+                  ? "نبذة"
+                  : currentLanguage === "fr"
+                    ? "À propos"
+                    : "About"}
                 <textarea
                   id="about"
-                  className="h-[100px] w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
-                  {...register("about")}
+                  className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  value={about}
+                  onChange={(e) => setAbout(e.target.value)}
                 />
-                {errors.about && (
-                  <span className="text-error">
-                    {currentLanguage === "en"
-                      ? "This field is required"
-                      : "هذا الحقل مطلوب"}
-                  </span>
-                )}
               </label>
 
               {/* Birth Date */}
@@ -390,73 +384,27 @@ const EditStudent = ({ params }: { params: Params }) => {
                 htmlFor="birthDate"
                 className="grid font-sans text-[18px] font-semibold"
               >
-                {currentLanguage === "en"
-                  ? "Date Of Birth"
-                  : currentLanguage === "ar"
-                    ? "تاريخ الميلاد"
-                    : currentLanguage === "fr"
-                      ? "Date de naissance"
-                      : "Date Of Birth"}
+                {currentLanguage === "ar"
+                  ? "تاريخ الميلاد"
+                  : currentLanguage === "fr"
+                    ? "Date de naissance"
+                    : "Birth Date"}
                 <input
                   id="birthDate"
                   type="date"
                   className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
-                  {...register("birthDate", {
-                    required: true,
-                    validate: value => {
-                      const today = new Date();
-                      const birthDate = new Date(value);
-                      const age = today.getFullYear() - birthDate.getFullYear();
-                      const isOlderThanSix =
-                        age > 6 ||
-                        (age === 6 &&
-                          today >=
-                          new Date(
-                            birthDate.setFullYear(today.getFullYear()),
-                          ));
-                      return isOlderThanSix;
-                    },
-                  })}
+                  value={birthDate}
+                  onChange={(e) => setBirthDate(e.target.value)}
                 />
-                {errors.birthDate && (
-                  <span className="text-error">
-                    {currentLanguage === "en"
-                      ? errors.birthDate.type === "validate"
-                        ? "The Student Must be older than 6"
-                        : "This field is required"
-                      : currentLanguage === "ar"
-                        ? errors.birthDate.type === "validate"
-                          ? "يجب أن يكون عمر الطالب أكبر من 6 سنوات"
-                          : "هذا الحقل مطلوب"
-                        : currentLanguage === "fr"
-                          ? errors.birthDate.type === "validate"
-                            ? "L'étudiant doit avoir plus de 6 ans"
-                            : "Ce champ est requis"
-                          : "This field is required"}
-                  </span>
-                )}
               </label>
             </div>
-
-            <div className="flex justify-center text-center">
-              <button
-                disabled={isLoading}
-                type="submit"
-                className="w-fit rounded-xl bg-primary px-4 py-2 text-[18px] text-white duration-300 ease-in hover:bg-hover hover:shadow-xl"
-              >
-                {isLoading
-                  ? currentLanguage === "en"
-                    ? "Adding..."
-                    : currentLanguage === "ar"
-                      ? "جارٍ الإضافة..."
-                      : "Ajout en cours..."
-                  : currentLanguage === "en"
-                    ? "Update Student"
-                    : currentLanguage === "ar"
-                      ? "تعديل طالب"
-                      : "Ajouter un étudiant"}
-              </button>
-            </div>
+            <button
+              type="submit"
+              className="mt-5 w-full rounded-lg bg-primary py-3 text-white font-semibold text-[18px] hover:bg-blue-700 transition-all duration-200"
+              disabled={isLoading}
+            >
+              {isLoading ? "Updating..." : "Update Student"}
+            </button>
           </div>
         </form>
       </div>

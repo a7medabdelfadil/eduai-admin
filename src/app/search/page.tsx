@@ -23,14 +23,12 @@ const Search = () => {
 
   useEffect(() => {
     if (data) {
-      console.log("Response Data:", data);
       const filtered = data.data.content.filter((student: Student) =>
         student.name.toLowerCase().includes(searchTerm.toLowerCase()),
       );
       setFilteredStudents(filtered);
     }
     if (error) {
-      console.log("Error:", error);
     }
   }, [data, searchTerm, error]);
 

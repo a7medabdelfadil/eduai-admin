@@ -15,6 +15,8 @@ import {
 import { MdBusiness, MdWorkOutline } from "react-icons/md"; // Department, Position
 import BreadCrumbs from "@/components/BreadCrumbs";
 import Spinner from "@/components/spinner";
+import { LuSchool } from "react-icons/lu";
+
 
 const OrganizationSettings = () => {
   const breadcrumbs = [
@@ -216,6 +218,26 @@ const OrganizationSettings = () => {
             : currentLanguage === "fr"
               ? "Quelques informations sur le type d'examen"
               : "All Annual Leave", // Default to English
+    },
+    {
+      href: "/organization-setting/edit-school-logo",
+      icon: <LuSchool size={40} />,
+      title:
+        currentLanguage === "en"
+          ? "School Logo"
+          : currentLanguage === "ar"
+            ? "شعار المدرسة"
+            : currentLanguage === "fr"
+              ? "Logo de l'école"
+              : "School Logo", // Default to English
+      description:
+        currentLanguage === "en"
+          ? "To edit the school's logo"
+          : currentLanguage === "ar"
+            ? "لتعديل شعار المدرسة"
+            : currentLanguage === "fr"
+              ? "Pour modifier le logo de l'écolen"
+              : "To edit the school's logo", // Default to English
     },
   ];
 

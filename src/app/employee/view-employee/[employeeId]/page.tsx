@@ -15,14 +15,7 @@ interface ViewEmployeeProps {
 
 const ViewEmployee: React.FC<ViewEmployeeProps> = ({ params }) => {
   const { data, error, isLoading } = useGetEmployeeByIdQuery(params.employeeId);
-  useEffect(() => {
-    if (data) {
-      console.log(data);
-    }
-    if (error) {
-      console.error("Error:", error);
-    }
-  }, [data, error]);
+  
 
   const booleanValue = useSelector((state: RootState) => state.boolean.value);
   const { language: currentLanguage, loading } = useSelector(

@@ -39,10 +39,7 @@ const Semester = () => {
   const { data, error, isLoading, refetch } = useGetAllSemestersQuery(null);
   const [selectAll, setSelectAll] = useState(false);
 
-  useEffect(() => {
-    if (data) console.log("Response Data:", data);
-    if (error) console.log("Error:", error);
-  }, [data, error]);
+
 
   const [deleteSemester, { isLoading: isDeleting }] =
     useDeleteSemestersMutation();

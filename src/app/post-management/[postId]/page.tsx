@@ -100,7 +100,6 @@ const EditPost = ({ params }: EditPostProps) => {
       await updatePostFiles({ formData, id: params.postId }).unwrap();
       toast.success("Post file edited successfully");
     } catch (err: any) {
-      console.error("Failed to update files", err);
       toast.error(`${err.data.message}`);
     }
   };

@@ -24,14 +24,12 @@ const EmployeeSearch = () => {
 
   useEffect(() => {
     if (data) {
-      console.log("Response Data:", data);
       const filtered = data.data.content.filter((student: Teacher) =>
         student.name.toLowerCase().includes(searchTerm.toLowerCase()),
       );
       setFilteredTeachers(filtered);
     }
     if (error) {
-      console.log("Error:", error);
     }
   }, [data, searchTerm, error]);
 

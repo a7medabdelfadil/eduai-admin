@@ -19,7 +19,7 @@ const StudentInfo = ({ data }: { data: any }) => {
                 ? "Informations sur l'élève"
                 : "Student Information"}
           </h1>
-          <Link href={`/edit-student/${data.data.id}`}>
+          <Link href={`/edit-student/${data?.data?.id}`}>
             <svg
               className="h-6 w-6 text-textPrimary"
               fill="none"
@@ -37,7 +37,7 @@ const StudentInfo = ({ data }: { data: any }) => {
         </div>
 
         <div className="grid items-center justify-center text-center">
-          {data.data.picture == null ? (
+          {data?.data?.picture == null ? (
             <img
               src="/images/userr.png"
               className="mx-2 h-[120px] w-[120px] rounded-full"
@@ -45,13 +45,13 @@ const StudentInfo = ({ data }: { data: any }) => {
             />
           ) : (
             <img
-              src={data.data.picture}
+              src={data?.data?.picture}
               className="mx-2 h-[120px] w-[120px] rounded-full"
               alt="#"
             />
           )}
           <h1 className="font-sans font-semibold text-textPrimary">
-            {data.data.name}
+            {data?.data?.name}
           </h1>
           <p className="font-sans font-semibold text-textPrimary">
             {" "}
@@ -62,7 +62,7 @@ const StudentInfo = ({ data }: { data: any }) => {
                   ? "ID de l'élève :"
                   : "Student ID:"}
             </span>
-            {data.data.id}
+            {data?.data?.id}
           </p>
         </div>
 
@@ -83,7 +83,7 @@ const StudentInfo = ({ data }: { data: any }) => {
                   : "Email:"}
             </h3>
             <p className="font-sans font-semibold text-textPrimary">
-              {data.data.email}
+              {data?.data?.email}
             </p>
             <h3 className="font-sans font-semibold text-textSecondary">
               {currentLanguage === "ar"
@@ -93,7 +93,7 @@ const StudentInfo = ({ data }: { data: any }) => {
                   : "Gender:"}
             </h3>
             <p className="font-sans font-semibold text-textPrimary">
-              {data.data.gender}
+              {data?.data?.gender}
             </p>
             <h3 className="font-sans font-semibold text-textSecondary">
               {currentLanguage === "ar"
@@ -103,7 +103,7 @@ const StudentInfo = ({ data }: { data: any }) => {
                   : "Nationality:"}
             </h3>
             <p className="font-sans font-semibold text-textPrimary">
-              {data.data.nationality}
+              {data?.data?.nationality}
             </p>
             <h3 className="font-sans font-semibold text-textSecondary">
               {currentLanguage === "ar"
@@ -113,7 +113,7 @@ const StudentInfo = ({ data }: { data: any }) => {
                   : "Role:"}
             </h3>
             <p className="font-sans font-semibold text-textPrimary">
-              {data.data.role}
+              {data?.data?.role}
             </p>
             <h3 className="font-sans font-semibold text-textSecondary">
               {currentLanguage === "ar"
@@ -123,7 +123,7 @@ const StudentInfo = ({ data }: { data: any }) => {
                   : "Date Of Birth:"}
             </h3>
             <p className="font-sans font-semibold text-textPrimary">
-            {data.data.birthday}
+              {data?.data?.birthday}
             </p>
           </div>
         </div>
@@ -137,7 +137,7 @@ const StudentInfo = ({ data }: { data: any }) => {
                 : "About the student:"}
           </p>
           <p className="mb-5 font-sans text-[16px] font-semibold text-textSecondary">
-            {data.data.about}
+            {data?.data?.about}
           </p>
           <p className="font-sans text-[20px] font-semibold text-textPrimary">
             {currentLanguage === "ar"

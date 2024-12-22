@@ -91,12 +91,10 @@ const EmployeeAttendance = () => {
       createAttendance(attendanceData)
         .unwrap()
         .then(response => {
-          console.log("Attendance recorded:", response);
           refetch();
           toast.success("Attendance recorded successfully");
         })
         .catch(error => {
-          console.error("Failed to record attendance:", error);
           toast.error("Failed to record attendance");
         });
     } else {
@@ -107,12 +105,10 @@ const EmployeeAttendance = () => {
       })
         .unwrap()
         .then(response => {
-          console.log("Attendance updated:", response);
           refetch();
           toast.info("Attendance updated successfully");
         })
         .catch(error => {
-          console.error("Failed to update attendance:", error);
           toast.error("Failed to update attendance");
         });
     }
@@ -127,10 +123,6 @@ const EmployeeAttendance = () => {
     setCurrentPage(0);
   };
 
-  useEffect(() => {
-    if (data) console.log("Response Data:", data);
-    if (error) console.log("Error:", error);
-  }, [data, error]);
 
   const [deleteEmployees] = useDeleteEmployeesMutation();
 

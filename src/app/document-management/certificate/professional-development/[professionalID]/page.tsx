@@ -16,14 +16,7 @@ const ViewProfessional: React.FC<ViewDriverProps> = ({ params }) => {
   const { data, error, isLoading } = useGetProfessionalByIdQuery(
     params.professionalID,
   );
-  useEffect(() => {
-    if (data) {
-      console.log(data);
-    }
-    if (error) {
-      console.error("Error:", error);
-    }
-  }, [data, error]);
+
 
   const { language: currentLanguage, loading } = useSelector(
     (state: RootState) => state.language,

@@ -75,6 +75,7 @@ const Events = () => {
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm({
     resolver: zodResolver(eventSchema),
@@ -86,6 +87,7 @@ const Events = () => {
 
   const handleCloseModal = () => {
     setModalOpen(false);
+    reset();
   };
   const ID = useSelector((state: RootState) => state.user.id);
   const [deleteEvent] = useDeleteEventsMutation();
@@ -142,14 +144,10 @@ const Events = () => {
             ? "Échec de la création de l'événement"
             : "Failed to create event",
       );
-      console.error("Failed to create event:", error);
     }
   };
 
-  useEffect(() => {
-    if (data) console.log("Response Data:", data);
-    if (error) console.log("Error:", error);
-  }, [data, error]);
+
 
   // Function to get error message based on current language
   const getErrorMessage = (message: string) => {

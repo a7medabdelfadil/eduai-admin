@@ -36,10 +36,6 @@ const FeesManagement = () => {
 
   const [selectAll, setSelectAll] = useState(false);
   const { data, error, isLoading, refetch } = useGetAllTaxesQuery(null);
-  useEffect(() => {
-    if (data) console.log("Response Data:", data);
-    if (error) console.log("Error:", error);
-  }, [data, error]);
   const booleanValue = useSelector((state: RootState) => state.boolean.value);
   type Invoice = Record<string, any>;
   const [search, setSearch] = useState("");
@@ -87,7 +83,6 @@ const FeesManagement = () => {
   const [deleteInvoice] = useDeleteTaxesMutation();
 
   const handleDelete = async (id: number) => {
-    console.log(id);
     try {
       await deleteInvoice(id).unwrap();
 

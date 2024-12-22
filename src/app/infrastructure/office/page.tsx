@@ -38,10 +38,7 @@ const Office = () => {
   const booleanValue = useSelector((state: RootState) => state.boolean.value);
   const [search, setSearch] = useState("");
 
-  useEffect(() => {
-    if (data) console.log("Response Data:", data);
-    if (error) console.log("Error:", error);
-  }, [data, error]);
+
 
   const [deleteBuses] = useDeleteOfficesMutation();
   type Bus = Record<string, any>;

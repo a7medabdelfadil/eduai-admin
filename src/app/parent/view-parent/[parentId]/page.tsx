@@ -22,7 +22,6 @@ const ViewParent: React.FC<ViewParentProps> = ({ params }) => {
       console.log(data);
     }
     if (error) {
-      console.error("Error:", error);
     }
   }, [data, error]);
 

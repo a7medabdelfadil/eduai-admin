@@ -220,7 +220,7 @@ const ViewInvoice: React.FC<ViewInvoiceProps> = ({ params }) => {
                   theme == "dark" ? "text-white" : "text-black"
                 }`}
               >
-                {data.data.billedToBasicInfo?.name}
+                {data?.data?.billedToBasicInfo?.name}
               </p>
             </h1>
             <h1 className="flex items-center gap-1 text-[20px] font-semibold text-secondary">
@@ -230,7 +230,7 @@ const ViewInvoice: React.FC<ViewInvoiceProps> = ({ params }) => {
                   theme == "dark" ? "text-white" : "text-black"
                 }`}
               >
-                {data.data.billedToBasicInfo?.id}
+                {data?.data?.billedToBasicInfo?.id}
               </p>
             </h1>
             <h1 className="flex items-center gap-1 text-[20px] font-semibold text-secondary">
@@ -240,7 +240,7 @@ const ViewInvoice: React.FC<ViewInvoiceProps> = ({ params }) => {
                   theme == "dark" ? "text-white" : "text-black"
                 }`}
               >
-                {data.data.billedToBasicInfo?.email}
+                {data?.data?.billedToBasicInfo?.email}
               </p>
             </h1>
             <h1 className="flex items-center gap-1 text-[20px] font-semibold text-secondary">
@@ -250,9 +250,9 @@ const ViewInvoice: React.FC<ViewInvoiceProps> = ({ params }) => {
                   theme == "dark" ? "text-white" : "text-black"
                 }`}
               >
-                {data.data.billedToBasicInfo?.phone == null
+                {data?.data?.billedToBasicInfo?.phone == null
                   ? "_"
-                  : data.data.billedToBasicInfo?.phone}
+                  : data?.data?.billedToBasicInfo?.phone}
               </p>
             </h1>
           </div>
@@ -264,7 +264,7 @@ const ViewInvoice: React.FC<ViewInvoiceProps> = ({ params }) => {
                   theme == "dark" ? "text-white" : "text-black"
                 }`}
               >
-                {formatTransactionDate(data.data.creationDate)}
+                {formatTransactionDate(data?.data?.creationDate)}
               </p>
             </h1>
             <h1 className="flex items-center gap-1 text-[20px] font-semibold text-secondary">
@@ -274,7 +274,7 @@ const ViewInvoice: React.FC<ViewInvoiceProps> = ({ params }) => {
                   theme == "dark" ? "text-white" : "text-black"
                 }`}
               >
-                {formatTransactionDate(data.data.dueDate)}
+                {formatTransactionDate(data?.data?.dueDate)}
               </p>
             </h1>
             <h1 className="flex items-center gap-1 text-[20px] font-semibold text-secondary">
@@ -284,7 +284,7 @@ const ViewInvoice: React.FC<ViewInvoiceProps> = ({ params }) => {
                   theme == "dark" ? "text-white" : "text-black"
                 }`}
               >
-                {data.data.paymentStatus
+                {data?.data?.paymentStatus
                   .toLowerCase()
                   .split("_")
                   .map(
@@ -303,7 +303,7 @@ const ViewInvoice: React.FC<ViewInvoiceProps> = ({ params }) => {
                   theme == "dark" ? "text-white" : "text-black"
                 }`}
               >
-                {data.data.totalAmount}
+                {data?.data?.totalAmount}
               </p>
             </h1>
           </div>
@@ -336,16 +336,16 @@ const ViewInvoice: React.FC<ViewInvoiceProps> = ({ params }) => {
                     scope="row"
                     className="whitespace-nowrap px-6 py-4 font-medium text-textSecondary"
                   >
-                    {data.data.invoiceItem.id}
+                    {data?.data?.invoiceItem.id}
                   </th>
                   <td className="whitespace-nowrap px-6 py-4">
-                    {data.data.invoiceItem.rate}
+                    {data?.data?.invoiceItem.rate}
                   </td>
                   <td className="whitespace-nowrap px-6 py-4">
-                    {data.data.invoiceItem.qty}
+                    {data?.data?.invoiceItem.qty}
                   </td>
                   <td className="whitespace-nowrap px-6 py-4">
-                    {data.data.invoiceItem.type}
+                    {data?.data?.invoiceItem.type}
                   </td>
                 </tr>
               </tbody>
@@ -361,7 +361,7 @@ const ViewInvoice: React.FC<ViewInvoiceProps> = ({ params }) => {
                   theme == "dark" ? "text-white" : "text-black"
                 }`}
               >
-                {data.data.paidAmount}
+                {data?.data?.paidAmount}
               </p>
             </p>
             <p className="flex items-center gap-1 border-b border-borderPrimary text-[18px] font-semibold text-secondary">
@@ -371,7 +371,7 @@ const ViewInvoice: React.FC<ViewInvoiceProps> = ({ params }) => {
                   theme == "dark" ? "text-white" : "text-black"
                 }`}
               >
-                {data.data.discountAmount}
+                {data?.data?.discountAmount}
               </p>
             </p>
             <p className="flex items-center gap-1 border-b border-borderPrimary text-[18px] font-semibold text-secondary">
@@ -381,7 +381,7 @@ const ViewInvoice: React.FC<ViewInvoiceProps> = ({ params }) => {
                   theme == "dark" ? "text-white" : "text-black"
                 }`}
               >
-                {data.data.taxAmount}
+                {data?.data?.taxAmount}
               </p>
             </p>
             <p className="flex items-center gap-1 text-[18px] font-semibold text-secondary">
@@ -391,7 +391,7 @@ const ViewInvoice: React.FC<ViewInvoiceProps> = ({ params }) => {
                   theme == "dark" ? "text-white" : "text-black"
                 }`}
               >
-                {data.data.dueAmount}
+                {data?.data?.dueAmount}
               </p>
             </p>
           </div>

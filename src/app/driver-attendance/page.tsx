@@ -81,12 +81,11 @@ const DriverAttendance = () => {
       createAttendance(attendanceData)
         .unwrap()
         .then(response => {
-          console.log("Attendance recorded:", response);
           refetch();
           toast.success("Attendance recorded successfully");
         })
         .catch(error => {
-          console.error("Failed to record attendance:", error);
+          
           toast.error("Failed to record attendance");
         });
     } else {
@@ -97,12 +96,10 @@ const DriverAttendance = () => {
       })
         .unwrap()
         .then(response => {
-          console.log("Attendance updated:", response);
           refetch();
           toast.info("Attendance updated successfully");
         })
         .catch(error => {
-          console.error("Failed to update attendance:", error);
           toast.error("Failed to update attendance");
         });
     }
@@ -140,10 +137,7 @@ const DriverAttendance = () => {
     }
   };
 
-  useEffect(() => {
-    if (data) console.log("Response Data:", data);
-    if (error) console.log("Error:", error);
-  }, [data, error]);
+
 
   const handleSelectAll = () => {
     setSelectAll(!selectAll);

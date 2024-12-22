@@ -56,10 +56,6 @@ const Student = () => {
     setCurrentPage(0);
   };
 
-  useEffect(() => {
-    if (data) console.log("Response Data:", data);
-    if (error) console.log("Error:", error);
-  }, [data, error]);
   const [deleteStudents] = useDeleteStudentsMutation();
 
   const handleDelete = async (id: string) => {
@@ -323,7 +319,10 @@ const Student = () => {
                           />
                         )}
                       </div>
-                      <p className="text-textSecondary"> {String(student.name)} </p>
+                      <p className="text-textSecondary">
+                        {" "}
+                        {String(student.name)}{" "}
+                      </p>
                     </th>
                     <td className="whitespace-nowrap px-6 py-4">
                       {student.id}

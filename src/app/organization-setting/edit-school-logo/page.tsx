@@ -6,7 +6,7 @@ import Spinner from "@/components/spinner";
 import { useGetSchoolLogoNameQuery } from "@/features/school/schoolLogo";
 import { useState } from "react";
 import { useUploadSchoolLogoMutation } from "@/features/school/schoolLogo";
-import { toast } from "react-toastify";  // إضافة toast notification
+import { toast } from "react-toastify"; // إضافة toast notification
 
 const EditSchool = () => {
   const breadcrumbs = [
@@ -17,15 +17,27 @@ const EditSchool = () => {
       href: "/",
     },
     {
+      nameEn: "Organization Settings",
+      nameAr: "إعدادات المنظمة",
+      nameFr: "Paramètres org",
+      href: "/organization-setting",
+    },
+    {
       nameEn: "Edit School Logo",
-      nameAr: "إضافة كتاب جديد",
-      nameFr: "Ajouter un nouveau livre",
-      href: "/edit-school-logo",
+      nameAr:  "تعديل شعار المدرسة",
+      nameFr: "Modifier le logo de l'école",
+      href: "/organization-setting/edit-school-logo",
     },
   ];
   const [logo, setLogo] = useState<File | null>(null);
-  const { data: logoData, error, isLoading, refetch } = useGetSchoolLogoNameQuery(null);
-  const [uploadSchoolLogo, { isLoading: isUploading, isError, isSuccess }] = useUploadSchoolLogoMutation();
+  const {
+    data: logoData,
+    error,
+    isLoading,
+    refetch,
+  } = useGetSchoolLogoNameQuery(null);
+  const [uploadSchoolLogo, { isLoading: isUploading, isError, isSuccess }] =
+    useUploadSchoolLogoMutation();
   const booleanValue = useSelector((state: RootState) => state.boolean.value);
   const { language: currentLanguage, loading } = useSelector(
     (state: RootState) => state.language,
@@ -42,20 +54,21 @@ const EditSchool = () => {
   // Handle file change
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files ? e.target.files[0] : null;
-  
+
     if (file) {
       const validTypes = ["image/jpeg", "image/png", "image/gif"];
-      
+
       if (validTypes.includes(file.type)) {
         setLogo(file);
       } else {
-        toast.error("Invalid file type! Please upload an image (JPG, PNG, GIF).");
+        toast.error(
+          "Invalid file type! Please upload an image (JPG, PNG, GIF).",
+        );
       }
     } else {
       toast.error("No file selected.");
     }
   };
-  
 
   // Handle form submission
   const handleSubmit = async (e: React.FormEvent) => {
@@ -139,7 +152,10 @@ const EditSchool = () => {
             </div>
 
             <div className="grid grid-cols-2 gap-4 max-[1278px]:grid-cols-1">
-              <label htmlFor="logo" className="grid font-sans text-[18px] font-semibold">
+              <label
+                htmlFor="logo"
+                className="grid font-sans text-[18px] font-semibold"
+              >
                 {currentLanguage === "en"
                   ? "Upload Logo"
                   : currentLanguage === "ar"

@@ -2,7 +2,10 @@
 import Calendar from "@/components/calendar";
 import Spinner from "@/components/spinner";
 import TeacherInfo from "@/components/teacherInfo";
-import { useGetTeacherByIdQuery, useGetTeacherClassQuery } from "@/features/User-Management/teacherApi";
+import {
+  useGetTeacherByIdQuery,
+  useGetTeacherClassQuery,
+} from "@/features/User-Management/teacherApi";
 import { useEffect } from "react";
 import { RootState } from "@/GlobalRedux/store";
 import { useSelector } from "react-redux";
@@ -13,18 +16,12 @@ interface ViewTeacherProps {
 }
 const ViewTeacher: React.FC<ViewTeacherProps> = ({ params }) => {
   const { data, error, isLoading } = useGetTeacherByIdQuery(params.teacherId);
-  const { data: Classes, isLoading: isClasses } = useGetTeacherClassQuery(params.teacherId);
+  const { data: Classes, isLoading: isClasses } = useGetTeacherClassQuery(
+    params.teacherId,
+  );
 
   const booleanValue = useSelector((state: RootState) => state.boolean.value);
 
-  useEffect(() => {
-    if (data) {
-      console.log(data);
-    }
-    if (error) {
-      console.error("Error:", error);
-    }
-  }, [data, error]);
 
   const { language: currentLanguage, loading } = useSelector(
     (state: RootState) => state.language,
@@ -72,41 +69,45 @@ const ViewTeacher: React.FC<ViewTeacherProps> = ({ params }) => {
                 <thead className="bg-thead text-xs uppercase text-textPrimary">
                   <tr>
                     <th scope="col" className="whitespace-nowrap px-6 py-3">
-                    courseName
+                      courseName
                     </th>
                     <th scope="col" className="whitespace-nowrap px-6 py-3">
-                    classroomName
+                      classroomName
                     </th>
                     <th scope="col" className="whitespace-nowrap px-6 py-3">
-                    startTime
+                      startTime
                     </th>
                     <th scope="col" className="whitespace-nowrap px-6 py-3">
-                    endTime
+                      endTime
                     </th>
                     <th scope="col" className="whitespace-nowrap px-6 py-3">
-                    day
+                      day
                     </th>
                   </tr>
                 </thead>
                 <tbody>
-                  {
-                    Classes.data.map((classItem: any) => (
-                      <tr className="border-b border-borderPrimary bg-bgPrimary hover:bg-bgSecondary">
-                        <th
-                          scope="row"
-                          className="whitespace-nowrap px-6 py-4 font-medium text-textSecondary"
-                        >
-                          {classItem.courseName}
-                        </th>
-                        <td className="whitespace-nowrap px-6 py-4">{classItem.classroomName}</td>
-                        <td className="whitespace-nowrap px-6 py-4">
-                        {classItem.startTime}
-                        </td>
-                        <td className="whitespace-nowrap px-6 py-4">{classItem.endTime}</td>
-                        <td className="whitespace-nowrap px-6 py-4">{classItem.day}</td>
-                      </tr>
-                    ))
-                  }
+                  {Classes?.data?.map((classItem: any) => (
+                    <tr className="border-b border-borderPrimary bg-bgPrimary hover:bg-bgSecondary">
+                      <th
+                        scope="row"
+                        className="whitespace-nowrap px-6 py-4 font-medium text-textSecondary"
+                      >
+                        {classItem?.courseName}
+                      </th>
+                      <td className="whitespace-nowrap px-6 py-4">
+                        {classItem?.classroomName}
+                      </td>
+                      <td className="whitespace-nowrap px-6 py-4">
+                        {classItem?.startTime}
+                      </td>
+                      <td className="whitespace-nowrap px-6 py-4">
+                        {classItem?.endTime}
+                      </td>
+                      <td className="whitespace-nowrap px-6 py-4">
+                        {classItem?.day}
+                      </td>
+                    </tr>
+                  ))}
                 </tbody>
               </table>
             </div>

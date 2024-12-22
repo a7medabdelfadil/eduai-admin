@@ -28,8 +28,7 @@ export const chatApi = createApi({
   }),
   endpoints: builder => ({
     getAllChats: builder.query({
-      query: () =>
-        `/api/v1/chat/all`,
+      query: () => `/api/v1/chat/all`,
     }),
     //
     getChatMessages: builder.query({
@@ -59,7 +58,7 @@ export const chatApi = createApi({
     }),
     //
     deleteChat: builder.mutation({
-      query: ( id ) => ({
+      query: id => ({
         url: `/api/v1/chat/${id}`,
         method: "DELETE",
       }),

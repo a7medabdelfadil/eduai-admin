@@ -20,12 +20,14 @@ import { useTheme } from "next-themes";
 import { FiSun, FiMoon } from "react-icons/fi";
 import { MdNavigateBefore, MdNavigateNext } from "react-icons/md";
 import { setUser } from "@/features/userSlice";
+import { useGetSchoolLogoQuery } from "@/features/events/eventsApi";
+import { useNotificationsWebSocket } from "@/hooks/useNotifications";
 
 const NavBar = () => {
   const { language: currentLanguage, loading } = useSelector(
     (state: RootState) => state.language,
   );
-
+  const { data, isLoading } = useGetSchoolLogoQuery(null);
   const dispatchLang = useDispatch();
   useEffect(() => {
     dispatchLang(initializeLanguage());
@@ -63,6 +65,11 @@ const NavBar = () => {
       id: userData?.data?.id,
     }),
   );
+
+  const userId = useSelector((state: RootState) => state.user?.id) || null;
+
+  const { notificationsCount, isConnected } = useNotificationsWebSocket(userId);
+  
 
   const [pathname, setPathname] = useState("");
   const [small, setSmall] = useState(false);
@@ -175,13 +182,21 @@ const NavBar = () => {
               className="mx-auto flex w-full basis-full items-center px-4 sm:px-6"
               aria-label="Global"
             >
-              <div className="me-5 lg:me-0 lg:hidden">
+              <div className="max-[1024px]:hidden">
                 <Link
                   className="inline-block flex-none rounded-xl text-xl font-semibold focus:opacity-80 focus:outline-none"
                   href="/"
                   aria-label="Preline"
                 >
-                  <img src="/images/logo.png" alt="#" />
+                  {isLoading ? (
+                    <p></p>
+                  ) : (
+                    <img
+                      src={data?.data?.logoLink}
+                      alt="#"
+                      className="h-[60px] w-[100px]"
+                    />
+                  )}
                 </Link>
               </div>
 
@@ -233,7 +248,7 @@ const NavBar = () => {
                   )}
                   <Link
                     href="/notifies"
-                    className="inline-flex h-[2.375rem] w-[2.375rem] items-center justify-center gap-x-2 rounded-full border border-transparent text-sm font-semibold text-textPrimary hover:bg-bgSecondary disabled:pointer-events-none disabled:opacity-50"
+                    className="relative inline-flex h-[2.375rem] w-[2.375rem] items-center justify-center gap-x-2 rounded-full border border-transparent text-sm font-semibold text-textPrimary hover:bg-bgSecondary disabled:pointer-events-none disabled:opacity-50"
                   >
                     <svg
                       className="size-4 flex-shrink-0"
@@ -250,6 +265,11 @@ const NavBar = () => {
                       <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9" />
                       <path d="M10.3 21a1.94 1.94 0 0 0 3.4 0" />
                     </svg>
+                    {notificationsCount > 0 && (
+                      <div className="absolute top-4 left-5 bg-sky-500 text-white w-4 h-4 rounded-full flex justify-center items-center text-center text-sm">
+                        <span>{notificationsCount}</span>
+                      </div>
+                    )}
                   </Link>
                   <Link
                     href="/chat"
@@ -949,6 +969,19 @@ const NavBar = () => {
                       <ul
                         className={`${small ? "hidden w-fit translate-x-5 whitespace-nowrap rounded-xl bg-bgPrimary p-2 group-hover:grid" : ""} mx-9 mt-2 grid gap-2 text-[14px] font-semibold`}
                       >
+                        <Link
+                          className="hover:text-primary"
+                          href="/chat"
+                        >
+                          {currentLanguage === "en"
+                            ? "Reported Chat"
+                            : currentLanguage === "ar"
+                              ? "الإبلاغات"
+                              : currentLanguage === "fr"
+                                ? "Discussion signalée"
+                                : "Reported Chat"}{" "}
+                          {/* Default to English */}
+                        </Link>
                         <Link
                           className="hover:text-primary"
                           href="/post-management/news"

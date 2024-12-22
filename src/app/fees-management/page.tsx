@@ -83,7 +83,6 @@ const FeesManagement = () => {
   const [deleteInvoice] = useDeleteInvoicesMutation();
 
   const handleDelete = async (id: number) => {
-    console.log(id);
     try {
       await deleteInvoice(id).unwrap();
 

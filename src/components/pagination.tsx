@@ -1,6 +1,7 @@
 "use client";
 import { RootState } from "@/GlobalRedux/store";
 import { useSelector } from "react-redux";
+import { useMemo } from "react";
 
 type PaginationProps = {
   totalPages: number;
@@ -17,61 +18,70 @@ const Pagination: React.FC<PaginationProps> = ({
   onChangeElementsPerPage,
   totalPages,
 }) => {
-  const numOfPages = totalPages;
   const { language: currentLanguage } = useSelector(
     (state: RootState) => state.language,
   );
 
-  const prevPage = () => {
-    let prevPage = currentPage - 1;
-    if (prevPage < 0) prevPage = numOfPages;
-    onChangePage(prevPage);
-  };
-
-  const nextPage = () => {
-    let nextPage = currentPage + 1;
-    if (nextPage > numOfPages) nextPage = numOfPages;
-    onChangePage(nextPage);
-  };
-
-  const addPageButton = ({
-    pageNum,
-    activeClass,
-  }: {
-    pageNum: number;
-    activeClass: boolean;
-  }) => (
-    <button
-      className="rounded-xl"
-      key={pageNum}
-      style={{
-        padding: "0.75rem 1rem",
-        fontSize: "14px",
-        backgroundColor: activeClass ? "#0077cc" : "transparent",
-        color: activeClass ? "#FFFFFF" : "#B2B1B4",
-        border: "none",
-        cursor: "pointer",
-      }}
-      onClick={() => onChangePage(pageNum)}
-    >
-      {pageNum + 1}
-    </button>
+  // Memoized page navigation functions to prevent unnecessary re-renders
+  const prevPage = useMemo(
+    () => () => {
+      let prevPage = currentPage - 1;
+      if (prevPage < 0) prevPage = totalPages;
+      onChangePage(prevPage);
+    },
+    [currentPage, totalPages, onChangePage],
   );
 
-  const renderPageButton = () => {
+  const nextPage = useMemo(
+    () => () => {
+      let nextPage = currentPage + 1;
+      if (nextPage > totalPages) nextPage = totalPages;
+      onChangePage(nextPage);
+    },
+    [currentPage, totalPages, onChangePage],
+  );
+
+  // Memoized page button generation to optimize performance
+  const pageButtons = useMemo(() => {
     const pagesButtons: React.ReactNode[] = [];
 
-    if (numOfPages <= 5) {
-      for (let i = 0; i < numOfPages; i++) {
+    const addPageButton = ({
+      pageNum,
+      activeClass,
+    }: {
+      pageNum: number;
+      activeClass: boolean;
+    }) => (
+      <button
+        className="rounded-xl"
+        key={pageNum}
+        style={{
+          padding: "0.75rem 1rem",
+          fontSize: "14px",
+          backgroundColor: activeClass ? "#0077cc" : "transparent",
+          color: activeClass ? "#FFFFFF" : "#B2B1B4",
+          border: "none",
+          cursor: "pointer",
+        }}
+        onClick={() => onChangePage(pageNum)}
+      >
+        {pageNum + 1}
+      </button>
+    );
+
+    if (totalPages <= 5) {
+      for (let i = 0; i < totalPages; i++) {
         pagesButtons.push(
           addPageButton({ pageNum: i, activeClass: currentPage === i }),
         );
       }
     } else {
+      // First page button
       pagesButtons.push(
-        addPageButton({ pageNum: 1, activeClass: currentPage === 1 }),
+        addPageButton({ pageNum: 0, activeClass: currentPage === 0 }),
       );
 
+      // Conditional rendering of left ellipsis
       if (currentPage > 3) {
         pagesButtons.push(
           <span key="dots-1" style={{ margin: "0 0.5rem" }}>
@@ -80,25 +90,22 @@ const Pagination: React.FC<PaginationProps> = ({
         );
       }
 
-      if (currentPage > 2 && currentPage < numOfPages - 1) {
-        pagesButtons.push(
-          addPageButton({ pageNum: currentPage - 1, activeClass: false }),
-        );
-      }
+      // Surrounding page buttons
+      const surroundingPages = [-1, 0, 1];
+      surroundingPages.forEach(offset => {
+        const pageNum = currentPage + offset;
+        if (pageNum > 0 && pageNum < totalPages - 1) {
+          pagesButtons.push(
+            addPageButton({
+              pageNum,
+              activeClass: pageNum === currentPage,
+            }),
+          );
+        }
+      });
 
-      if (currentPage !== 1 && currentPage !== numOfPages) {
-        pagesButtons.push(
-          addPageButton({ pageNum: currentPage, activeClass: true }),
-        );
-      }
-
-      if (currentPage < numOfPages - 1) {
-        pagesButtons.push(
-          addPageButton({ pageNum: currentPage + 1, activeClass: false }),
-        );
-      }
-
-      if (currentPage < numOfPages - 2) {
+      // Conditional rendering of right ellipsis
+      if (currentPage < totalPages - 2) {
         pagesButtons.push(
           <span key="dots-2" style={{ margin: "0 0.5rem" }}>
             ...
@@ -106,15 +113,30 @@ const Pagination: React.FC<PaginationProps> = ({
         );
       }
 
+      // Last page button
       pagesButtons.push(
         addPageButton({
-          pageNum: numOfPages,
-          activeClass: currentPage === numOfPages,
+          pageNum: totalPages - 1,
+          activeClass: currentPage === totalPages - 1,
         }),
       );
     }
 
     return pagesButtons;
+  }, [currentPage, totalPages, onChangePage]);
+
+  // Localized labels based on selected language
+  const getLocalizedLabel = (en: string, ar: string, fr: string) => {
+    switch (currentLanguage) {
+      case "en":
+        return en;
+      case "ar":
+        return ar;
+      case "fr":
+        return fr;
+      default:
+        return en;
+    }
   };
 
   return (
@@ -138,13 +160,7 @@ const Pagination: React.FC<PaginationProps> = ({
           className="text-textPrimary"
           style={{ fontSize: "14px" }}
         >
-          {currentLanguage === "en"
-            ? "Show"
-            : currentLanguage === "ar"
-              ? "عرض"
-              : currentLanguage === "fr"
-                ? "Afficher"
-                : "Show"}
+          {getLocalizedLabel("Show", "عرض", "Afficher")}
         </label>
         <select
           id="elementsPerPage"
@@ -166,13 +182,7 @@ const Pagination: React.FC<PaginationProps> = ({
           className="text-textPrimary"
           style={{ fontSize: "14px" }}
         >
-          {currentLanguage === "en"
-            ? "Rows"
-            : currentLanguage === "ar"
-              ? "الصفوف"
-              : currentLanguage === "fr"
-                ? "Lignes"
-                : "Rows"}
+          {getLocalizedLabel("Rows", "الصفوف", "Lignes")}
         </label>
       </div>
       <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
@@ -201,10 +211,10 @@ const Pagination: React.FC<PaginationProps> = ({
             />
           </svg>
         </button>
-        {renderPageButton()}
+        {pageButtons}
         <button
           style={{
-            visibility: currentPage === numOfPages ? "hidden" : "visible",
+            visibility: currentPage === totalPages - 1 ? "hidden" : "visible",
             border: "none",
             cursor: "pointer",
           }}

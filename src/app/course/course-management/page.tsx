@@ -125,9 +125,14 @@ const CourseManagement = () => {
         <div className="grid gap-3 p-3 sm:grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
           {data?.data.content
             .filter((course: Course) => {
-              return search.toLocaleLowerCase() === ""
+              // Convert both search term and course name to lowercase for case-insensitive comparison
+              const searchTerm = search.toLowerCase();
+              const courseName = course.name.toLowerCase();
+
+              // Return all courses if search is empty, otherwise check if course name includes search term
+              return search.trim() === ""
                 ? course
-                : course.name.toLocaleLowerCase().includes(search);
+                : courseName.includes(searchTerm);
             })
             .map((course: Course, index: number) => (
               <div
@@ -135,8 +140,7 @@ const CourseManagement = () => {
                 className="grid gap-2 rounded-lg bg-bgPrimary p-2"
               >
                 <div className="grid h-[220px] rounded-xl bg-[#f4bd0e] p-2 text-[25px] font-bold text-textPrimary">
-                  <div className="flex justify-end text-end">
-                  </div>
+                  <div className="flex justify-end text-end"></div>
                   <div className="items-staet mb-6 flex justify-center text-center">
                     <h1>{course.name}</h1>
                   </div>
@@ -156,7 +160,6 @@ const CourseManagement = () => {
                   />
                   {course.eduSystemName}
                 </div>
-                
               </div>
             ))}
         </div>

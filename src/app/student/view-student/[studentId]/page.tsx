@@ -23,9 +23,7 @@ const ViewStudent: React.FC<ViewStudentProps> = ({ params }) => {
     if (data) {
       console.log(data);
     }
-    if (error) {
-      console.error("Error:", error);
-    }
+  
   }, [data, error]);
 
   const { language: currentLanguage, loading } = useSelector(

@@ -1,4 +1,5 @@
 import type { Config } from "tailwindcss";
+import { CSSRuleObject } from "tailwindcss/types/config";
 
 const config: Config = {
   content: [
@@ -32,7 +33,25 @@ const config: Config = {
     },
   },
   plugins: [
-    require('tailwindcss-rtl'),
+    require("tailwindcss-animate"),
+      function ({ addBase }: { addBase: (base: CSSRuleObject | CSSRuleObject[]) => void }) {
+        addBase({
+          '::-webkit-scrollbar': {
+            width: '5px',
+            height: '5px',
+          },
+          '::-webkit-scrollbar-track': {
+            background: '#F0EFF2',
+          },
+          '::-webkit-scrollbar-thumb': {
+            background: '#4a5cc5',
+            "border-radius": "5px",
+          },
+          '::-webkit-scrollbar-thumb:hover': {
+            background: '#3b2b70',
+          },
+        });
+      },
   ],
   darkMode: 'class',
 };

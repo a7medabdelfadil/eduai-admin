@@ -92,8 +92,6 @@ const Attendance = () => {
 
   return (
     <>
-      <Soon />
-
       <BreadCrumbs breadcrumbs={breadcrumbs} />
       <div
         dir={currentLanguage === "ar" ? "rtl" : "ltr"}

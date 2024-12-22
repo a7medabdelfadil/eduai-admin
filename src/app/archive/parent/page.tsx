@@ -57,10 +57,6 @@ const Parent = () => {
     size: rowsPerPage,
   });
 
-  useEffect(() => {
-    if (data) console.log("Response Data:", data);
-    if (error) console.log("Error:", error);
-  }, [data, error]);
   const [deleteParents] = useDeleteParentsMutation();
 
   const handleDelete = async (id: string) => {

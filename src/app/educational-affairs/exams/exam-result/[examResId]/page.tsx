@@ -56,16 +56,11 @@ const ExamRes = ({ params }: ParamsType) => {
   const booleanValue = useSelector((state: RootState) => state.boolean.value);
   const [search, setSearch] = useState("");
 
-  useEffect(() => {
-    if (data) console.log("Response Data:", data);
-    if (error) console.log("Error:", error);
-  }, [data, error]);
 
   const [deleteExames] = useDeleteExamResultMutation();
   type Exam = Record<string, any>;
 
   const handleDelete = async (id: number) => {
-    console.log(id);
     try {
       await deleteExames(id).unwrap();
 

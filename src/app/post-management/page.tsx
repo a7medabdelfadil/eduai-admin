@@ -1,7 +1,10 @@
 /* eslint-disable @next/next/no-img-element */
 "use client";
 import Spinner from "@/components/spinner";
-import { useDeletePostsMutation, useGetAllPostsQuery } from "@/features/communication/postApi";
+import {
+  useDeletePostsMutation,
+  useGetAllPostsQuery,
+} from "@/features/communication/postApi";
 import Link from "next/link";
 import { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
@@ -30,11 +33,23 @@ const PostManagment = () => {
   type Post = Record<string, any>;
   const { data, error, isLoading, refetch } = useGetAllPostsQuery(null);
   const [selectAll, setSelectAll] = useState(false);
+  const [filteredCount, setFilteredCount] = useState(0);
+  const [filteredData, setFilteredData] = useState<Post[]>([]);
 
   useEffect(() => {
-    if (data) console.log("Response Data:", data);
-    if (error) console.log("Error:", error);
-  }, [data, error]);
+    if (!data?.data.content) return;
+
+    const filtered = data.data.content.filter((post: Post) => {
+      return search.toLocaleLowerCase() === ""
+        ? post
+        : post.title_en.toLocaleLowerCase().includes(search);
+    });
+
+    setFilteredData(filtered);
+    setFilteredCount(filtered.length);
+  }, [search, data?.data.content]);
+
+
 
   const handleSelectAll = () => {
     setSelectAll(!selectAll);
@@ -133,38 +148,44 @@ const PostManagment = () => {
             <label htmlFor="icon" className="sr-only">
               Search
             </label>
-            <div className="relative min-w-72 md:min-w-80">
-              <div className="pointer-events-none absolute inset-y-0 start-0 z-20 flex items-center ps-4">
-                <svg
-                  className="size-4 flex-shrink-0 text-gray-400"
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                >
-                  <circle cx="11" cy="11" r="8" />
-                  <path d="m21 21-4.3-4.3" />
-                </svg>
+            <div className="flex gap-1">
+              <div className="relative min-w-72 md:min-w-80">
+                <div className="pointer-events-none absolute inset-y-0 start-0 z-20 flex items-center ps-4">
+                  <svg
+                    className="size-4 flex-shrink-0 text-gray-400"
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <circle cx="11" cy="11" r="8" />
+                    <path d="m21 21-4.3-4.3" />
+                  </svg>
+                </div>
+                <input
+                  onChange={e => setSearch(e.target.value)}
+                  type="text"
+                  id="icon"
+                  name="icon"
+                  className="block w-full rounded-lg border-2 border-borderPrimary px-4 py-2 ps-11 text-sm outline-none focus:border-blue-500 focus:ring-blue-500 disabled:pointer-events-none disabled:opacity-50"
+                  placeholder={
+                    currentLanguage === "en"
+                      ? "Search"
+                      : currentLanguage === "ar"
+                        ? "بحث"
+                        : "Recherche"
+                  }
+                />
               </div>
-              <input
-                onChange={e => setSearch(e.target.value)}
-                type="text"
-                id="icon"
-                name="icon"
-                className="block w-full rounded-lg border-2 border-borderPrimary px-4 py-2 ps-11 text-sm outline-none focus:border-blue-500 focus:ring-blue-500 disabled:pointer-events-none disabled:opacity-50"
-                placeholder={
-                  currentLanguage === "en"
-                    ? "Search"
-                    : currentLanguage === "ar"
-                      ? "بحث"
-                      : "Recherche"
-                }
-              />
+              <div className="flex w-fit items-center justify-start rounded-lg border-2 border-borderPrimary bg-bgPrimary p-2 px-4 text-sm font-bold outline-none focus:border-blue-500 focus:ring-blue-500 disabled:pointer-events-none disabled:opacity-50">
+                {filteredCount}
+                <span className="ml-1 font-bold text-primary">result(s)</span>
+              </div>
             </div>
           </div>
           <div className="flex justify-center">
@@ -184,16 +205,6 @@ const PostManagment = () => {
           <table className="w-full overflow-x-auto text-left text-sm text-textSecondary rtl:text-right">
             <thead className="bg-thead text-xs uppercase text-textPrimary">
               <tr>
-                <th scope="col" className="p-4">
-                  <div className="flex items-center">
-                    <input
-                      id="checkbox-all-search"
-                      type="checkbox"
-                      className="-gray-800 h-4 w-4 rounded border border-borderPrimary bg-gray-100 text-blue-600 focus:ring-2 focus:ring-blue-500"
-                      onChange={handleSelectAll}
-                    />
-                  </div>
-                </th>
                 <th scope="col" className="whitespace-nowrap px-6 py-3">
                   {currentLanguage === "ar"
                     ? "العنوان"
@@ -223,7 +234,7 @@ const PostManagment = () => {
                       : "Image"}
                 </th>
                 <th scope="col" className="whitespace-nowrap px-6 py-3">
-                {currentLanguage === "ar"
+                  {currentLanguage === "ar"
                     ? "تحرير"
                     : currentLanguage === "fr"
                       ? "Modifier"
@@ -239,68 +250,56 @@ const PostManagment = () => {
               </tr>
             </thead>
             <tbody>
-              {data?.data.content
-                .filter((post: Post) => {
-                  return search.toLocaleLowerCase() === ""
-                    ? post
-                    : post.title_en.toLocaleLowerCase().includes(search);
-                })
-                .map((post: Post) => (
-                  <tr
-                    key={post.id}
-                    className="border-b border-borderPrimary bg-bgPrimary hover:bg-bgSecondary"
-                  >
-                    <td className="w-4 p-4">
-                      <div className="flex items-center">
-                        <input
-                          id="checkbox-table-search-1"
-                          type="checkbox"
-                          className="h-4 w-4 rounded border-gray-300 bg-gray-100 text-blue-600 focus:ring-2 focus:ring-blue-500"
+              {filteredData?.map((post: Post) => (
+                <tr
+                  key={post.id}
+                  className="border-b border-borderPrimary bg-bgPrimary hover:bg-bgSecondary"
+                >
+                  <th scope="row" className="whitespace-nowrap px-6 py-4">
+                    <p> {post.title_en} </p>
+                  </th>
+                  <td className="whitespace-nowrap px-6 py-4">{post.id}</td>
+                  <td className="whitespace-nowrap px-6 py-4">
+                    {post.content_en}
+                  </td>
+                  <td className="whitespace-nowrap px-6 py-4">
+                    <div className="grid grid-cols-2 gap-2">
+                      {post.attachments.map((img: any, index: number) => (
+                        <img
+                          className="w-[200px] rounded-md"
+                          src={img.viewLink}
+                          alt="#"
+                          key={index}
                         />
-                      </div>
-                    </td>
-                    <th scope="row" className="whitespace-nowrap px-6 py-4">
-                      <p> {post.title_en} </p>
-                    </th>
-                    <td className="whitespace-nowrap px-6 py-4">{post.id}</td>
-                    <td className="whitespace-nowrap px-6 py-4">
-                      {post.content_en}
-                    </td>
-                    <td className="whitespace-nowrap px-6 py-4">
-                      <div className="grid grid-cols-2 gap-2">
-                        {post.attachments.map((img: any, index: number) => (
-                          <img
-                            className="w-[200px] rounded-md"
-                            src={img.viewLink}
-                            alt="#"
-                            key={index}
-                          />
-                        ))}
-                      </div>
-                    </td>
-                    <td className="whitespace-nowrap px-6 py-4">
-                      <Link
-                        href={`/post-management/${post.id}`}
-                        className="font-medium text-blue-600 hover:underline"
-                      >
-                        {currentLanguage === "ar"
-                          ? "تعديل"
-                          : currentLanguage === "fr"
-                            ? "Modifier"
-                            : "Edit"}
-                      </Link>
-                    </td>
-                    <td className="whitespace-nowrap px-6 py-4">
-                      <button onClick={() => handleDelete(post.id)} className="rounded-lg bg-error px-2 py-1 font-semibold text-white shadow-lg delay-150 duration-300 ease-in-out hover:-translate-y-1 hover:scale-110">
-                        {currentLanguage === "ar"
-                          ? "حذف"
-                          : currentLanguage === "fr"
-                            ? "Supprimer"
-                            : "Delete"}
-                      </button>
-                    </td>
-                  </tr>
-                ))}
+                      ))}
+                    </div>
+                  </td>
+                  <td className="whitespace-nowrap px-6 py-4">
+                    <Link
+                      href={`/post-management/${post.id}`}
+                      className="font-medium text-blue-600 hover:underline"
+                    >
+                      {currentLanguage === "ar"
+                        ? "تعديل"
+                        : currentLanguage === "fr"
+                          ? "Modifier"
+                          : "Edit"}
+                    </Link>
+                  </td>
+                  <td className="whitespace-nowrap px-6 py-4">
+                    <button
+                      onClick={() => handleDelete(post.id)}
+                      className="rounded-lg bg-error px-2 py-1 font-semibold text-white shadow-lg delay-150 duration-300 ease-in-out hover:-translate-y-1 hover:scale-110"
+                    >
+                      {currentLanguage === "ar"
+                        ? "حذف"
+                        : currentLanguage === "fr"
+                          ? "Supprimer"
+                          : "Delete"}
+                    </button>
+                  </td>
+                </tr>
+              ))}
             </tbody>
           </table>
           {(data?.data.content.length == 0 || data == null) && (

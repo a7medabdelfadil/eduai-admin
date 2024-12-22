@@ -45,14 +45,7 @@ const ViewDriver: React.FC<ViewDriverProps> = ({ params }) => {
   const booleanValue = useSelector((state: RootState) => state.boolean.value);
 
   const { data, error, isLoading } = useGetDriverByIdQuery(params.driverId);
-  useEffect(() => {
-    if (data) {
-      console.log(data);
-    }
-    if (error) {
-      console.error("Error:", error);
-    }
-  }, [data, error]);
+
 
   const { language: currentLanguage, loading } = useSelector(
     (state: RootState) => state.language,

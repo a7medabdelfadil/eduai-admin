@@ -127,7 +127,6 @@ const AddTaxes = () => {
             : "Tax record created successfully",
       );
     } catch (err) {
-      console.error("Failed to create tax record", err);
       toast.error(
         currentLanguage === "ar"
           ? "فشل في إنشاء سجل الضريبة"

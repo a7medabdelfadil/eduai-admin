@@ -31,6 +31,10 @@ export const eventsApi = createApi({
       query: () => "/api/v1/event/all?size=10&page=0&getActive=1",
     }),
     //
+    getSchoolLogo: builder.query({
+      query: () => "/api/v1/school-logo/name-logo",
+    }),
+    //
     getAllEventsDashboard: builder.query({
       query: () =>
         "/api/v1/dashboard/upcoming-events?size=3&page=0&getActive=1",
@@ -69,6 +73,7 @@ export const {
   useGetAllEventsQuery,
   useGetAllEventsDashboardQuery,
   useDeleteEventsMutation,
+  useGetSchoolLogoQuery,
   useCreateEventsMutation,
   useGetEventByIdQuery,
   useUpdateEventsMutation,

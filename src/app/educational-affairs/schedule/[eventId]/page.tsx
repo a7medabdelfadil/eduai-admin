@@ -8,7 +8,10 @@ import { RootState } from "@/GlobalRedux/store";
 import BreadCrumbs from "@/components/BreadCrumbs";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useGetSchedualByIdQuery, useUpdateSchedualMutation } from "@/features/Acadimic/scheduleApi";
+import {
+  useGetSchedualByIdQuery,
+  useUpdateSchedualMutation,
+} from "@/features/Acadimic/scheduleApi";
 
 type Props = {
   params: {
@@ -67,9 +70,8 @@ const UpdateEvent = ({ params }: Props) => {
   });
 
   const [updateEvent, { isLoading }] = useUpdateSchedualMutation();
-  const { data: eventData, isLoading: isEventLoading } = useGetSchedualByIdQuery(
-    params.eventId,
-  );
+  const { data: eventData, isLoading: isEventLoading } =
+    useGetSchedualByIdQuery(params.eventId);
 
   useEffect(() => {
     if (eventData && eventData.data) {
@@ -150,81 +152,83 @@ const UpdateEvent = ({ params }: Props) => {
             </div>
             <div className="grid grid-cols-2 gap-4 max-[1278px]:grid-cols-1">
               <div>
-          <label>
-            {currentLanguage === "ar"
-              ? "اليوم"
-              : currentLanguage === "fr"
-                ? "Jour"
-                : "Day"}
-          </label>
-          <select
-            id="day"
-            className="w-full rounded border border-borderPrimary bg-bgPrimary px-4 py-2"
-            {...register("day")}
-          >
-            <option value="">
-              {currentLanguage === "ar"
-                ? "اختر اليوم"
-                : currentLanguage === "fr"
-                  ? "Sélectionner le jour"
-                  : "Select Day"}
-            </option>
-            <option value="SUNDAY">
-              {currentLanguage === "ar"
-                ? "الأحد"
-                : currentLanguage === "fr"
-                  ? "Dimanche"
-                  : "Sunday"}
-            </option>
-            <option value="MONDAY">
-              {currentLanguage === "ar"
-                ? "الإثنين"
-                : currentLanguage === "fr"
-                  ? "Lundi"
-                  : "Monday"}
-            </option>
-            <option value="TUESDAY">
-              {currentLanguage === "ar"
-                ? "الثلاثاء"
-                : currentLanguage === "fr"
-                  ? "Mardi"
-                  : "Tuesday"}
-            </option>
-            <option value="WEDNESDAY">
-              {currentLanguage === "ar"
-                ? "الأربعاء"
-                : currentLanguage === "fr"
-                  ? "Mercredi"
-                  : "Wednesday"}
-            </option>
-            <option value="THURSDAY">
-              {currentLanguage === "ar"
-                ? "الخميس"
-                : currentLanguage === "fr"
-                  ? "Jeudi"
-                  : "Thursday"}
-            </option>
-            <option value="FRIDAY">
-              {currentLanguage === "ar"
-                ? "الجمعة"
-                : currentLanguage === "fr"
-                  ? "Vendredi"
-                  : "Friday"}
-            </option>
-            <option value="SATURDAY">
-              {currentLanguage === "ar"
-                ? "السبت"
-                : currentLanguage === "fr"
-                  ? "Samedi"
-                  : "Saturday"}
-            </option>
-          </select>
-          {errors.day && (
-            <p className="text-red-500">{errors.day.message?.toString()}</p>
-          )}
-        </div>
+                <label>
+                  {currentLanguage === "ar"
+                    ? "اليوم"
+                    : currentLanguage === "fr"
+                      ? "Jour"
+                      : "Day"}
+                </label>
+                <select
+                  id="day"
+                  className="w-full rounded border border-borderPrimary bg-bgPrimary px-4 py-2"
+                  {...register("day")}
+                >
+                  <option value="">
+                    {currentLanguage === "ar"
+                      ? "اختر اليوم"
+                      : currentLanguage === "fr"
+                        ? "Sélectionner le jour"
+                        : "Select Day"}
+                  </option>
+                  <option value="SUNDAY">
+                    {currentLanguage === "ar"
+                      ? "الأحد"
+                      : currentLanguage === "fr"
+                        ? "Dimanche"
+                        : "Sunday"}
+                  </option>
+                  <option value="MONDAY">
+                    {currentLanguage === "ar"
+                      ? "الإثنين"
+                      : currentLanguage === "fr"
+                        ? "Lundi"
+                        : "Monday"}
+                  </option>
+                  <option value="TUESDAY">
+                    {currentLanguage === "ar"
+                      ? "الثلاثاء"
+                      : currentLanguage === "fr"
+                        ? "Mardi"
+                        : "Tuesday"}
+                  </option>
+                  <option value="WEDNESDAY">
+                    {currentLanguage === "ar"
+                      ? "الأربعاء"
+                      : currentLanguage === "fr"
+                        ? "Mercredi"
+                        : "Wednesday"}
+                  </option>
+                  <option value="THURSDAY">
+                    {currentLanguage === "ar"
+                      ? "الخميس"
+                      : currentLanguage === "fr"
+                        ? "Jeudi"
+                        : "Thursday"}
+                  </option>
+                  <option value="FRIDAY">
+                    {currentLanguage === "ar"
+                      ? "الجمعة"
+                      : currentLanguage === "fr"
+                        ? "Vendredi"
+                        : "Friday"}
+                  </option>
+                  <option value="SATURDAY">
+                    {currentLanguage === "ar"
+                      ? "السبت"
+                      : currentLanguage === "fr"
+                        ? "Samedi"
+                        : "Saturday"}
+                  </option>
+                </select>
+                {errors.day && (
+                  <p className="text-red-500">
+                    {errors.day.message?.toString()}
+                  </p>
+                )}
+              </div>
               {/* Title French */}
-             
+
               {/* Start Time */}
               <label
                 htmlFor="startTime"
@@ -240,7 +244,7 @@ const UpdateEvent = ({ params }: Props) => {
                 <input
                   id="startTime"
                   {...register("startTime")}
-                  type="datetime-local"
+                  type="time"
                   className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                 />
                 {errors.startTime && (
@@ -264,7 +268,7 @@ const UpdateEvent = ({ params }: Props) => {
                 <input
                   id="endTime"
                   {...register("endTime")}
-                  type="datetime-local"
+                  type="time"
                   className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                 />
                 {errors.endTime && (

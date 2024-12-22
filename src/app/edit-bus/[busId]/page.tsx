@@ -50,7 +50,6 @@ const EditBus: React.FC<ViewBusProps> = ({ params }) => {
       setValue("busCapacity", data.data.busCapacity);
     }
     if (error) {
-      console.error("Error:", error);
     }
   }, [data, error]);
 

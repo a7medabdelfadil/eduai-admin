@@ -6,6 +6,8 @@ import Cookies from "js-cookie";
 import { useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
+import { MessageBubble } from "./MessageBubble";
+import Link from "next/link";
 
 interface Message {
   chatId: number | string;
@@ -16,77 +18,114 @@ interface Message {
   imageUrl?: string;
 }
 
+
+const EmojiPicker = ({ onEmojiSelect, onClose }: { onEmojiSelect: (emoji: string) => void; onClose: () => void }) => {
+  const emojis = [
+    "😊", "😂", "🥰", "😍", "😎", "😢", "😭", "😤", "😡",
+    "👍", "👎", "❤️", "🎉", "🔥", "✨", "🌟", "💯", "🙏",
+    "🤔", "🤗", "🤫", "🤐", "😴", "🥱", "😷", "🤒", "🤕",
+    "💪", "👋", "🤝", "✌️", "👌", "🤌", "🤘", "🤙", "👊"
+  ];
+
+  return (
+    <div className="absolute bottom-16 left-0 z-50 w-72 rounded-lg bg-white p-2 shadow-lg dark:bg-gray-800">
+      <div className="grid grid-cols-6 gap-2">
+        {emojis.map((emoji, index) => (
+          <button
+            key={index}
+            onClick={() => onEmojiSelect(emoji)} // Removed onClose call here
+            className="text-2xl hover:bg-gray-100 dark:hover:bg-gray-700 p-1 rounded"
+          >
+            {emoji}
+          </button>
+        ))}
+      </div>
+    </div>
+  );
+};
+// Date separator component
+const DateSeparator = ({ date }: { date: string }) => (
+  <div className="my-4 flex items-center">
+    <div className="flex-1 border-t border-gray-300"></div>
+    <div className="mx-4 text-sm font-medium text-gray-500">{date}</div>
+    <div className="flex-1 border-t border-gray-300"></div>
+  </div>
+);
+
 interface ChatPageProps {
   userId: string | null;
   regetusers: () => void;
   userName: string;
+  userRole: string;
+  realuserId: string;
 }
 
-const ChatPage = ({ userId, regetusers, userName }: ChatPageProps) => {
-
-  function extractDayNameMonthName(datetimeString: string): string {
-    const date = new Date(datetimeString);
-
-    // Arrays of day and month names
-    const dayNames = [
-        'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'
-    ];
-    const monthNames = [
-        'January', 'February', 'March', 'April', 'May', 'June',
-        'July', 'August', 'September', 'October', 'November', 'December'
-    ];
-
-    // Extracting day name and month name
-    const dayName = dayNames[date.getDay()];
-    const monthName = monthNames[date.getMonth()];
-
-    // Extracting day of the month
-    const day = String(date.getDate()).padStart(2, '0');
-
-    // Extracting time part from the datetime string
-    const timePart = datetimeString.split('T')[1].split('.')[0]; // Handles possible milliseconds
-
-    // Constructing the result string
-    return `${dayName}, ${monthName} ${day} ${timePart}`;
-}
-
+const ChatPage = ({ userId, regetusers, userName, userRole, realuserId }: ChatPageProps) => {
   const chatEndRef = useRef<HTMLDivElement | null>(null);
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
   const [imageFile, setImageFile] = useState<File | null>(null);
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const [showEmojiPicker, setShowEmojiPicker] = useState(false);
 
+const handleEmojiSelect = (emoji: string) => {
+    setInput(prev => prev + emoji);
+  };
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (showEmojiPicker && !(event.target as Element).closest('.emoji-picker-container')) {
+        setShowEmojiPicker(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [showEmojiPicker]);
   const token = Cookies.get("token");
-  const { data: messagesData, isLoading, error } = useGetChatMessagesQuery(
-    userId!,
-    {
-      skip: userId === null,
-    }
-  );
+  const { data: messagesData, isLoading, error } = useGetChatMessagesQuery(userId!, {
+    skip: userId === null,
+  });
 
-  // Get current user's username from Redux store
   const currentUserName = useSelector(
     (state: RootState) => state.user.name || "Unknown User"
   );
 
-  // WebSocket connection reference
   const stompClientRef = useRef<Client | null>(null);
 
-  // Initialize messages from fetched data
+  // Group messages by date
+  const groupMessagesByDate = (messages: Message[]) => {
+    const groups: { [key: string]: Message[] } = {};
+    
+    messages.forEach(message => {
+      const date = new Date(message.creationTime);
+      const dateStr = date.toLocaleDateString(undefined, {
+        weekday: 'long',
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+      });
+      
+      if (!groups[dateStr]) {
+        groups[dateStr] = [];
+      }
+      groups[dateStr].push(message);
+    });
+    
+    return groups;
+  };
+
   useEffect(() => {
     if (messagesData) {
       setMessages(messagesData);
     }
   }, [messagesData]);
 
-  // Establish WebSocket connection
   useEffect(() => {
-    // Validate token and userId before connection
     if (!token || !userId) {
       toast.error("Authentication required to start chat");
       return;
     }
 
-    // Create STOMP client
     const stompClient = new Client({
       brokerURL: `wss://eduai.vitaparapharma.com/ws?token=${token}`,
       debug: function (str) {
@@ -97,26 +136,14 @@ const ChatPage = ({ userId, regetusers, userName }: ChatPageProps) => {
       heartbeatOutgoing: 4000,
     });
 
-    // Connection success handler
     stompClient.onConnect = () => {
       console.log("WebSocket Connected Successfully");
-
-      // Subscribe to user-specific chat channel
       stompClient.subscribe(`/direct-chat/${userId}`, (message: IMessage) => {
         try {
           const newMessage: Message = JSON.parse(message.body);
-          
-          // Add message using functional update to ensure no duplicates
-          setMessages((prevMessages) => {
-            // Check if message already exists by its unique identifier
-            const messageExists = prevMessages.some(
-              (msg) => msg.id === newMessage.id
-            );
-            
-            // Only add if not already in the list
-            return messageExists 
-              ? prevMessages 
-              : [...prevMessages, newMessage];
+          setMessages(prevMessages => {
+            const messageExists = prevMessages.some(msg => msg.id === newMessage.id);
+            return messageExists ? prevMessages : [...prevMessages, newMessage];
           });
         } catch (parseError) {
           console.error("Error parsing incoming message:", parseError);
@@ -124,36 +151,29 @@ const ChatPage = ({ userId, regetusers, userName }: ChatPageProps) => {
       });
     };
 
-    // Error handling
-    stompClient.onStompError = (frame) => {
+    stompClient.onStompError = frame => {
       console.error("Broker reported error:", frame.headers["message"]);
-      console.error("Details:", frame.body);
       toast.error("Chat connection error");
     };
 
-    stompClient.onWebSocketError = (event) => {
+    stompClient.onWebSocketError = event => {
       console.error("WebSocket connection error:", event);
       toast.error("Unable to establish chat connection");
     };
 
-    // Activate the connection
     stompClient.activate();
     stompClientRef.current = stompClient;
 
-    // Cleanup on component unmount
     return () => {
       stompClient.deactivate();
       stompClientRef.current = null;
     };
   }, [token, userId]);
 
-  // Image file handler
   const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files[0]) {
       const file = event.target.files[0];
-
-      // Optional: Add file size and type validation
-      const maxSize = 5 * 1024 * 1024; // 5MB
+      const maxSize = 5 * 1024 * 1024;
       const allowedTypes = ["image/jpeg", "image/png", "image/gif"];
 
       if (file.size > maxSize) {
@@ -167,153 +187,212 @@ const ChatPage = ({ userId, regetusers, userName }: ChatPageProps) => {
       }
 
       setImageFile(file);
+      // Create preview URL
+      const previewUrl = URL.createObjectURL(file);
+      setImagePreview(previewUrl);
     }
   };
 
-  // Message sending handler
+  const handleRemoveImage = () => {
+    setImageFile(null);
+    if (imagePreview) {
+      URL.revokeObjectURL(imagePreview);
+      setImagePreview(null);
+    }
+  };
+
   const handleSendMessage = async () => {
-    // Validate message or image
     if (!input.trim() && !imageFile) {
       toast.error("Cannot send empty message");
       return;
     }
 
-    // Check WebSocket connection
-    if (!stompClientRef.current || !stompClientRef.current.connected) {
+    if (!stompClientRef.current?.connected) {
       toast.error("Chat connection lost. Please reconnect.");
       return;
     }
 
-    // Prepare message payload
     const messagePayload = {
       chatId: userId,
       content: input.trim(),
-      ...(imageFile ? { imageUrl: URL.createObjectURL(imageFile) } : {})
+      ...(imageFile ? { imageUrl: URL.createObjectURL(imageFile) } : {}),
     };
 
     try {
-      // Publish message via WebSocket
       stompClientRef.current.publish({
         destination: "/app/sendMessage",
         body: JSON.stringify(messagePayload),
       });
 
-      // Trigger users refresh
       regetusers();
-
-      // Reset input states
       setInput("");
-      setImageFile(null);
-
-      console.log("Message sent successfully");
+      handleRemoveImage();
     } catch (error) {
       console.error("Message sending failed:", error);
       toast.error("Failed to send message");
     }
   };
 
-  // Auto-scroll to latest message
   useEffect(() => {
-    chatEndRef.current?.scrollIntoView({ behavior: "auto" });
+    chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
+
+  const groupedMessages = groupMessagesByDate(messages);
 
   return (
     <div className="mx-auto flex h-[700px] w-full flex-col rounded-xl bg-bgPrimary">
-      {/* Chat messages area */}
+      <div className="relative inline-block p-4">
+        <div className="flex items-center gap-2 font-medium">
+          <img src="/images/userr.png" alt="#" className="w-[50px] h-[50px]" />
+          <p>{userName}</p>
+        </div>
+        <div className="absolute right-3 top-5">
+          {
+            userRole === "Teacher" ? 
+            <Link href={`/teacher/view-teacher/${realuserId}`} className="font-medium text-secondary underline underline-offset-2">View Profile</Link> :
+            userRole === "Student" ?
+            <Link href={`/student/view-student/${realuserId}`} className="font-medium text-secondary underline underline-offset-2">View Profile</Link> :
+            userRole === "Parent" ?
+            <Link href={`/parent/view-parent/${realuserId}`} className="font-medium text-secondary underline underline-offset-2">View Profile</Link> :
+            userRole === "Employee" ?
+            <Link href={`/employee/view-employee/${realuserId}`} className="font-medium text-secondary underline underline-offset-2">View Profile</Link> :
+            <Link href={`/worker/view-worker/${realuserId}`} className="font-medium text-secondary underline underline-offset-2">View Profile</Link>
+          }
+        </div>
+      </div>
       <div className="flex-1 overflow-y-auto break-words rounded-xl bg-bgPrimary p-4">
-        {isLoading && <p></p>}
-        {error && <p>Error loading messages</p>}
-        {messages.map((msg, idx) => (
-          <div
-            key={`${msg.id}-${idx}`}
-            className={`mb-4 grid w-[320px] rounded-lg p-3 font-semibold text-balance break-words ${
-              msg.creatorName !== currentUserName
-                ? "mr-auto bg-[#5570f1] text-left text-white"
-                : "ml-auto bg-chat text-right text-black"
-            }`}
-          >
-            <p className="font-light text-gray-800">
-              {msg.creatorName !== currentUserName ? `${userName}` : `${currentUserName}`}
-            </p>
-            <p className="break-words w-[300px]">{msg.content}</p>
-            <p className="break-words text-sm text-start font-light text-gray-800">{extractDayNameMonthName(msg.creationTime)}</p>
-            {msg.imageUrl && (
-              <img 
-                src={msg.imageUrl} 
-                alt="Attached" 
-                className="mt-2 max-w-full rounded-lg" 
+        {isLoading && (
+          <div className="flex h-full items-center justify-center">
+            <div className="h-8 w-8 animate-spin rounded-full border-4 border-blue-500 border-t-transparent"></div>
+          </div>
+        )}
+        {error && (
+          <div className="flex h-full items-center justify-center text-red-500">
+            Error loading messages
+          </div>
+        )}
+        
+        {Object.entries(groupedMessages).map(([date, dateMessages]) => (
+          <div key={date}>
+            <DateSeparator date={date} />
+            {dateMessages.map((msg, idx) => (
+              <MessageBubble
+                key={`${msg.id}-${idx}`}
+                message={msg}
+                isCurrentUser={msg.creatorName === currentUserName}
+                userName={userName}
               />
-            )}
+            ))}
           </div>
         ))}
         <div ref={chatEndRef}></div>
       </div>
 
-      {/* Input, Image Upload, and Send button */}
-      <div className="m-4 flex items-center justify-between gap-5 rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-1">
-        <div className="grid items-center justify-center">
-          <label className="relative inline-flex cursor-pointer items-center">
-            <input
-              type="file"
-              accept="image/*"
-              onChange={handleImageChange}
-              className="absolute inset-0 h-full w-full cursor-pointer opacity-0"
+      <div className="m-4 flex flex-col gap-2">
+        {imagePreview && (
+          <div className="relative inline-block">
+            <img
+              src={imagePreview}
+              alt="Preview"
+              className="h-20 w-20 rounded-lg object-cover"
             />
+            <button
+              onClick={handleRemoveImage}
+              className="absolute -right-2 -top-2 rounded-full bg-red-500 p-1 text-white hover:bg-red-600"
+            >
+              <svg
+                className="h-4 w-4"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M6 18L18 6M6 6l12 12"
+                />
+              </svg>
+            </button>
+          </div>
+        )}
+        
+        <div className="flex items-center justify-between gap-5 rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-1">
+          <div className="grid items-center justify-center">
+            <label className="relative inline-flex cursor-pointer items-center">
+              <input
+                type="file"
+                accept="image/*"
+                onChange={handleImageChange}
+                className="absolute inset-0 h-full w-full cursor-pointer opacity-0"
+              />
+              <svg
+                className="h-6 w-6 cursor-pointer"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
+                <circle cx="8.5" cy="8.5" r="1.5" />
+                <polyline points="21 15 16 10 5 21" />
+              </svg>
+            </label>
+          </div>
+          <div className="emoji-picker-container relative">
+              <button
+                onClick={() => setShowEmojiPicker(!showEmojiPicker)}
+                className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-full"
+              >
+                <svg className="h-6 w-6" viewBox="0 0 24 24" width="24" height="24" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <circle cx="12" cy="12" r="10" />
+                  <path d="M8 14s1.5 2 4 2 4-2 4-2" />
+                  <line x1="9" y1="9" x2="9.01" y2="9" />
+                  <line x1="15" y1="9" x2="15.01" y2="9" />
+                </svg>
+              </button>
+              {showEmojiPicker && (
+                <EmojiPicker
+                  onEmojiSelect={handleEmojiSelect}
+                  onClose={() => setShowEmojiPicker(false)}
+                />
+              )}
+            </div>
+
+          <input
+            type="text"
+            className="flex-1 rounded-lg p-2 focus:outline-none"
+            value={input}
+            placeholder="Type your message..."
+            onChange={e => setInput(e.target.value)}
+            onKeyPress={e => {
+              if (e.key === "Enter") {
+                handleSendMessage();
+              }
+            }}
+          />
+          <button
+            className="ml-4 flex items-center gap-3 rounded-lg bg-[#ffead1] dark:bg-blue-900 px-2 py-1 font-semibold text-black hover:bg-[#dfbd90] hover:dark:bg-blue-700 dark:text-white"
+            onClick={handleSendMessage}
+          >
+            Send
             <svg
-              className="h-6 w-6 cursor-pointer"
+              className="h-5 w-5 text-black dark:text-white"
               viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
               strokeWidth="2"
+              stroke="currentColor"
+              fill="none"
               strokeLinecap="round"
               strokeLinejoin="round"
             >
-              <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
-              <circle cx="8.5" cy="8.5" r="1.5" />
-              <polyline points="21 15 16 10 5 21" />
+              <path stroke="none" d="M0 0h24v24H0z" />
+              <line x1="10" y1="14" x2="21" y2="3" />
+              <path d="M21 3L14.5 21a.55 .55 0 0 1 -1 0L10 14L3 10.5a.55 .55 0 0 1 0 -1L21 3" />
             </svg>
-          </label>
-          {imageFile && (
-            <p className="mt-2 text-nowrap text-sm text-gray-700">
-              {imageFile.name}
-            </p>
-          )}
+          </button>
         </div>
-
-        <input
-          type="text"
-          className="flex-1 rounded-lg p-2 focus:outline-none"
-          value={input}
-          placeholder="Type your message..."
-          onChange={(e) => setInput(e.target.value)}
-          onKeyPress={(e) => {
-            if (e.key === 'Enter') {
-              handleSendMessage();
-            }
-          }}
-        />
-        <button
-          className="ml-4 flex items-center gap-3 rounded-lg bg-[#ffead1] px-2 py-1 font-semibold text-black hover:bg-[#dfbd90]"
-          onClick={handleSendMessage}
-        >
-          Send
-          <svg
-            className="h-5 w-5 text-black"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            strokeWidth="2"
-            stroke="currentColor"
-            fill="none"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          >
-            {" "}
-            <path stroke="none" d="M0 0h24v24H0z" />{" "}
-            <line x1="10" y1="14" x2="21" y2="3" />{" "}
-            <path d="M21 3L14.5 21a.55 .55 0 0 1 -1 0L10 14L3 10.5a.55 .55 0 0 1 0 -1L21 3" />
-          </svg>
-        </button>
       </div>
     </div>
   );

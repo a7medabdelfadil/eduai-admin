@@ -73,11 +73,9 @@ const StudentAttendance = () => {
         .unwrap()
         .then(response => {
           refetch();
-          console.log("Attendance recorded:", response);
           toast.info("Update Attendance");
         })
         .catch(error => {
-          console.error("Failed to record attendance:", error);
           toast.error("Failed to Update Attendance");
         });
     }
@@ -93,10 +91,8 @@ const StudentAttendance = () => {
       createAttendance(attendanceData)
         .unwrap()
         .then(response => {
-          console.log("Attendance recorded:", response);
         })
         .catch(error => {
-          console.error("Failed to record attendance:", error);
         });
     }
     if (label === "L") {
@@ -111,18 +107,12 @@ const StudentAttendance = () => {
       createAttendance(attendanceData)
         .unwrap()
         .then(response => {
-          console.log("Attendance recorded:", response);
         })
         .catch(error => {
-          console.error("Failed to record attendance:", error);
         });
     }
   };
 
-  useEffect(() => {
-    if (data) console.log("Response Data:", data);
-    if (error) console.log("Error:", error);
-  }, [data, error]);
 
   const onPageChange = (page: SetStateAction<number>) => {
     setCurrentPage(page);

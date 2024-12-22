@@ -65,10 +65,7 @@ const News = () => {
   const handleClick = (id: SetStateAction<null>) => {
     setSelectedId(id);
   };
-  useEffect(() => {
-    if (data) console.log("Response Data:", data);
-    if (error) console.log("Error:", error);
-  }, [data, error]);
+
   const [open, setOpen] = useState<number | boolean | null>(false);
   const toggleNavbar = (index: number) => {
     setOpen(open === index ? null : index);
@@ -119,8 +116,7 @@ const News = () => {
       }).unwrap();
       void refetch();
     } catch (err) {
-      console.log(err);
-      console.log(id);
+
     }
   };
   const DeleteLike = async (id: string) => {
@@ -131,8 +127,7 @@ const News = () => {
       }).unwrap();
       void refetch();
     } catch (err) {
-      console.log(err);
-      console.log(id);
+
     }
   };
 
@@ -445,7 +440,9 @@ const News = () => {
                             <h1 className="font-semibold text-gray-400">
                               {comment.creatorName}:
                             </h1>
-                            <p className="font-semibold">{String(comment.comment)}</p>
+                            <p className="font-semibold">
+                              {String(comment.comment)}
+                            </p>
                           </div>
                         ),
                       )}

@@ -30,7 +30,7 @@ export const notificationsApi = createApi({
   endpoints: builder => ({
     //
     getAllNotifications: builder.query({
-      query: () => "/api/v1/my-notification/all",
+      query: ({size, page}) => `/api/v1/my-notification/all?size=${size}&page=${page}`,
     }),
     //
     putNotifiRead: builder.mutation({

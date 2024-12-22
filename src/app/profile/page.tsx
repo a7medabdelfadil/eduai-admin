@@ -102,7 +102,6 @@ const Profile = () => {
       refetch();
       toast.success("Picture updated successfully");
     } catch (error) {
-      console.error("Failed to update picture", error);
       toast.error("Failed to update picture");
     }
   };

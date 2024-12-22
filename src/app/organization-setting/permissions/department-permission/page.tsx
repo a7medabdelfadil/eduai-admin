@@ -37,10 +37,7 @@ const DepartmentPermission = () => {
     useGetAllDepartmentPermissionPermissionsQuery(null);
   const [selectAll, setSelectAll] = useState(false);
 
-  useEffect(() => {
-    if (data) console.log("Response Data:", data);
-    if (error) console.log("Error:", error);
-  }, [data, error]);
+
 
   const handleSelectAll = () => {
     setSelectAll(!selectAll);

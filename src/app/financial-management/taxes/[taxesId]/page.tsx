@@ -153,7 +153,6 @@ const EditTaxes = ({ params }: TaxesId) => {
             : "Tax record updated successfully",
       );
     } catch (err) {
-      console.error("Failed to update tax record", err);
       toast.error(
         currentLanguage === "ar"
           ? "فشل في تحديث سجل الضريبة"

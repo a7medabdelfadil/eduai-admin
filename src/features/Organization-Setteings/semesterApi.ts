@@ -32,7 +32,7 @@ export const semesterApi = createApi({
     }),
     //
     getAllSemestersByYear: builder.query({
-      query: (year) => `/api/v1/student-study/Semesters?academicYearId=${year}`,
+      query: year => `/api/v1/student-study/Semesters?academicYearId=${year}`,
     }),
     //
     getAllAcadimicYear: builder.query({

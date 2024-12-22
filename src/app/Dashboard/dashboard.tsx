@@ -82,33 +82,15 @@ const Dashboard: React.FC = () => {
     isLoading: isWorker,
   } = useGetAllWorkersQuery(null);
   const { data: mettings, isLoading: isMeeting } =
-    useGetAllEventsDashboardQuery(null);
+  useGetAllEventsDashboardQuery(null);
+  console.log("👾 ~ mettings:", mettings)
   const {
     data: notices,
     isLoading: isNotices,
     refetch,
   } = useGetNoticesQuery(null);
   const [createEvent] = useCreateEventsMutation();
-  useEffect(() => {
-    if (students || employees || teachers || workers || mettings) {
-      console.log(teachers);
-      console.log(employees);
-      console.log(students);
-      console.log(workers);
-      console.log(mettings);
-    }
-  }, [
-    router,
-    students,
-    employees,
-    teachers,
-    workers,
-    err1,
-    err2,
-    err3,
-    err4,
-    mettings,
-  ]);
+  
 
   const {
     register,
@@ -183,12 +165,10 @@ const Dashboard: React.FC = () => {
       }
 
       const result = await createEvent(formDataToSend).unwrap();
-      console.log("Event created:", result);
       toast.success("Event created success");
       handleCloseModal();
     } catch (error) {
       toast.error("Fiald Create Event");
-      console.error("Failed to create event:", error);
     }
   };
   const [deleteEvent] = useDeleteNoteMutation();
@@ -395,17 +375,15 @@ const Dashboard: React.FC = () => {
           <div className="flex justify-center">
             <div className="grid overflow-x-auto rounded-2xl">
               <div className="grid w-[550px] items-center justify-center overflow-x-auto rounded-2xl bg-bgPrimary p-2 shadow-xl max-[1536px]:h-[450px] max-[1536px]:w-[850px]">
-              <div
-                dir={currentLanguage === "ar" ? "rtl" : "ltr"}
-                >
-                <h1 className="text-xl font-bold">
-                  {currentLanguage === "ar"
-                    ? "الفعاليات القادمة"
-                    : currentLanguage === "fr"
-                      ? "Événements à venir"
-                      : "Upcoming Events"}
-                </h1>
-              </div>
+                <div dir={currentLanguage === "ar" ? "rtl" : "ltr"}>
+                  <h1 className="text-xl font-bold">
+                    {currentLanguage === "ar"
+                      ? "الفعاليات القادمة"
+                      : currentLanguage === "fr"
+                        ? "Événements à venir"
+                        : "Upcoming Events"}
+                  </h1>
+                </div>
                 {mettings?.data.content.map((meeting: Meeting) => (
                   <div
                     dir={currentLanguage === "ar" ? "rtl" : "ltr"}
@@ -453,14 +431,14 @@ const Dashboard: React.FC = () => {
                   </div>
                 ))}
                 {(mettings?.data.content.length == 0 || mettings == null) && (
-                  <div className="flex w-full justify-center py-3 text-center text-[18px] font-semibold">
+                  <div className="flex w-full text-secondary justify-center py-3 text-center text-[18px] font-semibold">
                     {currentLanguage === "en"
-                      ? "There is No Data"
+                      ? "No Events Found"
                       : currentLanguage === "ar"
-                        ? "لا توجد بيانات"
+                        ? "لم يتم العثور على أحداث"
                         : currentLanguage === "fr"
-                          ? "Il n'y a pas de données"
-                          : "There is No Data"}
+                          ? "Aucun événement trouvé"
+                          : "No Events Found"}
                   </div>
                 )}
                 <div className="flex h-full items-end justify-center">
@@ -518,20 +496,6 @@ const Dashboard: React.FC = () => {
                 </p>
               </div>
               <Calendar />
-              {/* 
-            <div className="mt-4 grid grid-cols-2">
-          <p className="font-sans font-semibold text-textPrimary">Tuesday:</p>
-          <p className="font-sans font-semibold text-textSecondary">
-            On Tuesday he comes to school and reads carefully. His activity is
-            so good.
-          </p>
-          <p className="font-sans font-semibold text-textPrimary">Homework:</p>
-          <p className="font-sans font-semibold text-textSecondary">
-            He completed his homework. <br /> He is the most active student of
-            the class.
-          </p>
-        </div>
-             */}
             </div>
           </div>
           <div

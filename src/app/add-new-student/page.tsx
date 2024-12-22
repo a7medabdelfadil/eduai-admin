@@ -2,7 +2,7 @@
 import React from "react";
 import { useForm } from "react-hook-form";
 import Spinner from "@/components/spinner";
-import { useCreateStudentsMutation } from "@/features/User-Management/studentApi";
+import { useCreateStudentsMutation, useGetAllEducationsQuery } from "@/features/User-Management/studentApi";
 import { useGetAllParentsQuery } from "@/features/User-Management/parentApi";
 import {
   useGetAllCountryCodeQuery,
@@ -68,6 +68,8 @@ const AddNewStudent = () => {
   const booleanValue = useSelector((state: RootState) => state.boolean.value);
   const { data: nationalityData, isLoading: nationalityLoading } =
     useGetAllNationalitysQuery(null);
+  const { data: educations, isLoading: isEducations } =
+  useGetAllEducationsQuery(null);
   const { data: regionData } = useGetAllReginionIDQuery(null);
   const optionsRigon =
     regionData?.data?.map(
@@ -678,12 +680,26 @@ const AddNewStudent = () => {
                   : currentLanguage === "ar"
                     ? "النظام التعليمي"
                     : "Système éducatif"}
-                <input
-                  type="text"
+                    <select
                   id="eduSystemId"
                   className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                   {...register("eduSystemId", { required: true })}
-                />
+                >
+                  <option value="">
+                  {currentLanguage === "en"
+                  ? "Educational System"
+                  : currentLanguage === "ar"
+                    ? "النظام التعليمي"
+                    : "Système éducatif"}
+                  </option>
+                  {educations &&
+                    educations?.data.content?.map((edu: any) => (
+                      <option key={edu.id} value={edu.id}>
+                        {edu.name}
+                      </option>
+                    ))}
+                </select>
+                
                 {errors.eduSystemId && (
                   <span className="text-error">
                     {currentLanguage === "en"

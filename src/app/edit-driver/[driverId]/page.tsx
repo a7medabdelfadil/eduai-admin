@@ -17,6 +17,7 @@ import BreadCrumbs from "@/components/BreadCrumbs";
 import { RootState } from "@/GlobalRedux/store";
 import { useSelector } from "react-redux";
 import PhoneNumberInput from "@/components/PhoneNumberInput";
+import SearchableSelect from "@/components/select";
 
 interface ViewDriverProps {
   params: {
@@ -60,6 +61,19 @@ const EditDriver: React.FC<ViewDriverProps> = ({ params }) => {
   const { data, error, isLoading } = useGetDriversQuery(params.driverId);
   const [createDriver, { isLoading: isUpdating }] = useUpdateDriversMutation();
   const { data: rigiond } = useGetAllReginionIDQuery(null);
+  const optionsRigon =
+    rigiond?.data?.map(
+      (rigion: {
+        cityName: any;
+        countryName: any;
+        regionName: any;
+        regionId: any;
+        name: any;
+      }) => ({
+        value: rigion.regionId,
+        label: `${rigion.regionName} - ${rigion.cityName}`,
+      }),
+    ) || [];
   const { data: nationalityData } = useGetAllNationalitysQuery(null);
   const { data: countryCode, isLoading: isCountryCode } =
     useGetAllCountryCodeQuery(null);
@@ -75,21 +89,32 @@ const EditDriver: React.FC<ViewDriverProps> = ({ params }) => {
       setValue("email", data.data.email);
       setValue("nid", data.data.nid);
       setValue("about", data.data.about);
+      setValue("gender", data.data.gender.toUpperCase());
+      setValue("positionId", data.data.positionId);
       setValue("number", data.data.number);
       setValue("salary", data.data.salary);
       setValue("name_en", data.data.name_en);
       setValue("name_ar", data.data.name_ar);
       setValue("name_fr", data.data.name_fr);
-      setValue("positionId", data.data.positionId);
+      setValue("nationality", data.data.nationality);
+      setValue("regionId", data.data.regionId);
+      setValue("hireDate", data.data.hireDate);
+      setValue("countryCode", data.data.countryCode);
+      setValue("birthDate", data.data.birthDate || undefined);
+      setValue("salary", data.data.salary || 0);
+      setValue("employeeStatus", data.data.enabled ? "ACTIVE" : "ON_BREAK");
+      setValue(
+        "employeeType",
+        data.data.role === "Employee" ? "EMPLOYEE" : "DRIVER",
+      );
     }
-    if (error) {
-      console.error("Error:", error);
-    }
+
   }, [data, error]);
 
   const onSubmit = async (data: any) => {
+    const formData = { ...data, religion: "OTHERS" };
     try {
-      await createDriver({ formData: data, id: params.driverId }).unwrap();
+      await createDriver({ formData: formData, id: params.driverId }).unwrap();
       toast.success(
         currentLanguage === "ar"
           ? "تم تحديث السائق بنجاح"
@@ -259,38 +284,6 @@ const EditDriver: React.FC<ViewDriverProps> = ({ params }) => {
                   </span>
                 )}
               </label>
-              <label
-                htmlFor="religion"
-                className="grid font-sans text-[18px] font-semibold"
-              >
-                {currentLanguage === "ar"
-                  ? "الدين"
-                  : currentLanguage === "fr"
-                    ? "Religion"
-                    : "Religion"}
-                <select
-                  id="religion"
-                  className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
-                  {...register("religion", { required: true })}
-                >
-                  <option value="OTHERS">
-                    {currentLanguage === "ar"
-                      ? "أخرى"
-                      : currentLanguage === "fr"
-                        ? "Autres"
-                        : "Others"}
-                  </option>
-                </select>
-                {errors.religion && (
-                  <span className="text-error">
-                    {currentLanguage === "ar"
-                      ? "هذا الحقل مطلوب"
-                      : currentLanguage === "fr"
-                        ? "Ce champ est requis"
-                        : "This field is required"}
-                  </span>
-                )}
-              </label>
             </div>
             <div className="grid grid-cols-2 gap-4 max-[1278px]:grid-cols-1">
               <label
@@ -373,60 +366,22 @@ const EditDriver: React.FC<ViewDriverProps> = ({ params }) => {
                 htmlFor="regionId"
                 className="grid font-sans text-[18px] font-semibold"
               >
-                {currentLanguage === "ar"
-                  ? "معرف المنطقة"
-                  : currentLanguage === "fr"
-                    ? "ID de la région"
-                    : "RegionId"}
-                <select
-                  defaultValue=""
-                  id="regionId"
-                  {...register("regionId", { required: true })}
-                  className=""
-                >
-                  <option selected value="">
-                    {currentLanguage === "ar"
-                      ? "اختر معرف المنطقة"
-                      : currentLanguage === "fr"
-                        ? "Sélectionnez l'ID de région"
-                        : "Select Region Id"}
-                  </option>
-                  {rigiond &&
-                    rigiond.data.map(
-                      (
-                        rigion: {
-                          id: string | number | readonly string[] | undefined;
-                          name:
-                            | string
-                            | number
-                            | bigint
-                            | boolean
-                            | React.ReactElement<
-                                any,
-                                string | React.JSXElementConstructor<any>
-                              >
-                            | Iterable<React.ReactNode>
-                            | React.ReactPortal
-                            | null
-                            | undefined;
-                        },
-                        index: React.Key | null | undefined,
-                      ) => (
-                        <option key={index} value={rigion.id}>
-                          {String(rigion.name)}
-                        </option>
-                      ),
-                    )}
-                </select>
-                {errors.regionId && (
-                  <span className="text-error">
-                    {currentLanguage === "ar"
-                      ? "هذا الحقل مطلوب"
-                      : currentLanguage === "fr"
-                        ? "Ce champ est requis"
-                        : "This field is required"}
-                  </span>
-                )}
+                {currentLanguage === "en"
+                  ? "Region Id"
+                  : currentLanguage === "ar"
+                    ? "معرف المنطقة"
+                    : currentLanguage === "fr"
+                      ? "ID de la région"
+                      : "Region Id"}{" "}
+                {/* default */}
+                <SearchableSelect
+                  name="regionId"
+                  control={control}
+                  errors={errors}
+                  options={optionsRigon}
+                  currentLanguage={currentLanguage}
+                  placeholder="Select Region"
+                />
               </label>
               <label
                 htmlFor="nationality"

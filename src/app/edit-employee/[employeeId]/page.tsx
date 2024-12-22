@@ -75,9 +75,7 @@ const EditEmployee: React.FC<ViewEmpolyeeProps> = ({ params }) => {
       setValue("name_fr", data.data.name_fr);
       setValue("positionId", data.data.positionId);
     }
-    if (error) {
-      console.error("Error:", error);
-    }
+
   }, [data, error]);
 
   const onSubmit = async (data: any) => {

@@ -38,16 +38,12 @@ const Lab = () => {
   const booleanValue = useSelector((state: RootState) => state.boolean.value);
   const [search, setSearch] = useState("");
 
-  useEffect(() => {
-    if (data) console.log("Response Data:", data);
-    if (error) console.log("Error:", error);
-  }, [data, error]);
 
   const [deleteBuses] = useDeleteLabsMutation();
   type Bus = Record<string, any>;
 
   const handleDelete = async (id: number) => {
-    console.log(id);
+
     try {
       await deleteBuses(id).unwrap();
 

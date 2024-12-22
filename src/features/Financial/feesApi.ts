@@ -77,10 +77,22 @@ export const feesApi = createApi({
       query: id => `/api/v1/invoice/${id}`,
     }),
     //
+    getScholarshipById: builder.query({
+      query: id => `/api/v1/scholarship/update?scholarshipId=${id}`,
+    }),
+    //
     updateInvoices: builder.mutation({
       query: ({ formData, id }) => ({
         url: `/api/v1/invoice/${id}`,
         method: "PATCH",
+        body: formData,
+      }),
+    }),
+    //
+    updateScholarship: builder.mutation({
+      query: ({ formData, id }) => ({
+        url: `/api/v1/scholarship?scholarshipId=${id}`,
+        method: "PUT",
         body: formData,
       }),
     }),
@@ -89,6 +101,8 @@ export const feesApi = createApi({
 
 export const {
   useGetAllInvoicesQuery,
+  useGetScholarshipByIdQuery,
+  useUpdateScholarshipMutation,
   useCreateScholarshipMutation,
   useDeleteInvoicesMutation,
   useDeleteScholarshipMutation,

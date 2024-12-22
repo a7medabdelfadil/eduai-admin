@@ -9,10 +9,8 @@ const RegisterForm = ({ onClose }: { onClose: () => void }) => {
     e.preventDefault();
     try {
       await createUser(userId, username);
-      console.log("User registered successfully");
       onClose(); // Close the modal after successful registration
     } catch (error) {
-      console.error("Error registering user:", error);
     }
   };
 

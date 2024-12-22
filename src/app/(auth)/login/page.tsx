@@ -57,7 +57,6 @@ const Login = () => {
   const onSubmit = async (data: any) => {
     try {
       const result = await loginDashboard(data).unwrap();
-      console.log("Login success:", result);
       Cookie.set("token", result.data);
       toast.success(
         currentLanguage === "ar"
@@ -78,9 +77,7 @@ const Login = () => {
       try {
         errorData = JSON.parse(err.data.errorMessage);
       } catch (e) {
-        console.error("Failed to parse errorMessage:", e);
       }
-      console.error("new", errorData);
     }
     if (errorData.message === "The account is not activated yet.") {
       dispatch2(

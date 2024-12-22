@@ -61,9 +61,7 @@ const EditCourse = ({ params }: EditCourseProps) => {
       setValue("desc_fr", data.data.desc_fr);
       setValue("desc_ar", data.data.desc_ar);
     }
-    if (error) {
-      console.error("Error:", error);
-    }
+
   }, [data, error]);
 
   const {

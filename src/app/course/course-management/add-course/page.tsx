@@ -57,20 +57,7 @@ const AddCourse = () => {
   const { data: LangData, isLoading: LangLoading } =
     useGetAllLanguagesQuery(null);
 
-  useEffect(() => {
-    if (CountryData) {
-      console.log("CountryData Data:", CountryData);
-    }
-    if (LevelData) {
-      console.log("LevelData Data:", LevelData);
-    }
-    if (RegData) {
-      console.log("RegData Data:", RegData);
-    }
-    if (LangData) {
-      console.log("LangData Data:", LangData);
-    }
-  }, [CountryData, LevelData, RegData, LangData]);
+  
 
   const [createCourse, { isLoading }] = useCreateCoursesMutation();
 

@@ -1,7 +1,10 @@
 "use client";
 
 import { useForm } from "react-hook-form";
-import { useGetAllTeacherScheduleQuery, useDeleteSchedualMutation } from "@/features/Acadimic/scheduleApi";
+import {
+  useGetAllTeacherScheduleQuery,
+  useDeleteSchedualMutation,
+} from "@/features/Acadimic/scheduleApi";
 import { RootState } from "@/GlobalRedux/store";
 import { useSelector } from "react-redux";
 import TimeTable from "@/components/TimeTable";
@@ -39,9 +42,12 @@ const Schedule = () => {
 
   const selectedTeacherId = watch("teacherId");
 
-  const { data, isLoading, refetch } = useGetAllTeacherScheduleQuery(selectedTeacherId, {
-    skip: !selectedTeacherId,
-  });
+  const { data, isLoading, refetch } = useGetAllTeacherScheduleQuery(
+    selectedTeacherId,
+    {
+      skip: !selectedTeacherId,
+    },
+  );
   const [deleteEvent] = useDeleteSchedualMutation();
   const handleDelete = async (id: number) => {
     try {

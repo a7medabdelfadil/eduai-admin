@@ -17,14 +17,7 @@ const ViewCertificate: React.FC<ViewDriverProps> = ({ params }) => {
   const { data, error, isLoading } = useGetCertificateByIdQuery(
     params.certificateID,
   );
-  useEffect(() => {
-    if (data) {
-      console.log(data);
-    }
-    if (error) {
-      console.error("Error:", error);
-    }
-  }, [data, error]);
+
 
   const { language: currentLanguage, loading } = useSelector(
     (state: RootState) => state.language,

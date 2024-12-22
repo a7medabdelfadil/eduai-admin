@@ -17,14 +17,7 @@ const ViewWorker: React.FC<ViewWorkerProps> = ({ params }) => {
 
   const booleanValue = useSelector((state: RootState) => state.boolean.value);
 
-  useEffect(() => {
-    if (data) {
-      console.log(data);
-    }
-    if (error) {
-      console.error("Error:", error);
-    }
-  }, [data, error]);
+
 
   const { language: currentLanguage, loading } = useSelector(
     (state: RootState) => state.language,

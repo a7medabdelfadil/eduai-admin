@@ -10,6 +10,7 @@ import { RootState } from "@/GlobalRedux/store";
 import BreadCrumbs from "@/components/BreadCrumbs";
 import { useState } from "react";
 import { FaCloudUploadAlt } from "react-icons/fa";
+import { useGetAllStudentsQuery } from "@/features/User-Management/studentApi";
 
 const AddNewCertificate = () => {
   const breadcrumbs = [
@@ -47,7 +48,12 @@ const AddNewCertificate = () => {
   } = useForm();
   const [createCertificate, { isLoading }] = useCreateCertificatesMutation();
   const [fileName, setFileName] = useState("");
-
+  const { data: students, isLoading: isStudentsLoading } =
+    useGetAllStudentsQuery({
+      archived: "false",
+      page: 0,
+      size: 1000000,
+    });
   const handleFileChange = (event: any) => {
     const file = event.target.files[0];
     if (file) {
@@ -135,17 +141,41 @@ const AddNewCertificate = () => {
                 htmlFor="studentId"
                 className="grid font-sans text-[18px] font-semibold"
               >
-                {currentLanguage === "ar"
-                  ? "رقم الطالب"
-                  : currentLanguage === "fr"
-                    ? "ID de l'étudiant"
-                    : "Student Id"}
-                <input
+                {currentLanguage === "en"
+                  ? "Student ID"
+                  : currentLanguage === "ar"
+                    ? "رقم الطالب"
+                    : "ID de l'étudiant"}
+
+                <select
                   id="studentId"
-                  type="text"
-                  className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
-                  {...register("studentId", { required: true })}
-                />
+                  {...register("studentId")}
+                  className="h-full w-[400px] rounded-xl border px-4 py-3 text-[18px] text-black outline-none max-[458px]:w-[350px]"
+                >
+                  <option value="">
+                    {currentLanguage === "en"
+                      ? "Select Student"
+                      : currentLanguage === "ar"
+                        ? "اختر الطالب"
+                        : "Sélectionner Étudiant"}
+                  </option>
+                  {students?.data.content.map(
+                    (student: {
+                      id: string | null | undefined;
+                      name:
+                        | string
+                        | number
+                        | bigint
+                        | boolean
+                        | null
+                        | undefined;
+                    }) => (
+                      <option key={student.id} value={student.id ?? ""}>
+                        {String(student.name)}
+                      </option>
+                    ),
+                  )}
+                </select>
                 {errors.studentId && (
                   <span className="text-error">
                     {currentLanguage === "ar"
@@ -165,12 +195,47 @@ const AddNewCertificate = () => {
                   : currentLanguage === "fr"
                     ? "Niveau éducatif"
                     : "Educational Stage"}
-                <input
+                <select
                   id="stage"
-                  type="text"
                   className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                   {...register("stage", { required: true })}
-                />
+                >
+                  <option value="">
+                    {currentLanguage === "ar"
+                      ? "اختر المرحلة التعليمية"
+                      : currentLanguage === "fr"
+                        ? "Sélectionner le niveau éducatif"
+                        : "Select Educational Stage"}
+                  </option>
+                  <option value="KINDERGARTEN">
+                    {currentLanguage === "ar"
+                      ? "الروضة"
+                      : currentLanguage === "fr"
+                        ? "Maternelle"
+                        : "Kindergarten"}
+                  </option>
+                  <option value="PRIMARY">
+                    {currentLanguage === "ar"
+                      ? "المرحلة الابتدائية"
+                      : currentLanguage === "fr"
+                        ? "Primaire"
+                        : "Primary"}
+                  </option>
+                  <option value="PREPARATORY">
+                    {currentLanguage === "ar"
+                      ? "المرحلة الإعدادية"
+                      : currentLanguage === "fr"
+                        ? "Préparatoire"
+                        : "Preparatory"}
+                  </option>
+                  <option value="SECONDARY">
+                    {currentLanguage === "ar"
+                      ? "المرحلة الثانوية"
+                      : currentLanguage === "fr"
+                        ? "Secondaire"
+                        : "Secondary"}
+                  </option>
+                </select>
                 {errors.stage && (
                   <span className="text-error">
                     {currentLanguage === "ar"

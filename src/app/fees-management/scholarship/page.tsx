@@ -49,7 +49,7 @@ const Scholarship = () => {
   };
   const [deleteInvoice] = useDeleteScholarshipMutation();
   const handleDelete = async (id: number) => {
-    console.log(id);
+
     try {
       await deleteInvoice(id).unwrap();
 
@@ -83,7 +83,6 @@ const Scholarship = () => {
       checkbox.addEventListener("change", handleOtherCheckboxes);
     });
 
-    
     return () => {
       otherCheckboxes.forEach(checkbox => {
         checkbox.removeEventListener("change", handleOtherCheckboxes);
@@ -108,14 +107,15 @@ const Scholarship = () => {
       <BreadCrumbs breadcrumbs={breadcrumbs} />
       <div
         dir={currentLanguage === "ar" ? "rtl" : "ltr"}
-        className={`${currentLanguage === "ar"
+        className={`${
+          currentLanguage === "ar"
             ? booleanValue
               ? "lg:mr-[100px]"
               : "lg:mr-[270px]"
             : booleanValue
               ? "lg:ml-[100px]"
               : "lg:ml-[270px]"
-          } relative mx-3 mt-10 h-screen overflow-x-auto bg-transparent sm:rounded-lg`}
+        } relative mx-3 mt-10 h-screen overflow-x-auto bg-transparent sm:rounded-lg`}
       >
         <div className="flex justify-between text-center max-[502px]:grid max-[502px]:justify-center">
           <div className="mb-3">
@@ -246,7 +246,10 @@ const Scholarship = () => {
                     : invoice.studentName.toLocaleLowerCase().includes(search);
                 })
                 .map((invoice: Invoice, index: number) => (
-                  <tr key={index} className="border-b border-borderPrimary bg-bgPrimary text-textSecondary hover:bg-bgSecondary">
+                  <tr
+                    key={index}
+                    className="border-b border-borderPrimary bg-bgPrimary text-textSecondary hover:bg-bgSecondary"
+                  >
                     <td className="w-4 p-4">
                       <div className="flex items-center">
                         <input
@@ -267,29 +270,47 @@ const Scholarship = () => {
                       />
                       {invoice.studentName}
                     </th>
-                    <td className="whitespace-nowrap px-6 py-4">{invoice.id}</td>
-                    <td className="whitespace-nowrap px-6 py-4">{invoice.scholarshipName}</td>
-                    <td className="whitespace-nowrap px-6 py-4">{invoice.scholarshipType}</td>
-                    <td className="whitespace-nowrap px-6 py-4">{invoice.startDate}</td>
-                    <td className="whitespace-nowrap px-6 py-4">{invoice.expirationDate}</td>
                     <td className="whitespace-nowrap px-6 py-4">
-                    <button
-                          onClick={() => handleDelete(invoice.id)}
+                      {invoice.id}
+                    </td>
+                    <td className="whitespace-nowrap px-6 py-4">
+                      {invoice.scholarshipName}
+                    </td>
+                    <td className="whitespace-nowrap px-6 py-4">
+                      {invoice.scholarshipType}
+                    </td>
+                    <td className="whitespace-nowrap px-6 py-4">
+                      {invoice.startDate}
+                    </td>
+                    <td className="whitespace-nowrap px-6 py-4">
+                      {invoice.expirationDate}
+                    </td>
+                    <td className="flex items-center gap-2 whitespace-nowrap px-6 py-4">
+                      <button onClick={() => handleDelete(invoice.id)}>
+                        <svg
+                          className="h-6 w-6 text-red-500"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke="currentColor"
                         >
-                          <svg
-                            className="h-6 w-6 text-red-500"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            stroke="currentColor"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth="2"
-                              d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-                            />
-                          </svg>
-                        </button>
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth="2"
+                            d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                          />
+                        </svg>
+                      </button>
+                      <Link
+                        href={`/fees-management/scholarship/${invoice.id}`}
+                        className="font-medium text-blue-600 hover:underline"
+                      >
+                        {currentLanguage === "ar"
+                          ? "تعديل"
+                          : currentLanguage === "fr"
+                            ? "Modifier"
+                            : "Edit"}
+                      </Link>
                     </td>
                   </tr>
                 ))}

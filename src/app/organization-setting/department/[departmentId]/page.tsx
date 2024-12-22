@@ -64,9 +64,6 @@ const DepartmentId = ({ params }: EditDepartmentProps) => {
       setValue("abbr_ar", data.data.abbr_ar);
       setValue("employee", data.data.employee);
     }
-    if (error) {
-      console.error("Error:", error);
-    }
   }, [data, error]);
 
   const {

@@ -130,10 +130,6 @@ const Bank = () => {
   const toggleNavbar = (index: number) => {
     setOpen(open === index ? null : index);
   };
-  useEffect(() => {
-    if (data) console.log("Response Data:", data);
-    if (error) console.log("Error:", error);
-  }, [data, error]);
 
   const { language: currentLanguage, loading } = useSelector(
     (state: RootState) => state.language,

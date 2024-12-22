@@ -62,7 +62,6 @@ const AddNewPost = () => {
       await createPost(formData).unwrap();
       toast.success("Create post Success");
     } catch (err) {
-      console.error("Failed to create post", err);
       toast.error("Failed to create post");
     }
   };

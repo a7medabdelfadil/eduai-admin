@@ -50,6 +50,17 @@ export const studentApi = createApi({
     getStudentById: builder.query({
       query: id => `/api/v1/management/student/${id}`,
     }),
+    getStudentUpdateById: builder.query({
+      query: id => `/api/v1/management/student/${id}/update`,
+    }),
+    //
+    getStudentByIdUpdate: builder.query({
+      query: id => `/api/v1/management/student/${id}/update`,
+    }),
+    //
+    getAllEducations: builder.query({
+      query: id => `/api/v1/management/education-system/all?size=1000000&page=0`,
+    }),
     //
     updateStudents: builder.mutation({
       query: ({ formData, id }) => ({
@@ -63,8 +74,11 @@ export const studentApi = createApi({
 
 export const {
   useGetAllStudentsQuery,
+  useGetStudentByIdUpdateQuery,
   useDeleteStudentsMutation,
   useCreateStudentsMutation,
+  useGetAllEducationsQuery,
   useGetStudentByIdQuery,
+  useGetStudentUpdateByIdQuery,
   useUpdateStudentsMutation,
 } = studentApi;

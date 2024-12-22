@@ -9,9 +9,7 @@ import {
   useGetAllAcadimicYearQuery,
 } from "@/features/Organization-Setteings/semesterApi";
 import { useGetAllStudentsQuery } from "@/features/User-Management/studentApi";
-import {
-  useState,
-} from "react";
+import { useState } from "react";
 import { useSelector } from "react-redux";
 import { skipToken } from "@reduxjs/toolkit/query";
 
@@ -34,7 +32,7 @@ const Grads = () => {
 
   const booleanValue = useSelector((state: RootState) => state.boolean.value);
   const { language: currentLanguage, loading } = useSelector(
-    (state: RootState) => state.language
+    (state: RootState) => state.language,
   );
 
   const [selectedStudent, setSelectedStudent] = useState("");
@@ -50,14 +48,13 @@ const Grads = () => {
 
   const { data: years, isLoading: isYear } = useGetAllAcadimicYearQuery(null);
 
-  const { data: semesters, isLoading: isSemester } = useGetAllSemestersByYearQuery(
-    selectedAcademicYear || skipToken
-  );
+  const { data: semesters, isLoading: isSemester } =
+    useGetAllSemestersByYearQuery(selectedAcademicYear || skipToken);
 
   const { data: grades, isLoading: isGrades } = useGetAllGradesQuery(
     selectedStudent && selectedSemester
       ? { semesterId: selectedSemester, studentId: selectedStudent }
-      : skipToken
+      : skipToken,
   );
 
   if (loading || isStudents || isSemester || isGrades || isYear)
@@ -78,25 +75,25 @@ const Grads = () => {
               ? "lg:mr-[100px]"
               : "lg:mr-[270px]"
             : booleanValue
-            ? "lg:ml-[100px]"
-            : "lg:ml-[270px]"
+              ? "lg:ml-[100px]"
+              : "lg:ml-[270px]"
         } relative mx-3 mt-10 h-screen overflow-x-auto bg-transparent sm:rounded-lg`}
       >
         <div className="mb-5 flex justify-between gap-5 max-[1150px]:grid max-[1150px]:justify-center">
           {/* Student Select */}
           <select
             value={selectedStudent}
-            onChange={(e) => setSelectedStudent(e.target.value)}
-            className="h-full w-[400px] rounded-xl border px-4 py-3 text-[18px] text-textSecondary bg-bgPrimary outline-none max-[458px]:w-[350px]"
+            onChange={e => setSelectedStudent(e.target.value)}
+            className="h-full w-[400px] rounded-xl border bg-bgPrimary px-4 py-3 text-[18px] text-textSecondary outline-none max-[458px]:w-[350px]"
           >
             <option value="">
               {currentLanguage === "en"
                 ? "Select Student"
                 : currentLanguage === "ar"
-                ? "اختر الطالب"
-                : "Sélectionner Étudiant"}
+                  ? "اختر الطالب"
+                  : "Sélectionner Étudiant"}
             </option>
-            {students?.data.content.map((student:any) => (
+            {students?.data.content.map((student: any) => (
               <option key={student.id} value={student.id ?? ""}>
                 {String(student.name)}
               </option>
@@ -106,21 +103,21 @@ const Grads = () => {
           {/* Academic Year Select */}
           <select
             value={selectedAcademicYear}
-            onChange={(e) => {
+            onChange={e => {
               setSelectedAcademicYear(e.target.value);
               setSemesterSelectTouched(false);
               setSelectedSemester(""); // Reset selected semester when academic year changes
             }}
-            className="h-full w-[400px] rounded-xl border px-4 py-3 text-[18px] text-textSecondary bg-bgPrimary outline-none max-[458px]:w-[350px]"
+            className="h-full w-[400px] rounded-xl border bg-bgPrimary px-4 py-3 text-[18px] text-textSecondary outline-none max-[458px]:w-[350px]"
           >
             <option value="">
               {currentLanguage === "en"
                 ? "Select Academic Year"
                 : currentLanguage === "ar"
-                ? "اختر العام الدراسي"
-                : "Sélectionner l'année académique"}
+                  ? "اختر العام الدراسي"
+                  : "Sélectionner l'année académique"}
             </option>
-            {years?.data.map((year:any) => (
+            {years?.data.map((year: any) => (
               <option key={year.id} value={year.id ?? ""}>
                 {year.name}
               </option>
@@ -130,8 +127,8 @@ const Grads = () => {
           {/* Semesters Select */}
           <select
             value={selectedSemester}
-            onChange={(e) => setSelectedSemester(e.target.value)}
-            className="h-full w-[400px] rounded-xl border px-4 py-3 text-[18px] text-textSecondary bg-bgPrimary outline-none max-[458px]:w-[350px]"
+            onChange={e => setSelectedSemester(e.target.value)}
+            className="h-full w-[400px] rounded-xl border bg-bgPrimary px-4 py-3 text-[18px] text-textSecondary outline-none max-[458px]:w-[350px]"
             disabled={!selectedAcademicYear}
             onFocus={() => {
               if (!selectedAcademicYear) {
@@ -143,10 +140,10 @@ const Grads = () => {
               {currentLanguage === "en"
                 ? "Select Semester"
                 : currentLanguage === "ar"
-                ? "اختر الفصل الدراسي"
-                : "Sélectionner Semestre"}
+                  ? "اختر الفصل الدراسي"
+                  : "Sélectionner Semestre"}
             </option>
-            {semesters?.data.map((semester:any) => (
+            {semesters?.data.map((semester: any) => (
               <option key={semester.id} value={semester.id ?? ""}>
                 {semester.name}
               </option>
@@ -159,8 +156,8 @@ const Grads = () => {
               {currentLanguage === "en"
                 ? "Please select academic year first"
                 : currentLanguage === "ar"
-                ? "الرجاء اختيار العام الدراسي أولاً"
-                : "Veuillez d'abord sélectionner l'année académique"}
+                  ? "الرجاء اختيار العام الدراسي أولاً"
+                  : "Veuillez d'abord sélectionner l'année académique"}
             </p>
           )}
         </div>
@@ -174,69 +171,69 @@ const Grads = () => {
                     {currentLanguage === "en"
                       ? "Subject"
                       : currentLanguage === "ar"
-                      ? "المادة"
-                      : "Sujet"}
+                        ? "المادة"
+                        : "Sujet"}
                   </th>
                   <th className="px-6 py-3">
                     {currentLanguage === "en"
                       ? "First Assignment"
                       : currentLanguage === "ar"
-                      ? "التكليف الأول"
-                      : "Première évaluation"}
+                        ? "التكليف الأول"
+                        : "Première évaluation"}
                   </th>
                   <th className="px-6 py-3">
                     {currentLanguage === "en"
                       ? "Second Assignment"
                       : currentLanguage === "ar"
-                      ? "التكليف الثاني"
-                      : "Deuxième évaluation"}
+                        ? "التكليف الثاني"
+                        : "Deuxième évaluation"}
                   </th>
                   <th className="px-6 py-3">
                     {currentLanguage === "en"
                       ? "Third Assignment"
                       : currentLanguage === "ar"
-                      ? "التكليف الثالث"
-                      : "Troisième évaluation"}
+                        ? "التكليف الثالث"
+                        : "Troisième évaluation"}
                   </th>
                   <th className="px-6 py-3">
                     {currentLanguage === "en"
                       ? "Fourth Assignment"
                       : currentLanguage === "ar"
-                      ? "التكليف الرابع"
-                      : "Quatrième évaluation"}
+                        ? "التكليف الرابع"
+                        : "Quatrième évaluation"}
                   </th>
                   <th className="px-6 py-3">
                     {currentLanguage === "en"
                       ? "Integrated Activities"
                       : currentLanguage === "ar"
-                      ? "الأنشطة المندمجة"
-                      : "Activités Intégrées"}
+                        ? "الأنشطة المندمجة"
+                        : "Activités Intégrées"}
                   </th>
                   <th className="px-6 py-3">
                     {currentLanguage === "en"
                       ? "Points"
                       : currentLanguage === "ar"
-                      ? "النقاط"
-                      : "Points"}
+                        ? "النقاط"
+                        : "Points"}
                   </th>
                   <th className="px-6 py-3">
                     {currentLanguage === "en"
                       ? "Coefficients"
                       : currentLanguage === "ar"
-                      ? "معاملات"
-                      : "Coefficients"}
+                        ? "معاملات"
+                        : "Coefficients"}
                   </th>
                   <th className="px-6 py-3">
                     {currentLanguage === "en"
                       ? "GPA"
                       : currentLanguage === "ar"
-                      ? "المعدل"
-                      : "Moyenne"}
+                        ? "المعدل"
+                        : "Moyenne"}
                   </th>
                 </tr>
               </thead>
               <tbody>
-                {grades.courses.map((course:any, index:any) => (
+                {grades.courses.map((course: any, index: any) => (
                   <tr
                     key={index}
                     className="border-b border-borderPrimary bg-bgPrimary hover:bg-bgSecondary"
@@ -269,8 +266,8 @@ const Grads = () => {
                     {currentLanguage === "en"
                       ? "Total Coefficient"
                       : currentLanguage === "ar"
-                      ? "إجمالي المعامل"
-                      : "Total des Coefficients"}
+                        ? "إجمالي المعامل"
+                        : "Total des Coefficients"}
                   </td>
                   <td colSpan={2} className="px-6 py-4">
                     {grades.totalCoefficient}
@@ -281,8 +278,8 @@ const Grads = () => {
                     {currentLanguage === "en"
                       ? "Semester Average"
                       : currentLanguage === "ar"
-                      ? "معدل الفصل"
-                      : "Moyenne du Semestre"}
+                        ? "معدل الفصل"
+                        : "Moyenne du Semestre"}
                   </td>
                   <td colSpan={2} className="px-6 py-4">
                     {grades.averageOfThisSemester ?? "-"}
