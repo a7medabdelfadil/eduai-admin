@@ -15,10 +15,10 @@ export default function Home() {
         className={`${
           currentLanguage === "ar"
             ? booleanValue
-              ? "lg:mr-[40px]"
+              ? "lg:mr-[100px]"
               : "lg:mr-[290px]"
             : booleanValue
-              ? "lg:ml-[40px]"
+              ? "lg:ml-[100px]"
               : "lg:ml-[290px]"
         } mt-12`}
       >

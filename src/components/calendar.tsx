@@ -1,26 +1,32 @@
 "use client";
-import React, { useState } from "react";
+import React from "react";
 import { format } from "date-fns";
 import { enUS } from "date-fns/locale";
 import { useSelector } from "react-redux";
 import { RootState } from "@/GlobalRedux/store";
 
-const Calendar = () => {
+interface CalendarProps {
+  onDateSelect?: (date: Date) => void;
+  initialDate?: Date;
+}
+
+const Calendar: React.FC<CalendarProps> = ({ 
+  onDateSelect,
+  initialDate = new Date()
+}) => {
   const { language: currentLanguage } = useSelector(
     (state: RootState) => state.language,
   );
 
-  const currentDate = new Date();
-
-  // State for selected date
-  const [selectedDate, setSelectedDate] = useState(currentDate);
+  const [selectedDate, setSelectedDate] = React.useState(initialDate);
 
   // Function to handle date selection
   const handleDateClick = (date: Date) => {
     setSelectedDate(date);
+    onDateSelect?.(date); // Call the callback with selected date
   };
 
-  // Function to generate an array of dates for the current month
+  // Rest of the calendar implementation remains the same
   const generateMonthDates = () => {
     const year = selectedDate.getFullYear();
     const month = selectedDate.getMonth();
@@ -33,7 +39,6 @@ const Calendar = () => {
       days.push(date);
     }
 
-    // Add empty slots for days before the first day of the month
     for (let i = 0; i < firstDayOfMonth.getDay(); i++) {
       days.unshift(null);
     }
@@ -41,30 +46,25 @@ const Calendar = () => {
     return days;
   };
 
-  // Generate the array of dates for the current month
   const monthDates = generateMonthDates();
 
-  // Function to handle moving to the previous month
   const goToPreviousMonth = () => {
     setSelectedDate(
       new Date(selectedDate.getFullYear(), selectedDate.getMonth() - 1, 1),
     );
   };
 
-  // Function to handle moving to the next month
   const goToNextMonth = () => {
     setSelectedDate(
       new Date(selectedDate.getFullYear(), selectedDate.getMonth() + 1, 1),
     );
   };
 
-  // Format month and year with localization
   const monthYear = format(selectedDate, "LLLL yyyy", { locale: enUS });
 
   return (
     <div className="calendar-component">
       <div className="grid h-[450px] w-[500px] rounded-xl bg-bgPrimary p-5 max-[1342px]:w-full">
-        {/* Display month and year */}
         <div className="mb-7 flex items-center justify-between">
           <button
             aria-label="Previous month"
@@ -82,8 +82,7 @@ const Calendar = () => {
               strokeLinecap="round"
               strokeLinejoin="round"
             >
-              {" "}
-              <path stroke="none" d="M0 0h24v24H0z" />{" "}
+              <path stroke="none" d="M0 0h24v24H0z" />
               <polyline points="15 6 9 12 15 18" />
             </svg>
           </button>
@@ -107,84 +106,49 @@ const Calendar = () => {
               strokeLinecap="round"
               strokeLinejoin="round"
             >
-              {" "}
               <polyline points="9 18 15 12 9 6" />
             </svg>
           </button>
         </div>
-        {/* Display calendar */}
-        {/* Day names */}
         <div className="grid grid-cols-7 gap-8" role="row">
-          <div
-            role="columnheader"
-            className="font-sans font-medium text-textSecondary"
-          >
-            {currentLanguage === "ar"
-              ? "الأحد"
-              : currentLanguage === "fr"
-                ? "DIM"
-                : "SUN"}
-          </div>
-          <div
-            role="columnheader"
-            className="font-sans font-medium text-textSecondary"
-          >
-            {currentLanguage === "ar"
-              ? "الإثنين"
-              : currentLanguage === "fr"
-                ? "LUN"
-                : "MON"}
-          </div>
-          <div
-            role="columnheader"
-            className="font-sans font-medium text-textSecondary"
-          >
-            {currentLanguage === "ar"
-              ? "الثلاثاء"
-              : currentLanguage === "fr"
-                ? "MAR"
-                : "TUE"}
-          </div>
-          <div
-            role="columnheader"
-            className="font-sans font-medium text-textSecondary"
-          >
-            {currentLanguage === "ar"
-              ? "الأربعاء"
-              : currentLanguage === "fr"
-                ? "MER"
-                : "WED"}
-          </div>
-          <div
-            role="columnheader"
-            className="font-sans font-medium text-textSecondary"
-          >
-            {currentLanguage === "ar"
-              ? "الخميس"
-              : currentLanguage === "fr"
-                ? "JEU"
-                : "THU"}
-          </div>
-          <div
-            role="columnheader"
-            className="font-sans font-medium text-textSecondary"
-          >
-            {currentLanguage === "ar"
-              ? "الجمعة"
-              : currentLanguage === "fr"
-                ? "VEN"
-                : "FRI"}
-          </div>
-          <div
-            role="columnheader"
-            className="font-sans font-medium text-textSecondary"
-          >
-            {currentLanguage === "ar"
-              ? "السبت"
-              : currentLanguage === "fr"
-                ? "SAM"
-                : "SAT"}
-          </div>
+          {/* Day headers */}
+          {["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"].map((day) => (
+            <div
+              key={day}
+              role="columnheader"
+              className="font-sans font-medium text-textSecondary"
+            >
+              {currentLanguage === "ar"
+                ? day === "SUN"
+                  ? "الأحد"
+                  : day === "MON"
+                  ? "الإثنين"
+                  : day === "TUE"
+                  ? "الثلاثاء"
+                  : day === "WED"
+                  ? "الأربعاء"
+                  : day === "THU"
+                  ? "الخميس"
+                  : day === "FRI"
+                  ? "الجمعة"
+                  : "السبت"
+                : currentLanguage === "fr"
+                ? day === "SUN"
+                  ? "DIM"
+                  : day === "MON"
+                  ? "LUN"
+                  : day === "TUE"
+                  ? "MAR"
+                  : day === "WED"
+                  ? "MER"
+                  : day === "THU"
+                  ? "JEU"
+                  : day === "FRI"
+                  ? "VEN"
+                  : "SAM"
+                : day}
+            </div>
+          ))}
         </div>
         <div className="grid grid-cols-7 gap-x-7" role="grid">
           {monthDates.map((date, index) => (
@@ -200,7 +164,11 @@ const Calendar = () => {
               aria-label={date ? format(date, "MMMM d, yyyy") : ""}
               className={`flex h-8 w-8 cursor-pointer items-center justify-center rounded-full font-semibold text-textSecondary ${
                 date ? "hover:bg-thead focus:bg-primary" : ""
-              } ${date && date.getDate() === selectedDate.getDate() ? "bg-primary text-white" : ""}`}
+              } ${
+                date && date.getDate() === selectedDate.getDate()
+                  ? "bg-primary text-white"
+                  : ""
+              }`}
               onClick={() => date && handleDateClick(date)}
             >
               {date ? date.getDate() : ""}

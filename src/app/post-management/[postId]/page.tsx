@@ -3,6 +3,7 @@ import {
   useGetPostByIdQuery,
   useUpdatePostsMutation,
   useUpdatePostsFilesMutation,
+  useDeletePostImagesMutation,
 } from "@/features/communication/postApi";
 import { RootState } from "@/GlobalRedux/store";
 import { useSelector } from "react-redux";
@@ -56,7 +57,17 @@ const EditPost = ({ params }: EditPostProps) => {
     (state: RootState) => state.language.language,
   );
   const booleanValue = useSelector((state: RootState) => state.boolean.value);
-  const { data: post, isLoading } = useGetPostByIdQuery(params.postId);
+  const { data: post, isLoading, refetch } = useGetPostByIdQuery(params.postId);
+  const [deletePostImages] = useDeletePostImagesMutation();
+  const handleDelete = async ({ postId, imageId }: { postId: string; imageId: string }) => {
+    try {
+      await deletePostImages({postId, imageId}).unwrap();
+      toast.success("Delete Post Image Success");
+      void refetch();
+    } catch (err) {
+      toast.error("Can not Delete Post Image");
+    }
+  };
   const {
     register,
     handleSubmit,
@@ -462,13 +473,28 @@ const EditPost = ({ params }: EditPostProps) => {
               </div>
             </div>
             <div className="flex flex-wrap gap-2">
-              {post.data.attachments.map((img: any) => (
+              {post?.data?.attachments.map((img: any) => (
                 <div className="grid justify-center gap-2">
                   <img
                     src={img.viewLink}
                     alt="#"
                     className="mt-10 h-[120px] w-[120px] rounded-lg"
                   />
+                  <button type="button" onClick={() => handleDelete({ postId: params.postId, imageId: img.id })}>
+                  <svg
+                                  className="h-5 w-5 mr-2"
+                                  fill="none"
+                                  viewBox="0 0 24 24"
+                                  stroke="currentColor"
+                                >
+                                  <path
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    strokeWidth="2"
+                                    d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                                  />
+                                </svg>
+                  </button>
                 </div>
               ))}
             </div>

@@ -332,7 +332,7 @@ const Bank = () => {
                                   : "Nom"}
                             </h1>
                             <p className="font-medium tracking-widest">
-                              Mostapha Taha
+                            {bank.beneficiaryName}
                             </p>
                           </div>
                           <img
@@ -350,46 +350,19 @@ const Bank = () => {
                                 : "Numéro de Carte"}
                           </h1>
                           <p className="tracking-more-wider font-medium">
-                            4642 3489 9867 7632
+                          {bank.beneficiaryAccountNumber}
                           </p>
                         </div>
                         <div className="pr-6 pt-6">
                           <div className="flex justify-between">
                             <div className="">
-                              <h1 className="text-xs font-light">
-                                {currentLanguage === "en"
-                                  ? "Valid"
-                                  : currentLanguage === "ar"
-                                    ? "صالح"
-                                    : "Valide"}
-                              </h1>
-                              <p className="text-sm font-medium tracking-wider">
-                                11/15
-                              </p>
+                              
                             </div>
                             <div className="">
-                              <h1 className="text-xs font-light">
-                                {currentLanguage === "en"
-                                  ? "Expiry"
-                                  : currentLanguage === "ar"
-                                    ? "انتهاء الصلاحية"
-                                    : "Expiration"}
-                              </h1>
-                              <p className="text-sm font-medium tracking-wider">
-                                03/25
-                              </p>
+                              
                             </div>
                             <div className="">
-                              <h1 className="text-xs font-light">
-                                {currentLanguage === "en"
-                                  ? "CVV"
-                                  : currentLanguage === "ar"
-                                    ? "رمز التحقق"
-                                    : "CVV"}
-                              </h1>
-                              <p className="tracking-more-wider text-sm font-bold">
-                                ···
-                              </p>
+                              
                             </div>
                           </div>
                         </div>

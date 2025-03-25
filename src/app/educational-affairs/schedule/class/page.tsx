@@ -92,7 +92,7 @@ const ClassSchedule = () => {
               : "lg:ml-[270px]"
         } mt-7`}
       >
-        <div className="my-12 mr-5 flex justify-between max-[540px]:my-1 max-[540px]:mr-0 max-[540px]:grid max-[540px]:justify-center">
+        <div className="mb-6 mr-5 flex justify-between max-[540px]:my-1 max-[540px]:mr-0 max-[540px]:grid max-[540px]:justify-center">
           <div className="ml-2 flex items-center justify-start gap-3 text-xl font-semibold max-[540px]:mb-2 max-[540px]:ml-0 max-[540px]:justify-center">
             <Link href="/educational-affairs/schedule">
               {currentLanguage === "ar"

@@ -38,12 +38,12 @@ const eventSchema = z.object({
   creatorId: z.string().optional(),
   startTime: z.string().min(1, "Start time is required"),
   endTime: z.string().min(1, "End time is required"),
-  title_en: z.string().optional(),
-  title_ar: z.string().optional(),
-  title_fr: z.string().optional(),
-  description_en: z.string().optional(),
-  description_ar: z.string().optional(),
-  description_fr: z.string().optional(),
+  title_en: z.string().min(1, "English title is required"),
+  title_ar: z.string().min(1, "Arabic title is required"),
+  title_fr: z.string().min(1, "French title is required"),
+  description_en: z.string().min(1, "English description is required"),
+  description_ar: z.string().min(1, "Arabic description is required"),
+  description_fr: z.string().min(1, "French description is required"),
   file: z.any().optional(),
 });
 
@@ -374,8 +374,8 @@ const Dashboard: React.FC = () => {
           </div>
           <div className="flex justify-center">
             <div className="grid overflow-x-auto rounded-2xl">
-              <div className="grid w-[550px] items-center justify-center overflow-x-auto rounded-2xl bg-bgPrimary p-2 shadow-xl max-[1536px]:h-[450px] max-[1536px]:w-[850px]">
-                <div dir={currentLanguage === "ar" ? "rtl" : "ltr"}>
+              <div className="grid w-[550px]  overflow-x-auto rounded-2xl bg-bgPrimary p-2 shadow-xl max-[1536px]:h-[450px] max-[1536px]:w-[850px]">
+                <div className="flex justify-start text-start w-full" dir={currentLanguage === "ar" ? "rtl" : "ltr"}>
                   <h1 className="text-xl font-bold">
                     {currentLanguage === "ar"
                       ? "الفعاليات القادمة"
@@ -405,7 +405,7 @@ const Dashboard: React.FC = () => {
                           "dd - MMMM - yyyy",
                         )}
                       </p>
-                      <p className="text-[16px] text-gray-400">
+                      <p className="text-[16px] text-gray-400 truncate">
                         {meeting.title}
                       </p>
                       <div className="h-2.5 w-full rounded-full bg-gray-200">
@@ -420,13 +420,7 @@ const Dashboard: React.FC = () => {
                         {format(parseISO(meeting.startDate), "hh:mm a")} -{" "}
                         {format(parseISO(meeting.endDate), "hh:mm a")}
                       </p>
-                      <p className="mx-2 text-[16px] text-gray-600">
-                        {currentLanguage === "ar"
-                          ? "23 مهتم بالحدث"
-                          : currentLanguage === "fr"
-                            ? "23 intéressés par l'événement"
-                            : "23 Interested in the event"}
-                      </p>
+                      
                     </div>
                   </div>
                 ))}
@@ -441,10 +435,10 @@ const Dashboard: React.FC = () => {
                           : "No Events Found"}
                   </div>
                 )}
-                <div className="flex h-full items-end justify-center">
+                <div className="flex h-full justify-evenly items-center">
                   <button
                     onClick={handleOpenModal}
-                    className="mx-3 whitespace-nowrap rounded-xl bg-primary px-1 py-1.5 text-[14px] font-semibold text-white duration-300 ease-in hover:bg-[#4a5cc5] hover:shadow-xl"
+                    className="mx-3 whitespace-nowrap rounded-xl bg-primary px-2.5 py-2 text-[14px] font-semibold text-white duration-300 ease-in hover:bg-[#4a5cc5] hover:shadow-xl"
                   >
                     {currentLanguage === "ar"
                       ? "+ فعالية جديدة"
@@ -452,11 +446,6 @@ const Dashboard: React.FC = () => {
                         ? "+ Nouvel événement"
                         : "+ New Event"}
                   </button>
-                </div>
-                <div
-                  dir={currentLanguage === "ar" ? "rtl" : "ltr"}
-                  className="flex w-full justify-end text-end"
-                >
                   <Link
                     href="/educational-affairs/events"
                     className="font-semibold text-primary underline"
@@ -502,7 +491,7 @@ const Dashboard: React.FC = () => {
             dir={currentLanguage === "ar" ? "rtl" : "ltr"}
             className="grid overflow-x-auto rounded-xl"
           >
-            <div className="grid h-[500px] w-[550px] overflow-x-auto overflow-y-auto rounded-xl bg-bgPrimary p-2 shadow-xl max-[1536px]:w-full">
+            <div className="grid h-[500px] w-[550px] overflow-x-auto overflow-y-auto rounded-xl bg-bgPrimary p-2  max-[1536px]:w-full">
               <div className="flex w-full justify-between">
                 <p className="text-[20px] font-bold">
                   {currentLanguage === "en"

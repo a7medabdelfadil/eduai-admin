@@ -44,6 +44,7 @@ const Grads = () => {
     archived: "false",
     page: 0,
     size: 1000000,
+    graduated: "false"
   });
 
   const { data: years, isLoading: isYear } = useGetAllAcadimicYearQuery(null);

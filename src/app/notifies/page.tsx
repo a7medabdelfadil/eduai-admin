@@ -15,7 +15,6 @@ import { RootState } from "@/GlobalRedux/store";
 import Pagination from "@/components/pagination";
 import { useNotificationsSocket } from "@/hooks/useGetAllNotifications";
 
-
 const Notifies = () => {
   const userId = useSelector((state: RootState) => state.user.id);
   const { notifications: socketNotifications, isConnected } = useNotificationsSocket(userId);

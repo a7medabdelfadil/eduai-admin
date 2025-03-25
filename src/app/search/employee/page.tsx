@@ -13,25 +13,30 @@ import { RootState } from "@/GlobalRedux/store";
 const EmployeeSearch = () => {
   const booleanValue = useSelector((state: RootState) => state.boolean.value);
 
-  type Teacher = Record<string, any>;
+  type Employee = Record<string, any>;
   const { data, error, isLoading } = useGetAllEmployeesQuery({
     archived: "false",
     page: 0,
     size: 1000000,
   });
   const [searchTerm, setSearchTerm] = useState("");
-  const [filteredTeachers, setFilteredTeachers] = useState<Teacher[]>([]);
+  const [filteredEmployees, setFilteredEmployees] = useState<Employee[]>([]);
 
+  // Update filtering logic to show all employees by default
   useEffect(() => {
     if (data) {
-      const filtered = data.data.content.filter((student: Teacher) =>
-        student.name.toLowerCase().includes(searchTerm.toLowerCase()),
-      );
-      setFilteredTeachers(filtered);
+      if (searchTerm === "") {
+        // Show all employees when search is empty
+        setFilteredEmployees(data.data.content);
+      } else {
+        // Filter employees based on search term
+        const filtered = data.data.content.filter((employee: Employee) =>
+          employee.name.toLowerCase().includes(searchTerm.toLowerCase()),
+        );
+        setFilteredEmployees(filtered);
+      }
     }
-    if (error) {
-    }
-  }, [data, searchTerm, error]);
+  }, [data, searchTerm]);
 
   const [selectedId, setSelectedId] = useState(null);
   const { data: EmployeeQ, isLoading: isEmployee } = useGetEmployeeByIdQuery(
@@ -40,9 +45,18 @@ const EmployeeSearch = () => {
       skip: !selectedId,
     },
   );
+
+  // Select first employee by default when data loads
+  useEffect(() => {
+    if (data?.data?.content?.length > 0 && !selectedId) {
+      setSelectedId(data.data.content[0].id);
+    }
+  }, [data]);
+
   const handleClick = (id: SetStateAction<null>) => {
     setSelectedId(id);
   };
+
   const { language: currentLanguage, loading } = useSelector(
     (state: RootState) => state.language,
   );
@@ -53,6 +67,7 @@ const EmployeeSearch = () => {
         <Spinner />
       </div>
     );
+
   return (
     <>
       <div
@@ -68,7 +83,7 @@ const EmployeeSearch = () => {
       >
         <div className="flex h-full w-full justify-center overflow-auto p-2">
           <div className="grid h-full w-full overflow-auto rounded-xl bg-bgPrimary">
-            <div
+          <div
               dir={currentLanguage === "ar" ? "rtl" : "ltr"}
               className="flex h-[70px] items-center gap-7 overflow-auto rounded-t-xl bg-bgPrimary px-3 font-semibold"
             >
@@ -196,32 +211,15 @@ const EmployeeSearch = () => {
                       />
                     </div>
                   </div>
-                  <div>
-                    <select
-                      id="countries"
-                      className="block h-full w-full rounded-lg border border-borderPrimary bg-bgSecondary p-1.5 text-sm text-textPrimary outline-none focus:border-borderPrimary"
-                    >
-                      <option selected>
-                        {currentLanguage === "en"
-                          ? "Search by Name"
-                          : currentLanguage === "ar"
-                            ? "البحث بالاسم"
-                            : "Rechercher par nom"}
-                      </option>
-                    </select>
-                  </div>
                 </div>
                 <div className="mt-3">
                   <p className="font-semibold">
-                    {filteredTeachers.length}{" "}
+                    {filteredEmployees.length}{" "}
                     {currentLanguage === "en"
                       ? "Employees Found"
                       : currentLanguage === "ar"
                         ? "موظفين تم العثور عليهم"
-                        : currentLanguage === "fr"
-                          ? "Employés trouvés"
-                          : "Employees Found"}{" "}
-                    {/* Default to English */}
+                        : "Employés trouvés"}
                   </p>
                 </div>
                 <div className="grid h-[450px] w-full overflow-y-auto">
@@ -229,16 +227,18 @@ const EmployeeSearch = () => {
                     <Spinner />
                   ) : (
                     <div className="h-full w-full overflow-y-auto">
-                      {filteredTeachers.length > 0 && searchTerm ? (
+                      {filteredEmployees.length > 0 ? (
                         <ul className="mt-12 grid w-full gap-2 overflow-y-auto">
-                          {filteredTeachers.map(student => (
+                          {filteredEmployees.map(employee => (
                             <div
-                              onClick={() => handleClick(student.id)}
-                              key={student.id}
-                              className="flex w-full cursor-pointer items-center rounded-lg border border-borderPrimary px-2 py-1 hover:bg-bgPrimary"
+                              onClick={() => handleClick(employee.id)}
+                              key={employee.id}
+                              className={`flex w-full cursor-pointer items-center rounded-lg border border-borderPrimary px-2 py-1 hover:bg-bgSecondary ${
+                                selectedId === employee.id ? 'bg-bgSecondary' : ''
+                              }`}
                             >
                               <div>
-                                {student.picture == null ? (
+                                {employee.picture == null ? (
                                   <img
                                     src="/images/userr.png"
                                     className="mx-2 h-[40px] w-[40px] rounded-full"
@@ -246,7 +246,7 @@ const EmployeeSearch = () => {
                                   />
                                 ) : (
                                   <img
-                                    src={student.picture}
+                                    src={employee.picture}
                                     className="mx-2 h-[40px] w-[40px] rounded-full"
                                     alt="#"
                                   />
@@ -254,10 +254,10 @@ const EmployeeSearch = () => {
                               </div>
                               <div className="grid gap-2">
                                 <p className="font-semibold">
-                                  {String(student.name)}
+                                  {String(employee.name)}
                                 </p>
                                 <p className="font-semibold text-secondary">
-                                  ID: {student.id}
+                                  ID: {employee.id}
                                 </p>
                               </div>
                             </div>
@@ -279,147 +279,149 @@ const EmployeeSearch = () => {
                   <div className="mt-16 grid items-center justify-center">
                     {EmployeeQ ? (
                       <div>
-                        <div className="flex justify-end">
-                          <Link
-                            className="rounded-lg bg-primary px-2 py-1 font-semibold text-white duration-300 ease-in hover:bg-hover hover:shadow-xl"
-                            href={`/employee/view-employee/${EmployeeQ.data.id}`}
-                          >
-                            {currentLanguage === "ar"
-                              ? "عرض"
-                              : currentLanguage === "fr"
-                                ? "Voir"
-                                : "View"}
-                          </Link>
-                        </div>
-                        <div className="grid items-center justify-center text-center">
-                          {EmployeeQ?.data.picture == null ? (
-                            <img
-                              src="/images/userr.png"
-                              className="mx-2 h-[120px] w-[120px] rounded-full"
-                              alt="#"
-                            />
-                          ) : (
-                            <img
-                              src={EmployeeQ?.data.picture}
-                              className="mx-2 h-[120px] w-[120px] rounded-full"
-                              alt="#"
-                            />
-                          )}
-                          <h1 className="font-sans font-semibold text-textSecondary">
-                            {EmployeeQ?.data.name}
-                          </h1>
-                        </div>
+                      <div className="flex justify-end">
+                        <Link
+                          className="rounded-lg bg-primary px-2 py-1 font-semibold text-white duration-300 ease-in hover:bg-hover hover:shadow-xl"
+                          href={`/employee/view-employee/${EmployeeQ.data.id}`}
+                        >
+                          {currentLanguage === "ar"
+                            ? "عرض"
+                            : currentLanguage === "fr"
+                              ? "Voir"
+                              : "View"}
+                        </Link>
+                      </div>
+                      <div className="grid items-center justify-center text-center">
+                        {EmployeeQ?.data.picture == null ? (
+                          <img
+                            src="/images/userr.png"
+                            className="mx-2 h-[120px] w-[120px] rounded-full"
+                            alt="#"
+                          />
+                        ) : (
+                          <img
+                            src={EmployeeQ?.data.picture}
+                            className="mx-2 h-[120px] w-[120px] rounded-full"
+                            alt="#"
+                          />
+                        )}
+                        <h1 className="font-sans font-semibold text-textSecondary">
+                          {EmployeeQ?.data.name}
+                        </h1>
+                      </div>
 
-                        <div className="grid justify-start">
-                          <h1 className="font-sans text-[22px] font-semibold text-textSecondary">
+                      <div className="grid justify-start">
+                        <h1 className="font-sans text-[22px] font-semibold text-textSecondary">
+                          {currentLanguage === "ar"
+                            ? "تفاصيل أساسية"
+                            : currentLanguage === "fr"
+                              ? "Détails de base"
+                              : "Basic Details"}
+                        </h1>
+                        <div className="grid w-[400px] grid-cols-2 max-[485px]:w-[240px]">
+                          <h3 className="font-sans font-semibold text-textPrimary">
                             {currentLanguage === "ar"
-                              ? "تفاصيل أساسية"
+                              ? "البريد الإلكتروني:"
                               : currentLanguage === "fr"
-                                ? "Détails de base"
-                                : "Basic Details"}
-                          </h1>
-                          <div className="grid w-[400px] grid-cols-2 max-[485px]:w-[240px]">
-                            <h3 className="font-sans font-semibold text-textPrimary">
-                              {currentLanguage === "ar"
-                                ? "البريد الإلكتروني:"
+                                ? "Email:"
+                                : "Email:"}
+                          </h3>
+                          <p className="font-sans font-semibold text-textSecondary">
+                            {EmployeeQ?.data.email}
+                          </p>
+                          <h3 className="font-sans font-semibold text-textPrimary">
+                            {currentLanguage === "ar"
+                              ? "الراتب:"
+                              : currentLanguage === "fr"
+                                ? "Salaire:"
+                                : "Salary:"}
+                          </h3>
+                          <p className="font-sans font-semibold text-textSecondary">
+                            {EmployeeQ?.data.salary == null
+                              ? currentLanguage === "ar"
+                                ? "غير محدد"
                                 : currentLanguage === "fr"
-                                  ? "Email:"
-                                  : "Email:"}
-                            </h3>
-                            <p className="font-sans font-semibold text-textSecondary">
-                              {EmployeeQ?.data.email}
-                            </p>
-                            <h3 className="font-sans font-semibold text-textPrimary">
-                              {currentLanguage === "ar"
-                                ? "الراتب:"
-                                : currentLanguage === "fr"
-                                  ? "Salaire:"
-                                  : "Salary:"}
-                            </h3>
-                            <p className="font-sans font-semibold text-textSecondary">
-                              {EmployeeQ?.data.salary == null
-                                ? currentLanguage === "ar"
-                                  ? "غير محدد"
-                                  : currentLanguage === "fr"
-                                    ? "Non spécifié"
-                                    : "Not specified"
-                                : EmployeeQ?.data.salary}
-                            </p>
-                            <h3 className="font-sans font-semibold text-textPrimary">
-                              {currentLanguage === "ar"
-                                ? "العمر:"
-                                : currentLanguage === "fr"
-                                  ? "Âge:"
-                                  : "Age:"}
-                            </h3>
-                            <p className="font-sans font-semibold text-textSecondary">
-                              {EmployeeQ?.data.birthDate}
-                            </p>
-                            <h3 className="font-sans font-semibold text-textPrimary">
-                              {currentLanguage === "ar"
-                                ? "الجنس:"
-                                : currentLanguage === "fr"
-                                  ? "Genre:"
-                                  : "Gender:"}
-                            </h3>
-                            <p className="font-sans font-semibold text-textSecondary">
-                              {EmployeeQ?.data.gender}
-                            </p>
-                            <h3 className="font-sans font-semibold text-textPrimary">
-                              {currentLanguage === "ar"
-                                ? "الوظيفة:"
-                                : currentLanguage === "fr"
-                                  ? "Poste:"
-                                  : "Position:"}
-                            </h3>
-                            <p className="font-sans font-semibold text-textSecondary">
-                              {EmployeeQ?.data.role}
-                            </p>
-                            <h3 className="font-sans font-semibold text-textPrimary">
-                              {currentLanguage === "ar"
-                                ? "الديانة:"
-                                : currentLanguage === "fr"
-                                  ? "Religion:"
-                                  : "Religion:"}
-                            </h3>
-                            <p className="font-sans font-semibold text-textSecondary">
-                              {EmployeeQ?.data.religion}
-                            </p>
-                            <h3 className="font-sans font-semibold text-textPrimary">
-                              {currentLanguage === "ar"
-                                ? "العنوان:"
-                                : currentLanguage === "fr"
-                                  ? "Adresse:"
-                                  : "Address:"}
-                            </h3>
-                            <p className="font-sans font-semibold text-textSecondary">
-                              {EmployeeQ?.data.nationality}
-                            </p>
-                            <h3 className="font-sans font-semibold text-textPrimary">
-                              {currentLanguage === "ar"
-                                ? "رقم الهاتف:"
-                                : currentLanguage === "fr"
-                                  ? "Mobile:"
-                                  : "Mobile:"}
-                            </h3>
-                            <p className="font-sans font-semibold text-textSecondary">
-                              {EmployeeQ?.data.phoneNumber}
-                            </p>
-                            <h3 className="font-sans font-semibold text-textPrimary">
-                              {currentLanguage === "ar"
-                                ? "عن:"
-                                : currentLanguage === "fr"
-                                  ? "À propos:"
-                                  : "About:"}
-                            </h3>
-                            <p className="font-sans font-semibold text-textSecondary">
-                              {EmployeeQ?.data.about}
-                            </p>
-                          </div>
+                                  ? "Non spécifié"
+                                  : "Not specified"
+                              : EmployeeQ?.data.salary}
+                          </p>
+                          <h3 className="font-sans font-semibold text-textPrimary">
+                            {currentLanguage === "ar"
+                              ? "العمر:"
+                              : currentLanguage === "fr"
+                                ? "Âge:"
+                                : "Age:"}
+                          </h3>
+                          <p className="font-sans font-semibold text-textSecondary">
+                            {EmployeeQ?.data.birthDate}
+                          </p>
+                          <h3 className="font-sans font-semibold text-textPrimary">
+                            {currentLanguage === "ar"
+                              ? "الجنس:"
+                              : currentLanguage === "fr"
+                                ? "Genre:"
+                                : "Gender:"}
+                          </h3>
+                          <p className="font-sans font-semibold text-textSecondary">
+                            {EmployeeQ?.data.gender}
+                          </p>
+                          <h3 className="font-sans font-semibold text-textPrimary">
+                            {currentLanguage === "ar"
+                              ? "الوظيفة:"
+                              : currentLanguage === "fr"
+                                ? "Poste:"
+                                : "Position:"}
+                          </h3>
+                          <p className="font-sans font-semibold text-textSecondary">
+                            {EmployeeQ?.data.role}
+                          </p>
+                          <h3 className="font-sans font-semibold text-textPrimary">
+                            {currentLanguage === "ar"
+                              ? "الديانة:"
+                              : currentLanguage === "fr"
+                                ? "Religion:"
+                                : "Religion:"}
+                          </h3>
+                          <p className="font-sans font-semibold text-textSecondary">
+                            {EmployeeQ?.data.religion}
+                          </p>
+                          <h3 className="font-sans font-semibold text-textPrimary">
+                            {currentLanguage === "ar"
+                              ? "العنوان:"
+                              : currentLanguage === "fr"
+                                ? "Adresse:"
+                                : "Address:"}
+                          </h3>
+                          <p className="font-sans font-semibold text-textSecondary">
+                            {EmployeeQ?.data.nationality}
+                          </p>
+                          <h3 className="font-sans font-semibold text-textPrimary">
+                            {currentLanguage === "ar"
+                              ? "رقم الهاتف:"
+                              : currentLanguage === "fr"
+                                ? "Mobile:"
+                                : "Mobile:"}
+                          </h3>
+                          <p className="font-sans font-semibold text-textSecondary">
+                            {EmployeeQ?.data.phoneNumber}
+                          </p>
+                          <h3 className="font-sans font-semibold text-textPrimary">
+                            {currentLanguage === "ar"
+                              ? "عن:"
+                              : currentLanguage === "fr"
+                                ? "À propos:"
+                                : "About:"}
+                          </h3>
+                          <p className="font-sans font-semibold text-textSecondary">
+                            {EmployeeQ?.data.about}
+                          </p>
                         </div>
                       </div>
+                    </div>
                     ) : (
-                      <div></div>
+                      <div className="flex h-full items-center justify-center">
+                        <p className="text-textSecondary">Select an employee to view details</p>
+                      </div>
                     )}
                   </div>
                 )}

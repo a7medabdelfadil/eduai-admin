@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import Spinner from "@/components/spinner";
 import { useCreateTeachersMutation } from "@/features/User-Management/teacherApi";
@@ -17,8 +17,12 @@ import { useGetAllPositionsQuery } from "@/features/User-Management/driverApi";
 import SearchableSelect from "@/components/select";
 import PhoneNumberInput from "@/components/PhoneNumberInput";
 import MultiSelectComponent from "@/components/multiSelect";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 const AddNewTeacher = () => {
+    const [backendError, setBackendError] = useState<string | null>(null);
+  
   const { data: positionData, isLoading: isPosition } =
     useGetAllPositionsQuery(null);
 
@@ -85,6 +89,7 @@ const AddNewTeacher = () => {
     formState: { errors },
   } = formMethods;
   const birthDate = watch("birthDate");
+  const router = useRouter();
 
   const [createTeacher, { isLoading }] = useCreateTeachersMutation();
   const { data: rigiond } = useGetAllReginionIDQuery(null);
@@ -110,11 +115,15 @@ const AddNewTeacher = () => {
     try {
       await createTeacher(formData).unwrap();
       toast.success("Teacher created successfully");
-    } catch {
-      toast.error(
-        "Failed to create Teacher: you may have entered the password incorrectly",
-      );
-    }
+      router.push("/teacher");
+    } catch (error: any) {
+          if (error.data && error.data.data && error.data.data.length > 0) {
+            setBackendError(error.data.data[0]);
+          } else {
+            setBackendError("Failed to create parent");
+          }
+          toast.error("Failed to create parent");
+        }
   };
 
   const booleanValue = useSelector((state: RootState) => state.boolean.value);
@@ -148,6 +157,11 @@ const AddNewTeacher = () => {
         <FormProvider {...formMethods}>
           <form onSubmit={handleSubmit(onSubmit)}>
             <div className="my-10 grid items-center justify-center gap-5 rounded-xl bg-bgPrimary p-10 sm:w-[500px] md:w-[600px] lg:w-[750px] xl:w-[1000px]">
+            {backendError && (
+              <div className="text-error text-center">
+                {backendError}
+              </div>
+            )}
               <div className="flex items-center justify-start gap-2">
                 <svg
                   className="h-6 w-6 font-bold text-secondary group-hover:text-hover"
@@ -700,6 +714,12 @@ const AddNewTeacher = () => {
                           : "Ce champ est requis"}
                     </span>
                   )}
+{
+  positionData.data.content.length == 0 && (
+    <Link href="/organization-setting/position/add-position" className="mt-4 text-sm text-primary underline font-medium">Add Position</Link>
+
+  )
+}
                 </label>
 
                 <label

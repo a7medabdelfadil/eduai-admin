@@ -204,17 +204,17 @@ const Semester = () => {
                 </th>
                 <th scope="col" className="whitespace-nowrap px-6 py-3">
                   {currentLanguage === "ar"
-                    ? "اختصار"
+                    ? "تاريخ البدء"
                     : currentLanguage === "fr"
-                      ? "Abréviation"
-                      : "Abbreviation"}
+                      ? "date de début"
+                      : "start Date"}
                 </th>
                 <th scope="col" className="whitespace-nowrap px-6 py-3">
                   {currentLanguage === "ar"
-                    ? "وصف"
+                    ? "تاريخ الانتهاء"
                     : currentLanguage === "fr"
-                      ? "Description"
-                      : "Description"}
+                      ? "Date de fin"
+                      : "end Date"}
                 </th>
                 <th scope="col" className="whitespace-nowrap px-6 py-3">
                   {currentLanguage === "ar"
@@ -278,14 +278,14 @@ const Semester = () => {
                       {Semester.id}
                     </td>
                     <td className="whitespace-nowrap px-6 py-4">
-                      {Semester.abbreviation}
+                      {Semester.startDate}
                     </td>
                     <td className="whitespace-nowrap px-6 py-4">
-                      {Semester.description}
+                      {Semester.endDate}
                     </td>
                     <td className="whitespace-nowrap px-6 py-4">
                       <Link
-                        href={`/organization-setting/department/${Semester.id}`}
+                        href={`/organization-setting/semester/${Semester.id}`}
                         className="font-medium text-primary hover:underline"
                       >
                         {currentLanguage === "ar"

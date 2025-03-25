@@ -7,6 +7,8 @@ import { useSelector } from "react-redux";
 import { RootState } from "@/GlobalRedux/store";
 import { toast } from "react-toastify";
 import Spinner from "@/components/spinner";
+import { useDeleteExamTypeMutation, useGetExamTypeByCourseIdQuery } from "@/features/Acadimic/examsApi";
+import { useGetAllCoursesQuery } from "@/features/Acadimic/courseApi";
 
 const Exams = () => {
   const breadcrumbs = [
@@ -31,10 +33,29 @@ const Exams = () => {
   ];
 
   const [search, setSearch] = useState("");
+  const [selectedCourseId, setSelectedCourseId] = useState(""); // State to store selected course ID
   const booleanValue = useSelector((state: RootState) => state.boolean.value); // sidebar
-
+  const { data: coursesData, isLoading: isCoursesLoading } = useGetAllCoursesQuery(null);
+  const { data: exams, isLoading: isExamsLoading, refetch: refetchExam } = useGetExamTypeByCourseIdQuery(
+    selectedCourseId || "0", // Use "0" as default if no course selected
+    { skip: !selectedCourseId } // Skip the query if no course is selected
+  );
   const [selectAll, setSelectAll] = useState(false); // State to track whether select all checkbox is checked
 
+  const [deleteExamType, { isLoading: isDeleting }] =
+    useDeleteExamTypeMutation();
+
+  const handleDelete = async (id: any) => {
+    console.log(id);
+    
+    try {
+      await deleteExamType(id).unwrap();
+      toast.success(`Semester with ID ${id} deleted successfully`);
+      refetchExam();
+    } catch (err: any) {
+      toast.error(err.data.statusMsg);
+    }
+  };
   // Function to handle click on select all checkbox
   const handleSelectAll = () => {
     setSelectAll(!selectAll); // Toggle select all state
@@ -46,46 +67,11 @@ const Exams = () => {
     });
   };
 
-  useEffect(() => {
-    toast.warning(
-      currentLanguage === "ar"
-        ? "هذه الصفحة غير جاهزة للاستخدام!"
-        : currentLanguage === "fr"
-          ? "Cette page n'est pas prête à être utilisée!"
-          : "This page is not ready to use!",
-    );
-    // Function to handle click on other checkboxes
-    const handleOtherCheckboxes = () => {
-      const allCheckboxes = document.querySelectorAll<HTMLInputElement>(
-        'input[type="checkbox"]:not(#checkbox-all-search)',
-      );
-      const allChecked = Array.from(allCheckboxes).every(
-        checkbox => checkbox.checked,
-      );
-      const selectAllCheckbox = document.getElementById(
-        "checkbox-all-search",
-      ) as HTMLInputElement | null;
-      if (selectAllCheckbox) {
-        selectAllCheckbox.checked = allChecked;
-        setSelectAll(allChecked);
-      }
-    };
-
-    // Add event listeners to other checkboxes
-    const otherCheckboxes = document.querySelectorAll<HTMLInputElement>(
-      'input[type="checkbox"]:not(#checkbox-all-search)',
-    );
-    otherCheckboxes.forEach(checkbox => {
-      checkbox.addEventListener("change", handleOtherCheckboxes);
-    });
-
-    return () => {
-      // Remove event listeners when component unmounts
-      otherCheckboxes.forEach(checkbox => {
-        checkbox.removeEventListener("change", handleOtherCheckboxes);
-      });
-    };
-  }, []);
+  // Handle course selection change
+  const handleCourseChange = (e: any) => {
+    const courseId = e.target.value;
+    setSelectedCourseId(courseId);
+  };
 
   const { language: currentLanguage, loading } = useSelector(
     (state: RootState) => state.language,
@@ -103,22 +89,58 @@ const Exams = () => {
       <BreadCrumbs breadcrumbs={breadcrumbs} />
       <div
         dir={currentLanguage === "ar" ? "rtl" : "ltr"}
-        className={`${
-          currentLanguage === "ar"
+        className={`${currentLanguage === "ar"
             ? booleanValue
               ? "lg:mr-[100px]"
               : "lg:mr-[270px]"
             : booleanValue
               ? "lg:ml-[100px]"
               : "lg:ml-[270px]"
-        } relative mx-3 mt-10 h-screen overflow-x-auto bg-transparent sm:rounded-lg`}
+          } relative mx-3 mt-10 h-screen overflow-x-auto bg-transparent sm:rounded-lg`}
       >
-        <div className="flex justify-between text-center max-[502px]:grid max-[502px]:justify-center">
-          <div className="mb-3">
-            <label htmlFor="icon" className="sr-only">
-              Search
+        <div className="flex flex-col md:flex-row justify-between text-center gap-4">
+          {/* Course selection dropdown */}
+          <div className="flex-1 min-w-72 md:min-w-80">
+            <label 
+              htmlFor="course-select" 
+              className="block mb-2 text-sm font-medium text-textPrimary text-left"
+            >
+              {currentLanguage === "ar"
+                ? "اختر المسار"
+                : currentLanguage === "fr"
+                  ? "Sélectionnez le cours"
+                  : "Select Course"}
             </label>
-            <div className="relative min-w-72 md:min-w-80">
+            <select
+              id="course-select"
+              className="block w-full rounded-lg border-2 border-borderPrimary px-4 py-2 text-sm outline-none focus:border-blue-500 focus:ring-blue-500"
+              value={selectedCourseId}
+              onChange={handleCourseChange}
+            >
+              <option value="">
+                {currentLanguage === "ar"
+                  ? "اختر المسار"
+                  : currentLanguage === "fr"
+                    ? "Sélectionnez le cours"
+                    : "Select Course"}
+              </option>
+              {coursesData?.data?.content?.map((course: any) => (
+                <option key={course.id} value={course.id}>
+                  {course.name} - {course.level}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <div className="flex-1 min-w-72 md:min-w-80">
+            <label htmlFor="icon" className="block mb-2 text-sm font-medium text-textPrimary text-left">
+              {currentLanguage === "ar"
+                ? "بحث"
+                : currentLanguage === "fr"
+                  ? "Recherche"
+                  : "Search"}
+            </label>
+            <div className="relative">
               <div className="pointer-events-none absolute inset-y-0 start-0 z-20 flex items-center ps-4">
                 <svg
                   className="size-4 flex-shrink-0 text-gray-400"
@@ -152,10 +174,11 @@ const Exams = () => {
               />
             </div>
           </div>
-          <div className="flex justify-center">
+
+          <div className="flex items-end justify-center">
             <Link
               href="/organization-setting/exams/add-exam"
-              className="mx-3 mb-5 w-fit whitespace-nowrap rounded-xl bg-primary px-4 py-2 text-[18px] font-semibold text-white duration-300 ease-in hover:bg-hover hover:shadow-xl"
+              className="mx-3 mb-0 w-fit whitespace-nowrap rounded-xl bg-primary px-4 py-2 text-[18px] font-semibold text-white duration-300 ease-in hover:bg-hover hover:shadow-xl"
             >
               {currentLanguage === "ar"
                 ? "إضافة نوع امتحان"
@@ -165,125 +188,140 @@ const Exams = () => {
             </Link>
           </div>
         </div>
-        <table className="w-full overflow-x-auto text-left text-sm text-gray-500 rtl:text-right">
-          <thead className="bg-thead text-xs uppercase text-textPrimary">
-            <tr>
-              <th scope="col" className="p-4">
-                <div className="flex items-center">
-                  {/* Add event listener for select all checkbox */}
-                  <input
-                    id="checkbox-all-search"
-                    type="checkbox"
-                    className="-gray-800 h-4 w-4 rounded border-gray-300 bg-gray-100 text-blue-600 focus:ring-2 focus:ring-blue-500"
-                    onChange={handleSelectAll}
-                  />
-                </div>
-              </th>
-              <th scope="col" className="whitespace-nowrap px-6 py-3">
-                {currentLanguage === "ar"
-                  ? "اسم الامتحان"
-                  : currentLanguage === "fr"
-                    ? "Nom de l'examen"
-                    : "Exam Name"}
-              </th>
-              <th scope="col" className="whitespace-nowrap px-6 py-3">
-                {currentLanguage === "ar"
-                  ? "درجة الامتحان"
-                  : currentLanguage === "fr"
-                    ? "Note de l'examen"
-                    : "Exam Grade"}
-              </th>
-              <th scope="col" className="whitespace-nowrap px-6 py-3">
-                {currentLanguage === "ar"
-                  ? "درجة النجاح"
-                  : currentLanguage === "fr"
-                    ? "Note de passage"
-                    : "Passing Grade"}
-              </th>
-              <th scope="col" className="whitespace-nowrap px-6 py-3">
-                {currentLanguage === "ar"
-                  ? "المستوى الدراسي"
-                  : currentLanguage === "fr"
-                    ? "Niveau d'étude"
-                    : "Study Level"}
-              </th>
 
-              <th scope="col" className="whitespace-nowrap px-6 py-3">
-                {currentLanguage === "ar"
-                  ? "الإجراء"
-                  : currentLanguage === "fr"
-                    ? "Action"
-                    : "Action"}
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr className="border-b border-borderPrimary bg-bgPrimary hover:bg-bgSecondary">
-              <td className="w-4 p-4">
-                <div className="flex items-center">
-                  <input
-                    id="checkbox-table-search-1"
-                    type="checkbox"
-                    className="h-4 w-4 rounded border-gray-300 bg-gray-100 text-blue-600 focus:ring-2 focus:ring-blue-500"
-                  />
-                </div>
-              </td>
-              <th
-                scope="row"
-                className="flex items-center whitespace-nowrap px-6 py-4 font-medium text-textSecondary"
-              >
-                Nahda
-              </th>
-              <td className="whitespace-nowrap px-6 py-4">This is text</td>
-              <td className="whitespace-nowrap px-6 py-4">This is text</td>
-              <td className="whitespace-nowrap px-6 py-4">This is text</td>
-              <td className="whitespace-nowrap px-6 py-4">
-                <Link
-                  href="/organization-setting/exams/edit-exam"
-                  className="font-medium text-blue-600 hover:underline"
-                >
-                  {currentLanguage === "ar"
-                    ? "تعديل"
-                    : currentLanguage === "fr"
-                      ? "Modifier"
-                      : "Edit"}
-                </Link>
-              </td>
-            </tr>
-            <tr className="border-b border-borderPrimary bg-bgPrimary hover:bg-bgSecondary">
-              <td className="w-4 p-4">
-                <div className="flex items-center">
-                  <input
-                    id="checkbox-table-search-1"
-                    type="checkbox"
-                    className="h-4 w-4 rounded border-gray-300 bg-gray-100 text-blue-600 focus:ring-2 focus:ring-blue-500"
-                  />
-                </div>
-              </td>
-              <th
-                scope="row"
-                className="flex items-center whitespace-nowrap px-6 py-4 font-medium text-textSecondary"
-              >
-                Nahda
-              </th>
-              <td className="whitespace-nowrap px-6 py-4">This is text</td>
-              <td className="whitespace-nowrap px-6 py-4">This is text</td>
-              <td className="whitespace-nowrap px-6 py-4">This is text</td>
-              <td className="whitespace-nowrap px-6 py-4">
-                <Link
-                  href="/organization-setting/exams/edit-exam"
-                  className="font-medium text-blue-600 hover:underline"
-                >
-                  {currentLanguage === "ar"
-                    ? "تعديل"
-                    : currentLanguage === "fr"
-                      ? "Modifier"
-                      : "Edit"}
-                </Link>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+        {/* Show loading state while fetching exams */}
+        {isExamsLoading ? (
+          <div className="flex justify-center my-8">
+            <Spinner />
+          </div>
+        ) : selectedCourseId ? (
+          // Only show table if a course is selected
+          <>
+            <div className="mt-6">
+              <table className="w-full overflow-x-auto text-left text-sm text-gray-500 rtl:text-right">
+                <thead className="bg-thead text-xs uppercase text-textPrimary">
+                  <tr>
+                    <th scope="col" className="p-4">
+                      <div className="flex items-center">
+                        <input
+                          id="checkbox-all-search"
+                          type="checkbox"
+                          className="-gray-800 h-4 w-4 rounded border-gray-300 bg-gray-100 text-blue-600 focus:ring-2 focus:ring-blue-500"
+                          onChange={handleSelectAll}
+                        />
+                      </div>
+                    </th>
+                    <th scope="col" className="whitespace-nowrap px-6 py-3">
+                      {currentLanguage === "ar"
+                        ? "اسم الامتحان"
+                        : currentLanguage === "fr"
+                          ? "Nom de l'examen"
+                          : "Exam Name"}
+                    </th>
+                    <th scope="col" className="whitespace-nowrap px-6 py-3">
+                      {currentLanguage === "ar"
+                        ? "درجة الامتحان"
+                        : currentLanguage === "fr"
+                          ? "Note de l'examen"
+                          : "Exam Grade"}
+                    </th>
+                    <th scope="col" className="whitespace-nowrap px-6 py-3">
+                      {currentLanguage === "ar"
+                        ? "درجة النجاح"
+                        : currentLanguage === "fr"
+                          ? "Note de passage"
+                          : "Passing Grade"}
+                    </th>
+                    <th scope="col" className="whitespace-nowrap px-6 py-3">
+                      {currentLanguage === "ar"
+                        ? "المستوى الدراسي"
+                        : currentLanguage === "fr"
+                          ? "Niveau d'étude"
+                          : "Study Level"}
+                    </th>
+                    <th scope="col" className="whitespace-nowrap px-6 py-3">
+                      {currentLanguage === "ar"
+                        ? "الإجراء"
+                        : currentLanguage === "fr"
+                          ? "Action"
+                          : "Action"}
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {exams?.data?.length > 0 ? (
+                    exams.data.map((exam: any, index: number) => (
+                      <tr key={index} className="border-b border-borderPrimary bg-bgPrimary hover:bg-bgSecondary">
+                        <td className="w-4 p-4">
+                          <div className="flex items-center">
+                            <input
+                              id={`checkbox-table-search-${index}`}
+                              type="checkbox"
+                              className="h-4 w-4 rounded border-gray-300 bg-gray-100 text-blue-600 focus:ring-2 focus:ring-blue-500"
+                            />
+                          </div>
+                        </td>
+                        <th
+                          scope="row"
+                          className="flex items-center whitespace-nowrap px-6 py-4 font-medium text-textSecondary"
+                        >
+                          {exam.name}
+                        </th>
+                        <td className="whitespace-nowrap px-6 py-4">{exam.examGrade}</td>
+                        <td className="whitespace-nowrap px-6 py-4">{exam.passingGrade}</td>
+                        <td className="whitespace-nowrap px-6 py-4">{exam.studyLevel}</td>
+                        <td className="whitespace-nowrap px-6 py-4">
+                          {/* <Link
+                            href={`/organization-setting/exams/edit-exam/${exam.examTypeId}`}
+                            className="font-medium text-blue-600 hover:underline"
+                          >
+                            {currentLanguage === "ar"
+                              ? "تعديل"
+                              : currentLanguage === "fr"
+                                ? "Modifier"
+                                : "Edit"}
+                          </Link> */}
+                          <button
+                           disabled={isDeleting}
+                           onClick={() => handleDelete(exam.examTypeId)}
+                        className="rounded-lg bg-error px-2 py-1 font-semibold text-white shadow-lg delay-150 duration-300 ease-in-out hover:-translate-y-1 hover:scale-110"
+                      >
+                        {currentLanguage === "ar"
+                          ? "حذف"
+                          : currentLanguage === "fr"
+                            ? "Supprimer"
+                            : "Delete"}
+                      </button>
+                        </td>
+                      </tr>
+                    ))
+                  ) : (
+                    <tr>
+                      <td colSpan={6} className="px-6 py-4 text-center">
+                        {currentLanguage === "en"
+                          ? "No exams found for this course"
+                          : currentLanguage === "ar"
+                            ? "لا توجد امتحانات لهذا المسار"
+                            : "Aucun examen trouvé pour ce cours"}
+                      </td>
+                    </tr>
+                  )}
+                </tbody>
+              </table>
+            </div>
+          </>
+        ) : (
+          // Show message to select a course if none selected
+          <div className="flex justify-center my-8 p-6 bg-gray-50 rounded-lg border border-gray-200">
+            <p className="text-center text-[18px] font-semibold text-gray-500">
+              {currentLanguage === "en"
+                ? "Please select a course to view exams"
+                : currentLanguage === "ar"
+                  ? "الرجاء اختيار مسار لعرض الامتحانات"
+                  : "Veuillez sélectionner un cours pour afficher les examens"}
+            </p>
+          </div>
+        )}
       </div>
     </>
   );

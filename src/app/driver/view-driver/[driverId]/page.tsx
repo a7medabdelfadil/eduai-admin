@@ -3,10 +3,10 @@
 import DriverInfo from "@/components/driverInfo";
 import Spinner from "@/components/spinner";
 import { useGetDriverByIdQuery } from "@/features/User-Management/driverApi";
-import { useEffect } from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "@/GlobalRedux/store";
 import BreadCrumbs from "@/components/BreadCrumbs";
+import Container from "@/components/Container";
 
 interface ViewDriverProps {
   params: {
@@ -61,18 +61,7 @@ const ViewDriver: React.FC<ViewDriverProps> = ({ params }) => {
   return (
     <>
       <BreadCrumbs breadcrumbs={breadcrumbs} />
-      <div
-        dir={currentLanguage === "ar" ? "rtl" : "ltr"}
-        className={`${
-          currentLanguage === "ar"
-            ? booleanValue
-              ? "lg:mr-[40px]"
-              : "lg:mr-[290px]"
-            : booleanValue
-              ? "lg:ml-[40px]"
-              : "lg:ml-[290px]"
-        } mt-[40px] grid py-4`}
-      >
+      <Container>
         <div className="grid grid-cols-2 gap-7 pr-7 max-[1342px]:grid-cols-1 max-[1342px]:px-5">
           <DriverInfo data={data} />
           <div className="grid h-[400px] items-center justify-center gap-10 rounded-xl bg-bgPrimary p-5">
@@ -154,7 +143,7 @@ const ViewDriver: React.FC<ViewDriverProps> = ({ params }) => {
             </div>
           </div>
         </div>
-      </div>
+      </Container>
     </>
   );
 };

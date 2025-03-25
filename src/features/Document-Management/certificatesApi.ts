@@ -51,11 +51,24 @@ export const certificatesApi = createApi({
       query: id => `/api/v1/management/certificate/completion/${id}`,
     }),
     //
-    updateCertificates: builder.mutation({
-      query: ({ formData, id }) => ({
-        url: `cases/categories/${id}`,
-        method: "PATCH",
-        body: formData,
+    getAllTranscriptCourses: builder.query({
+      query: ( id ) => ({
+        url: `/api/v1/transcript/courses?semesterId=${id}`,
+      }),
+    }),
+    getAllGradeCourse: builder.query({
+      query: ( id ) => ({
+        url: `/api/v1/transcript/grades-of-course?courseSemesterRegistrationId=${id}`,
+      }),
+    }),
+    getAllStudentGrads: builder.query({
+      query: ( id ) => ({
+        url: `/api/v1/transcript/list-of-points/grades-for-all-semesters?student-id=${id}`,
+      }),
+    }),
+    getAllListPoints: builder.query({
+      query: () => ({
+        url: `/api/v1/transcript/list-of-points/students?search&size=1000000&page=0`,
       }),
     }),
   }),
@@ -66,5 +79,8 @@ export const {
   useDeleteCertificatesMutation,
   useCreateCertificatesMutation,
   useGetCertificateByIdQuery,
-  useUpdateCertificatesMutation,
+  useGetAllStudentGradsQuery,
+  useGetAllTranscriptCoursesQuery,
+  useGetAllGradeCourseQuery,
+  useGetAllListPointsQuery,
 } = certificatesApi;

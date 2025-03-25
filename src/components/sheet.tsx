@@ -26,22 +26,6 @@ const Sheet: React.FC<SheetProps> = ({ isOpen, onClose, children }) => {
         <div className="p-6">{children}</div>
       </div>
     </div>
-    //   const [isSheetOpen, setIsSheetOpen] = useState(false);
-
-    //   const handleOpen = () => setIsSheetOpen(true);
-    //   const handleClose = () => setIsSheetOpen(false);
-    //     <div className="p-8">
-    //     <button
-    //       className="bg-blue-500 text-white px-4 py-2 rounded"
-    //       onClick={handleOpen}
-    //     >
-    //       Open Sheet
-    //     </button>
-    //     <Sheet isOpen={isSheetOpen} onClose={handleClose}>
-    //       <h2 className="text-2xl font-semibold mb-4">Sheet Content</h2>
-    //       <p>This is some content inside the sheet.</p>
-    //     </Sheet>
-    //   </div>
   );
 };
 

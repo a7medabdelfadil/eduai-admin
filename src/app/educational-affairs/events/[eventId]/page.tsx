@@ -12,6 +12,7 @@ import { RootState } from "@/GlobalRedux/store";
 import BreadCrumbs from "@/components/BreadCrumbs";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useRouter } from "next/navigation";
 
 type Props = {
   params: {
@@ -46,6 +47,7 @@ const UpdateEvent = ({ params }: Props) => {
       href: `/educational-affairs/events/${params.eventId}`,
     },
   ];
+  const router = useRouter();
 
   const booleanValue = useSelector((state: RootState) => state.boolean.value);
   const { language: currentLanguage, loading } = useSelector(
@@ -110,6 +112,7 @@ const UpdateEvent = ({ params }: Props) => {
     try {
       await updateEvent({ id: params.eventId, formData: data }).unwrap();
       toast.success("Event updated successfully");
+      router.push("/educational-affairs/events");
     } catch (err) {
       toast.error("Failed to update event");
     }

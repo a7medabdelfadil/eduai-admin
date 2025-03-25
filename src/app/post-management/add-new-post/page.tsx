@@ -7,8 +7,10 @@ import { toast } from "react-toastify";
 import { AiOutlineSave } from "react-icons/ai"; // Save Icon
 import BreadCrumbs from "@/components/BreadCrumbs";
 import Spinner from "@/components/spinner";
+import { useState } from "react";
 
 const AddNewPost = () => {
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
   const breadcrumbs = [
     {
       nameEn: "Communication",
@@ -37,7 +39,18 @@ const AddNewPost = () => {
     formState: { errors },
   } = useForm();
   const [createPost, { isLoading }] = useCreatePostsMutation();
-
+  const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImagePreview(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+    } else {
+      setImagePreview(null);
+    }
+  };
   const onSubmit = async (data: any) => {
     // Create FormData object
     const formData = new FormData();
@@ -316,51 +329,76 @@ const AddNewPost = () => {
                       : "Images or Videos"}
                 </h1>
               </div>
-              <div className="flex justify-center gap-3 font-semibold">
+              <div className="flex flex-col gap-4 font-semibold">
                 <div className="flex w-full items-center justify-center">
                   <label
                     htmlFor="dropzone-file"
                     className="flex h-64 w-full cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-borderPrimary bg-bgPrimary hover:bg-bgPrimary"
                   >
-                    <div className="flex flex-col items-center justify-center pb-6 pt-5">
-                      <svg
-                        className="mb-4 h-8 w-8 text-textSecondary"
-                        aria-hidden="true"
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 20 16"
-                      >
-                        <path
-                          stroke="currentColor"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth="2"
-                          d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"
+                    {imagePreview ? (
+                      <div className="h-full w-full p-4">
+                        <img
+                          src={imagePreview}
+                          alt="Preview"
+                          className="h-full w-full object-contain"
                         />
-                      </svg>
-                      <p className="mb-2 text-sm text-textSecondary">
-                        {currentLanguage === "ar"
-                          ? "انقر للرفع أو اسحب وأفلت"
-                          : currentLanguage === "fr"
-                            ? "Cliquez pour télécharger ou glissez-déposez"
-                            : "Click to upload or drag and drop"}
-                      </p>
-                      <p className="text-xs text-textSecondary">
-                        {currentLanguage === "ar"
-                          ? "SVG، PNG، JPG أو GIF (الحد الأقصى. 800x400 بكسل)"
-                          : currentLanguage === "fr"
-                            ? "SVG, PNG, JPG ou GIF (MAX. 800x400px)"
-                            : "SVG, PNG, JPG or GIF (MAX. 800x400px)"}
-                      </p>
-                    </div>
+                      </div>
+                    ) : (
+                      <div className="flex flex-col items-center justify-center pb-6 pt-5">
+                        <svg
+                          className="mb-4 h-8 w-8 text-textSecondary"
+                          aria-hidden="true"
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="none"
+                          viewBox="0 0 20 16"
+                        >
+                          <path
+                            stroke="currentColor"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth="2"
+                            d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"
+                          />
+                        </svg>
+                        <p className="mb-2 text-sm text-textSecondary">
+                          {currentLanguage === "ar"
+                            ? "انقر للرفع أو اسحب وأفلت"
+                            : currentLanguage === "fr"
+                              ? "Cliquez pour télécharger ou glissez-déposez"
+                              : "Click to upload or drag and drop"}
+                        </p>
+                        <p className="text-xs text-textSecondary">
+                          {currentLanguage === "ar"
+                            ? "SVG، PNG، JPG أو GIF (الحد الأقصى. 800x400 بكسل)"
+                            : currentLanguage === "fr"
+                              ? "SVG, PNG, JPG ou GIF (MAX. 800x400px)"
+                              : "SVG, PNG, JPG or GIF (MAX. 800x400px)"}
+                        </p>
+                      </div>
+                    )}
                     <input
                       {...register("files")}
                       id="dropzone-file"
                       type="file"
-                      className="hidden"
+                      className="opacity-0"
+                      onChange={handleImageChange}
+                      accept="image/*"
                     />
                   </label>
                 </div>
+                {imagePreview && (
+                  <button
+                    type="button"
+                    onClick={() => setImagePreview(null)}
+                    className="w-full rounded-lg bg-red-500 p-2 text-white hover:bg-red-600"
+                  >
+                    {currentLanguage === "ar"
+                      ? "إزالة الصورة"
+                      : currentLanguage === "fr"
+                        ? "Supprimer l'image"
+                        : "Remove Image"}
+                  </button>
+                )}
               </div>
             </div>
           </div>

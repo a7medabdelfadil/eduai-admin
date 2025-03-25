@@ -33,13 +33,21 @@ export const chatApi = createApi({
     //
     getChatMessages: builder.query({
       query: id => ({
-        url: `/api/v1/messages/messagesInChat/${id}`,
+        url: `/api/v1/messages/messagesInChat/${id}?page=0&size=100`,
       }),
     }),
     //
     sendMessage: builder.mutation({
       query: formData => ({
         url: `/api/v1/messages/new`,
+        method: "POST",
+        body: formData,
+      }),
+    }),
+    //
+    uploadFile: builder.mutation({
+      query: ({id, formData}) => ({
+        url: `/api/v1/messages/${id}/file`,
         method: "POST",
         body: formData,
       }),
@@ -78,6 +86,7 @@ export const {
   useGetAllChatsQuery,
   useGetChatMessagesQuery,
   useCreateNewChatMutation,
+  useUploadFileMutation,
   useSendMessageMutation,
   useGetBusByIdQuery,
   useDeleteChatMutation,

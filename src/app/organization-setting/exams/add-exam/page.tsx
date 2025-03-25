@@ -4,8 +4,16 @@ import { RootState } from "@/GlobalRedux/store";
 import { useSelector } from "react-redux";
 import { useForm } from "react-hook-form";
 import Spinner from "@/components/spinner";
+import { useCreateExamTypeMutation } from "@/features/Acadimic/examsApi";
+import { useState } from "react";
+import { toast } from "react-toastify";
+import { useRouter } from "next/navigation";
+import { useGetAllCoursesQuery } from "@/features/Acadimic/courseApi";
 
 const AddExam = () => {
+  const router = useRouter();
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  
   const breadcrumbs = [
     {
       nameEn: "Administration",
@@ -32,16 +40,72 @@ const AddExam = () => {
       href: "/organization-setting/exams/add-exam",
     },
   ];
+  
+  // Legal type options
+  const legalTypeOptions = {
+    "FIRST": "First",
+    "SECOND": "Second",
+    "THIRD": "Third", 
+    "FOURTH": "Fourth",
+    "INTEGRATED_ACTIVITIES": "Integrated Activities"
+  };
+  
   const {
     register,
     handleSubmit,
     formState: { errors },
+    reset
   } = useForm();
+
+  // Get course data for course selection
+  
+  // Use the create exam type mutation
+  const [createExamType, { isLoading: isCreating }] = useCreateExamTypeMutation();
 
   const booleanValue = useSelector((state: RootState) => state.boolean.value);
   const { language: currentLanguage, loading } = useSelector(
     (state: RootState) => state.language,
   );
+
+  // Handle form submission
+  const onSubmit = async (data: any) => {
+    setIsSubmitting(true);
+    try {
+      // Convert numeric form values from strings to numbers
+      const payload = {
+        name: data.examName,
+        examGrade: Number(data.examGrade),
+        passingGrade: Number(data.passingGrade),
+        studyLevel: data.studyLevel,
+        legalType: data.legalType,
+      };
+      
+      const response = await createExamType(payload).unwrap();
+      
+      if (response) {
+        toast.success(
+          currentLanguage === "ar"
+            ? "تم إضافة الامتحان بنجاح"
+            : currentLanguage === "fr"
+              ? "Examen ajouté avec succès"
+              : "Exam added successfully"
+        );
+        reset(); // Reset form after successful submission
+        router.push("/organization-setting/exams"); // Redirect to exams page
+      }
+    } catch (error) {
+      toast.error(
+        currentLanguage === "ar"
+          ? "حدث خطأ أثناء إضافة الامتحان"
+          : currentLanguage === "fr"
+            ? "Une erreur s'est produite lors de l'ajout de l'examen"
+            : "An error occurred while adding the exam"
+      );
+      console.error("Error creating exam type:", error);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   if (loading)
     return (
@@ -49,6 +113,7 @@ const AddExam = () => {
         <Spinner />
       </div>
     );
+    
   return (
     <>
       <BreadCrumbs breadcrumbs={breadcrumbs} />
@@ -62,10 +127,10 @@ const AddExam = () => {
             : booleanValue
               ? "lg:ml-[100px]"
               : "lg:ml-[270px]"
-        } mx-3 mt-[40px] grid h-[500px] items-center justify-center`}
+        } mx-3 mt-[40px] grid items-center justify-center`}
       >
-        <form>
-          <div className="grid h-[400px] items-center justify-center gap-5 rounded-xl bg-bgPrimary p-10 sm:w-[500px] md:w-[600px] lg:w-[750px] xl:h-[500px] xl:w-[1000px]">
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <div className="grid items-center justify-center gap-5 rounded-xl bg-bgPrimary p-10 sm:w-[500px] md:w-[600px] lg:w-[750px] xl:w-[1000px]">
             <div className="flex items-center justify-start gap-2">
               <svg
                 className="h-6 w-6 font-bold text-secondary group-hover:text-hover"
@@ -94,12 +159,12 @@ const AddExam = () => {
                   : currentLanguage === "fr"
                     ? "Ajouter un examen"
                     : "Add Exam"}
-                {/* default */}
               </h1>
             </div>
+          
             <div className="grid grid-cols-2 gap-4 max-[1278px]:grid-cols-1">
               <label
-                htmlFor="annual"
+                htmlFor="examName"
                 className="grid font-sans text-[18px] font-semibold"
               >
                 {currentLanguage === "ar"
@@ -107,11 +172,9 @@ const AddExam = () => {
                   : currentLanguage === "fr"
                     ? "Nom de l'examen"
                     : "Exam Name"}
-
-                {/* default */}
                 <input
-                  id="annual"
-                  type="number"
+                  id="examName"
+                  type="text"
                   className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                   placeholder={
                     currentLanguage === "ar"
@@ -120,10 +183,21 @@ const AddExam = () => {
                         ? "Entrez le nom de l'examen"
                         : "Enter exam name"
                   }
+                  {...register("examName", { required: true })}
                 />
+                {errors.examName && (
+                  <span className="text-sm text-red-500">
+                    {currentLanguage === "ar"
+                      ? "هذا الحقل مطلوب"
+                      : currentLanguage === "fr"
+                        ? "Ce champ est obligatoire"
+                        : "This field is required"}
+                  </span>
+                )}
               </label>
+              
               <label
-                htmlFor="annual"
+                htmlFor="examGrade"
                 className="grid font-sans text-[18px] font-semibold"
               >
                 {currentLanguage === "ar"
@@ -131,10 +205,8 @@ const AddExam = () => {
                   : currentLanguage === "fr"
                     ? "Note de l'examen"
                     : "Exam Grade"}
-
-                {/* default */}
                 <input
-                  id="annual"
+                  id="examGrade"
                   type="number"
                   className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                   placeholder={
@@ -144,10 +216,21 @@ const AddExam = () => {
                         ? "Entrez la note de l'examen"
                         : "Enter exam grade"
                   }
+                  {...register("examGrade", { required: true, min: 0 })}
                 />
+                {errors.examGrade && (
+                  <span className="text-sm text-red-500">
+                    {currentLanguage === "ar"
+                      ? "هذا الحقل مطلوب ويجب أن يكون رقماً موجباً"
+                      : currentLanguage === "fr"
+                        ? "Ce champ est obligatoire et doit être un nombre positif"
+                        : "This field is required and must be a positive number"}
+                  </span>
+                )}
               </label>
+              
               <label
-                htmlFor="annual"
+                htmlFor="passingGrade"
                 className="grid font-sans text-[18px] font-semibold"
               >
                 {currentLanguage === "ar"
@@ -155,10 +238,8 @@ const AddExam = () => {
                   : currentLanguage === "fr"
                     ? "Note de passage"
                     : "Passing Grade"}
-
-                {/* default */}
                 <input
-                  id="annual"
+                  id="passingGrade"
                   type="number"
                   className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                   placeholder={
@@ -168,11 +249,21 @@ const AddExam = () => {
                         ? "Entrez la note de passage"
                         : "Enter passing grade"
                   }
+                  {...register("passingGrade", { required: true, min: 0 })}
                 />
+                {errors.passingGrade && (
+                  <span className="text-sm text-red-500">
+                    {currentLanguage === "ar"
+                      ? "هذا الحقل مطلوب ويجب أن يكون رقماً موجباً"
+                      : currentLanguage === "fr"
+                        ? "Ce champ est obligatoire et doit être un nombre positif"
+                        : "This field is required and must be a positive number"}
+                  </span>
+                )}
               </label>
 
               <label
-                htmlFor="leaveType"
+                htmlFor="studyLevel"
                 className="grid font-sans text-[18px] font-semibold"
               >
                 {currentLanguage === "ar"
@@ -181,9 +272,9 @@ const AddExam = () => {
                     ? "Niveau d'étude"
                     : "Study Level"}
                 <select
-                  id="leaveType"
+                  id="studyLevel"
                   className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
-                  {...register("leaveType", { required: true })}
+                  {...register("studyLevel", { required: true })}
                 >
                   <option value="">
                     {currentLanguage === "ar"
@@ -192,22 +283,85 @@ const AddExam = () => {
                         ? "Sélectionnez le niveau d'étude"
                         : "Select study level"}
                   </option>
+                  <option value="GRADE1">Grade 1</option>
+                  <option value="GRADE2">Grade 2</option>
+                  <option value="GRADE3">Grade 3</option>
+                  <option value="GRADE4">Grade 4</option>
+                  <option value="GRADE5">Grade 5</option>
+                  <option value="GRADE6">Grade 6</option>
                 </select>
+                {errors.studyLevel && (
+                  <span className="text-sm text-red-500">
+                    {currentLanguage === "ar"
+                      ? "هذا الحقل مطلوب"
+                      : currentLanguage === "fr"
+                        ? "Ce champ est obligatoire"
+                        : "This field is required"}
+                  </span>
+                )}
+              </label>
+              
+              {/* Legal Type Selection */}
+              <label
+                htmlFor="legalType"
+                className="grid font-sans text-[18px] font-semibold"
+              >
+                {currentLanguage === "ar"
+                  ? "النوع القانوني"
+                  : currentLanguage === "fr"
+                    ? "Type légal"
+                    : "Legal Type"}
+                <select
+                  id="legalType"
+                  className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  {...register("legalType", { required: true })}
+                >
+                  <option value="">
+                    {currentLanguage === "ar"
+                      ? "اختر النوع القانوني"
+                      : currentLanguage === "fr"
+                        ? "Sélectionnez le type légal"
+                        : "Select legal type"}
+                  </option>
+                  {Object.entries(legalTypeOptions).map(([key, value]) => (
+                    <option key={key} value={key}>
+                      {value}
+                    </option>
+                  ))}
+                </select>
+                {errors.legalType && (
+                  <span className="text-sm text-red-500">
+                    {currentLanguage === "ar"
+                      ? "هذا الحقل مطلوب"
+                      : currentLanguage === "fr"
+                        ? "Ce champ est obligatoire"
+                        : "This field is required"}
+                  </span>
+                )}
               </label>
             </div>
 
             <div className="flex justify-center text-center">
               <button
                 type="submit"
-                className="w-fit rounded-xl bg-primary px-4 py-2 text-[18px] text-white duration-300 ease-in hover:bg-hover hover:shadow-xl"
+                className="w-fit rounded-xl bg-primary px-4 py-2 text-[18px] text-white duration-300 ease-in hover:bg-hover hover:shadow-xl disabled:opacity-70 disabled:cursor-not-allowed"
+                disabled={isSubmitting || isCreating}
               >
-                {currentLanguage === "ar"
-                  ? "حفظ"
-                  : currentLanguage === "fr"
-                    ? "Sauvegarder"
-                    : "Save"}
-
-                {/* default */}
+                {(isSubmitting || isCreating) ? (
+                  <span className="flex items-center gap-2">
+                    {currentLanguage === "ar"
+                      ? "جاري الحفظ..."
+                      : currentLanguage === "fr"
+                        ? "Sauvegarde en cours..."
+                        : "Saving..."}
+                  </span>
+                ) : (
+                  currentLanguage === "ar"
+                    ? "حفظ"
+                    : currentLanguage === "fr"
+                      ? "Sauvegarder"
+                      : "Save"
+                )}
               </button>
             </div>
           </div>

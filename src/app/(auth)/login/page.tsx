@@ -1,24 +1,26 @@
 "use client";
 /* eslint-disable @next/next/no-img-element */
-import { useForm } from "react-hook-form";
 import {
   useLoginDashboardMutation,
   useSelectAccoutConfirmMutation,
 } from "@/features/loginApi";
-import { useRouter } from "next/navigation";
-import Cookie from "js-cookie";
-import { toast } from "react-toastify";
-import { RootState } from "@/GlobalRedux/store";
-import { useSelector } from "react-redux";
-import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
-import { useDispatch } from "react-redux";
 import {
   initializeLanguage,
   setLanguage,
 } from "@/features/language/languageSlice";
-import { useEffect } from "react";
+
+import Cookie from "js-cookie";
+import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
+import { toast } from "react-toastify";
+import { useForm } from "react-hook-form";
 import Spinner from "@/components/spinner";
+import { useRouter } from "next/navigation";
 import { setUser } from "@/features/userSlice";
+import { RootState } from "@/GlobalRedux/store";
+import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
+import { Text } from "@/components/Text";
 
 interface ErrorMessage {
   userId: string;
@@ -27,9 +29,22 @@ interface ErrorMessage {
 }
 
 const Login = () => {
+  const [emailFocused, setEmailFocused] = useState(false);
+  const [passwordFocused, setPasswordFocused] = useState(false);
+
   const { language: currentLanguage, loading } = useSelector(
     (state: RootState) => state.language,
   );
+
+  const [pageHeight, setPageHeight] = useState(0);
+
+  useEffect(() => {
+    const updateHeight = () => setPageHeight(window.innerHeight);
+    updateHeight();
+
+    window.addEventListener("resize", updateHeight);
+    return () => window.removeEventListener("resize", updateHeight);
+  }, []);
 
   const dispatchLang = useDispatch();
   useEffect(() => {
@@ -76,8 +91,7 @@ const Login = () => {
       );
       try {
         errorData = JSON.parse(err.data.errorMessage);
-      } catch (e) {
-      }
+      } catch (e) {}
     }
     if (errorData.message === "The account is not activated yet.") {
       dispatch2(
@@ -104,7 +118,7 @@ const Login = () => {
 
   if (loading) {
     return (
-      <div className="grid h-screen grid-cols-2 items-center justify-center bg-bgSecondary duration-300 ease-in max-[1040px]:grid-cols-1">
+      <div className="flex h-screen w-full items-center justify-center bg-bgSecondary duration-300 ease-in">
         <Spinner />
       </div>
     );
@@ -112,118 +126,89 @@ const Login = () => {
 
   return (
     <>
-      <div className="absolute right-5 top-5">
-        <DropdownMenu.Root>
-          <DropdownMenu.Trigger asChild>
-            <button
-              className="text-violet11 hover:bg-violet3 inline-flex h-[35px] w-[35px] items-center justify-center rounded-full bg-bgPrimary outline-none"
-              aria-label="Customise options"
-            >
-              {currentLanguage === "en" ? (
-                <img src="/images/en.png" alt="#" />
-              ) : currentLanguage === "ar" ? (
-                <img src="/images/ar.png" alt="#" />
-              ) : currentLanguage === "fr" ? (
-                <img src="/images/fr.png" alt="#" />
-              ) : (
-                <img src="/images/fr.png" alt="#" />
-              )}
-            </button>
-          </DropdownMenu.Trigger>
-          <DropdownMenu.Portal>
-            <DropdownMenu.Content
-              className="data-[side=top]:animate-slideDownAndFade data-[side=right]:animate-slideLeftAndFade data-[side=bottom]:animate-slideUpAndFade data-[side=left]:animate-slideRightAndFade z-50 mx-2 mt-5 grid min-w-[150px] justify-center gap-5 rounded-md bg-bgPrimary p-[5px] font-semibold shadow-[0px_10px_38px_-10px_rgba(22,_23,_24,_0.35),_0px_10px_20px_-15px_rgba(22,_23,_24,_0.2)] will-change-[opacity,transform]"
-              sideOffset={5}
-            >
-              <DropdownMenu.Item className="text-violet11 data-[disabled]:text-mauve8 data-[highlighted]:bg-violet9 data-[highlighted]:text-violet1 group relative mt-2 flex h-[25px] select-none items-center rounded-[3px] px-[5px] text-[13px] leading-none outline-none data-[disabled]:pointer-events-none">
-                <button
-                  onClick={() => handleLanguageChange("ar")}
-                  className="rounded-lg px-4 py-2 text-[20px] hover:bg-bgSecondary"
-                >
-                  {currentLanguage === "en"
-                    ? "Arabic"
-                    : currentLanguage === "ar"
-                      ? "العربية"
-                      : currentLanguage === "fr"
-                        ? "Arabe"
-                        : "Arabic"}
-                </button>
-              </DropdownMenu.Item>
-              <DropdownMenu.Item className="text-violet11 data-[disabled]:text-mauve8 data-[highlighted]:bg-violet9 data-[highlighted]:text-violet1 group relative flex h-[25px] select-none items-center rounded-[3px] px-[5px] text-[13px] leading-none outline-none data-[disabled]:pointer-events-none">
-                <button
-                  onClick={() => handleLanguageChange("en")}
-                  className="rounded-lg px-4 py-2 text-[20px] hover:bg-bgSecondary"
-                >
-                  {currentLanguage === "en"
-                    ? "English"
-                    : currentLanguage === "ar"
-                      ? "الإنجليزية"
-                      : currentLanguage === "fr"
-                        ? "Anglais"
-                        : "English"}
-                </button>
-              </DropdownMenu.Item>
-              <DropdownMenu.Item className="text-violet11 data-[disabled]:text-mauve8 data-[highlighted]:bg-violet9 data-[highlighted]:text-violet1 group relative mb-2 flex h-[25px] select-none items-center rounded-[3px] px-[5px] text-[13px] leading-none outline-none data-[disabled]:pointer-events-none">
-                <button
-                  onClick={() => handleLanguageChange("fr")}
-                  className="rounded-lg px-4 py-2 text-[20px] hover:bg-bgSecondary"
-                >
-                  {currentLanguage === "en"
-                    ? "French"
-                    : currentLanguage === "ar"
-                      ? "الفرنسية"
-                      : currentLanguage === "fr"
-                        ? "Français"
-                        : "French"}
-                </button>
-              </DropdownMenu.Item>
-            </DropdownMenu.Content>
-          </DropdownMenu.Portal>
-        </DropdownMenu.Root>
-      </div>
-      <div className="grid h-screen grid-cols-2 items-center justify-center bg-bgSecondary duration-300 ease-in max-[1040px]:grid-cols-1">
-        <div className="gird items-center justify-center text-center">
+      <div
+        dir={currentLanguage === "ar" ? "rtl" : "ltr"}
+        className="relative flex h-[100vh] w-full items-center justify-center overflow-hidden"
+      >
+        <div
+          className={`absolute -bottom-28 ${currentLanguage === "ar" ? "right-0 scale-x-[-1]" : "left-0"} z-10 hidden h-[400px] w-[400px] lg:block`}
+        >
+          <img
+            src="/images/bottomleft-login.png"
+            alt="Logo"
+            className="m-0 w-full p-0"
+          />
+        </div>
+        <div
+          className={`absolute ${currentLanguage === "ar" ? "left-10 scale-x-[-1]" : "right-10"} z-10 hidden max-h-[80vh] max-w-[40vw] md:top-52 lg:top-48 lg:block xl:top-32 2xl:top-20`}
+        >
+          <img
+            src="/images/dashboard-login.png"
+            alt="Logo"
+            className="h-auto w-full object-contain"
+          />
+        </div>
+
+        {/* Background */}
+        <div className="absolute inset-0 flex">
+          <div className="w-full bg-bgPrimary lg:w-2/3"></div>
+          <div className="w-0 bg-bgPrimary opacity-40 lg:w-1/3 lg:bg-[#3E5AF0]" />
+        </div>
+        {/* Card */}
+        <div
+          style={{ height: `${pageHeight - 100}px` }}
+          className="relative my-0 w-full rounded-xl bg-transparent md:my-[40px] md:w-[85%] md:shadow-2xl"
+        >
           <div className="mb-20">
             <img
-              className="absolute left-5 top-5 w-[300px]"
+              className={`absolute ${currentLanguage === "ar" ? "right-5" : "left-5"} left-5 top-5 w-[200px]`}
               src="images/logo.png"
-              alt="#"
+              alt="EduAi Logo"
             />
           </div>
-          <div className="mb-10 grid">
-            <h1 className="font-sans text-[28px] font-bold text-primary">
+
+          <div className="flex flex-col items-start p-10">
+            <Text font={"bold"} size={"4xl"}>
               {currentLanguage === "ar"
                 ? "تسجيل الدخول"
                 : currentLanguage === "fr"
                   ? "Connexion"
-                  : "Log in"}
-            </h1>
-            <p className="font-sans text-[20px] font-semibold text-secondary">
+                  : "Sign in"}
+            </Text>
+            <Text font={"medium"} size={"xl"} color={"gray"} className="mt-2">
               {currentLanguage === "ar"
-                ? "للوصول إلى حسابك"
+                ? "يرجى تسجيل الدخول للمتابعة إلى حسابك."
                 : currentLanguage === "fr"
-                  ? "Pour accéder à votre compte"
-                  : "To access your account"}
-            </p>
-          </div>
-          <div className="grid items-center justify-center">
+                  ? "Veuillez vous connecter pour accéder à votre compte."
+                  : "Please login to continue to your account."}
+            </Text>
             <form
               dir={currentLanguage === "ar" ? "rtl" : "ltr"}
-              className="grid gap-10"
+              className="mt-6 grid w-full gap-10 md:w-fit"
               onSubmit={handleSubmit(onSubmit)}
             >
-              <label
-                htmlFor="email"
-                className="grid text-start font-sans text-[18px] font-semibold text-[#041631] text-primary"
-              >
-                {currentLanguage === "ar"
-                  ? "بريدك الإلكتروني"
-                  : currentLanguage === "fr"
-                    ? "Votre Email"
-                    : "Your Email"}
+              <div className="relative mt-6 w-full md:w-fit">
+                <label
+                  htmlFor="email"
+                  className={`absolute left-4 rounded px-1 font-sans text-sm font-semibold transition-all duration-200 ${
+                    emailFocused
+                      ? "top-[-10px] bg-bgPrimary opacity-100"
+                      : "top-4 opacity-0"
+                  } text-primary`}
+                >
+                  {currentLanguage === "ar"
+                    ? "البريد الإلكتروني"
+                    : currentLanguage === "fr"
+                      ? "Email"
+                      : "Email"}
+                </label>
+
                 <input
                   id="email"
+                  type="email"
                   {...register("username", { required: true })}
+                  onFocus={() => setEmailFocused(true)}
+                  onBlur={e => setEmailFocused(!!e.target.value)}
                   placeholder={
                     currentLanguage === "ar"
                       ? "أدخل بريدك الإلكتروني"
@@ -231,10 +216,17 @@ const Login = () => {
                         ? "Entrez votre email"
                         : "Enter Your Email"
                   }
-                  className={`w-[450px] rounded-xl border px-4 py-3 text-textPrimary ${errors.username ? "border-warning" : "border-borderPrimary"} outline-none max-[471px]:w-[350px]`}
+                  className={`w-full rounded-xl border p-4 text-textPrimary outline-none transition-all duration-200 md:w-[450px] ${
+                    errors.username
+                      ? "border-warning"
+                      : emailFocused
+                        ? "border-primary"
+                        : "border-borderPrimary"
+                  }`}
                 />
+
                 {errors.username && (
-                  <span className="text-[13px] text-error">
+                  <span className="mt-1 block text-[13px] text-error">
                     {currentLanguage === "ar"
                       ? "البريد الإلكتروني مطلوب"
                       : currentLanguage === "fr"
@@ -242,19 +234,28 @@ const Login = () => {
                         : "Email is Required"}
                   </span>
                 )}
-              </label>
-              <label
-                htmlFor="password"
-                className="grid text-start font-sans text-[18px] font-semibold text-[#041631] text-primary"
-              >
-                {currentLanguage === "ar"
-                  ? "كلمة المرور الخاصة بك"
-                  : currentLanguage === "fr"
-                    ? "Votre mot de passe"
-                    : "Your Password"}
+              </div>
+
+              <div className="relative w-full md:w-fit">
+                <label
+                  htmlFor="password"
+                  className={`absolute left-4 rounded px-1 font-sans text-sm font-semibold transition-all duration-200 ${
+                    passwordFocused
+                      ? "top-[-10px] bg-bgPrimary opacity-100"
+                      : "top-4 opacity-0"
+                  } text-primary`}
+                >
+                  {currentLanguage === "ar"
+                    ? "كلمة المرور الخاصة بك"
+                    : currentLanguage === "fr"
+                      ? "Votre mot de passe"
+                      : "Your Password"}
+                </label>
                 <input
                   id="password"
                   {...register("password", { required: true })}
+                  onFocus={() => setPasswordFocused(true)}
+                  onBlur={e => setPasswordFocused(!!e.target.value)}
                   placeholder={
                     currentLanguage === "ar"
                       ? "أدخل كلمة المرور الخاصة بك"
@@ -262,7 +263,13 @@ const Login = () => {
                         ? "Entrez votre mot de passe"
                         : "Enter Your Password"
                   }
-                  className={`w-[450px] rounded-xl border px-4 py-3 text-textPrimary ${errors.password ? "border-warning" : "border-borderPrimary"} outline-none max-[471px]:w-[350px]`}
+                  className={`w-full rounded-xl border bg-white p-4 text-textPrimary outline-none transition-all duration-200 md:w-[450px] ${
+                    errors.password
+                      ? "border-warning"
+                      : passwordFocused
+                        ? "border-primary"
+                        : "border-borderPrimary"
+                  }`}
                   type="password"
                 />
                 {errors.password && (
@@ -274,18 +281,18 @@ const Login = () => {
                         : "Password is Required"}
                   </span>
                 )}
-              </label>
-              <div className="flex justify-end text-end">
-                <a
-                  href="/forget-password"
-                  className="flex font-sans text-[12px] font-medium text-secondary hover:underline"
-                >
-                  {currentLanguage === "ar"
-                    ? "نسيت كلمة المرور؟"
-                    : currentLanguage === "fr"
-                      ? "Mot de passe oublié ?"
-                      : "Forgot password ?"}
-                </a>
+                <div className="mt-2 flex justify-end text-end">
+                  <a
+                    href="/forget-password"
+                    className="flex font-sans text-[12px] font-medium text-secondary hover:underline"
+                  >
+                    {currentLanguage === "ar"
+                      ? "نسيت كلمة المرور؟"
+                      : currentLanguage === "fr"
+                        ? "Mot de passe oublié ?"
+                        : "Forgot password ?"}
+                  </a>
+                </div>
               </div>
 
               {/* <Spinner/> */}
@@ -293,7 +300,7 @@ const Login = () => {
                 <button
                   disabled={isLoading}
                   type="submit"
-                  className="w-[450px] rounded-xl bg-primary px-4 py-2 text-[18px] font-bold text-white duration-300 ease-in hover:bg-hover hover:shadow-xl max-[471px]:w-[350px]"
+                  className="w-full rounded-xl bg-primary p-4 text-[18px] font-bold text-white duration-300 ease-in hover:bg-hover hover:shadow-xl md:w-[450px]"
                 >
                   {isLoading
                     ? currentLanguage === "ar"
@@ -338,14 +345,76 @@ const Login = () => {
               </div>
             </form>
           </div>
-        </div>
-        <div className="flex h-full w-full justify-end">
-          <div className="flex h-full w-[600px] items-center justify-end bg-[#2a3469] max-[1040px]:hidden">
-            <img
-              className="h-[530px] w-[500px] -translate-x-[260px]"
-              src="images/labtop.png"
-              alt="#"
-            />
+          <div
+            className={`absolute ${currentLanguage === "ar" ? "left-5 scale-x-[-1]" : "right-5"} top-5`}
+          >
+            <DropdownMenu.Root>
+              <DropdownMenu.Trigger asChild>
+                <button
+                  className="text-violet11 hover:bg-violet3 inline-flex h-[35px] w-[35px] items-center justify-center rounded-full bg-bgPrimary outline-none"
+                  aria-label="Customise options"
+                >
+                  {currentLanguage === "en" ? (
+                    <img src="/images/en.png" alt="#" />
+                  ) : currentLanguage === "ar" ? (
+                    <img src="/images/ar.png" alt="#" />
+                  ) : currentLanguage === "fr" ? (
+                    <img src="/images/fr.png" alt="#" />
+                  ) : (
+                    <img src="/images/fr.png" alt="#" />
+                  )}
+                </button>
+              </DropdownMenu.Trigger>
+              <DropdownMenu.Portal>
+                <DropdownMenu.Content
+                  className="data-[side=top]:animate-slideDownAndFade data-[side=right]:animate-slideLeftAndFade data-[side=bottom]:animate-slideUpAndFade data-[side=left]:animate-slideRightAndFade z-50 mx-2 mt-5 grid min-w-[150px] justify-center gap-5 rounded-md bg-bgPrimary p-[5px] font-semibold shadow-[0px_10px_38px_-10px_rgba(22,_23,_24,_0.35),_0px_10px_20px_-15px_rgba(22,_23,_24,_0.2)] will-change-[opacity,transform]"
+                  sideOffset={5}
+                >
+                  <DropdownMenu.Item className="text-violet11 data-[disabled]:text-mauve8 data-[highlighted]:bg-violet9 data-[highlighted]:text-violet1 group relative mt-2 flex h-[25px] select-none items-center rounded-[3px] px-[5px] text-[13px] leading-none outline-none data-[disabled]:pointer-events-none">
+                    <button
+                      onClick={() => handleLanguageChange("ar")}
+                      className="rounded-lg px-4 py-2 text-[20px] hover:bg-bgSecondary"
+                    >
+                      {currentLanguage === "en"
+                        ? "Arabic"
+                        : currentLanguage === "ar"
+                          ? "العربية"
+                          : currentLanguage === "fr"
+                            ? "Arabe"
+                            : "Arabic"}
+                    </button>
+                  </DropdownMenu.Item>
+                  <DropdownMenu.Item className="text-violet11 data-[disabled]:text-mauve8 data-[highlighted]:bg-violet9 data-[highlighted]:text-violet1 group relative flex h-[25px] select-none items-center rounded-[3px] px-[5px] text-[13px] leading-none outline-none data-[disabled]:pointer-events-none">
+                    <button
+                      onClick={() => handleLanguageChange("en")}
+                      className="rounded-lg px-4 py-2 text-[20px] hover:bg-bgSecondary"
+                    >
+                      {currentLanguage === "en"
+                        ? "English"
+                        : currentLanguage === "ar"
+                          ? "الإنجليزية"
+                          : currentLanguage === "fr"
+                            ? "Anglais"
+                            : "English"}
+                    </button>
+                  </DropdownMenu.Item>
+                  <DropdownMenu.Item className="text-violet11 data-[disabled]:text-mauve8 data-[highlighted]:bg-violet9 data-[highlighted]:text-violet1 group relative mb-2 flex h-[25px] select-none items-center rounded-[3px] px-[5px] text-[13px] leading-none outline-none data-[disabled]:pointer-events-none">
+                    <button
+                      onClick={() => handleLanguageChange("fr")}
+                      className="rounded-lg px-4 py-2 text-[20px] hover:bg-bgSecondary"
+                    >
+                      {currentLanguage === "en"
+                        ? "French"
+                        : currentLanguage === "ar"
+                          ? "الفرنسية"
+                          : currentLanguage === "fr"
+                            ? "Français"
+                            : "French"}
+                    </button>
+                  </DropdownMenu.Item>
+                </DropdownMenu.Content>
+              </DropdownMenu.Portal>
+            </DropdownMenu.Root>
           </div>
         </div>
       </div>

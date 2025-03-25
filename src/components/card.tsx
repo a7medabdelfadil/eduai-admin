@@ -27,7 +27,7 @@ const Card: React.FC<CardProps> = ({
   return (
     <div
       dir={currentLanguage === "ar" ? "rtl" : "ltr"}
-      className="grid h-[250px] w-[250px] items-end justify-center rounded-xl bg-bgPrimary shadow-lg"
+      className="grid h-[250px] w-[250px] items-end justify-center rounded-xl bg-bgPrimary shadow-lg hover:scale-105 ease-in duration-200"
     >
       <Link
         href={href}

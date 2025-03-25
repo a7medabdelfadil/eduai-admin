@@ -69,6 +69,7 @@ const NewScholarship = () => {
     archived: "false",
     page: 0,
     size: 1000000,
+    graduated: "false"
   });
   const onSubmit = async (data: any) => {
     const formData = new FormData();

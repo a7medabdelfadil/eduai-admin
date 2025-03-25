@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import Spinner from "@/components/spinner";
 import { toast } from "react-toastify";
@@ -12,6 +12,7 @@ import {
   useGetSchedualByIdQuery,
   useUpdateSchedualMutation,
 } from "@/features/Acadimic/scheduleApi";
+import { useRouter } from "next/navigation";
 
 type Props = {
   params: {
@@ -40,11 +41,13 @@ const UpdateEvent = ({ params }: Props) => {
       href: `/educational-affairs/schedule/${params.eventId}`,
     },
   ];
+  const router = useRouter();
 
   const booleanValue = useSelector((state: RootState) => state.boolean.value);
   const { language: currentLanguage, loading } = useSelector(
     (state: RootState) => state.language,
   );
+  const [isFormChanged, setIsFormChanged] = useState(false);
 
   // Define the validation schema
   const schema = z
@@ -53,10 +56,20 @@ const UpdateEvent = ({ params }: Props) => {
       endTime: z.string().nonempty({ message: "This field is required" }),
       day: z.string().nonempty({ message: "This field is required" }),
     })
-    .refine(data => new Date(data.startTime) <= new Date(data.endTime), {
-      message: "Start Time must be before End Time",
-      path: ["startTime"],
-    });
+    .refine(
+      data => {
+        const [startHour, startMinute] = data.startTime.split(":").map(Number);
+        const [endHour, endMinute] = data.endTime.split(":").map(Number);
+        return (
+          startHour < endHour ||
+          (startHour === endHour && startMinute < endMinute)
+        );
+      },
+      {
+        message: "Start Time must be before End Time",
+        path: ["startTime"], // Attach the error to the startTime field
+      },
+    );
 
   type FormData = z.infer<typeof schema>;
 
@@ -65,13 +78,17 @@ const UpdateEvent = ({ params }: Props) => {
     handleSubmit,
     formState: { errors },
     reset,
+    watch,
   } = useForm<FormData>({
     resolver: zodResolver(schema),
   });
 
   const [updateEvent, { isLoading }] = useUpdateSchedualMutation();
-  const { data: eventData, isLoading: isEventLoading } =
-    useGetSchedualByIdQuery(params.eventId);
+  const {
+    data: eventData,
+    isLoading: isEventLoading,
+    refetch,
+  } = useGetSchedualByIdQuery(params.eventId);
 
   useEffect(() => {
     if (eventData && eventData.data) {
@@ -83,9 +100,24 @@ const UpdateEvent = ({ params }: Props) => {
     }
   }, [eventData, reset]);
 
+  const watchedValues = watch();
+
+  useEffect(() => {
+    if (eventData?.data) {
+      const { startTime, endTime, day } = eventData.data;
+      setIsFormChanged(
+        watchedValues.startTime !== startTime ||
+          watchedValues.endTime !== endTime ||
+          watchedValues.day !== day,
+      );
+    }
+  }, [watchedValues, eventData]);
+
   const onSubmit = async (data: FormData) => {
     try {
       await updateEvent({ id: params.eventId, formData: data }).unwrap();
+      refetch();
+      router.back();
       toast.success("Event updated successfully");
     } catch (err) {
       toast.error("Failed to update event");
@@ -151,8 +183,8 @@ const UpdateEvent = ({ params }: Props) => {
               </h1>
             </div>
             <div className="grid grid-cols-2 gap-4 max-[1278px]:grid-cols-1">
-              <div>
-                <label>
+              <div className="mt-1">
+                <label className="font-sans text-[16px] font-semibold">
                   {currentLanguage === "ar"
                     ? "اليوم"
                     : currentLanguage === "fr"
@@ -161,7 +193,7 @@ const UpdateEvent = ({ params }: Props) => {
                 </label>
                 <select
                   id="day"
-                  className="w-full rounded border border-borderPrimary bg-bgPrimary px-4 py-2"
+                  className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-4"
                   {...register("day")}
                 >
                   <option value="">
@@ -285,7 +317,12 @@ const UpdateEvent = ({ params }: Props) => {
               ) : (
                 <button
                   type="submit"
-                  className="w-[140px] rounded-xl bg-primary px-4 py-2 text-[18px] text-white duration-300 ease-in hover:bg-hover hover:shadow-xl"
+                  className={`w-fit rounded-xl px-4 py-2 text-[18px] text-white duration-300 ease-in ${
+                    isFormChanged
+                      ? "bg-primary hover:bg-hover hover:shadow-xl"
+                      : "cursor-not-allowed bg-gray-500"
+                  }`}
+                  disabled={!isFormChanged}
                 >
                   {currentLanguage === "en"
                     ? "Update Event"

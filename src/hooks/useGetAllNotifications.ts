@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { Client, IMessage } from '@stomp/stompjs';
 import Cookies from 'js-cookie';
-import { toast } from 'react-toastify';
+import { baseUrlStock } from '@/components/BaseURL';
 
 interface Notification {
   id: string;
@@ -44,7 +44,7 @@ export const useNotificationsSocket = (userId: string | null) => {
 
     // Create STOMP client
     const stompClient = new Client({
-      brokerURL: `wss://eduai.vitaparapharma.com/ws?token=${token}`,
+      brokerURL: `${baseUrlStock}ws?token=${token}`,
       debug: function (str) {
         console.log('[STOMP Notifications Debug]', str);
       },
@@ -81,7 +81,6 @@ export const useNotificationsSocket = (userId: string | null) => {
           });
         } catch (parseError) {
           console.error('Error parsing notification:', parseError);
-          toast.error('Failed to process notification');
         }
       });
     };
@@ -90,13 +89,11 @@ export const useNotificationsSocket = (userId: string | null) => {
     stompClient.onStompError = frame => {
       console.error('Broker reported notifications error:', frame.headers['message']);
       console.error('Details:', frame.body);
-      toast.error('Notifications connection error');
       setIsConnected(false);
     };
 
     stompClient.onWebSocketError = event => {
       console.error('WebSocket notifications connection error:', event);
-      toast.error('Unable to establish notifications connection');
       setIsConnected(false);
     };
 

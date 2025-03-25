@@ -1,5 +1,3 @@
-// PhoneNumberInput.tsx
-
 "use client";
 import React from "react";
 import { UseFormRegister, FieldErrors, Control } from "react-hook-form";
@@ -49,7 +47,8 @@ const PhoneNumberInput: React.FC<PhoneNumberInputProps> = ({
     return translations[key][currentLanguage] || translations[key]["en"];
   };
 
-  const countryOptions = Object.entries(countryCodeData).map(
+  const safeCountryCodeData = countryCodeData || {};
+  const countryOptions = Object.entries(safeCountryCodeData).map(
     ([key, value]) => ({
       value: key,
       label: `+${key} (${value})`,
@@ -76,9 +75,16 @@ const PhoneNumberInput: React.FC<PhoneNumberInputProps> = ({
         <input
           id="number"
           type="tel"
+          inputMode="numeric"
+          pattern="[0-9]*"
           placeholder={getTranslation("phoneNumber")}
           className="flex-1 rounded-xl border-none outline-none"
-          {...register("number", { required: true })}
+          {...register("number", { 
+            required: true,
+            onChange: (e) => {
+              e.target.value = e.target.value.replace(/\D/g, '');
+            },
+          })}
         />
       </div>
       {(errors.countryCode || errors.number) && (

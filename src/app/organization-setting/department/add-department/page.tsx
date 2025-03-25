@@ -9,6 +9,8 @@ import { useSelector } from "react-redux";
 import { RootState } from "@/GlobalRedux/store";
 import { useGetAllRolesQuery } from "@/features/signupApi";
 import BreadCrumbs from "@/components/BreadCrumbs";
+import { useRouter } from "next/navigation";
+import { useGetAllEmployeesQuery } from "@/features/User-Management/employeeApi";
 
 const AddDepartment = () => {
   const breadcrumbs = [
@@ -37,8 +39,14 @@ const AddDepartment = () => {
       href: "/organization-setting/department/add-department",
     },
   ];
+  const router = useRouter();
   const booleanValue = useSelector((state: RootState) => state.boolean.value);
   const { data, isLoading: isRoles } = useGetAllRolesQuery(null);
+    const { data: employees, error, refetch } = useGetAllEmployeesQuery({
+      archived: "false",
+      page: 0,
+      size: 1000000,
+    });
   const {
     register,
     handleSubmit,
@@ -56,6 +64,7 @@ const AddDepartment = () => {
       };
       await createDepartment(processedData).unwrap();
       toast.success("Department created successfully");
+      router.push("/organization-setting/department");
     } catch (err) {
       toast.error("Failed to create Department");
     }
@@ -348,40 +357,53 @@ const AddDepartment = () => {
                 )}
               </label>
               <label
-                htmlFor="headId"
-                className="grid font-sans text-[18px] font-semibold"
-              >
-                {currentLanguage === "ar"
-                  ? "المعرف الرئيسي"
-                  : currentLanguage === "fr"
-                    ? "ID du Responsable"
-                    : "HeadId"}
+  htmlFor="headId"
+  className="grid font-sans text-[18px] font-semibold"
+>
+  {currentLanguage === "ar"
+    ? "المعرف الرئيسي"
+    : currentLanguage === "fr"
+      ? "ID du Responsable"
+      : "HeadId"}
 
-                <input
-                  id="headId"
-                  type="number"
-                  className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
-                  {...register("headId", { required: true })}
-                />
-                {errors.headId && (
-                  <span className="text-error">
-                    {currentLanguage === "ar"
-                      ? "هذا الحقل مطلوب"
-                      : currentLanguage === "fr"
-                        ? "Ce champ est requis"
-                        : "This field is required"}
-                  </span>
-                )}
-              </label>
+  <select
+    id="headId"
+    className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+    {...register("headId", { required: true })}
+  >
+    <option value="">
+      {currentLanguage === "ar"
+        ? "اختر موظفًا"
+        : currentLanguage === "fr"
+          ? "Sélectionner un employé"
+          : "Select an employee"}
+    </option>
+    {employees?.data?.content?.map((employee: any) => (
+      <option key={employee.id} value={employee.id}>
+        {employee.name}
+      </option>
+    ))}
+  </select>
+  
+  {errors.headId && (
+    <span className="text-error">
+      {currentLanguage === "ar"
+        ? "هذا الحقل مطلوب"
+        : currentLanguage === "fr"
+          ? "Ce champ est requis"
+          : "This field is required"}
+    </span>
+  )}
+</label>
               <label
                 htmlFor="roles"
                 className="grid font-sans text-[18px] font-semibold"
               >
                 {currentLanguage === "ar"
-                  ? "موظف"
+                  ? "حدد الدور"
                   : currentLanguage === "fr"
-                    ? "Employé"
-                    : "Employee"}
+                    ? "sélectionner le rôle"
+                    : "Select Role"}
                 <select
                   defaultValue=""
                   id="roles"
@@ -390,10 +412,10 @@ const AddDepartment = () => {
                 >
                   <option selected value="">
                     {currentLanguage === "ar"
-                      ? "اختر الوظيفة"
-                      : currentLanguage === "fr"
-                        ? "Sélectionnez le poste"
-                        : "Select Position"}
+                      ? "حدد الدور"
+                  : currentLanguage === "fr"
+                    ? "sélectionner le rôle"
+                    : "Select Role"}
                   </option>
                   {data &&
                     Object.entries(data.data).map(([key, value]) => (

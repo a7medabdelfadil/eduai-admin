@@ -7,35 +7,116 @@ import BreadCrumbs from "@/components/BreadCrumbs";
 import { RootState } from "@/GlobalRedux/store";
 import { useSelector } from "react-redux";
 import Spinner from "@/components/spinner";
+import { useRouter } from "next/navigation";
 
 const AddClass = () => {
-  const studyLevels = {
-    GRADE12: "الصف 12",
-    GRADE9: "الصف 9",
-    GRADE7: "الصف 7",
-    GRADE8: "الصف 8",
-    GRADE11: "الصف 11",
-    GRADE10: "الصف 10",
-    GRADE1: "الصف 1",
-    GRADE2: "الصف 2",
-    KG1: "روضة أطفال 1",
-    GRADE5: "الصف 5",
-    GRADE6: "الصف 6",
-    GRADE3: "الصف 3",
-    KG2: "روضة أطفال 2",
-    GRADE4: "الصف 4",
+  const router = useRouter();
+  const getStudyLevels = (currentLanguage: any) => {
+    if (currentLanguage === 'ar') {
+      return {
+        GRADE12: "الصف 12",
+        GRADE9: "الصف 9",
+        GRADE7: "الصف 7",
+        GRADE8: "الصف 8",
+        GRADE11: "الصف 11",
+        GRADE10: "الصف 10",
+        GRADE1: "الصف 1",
+        GRADE2: "الصف 2",
+        KG1: "روضة أطفال 1",
+        GRADE5: "الصف 5",
+        GRADE6: "الصف 6",
+        GRADE3: "الصف 3",
+        KG2: "روضة أطفال 2",
+        GRADE4: "الصف 4",
+      };
+    } else if (currentLanguage === 'en') {
+      return {
+        GRADE12: "Grade 12",
+        GRADE9: "Grade 9",
+        GRADE7: "Grade 7",
+        GRADE8: "Grade 8",
+        GRADE11: "Grade 11",
+        GRADE10: "Grade 10",
+        GRADE1: "Grade 1",
+        GRADE2: "Grade 2",
+        KG1: "Kindergarten 1",
+        GRADE5: "Grade 5",
+        GRADE6: "Grade 6",
+        GRADE3: "Grade 3",
+        KG2: "Kindergarten 2",
+        GRADE4: "Grade 4",
+      };
+    } else if (currentLanguage === 'fr') {
+      return {
+        GRADE12: "12ème année",
+        GRADE9: "9ème année",
+        GRADE7: "7ème année",
+        GRADE8: "8ème année",
+        GRADE11: "11ème année",
+        GRADE10: "10ème année",
+        GRADE1: "1ère année",
+        GRADE2: "2ème année",
+        KG1: "Maternelle 1",
+        GRADE5: "5ème année",
+        GRADE6: "6ème année",
+        GRADE3: "3ème année",
+        KG2: "Maternelle 2",
+        GRADE4: "4ème année",
+      };
+    }
+    return {};
   };
-  const studyCategories = {
-    KINDERGARTEN: "روضة أطفال",
-    SECONDARY: "السنة الثانوية",
-    PRIMARY: "السنة الابتدائية",
-    PREPARATORY: "السنة الاعدادية",
+  
+  const getStudyCategories = (currentLanguage: any): { [key: string]: string } => {
+    if (currentLanguage === 'ar') {
+      return {
+        KINDERGARTEN: "روضة أطفال",
+        SECONDARY: "السنة الثانوية",
+        PRIMARY: "السنة الابتدائية",
+        PREPARATORY: "السنة الاعدادية",
+      };
+    } else if (currentLanguage === 'en') {
+      return {
+        KINDERGARTEN: "Kindergarten",
+        SECONDARY: "Secondary School",
+        PRIMARY: "Primary School",
+        PREPARATORY: "Preparatory School",
+      };
+    } else if (currentLanguage === 'fr') {
+      return {
+        KINDERGARTEN: "Maternelle",
+        SECONDARY: "École Secondaire",
+        PRIMARY: "École Primaire",
+        PREPARATORY: "École Préparatoire",
+      };
+    }
+    return {};
   };
-  const jobCategories = {
-    EDUCATIONAL: "التعليمية",
-    ADMINISTRATIVE: "إداري",
-    SPECIALIZED: "متخصص",
-    FACILITIES_SERVICES: "خدمة المرافق",
+  
+  const getJobCategories = (currentLanguage: any): { [key: string]: string } => {
+    if (currentLanguage === 'ar') {
+      return {
+        EDUCATIONAL: "التعليمية",
+        ADMINISTRATIVE: "إداري",
+        SPECIALIZED: "متخصص",
+        FACILITIES_SERVICES: "خدمة المرافق",
+      };
+    } else if (currentLanguage === 'en') {
+      return {
+        EDUCATIONAL: "Educational",
+        ADMINISTRATIVE: "Administrative",
+        SPECIALIZED: "Specialized",
+        FACILITIES_SERVICES: "Facilities Services",
+      };
+    } else if (currentLanguage === 'fr') {
+      return {
+        EDUCATIONAL: "Éducatif",
+        ADMINISTRATIVE: "Administratif",
+        SPECIALIZED: "Spécialisé",
+        FACILITIES_SERVICES: "Services des Installations",
+      };
+    }
+    return {};
   };
   const breadcrumbs = [
     {
@@ -70,6 +151,7 @@ const AddClass = () => {
     try {
       await createDriver(data).unwrap();
       toast.success("Class created successfully");
+      router.push("/classes")
     } catch {
       toast.error("Failed to create Class: you may enter data incorrectly ");
     }
@@ -78,6 +160,10 @@ const AddClass = () => {
   const { language: currentLanguage, loading } = useSelector(
     (state: RootState) => state.language,
   );
+
+  const studyLevels = getStudyLevels(currentLanguage);
+const studyCategories = getStudyCategories(currentLanguage);
+const jobCategories = getJobCategories(currentLanguage);
 
   if (loading || isLoading)
     return (

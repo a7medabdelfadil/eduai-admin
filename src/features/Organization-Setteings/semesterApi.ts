@@ -61,7 +61,7 @@ export const semesterApi = createApi({
     updateSemesters: builder.mutation({
       query: ({ formData, id }) => ({
         url: `/api/v1/management/semester/${id}`,
-        method: "PATCH",
+        method: "PUT",
         body: formData,
       }),
     }),

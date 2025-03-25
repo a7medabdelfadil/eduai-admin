@@ -56,11 +56,12 @@ const AddNewAchievement = () => {
     }
   };
   const { data: students, isLoading: isStudentsLoading } =
-    useGetAllStudentsQuery({
-      archived: "false",
-      page: 0,
-      size: 1000000,
-    });
+  useGetAllStudentsQuery({
+    archived: "false",
+    page: 0,
+    size: 1000000,
+    graduated: "false"
+  });
   const onSubmit = async (formData: any) => {
     const data = new FormData();
     data.append(

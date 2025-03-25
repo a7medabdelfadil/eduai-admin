@@ -45,6 +45,13 @@ export const examsApi = createApi({
       }),
     }),
     //
+    deleteExamType: builder.mutation({
+      query: id => ({
+        url: `/api/v1/academic/educationalAffairs/exam-types/${id}`,
+        method: "DELETE",
+      }),
+    }),
+    //
     createExams: builder.mutation({
       query: formData => ({
         url: `/api/v1/academic/educationalAffairs/exams`,
@@ -53,8 +60,20 @@ export const examsApi = createApi({
       }),
     }),
     //
+    createExamType: builder.mutation({
+      query: formData => ({
+        url: `/api/v1/academic/educationalAffairs/exam-types`,
+        method: "POST",
+        body: formData,
+      }),
+    }),
+    //
     getExamResById: builder.query({
       query: id => `/api/v1/exam-results/exam/${id}`,
+    }),
+    //
+    getExamTypeByCourseId: builder.query({
+      query: id => `/api/v1/academic/educationalAffairs/exam-types/non-teacher/all-by-course/${id}`,
     }),
     //
     updateExam: builder.mutation({
@@ -72,6 +91,9 @@ export const {
   useDeleteExamMutation,
   useCreateExamsMutation,
   useGetExamResByIdQuery,
+  useCreateExamTypeMutation,
+  useDeleteExamTypeMutation,
   useUpdateExamMutation,
+  useGetExamTypeByCourseIdQuery,
   useDeleteExamResultMutation,
 } = examsApi;

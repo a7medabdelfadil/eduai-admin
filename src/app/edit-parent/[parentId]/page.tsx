@@ -80,15 +80,15 @@ const EditParent: React.FC<ViewParentProps> = ({ params }) => {
   } = useForm();
   useEffect(() => {
     if (data) {
-      setValue("email", data.data.email);
-      setValue("nid", data.data.nid);
-      setValue("about", data.data.about);
-      setValue("number", data.data.number);
-      setValue("salary", data.data.salary);
-      setValue("name_en", data.data.name);
+      setValue("email", data?.data?.email);
+      setValue("nid", data?.data?.nid);
+      setValue("about", data?.data?.about);
+      setValue("number", data?.data?.number);
+      setValue("salary", data?.data?.salary);
+      setValue("name_en", data?.data?.name);
       setValue("name_ar", "");
       setValue("name_fr", "");
-      setValue("birthDate", data.data.birthDate);
+      setValue("birthDate", data?.data?.birthDate);
     }
 
   }, [data, error]);
@@ -308,7 +308,7 @@ const EditParent: React.FC<ViewParentProps> = ({ params }) => {
                           : "Select Nationality"}
                   </option>
                   {nationalityData &&
-                    Object.entries(nationalityData.data).map(([key, value]) => (
+                    Object.entries(nationalityData?.data).map(([key, value]) => (
                       <option key={key} value={key}>
                         {String(value)}
                       </option>
@@ -606,7 +606,7 @@ const EditParent: React.FC<ViewParentProps> = ({ params }) => {
                 )}
               </label>
               <PhoneNumberInput
-                countryCodeData={countryCode.data}
+                countryCodeData={countryCode?.data !== null ? countryCode?.data : {} }
                 currentLanguage="en"
                 label="Your Phone Number"
                 register={register}

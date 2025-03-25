@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import Spinner from "@/components/spinner";
 import {
@@ -17,10 +17,11 @@ import { RootState } from "@/GlobalRedux/store";
 import BreadCrumbs from "@/components/BreadCrumbs";
 import SearchableSelect from "@/components/select";
 import PhoneNumberInput from "@/components/PhoneNumberInput";
+import { useRouter } from "next/navigation";
 
 const AddNewDriver = () => {
   const booleanValue = useSelector((state: RootState) => state.boolean.value);
-
+  const [backendError, setBackendError] = useState<string | null>(null);
   const { data: nationalityData, isLoading: nationalityLoading } =
     useGetAllNationalitysQuery(null);
   const { data: countryCode, isLoading: isCountryCode } =
@@ -33,6 +34,8 @@ const AddNewDriver = () => {
     handleSubmit,
     formState: { errors },
   } = useForm();
+  const router = useRouter();
+
   const [createDriver, { isLoading }] = useCreateDriversMutation();
   const { data: rigiond } = useGetAllReginionIDQuery(null);
   const optionsRigon =
@@ -53,10 +56,14 @@ const AddNewDriver = () => {
     try {
       await createDriver(formData).unwrap();
       toast.success("Driver created successfully");
-    } catch {
-      toast.error(
-        "Failed to create Driver: you may enter the password incorrectly ",
-      );
+      router.push("/driver");
+    } catch (error: any) {
+      if (error.data && error.data.data && error.data.data.length > 0) {
+        setBackendError(error.data.data[0]);
+      } else {
+        setBackendError("Failed to create parent");
+      }
+      toast.error(error.data.message);
     }
   };
 
@@ -115,6 +122,11 @@ const AddNewDriver = () => {
       >
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="my-10 grid items-center justify-center gap-5 rounded-xl bg-bgPrimary p-10 sm:w-[500px] md:w-[600px] lg:w-[750px] xl:w-[1000px]">
+          {backendError && (
+              <div className="text-error text-center">
+                {backendError}
+              </div>
+            )}
             <div className="flex items-center justify-start gap-2">
               <svg
                 className="h-6 w-6 font-bold text-secondary group-hover:text-hover"

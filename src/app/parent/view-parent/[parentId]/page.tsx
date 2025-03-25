@@ -6,6 +6,7 @@ import Spinner from "@/components/spinner";
 import { useEffect } from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "@/GlobalRedux/store";
+import Container from "@/components/Container";
 interface ViewParentProps {
   params: {
     parentId: string;
@@ -37,19 +38,7 @@ const ViewParent: React.FC<ViewParentProps> = ({ params }) => {
     );
 
   return (
-    <>
-      <div
-        dir={currentLanguage === "ar" ? "rtl" : "ltr"}
-        className={`${
-          currentLanguage === "ar"
-            ? booleanValue
-              ? "lg:mr-[40px]"
-              : "lg:mr-[290px]"
-            : booleanValue
-              ? "lg:ml-[40px]"
-              : "lg:ml-[290px]"
-        } grid py-4`}
-      >
+<Container>
         <div className="grid grid-cols-2 gap-7 pr-7 max-[1342px]:grid-cols-1 max-[1342px]:px-5">
           <ParentInfo data={data} />
           <div className="grid h-[400px] items-center justify-center gap-10 rounded-xl bg-bgPrimary p-5">
@@ -65,8 +54,7 @@ const ViewParent: React.FC<ViewParentProps> = ({ params }) => {
             <CircleProgress percentage={75} />
           </div>
         </div>
-      </div>
-    </>
+        </Container>
   );
 };
 

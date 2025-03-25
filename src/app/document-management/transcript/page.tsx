@@ -1,11 +1,13 @@
 "use client";
-import Soon from "@/components/soon";
 import Link from "next/link";
-import { useState, useEffect } from "react"; // Import useState and useEffect hooks
+import { useState, useEffect } from "react";
 import BreadCrumbs from "@/components/BreadCrumbs";
 import { useSelector } from "react-redux";
 import { RootState } from "@/GlobalRedux/store";
 import Spinner from "@/components/spinner";
+import { useGetAllTranscriptCoursesQuery } from "@/features/Document-Management/certificatesApi";
+import { useGetAllSemestersQuery } from "@/features/Organization-Setteings/semesterApi";
+import { skipToken } from "@reduxjs/toolkit/query";
 
 const Transcript = () => {
   const breadcrumbs = [
@@ -29,60 +31,24 @@ const Transcript = () => {
     },
   ];
 
-  const booleanValue = useSelector((state: RootState) => state.boolean.value); // sidebar
-
-  const [selectAll, setSelectAll] = useState(false); // State to track whether select all checkbox is checked
-
-  // Function to handle click on select all checkbox
-  const handleSelectAll = () => {
-    setSelectAll(!selectAll); // Toggle select all state
-    const checkboxes = document.querySelectorAll<HTMLInputElement>(
-      'input[type="checkbox"]:not(#checkbox-all-search)',
-    ); // Select all checkboxes except select all checkbox
-    checkboxes.forEach(checkbox => {
-      checkbox.checked = !selectAll; // Set checked state of each checkbox based on select all state
-    });
-  };
-
-  useEffect(() => {
-    // Function to handle click on other checkboxes
-    const handleOtherCheckboxes = () => {
-      const allCheckboxes = document.querySelectorAll<HTMLInputElement>(
-        'input[type="checkbox"]:not(#checkbox-all-search)',
-      );
-      const allChecked = Array.from(allCheckboxes).every(
-        checkbox => checkbox.checked,
-      );
-      const selectAllCheckbox = document.getElementById(
-        "checkbox-all-search",
-      ) as HTMLInputElement | null;
-      if (selectAllCheckbox) {
-        selectAllCheckbox.checked = allChecked;
-        setSelectAll(allChecked);
-      }
-    };
-
-    // Add event listeners to other checkboxes
-    const otherCheckboxes = document.querySelectorAll<HTMLInputElement>(
-      'input[type="checkbox"]:not(#checkbox-all-search)',
-    );
-    otherCheckboxes.forEach(checkbox => {
-      checkbox.addEventListener("change", handleOtherCheckboxes);
-    });
-
-    return () => {
-      // Remove event listeners when component unmounts
-      otherCheckboxes.forEach(checkbox => {
-        checkbox.removeEventListener("change", handleOtherCheckboxes);
-      });
-    };
-  }, []);
-
+  const booleanValue = useSelector((state: RootState) => state.boolean.value);
   const { language: currentLanguage, loading } = useSelector(
-    (state: RootState) => state.language,
+    (state: RootState) => state.language
   );
 
-  if (loading)
+  const { data: semestersData, isLoading: semestersLoading } = useGetAllSemestersQuery(null);
+  const [selectedSemester, setSelectedSemester] = useState<number | null>(null);
+  const { data: coursesData, refetch: fetchCourses } = useGetAllTranscriptCoursesQuery(selectedSemester || skipToken);
+
+  console.log(selectedSemester);
+  
+
+  const handleSemesterChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    const semesterId = Number(event.target.value);
+    setSelectedSemester(semesterId);
+  };
+
+  if (loading || semestersLoading)
     return (
       <div className="flex h-screen w-full items-center justify-center">
         <Spinner />
@@ -100,148 +66,173 @@ const Transcript = () => {
               ? "lg:mr-[100px]"
               : "lg:mr-[270px]"
             : booleanValue
+            ? "lg:ml-[100px]"
+            : "lg:ml-[270px]"
+        } justify-left mb-4 ml-4 mt-5 flex gap-5 text-[20px] font-medium`}
+      >
+        <Link
+          href="/document-management/transcript"
+          className="text-blue-500 underline"
+        >
+          {currentLanguage === "ar"
+            ? "قائمة الدورات"
+            : currentLanguage === "fr"
+            ? "Liste des cours"
+            : "Course List"}
+        </Link>
+        <Link href="/document-management/transcript/points">
+          {currentLanguage === "ar"
+            ? "قائمة النقاط"
+            : currentLanguage === "fr"
+            ? "Liste des points"
+            : "List Of Points"}
+        </Link>
+      </div>
+      <div dir={currentLanguage === "ar" ? "rtl" : "ltr"}
+        className={`${
+          currentLanguage === "ar"
+            ? booleanValue
+              ? "lg:mr-[100px]"
+              : "lg:mr-[270px]"
+            : booleanValue
+            ? "lg:ml-[100px]"
+            : "lg:ml-[270px]"
+        } justify-left mb-4 ml-4 mt-5 flex gap-5 text-[20px] font-medium`}>
+        <select
+          id="semester-select"
+          className="h-full w-[400px] rounded-xl border bg-bgPrimary px-4 py-3 text-[18px] text-textSecondary outline-none max-[458px]:w-[350px]"
+          value={selectedSemester || ""}
+          onChange={handleSemesterChange}
+        >
+          <option value="" disabled>
+            {currentLanguage === "ar"
+              ? "اختر فصلًا"
+              : currentLanguage === "fr"
+              ? "Choisissez un semestre"
+              : "Choose a Semester"}
+          </option>
+          {semestersData?.data?.content.map((semester: any) => (
+            <option key={semester.id} value={semester.id}>
+              {semester.name}
+            </option>
+          ))}
+        </select>
+      </div>
+      {selectedSemester && coursesData && (
+        <div
+          dir={currentLanguage === "ar" ? "rtl" : "ltr"}
+          className={`${
+            currentLanguage === "ar"
+              ? booleanValue
+                ? "lg:mr-[100px]"
+                : "lg:mr-[270px]"
+              : booleanValue
               ? "lg:ml-[100px]"
               : "lg:ml-[270px]"
-        } relative mx-3 mt-10 h-screen overflow-x-auto bg-transparent sm:rounded-lg`}
-      >
-        <table className="w-full overflow-x-auto text-left text-sm text-gray-500 rtl:text-right">
-          <thead className="bg-thead text-xs uppercase text-textPrimary">
-            <tr>
-              <th scope="col" className="p-4">
-                <div className="flex items-center">
-                  {/* Add event listener for select all checkbox */}
-                  <input
-                    id="checkbox-all-search"
-                    type="checkbox"
-                    className="-gray-800 h-4 w-4 rounded border-gray-300 bg-gray-100 text-blue-600 focus:ring-2 focus:ring-blue-500"
-                    onChange={handleSelectAll}
-                  />
-                </div>
-              </th>
-              <th scope="col" className="whitespace-nowrap px-6 py-3">
-                {currentLanguage === "ar"
-                  ? "الاسم"
-                  : currentLanguage === "fr"
-                    ? "Nom"
-                    : "Name"}
-              </th>
-              <th scope="col" className="whitespace-nowrap px-6 py-3">
-                {currentLanguage === "ar"
-                  ? "الرقم التعريفي"
-                  : currentLanguage === "fr"
-                    ? "ID"
-                    : "ID"}
-              </th>
-
-              <th scope="col" className="whitespace-nowrap px-6 py-3">
-                {currentLanguage === "ar"
-                  ? "الجنس"
-                  : currentLanguage === "fr"
-                    ? "Genre"
-                    : "Gender"}
-              </th>
-              <th scope="col" className="whitespace-nowrap px-6 py-3">
-                {currentLanguage === "ar"
-                  ? "العمر"
-                  : currentLanguage === "fr"
-                    ? "Âge"
-                    : "Age"}
-              </th>
-              <th scope="col" className="whitespace-nowrap px-6 py-3">
-                {currentLanguage === "ar"
-                  ? "إجمالي الدورات"
-                  : currentLanguage === "fr"
-                    ? "Nombre total de cours"
-                    : "Total Courses"}
-              </th>
-              <th scope="col" className="whitespace-nowrap px-6 py-3">
-                {currentLanguage === "ar"
-                  ? "المرحلة التعليمية"
-                  : currentLanguage === "fr"
-                    ? "Niveau d'éducation"
-                    : "Educational Stage"}
-              </th>
-              <th scope="col" className="whitespace-nowrap px-6 py-3">
-                {currentLanguage === "ar"
-                  ? "تعديل"
-                  : currentLanguage === "fr"
-                    ? "Modifier"
-                    : "Edit"}
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr className="border-b border-borderPrimary bg-bgPrimary hover:bg-bgSecondary">
-              <td className="w-4 p-4">
-                <div className="flex items-center">
-                  <input
-                    id="checkbox-table-search-1"
-                    type="checkbox"
-                    className="h-4 w-4 rounded border-gray-300 bg-gray-100 text-blue-600 focus:ring-2 focus:ring-blue-500"
-                  />
-                </div>
-              </td>
-              <th
-                scope="row"
-                className="flex items-center whitespace-nowrap px-6 py-4 font-medium text-textSecondary"
-              >
-                Nahda
-              </th>
-              <td className="whitespace-nowrap px-6 py-4">1321312</td>
-              <td className="whitespace-nowrap px-6 py-4">Male</td>
-              <td className="whitespace-nowrap px-6 py-4">5515151</td>
-              <td className="whitespace-nowrap px-6 py-4">002050030</td>
-              <td className="whitespace-nowrap px-6 py-4">This is text</td>
-              <td className="whitespace-nowrap px-6 py-4">
-                <Link
-                  href="/edit-enrolment"
-                  className="font-medium text-blue-600 hover:underline"
-                >
+          } relative mx-3 mt-10 h-screen overflow-x-auto bg-transparent sm:rounded-lg`}
+        >
+          <table className="w-full overflow-x-auto text-left text-sm text-gray-500 rtl:text-right">
+            <thead className="bg-thead text-xs uppercase text-textPrimary">
+              <tr>
+                <th scope="col" className="whitespace-nowrap px-6 py-3">
                   {currentLanguage === "ar"
-                    ? "تعديل"
+                    ? "اسم الدورة"
                     : currentLanguage === "fr"
-                      ? "Modifier"
-                      : "Edit"}
-                </Link>
-              </td>
-            </tr>
-            <tr className="border-b border-borderPrimary bg-bgPrimary hover:bg-bgSecondary">
-              <td className="w-4 p-4">
-                <div className="flex items-center">
-                  <input
-                    id="checkbox-table-search-1"
-                    type="checkbox"
-                    className="h-4 w-4 rounded border-gray-300 bg-gray-100 text-blue-600 focus:ring-2 focus:ring-blue-500"
-                  />
-                </div>
-              </td>
-              <th
-                scope="row"
-                className="flex items-center whitespace-nowrap px-6 py-4 font-medium text-textSecondary"
-              >
-                Nahda
-              </th>
-              <td className="whitespace-nowrap px-6 py-4">1321312</td>
-              <td className="whitespace-nowrap px-6 py-4">Male</td>
-              <td className="whitespace-nowrap px-6 py-4">5513131s</td>
-              <td className="whitespace-nowrap px-6 py-4">00515</td>
-              <td className="whitespace-nowrap px-6 py-4">This is text</td>
-              <td className="whitespace-nowrap px-6 py-4">
-                <Link
-                  href="/edit-book"
-                  className="font-medium text-blue-600 hover:underline"
-                >
+                    ? "Nom du cours"
+                    : "Course Name"}
+                </th>
+                <th scope="col" className="whitespace-nowrap px-6 py-3">
                   {currentLanguage === "ar"
-                    ? "تعديل"
+                    ? "الكود"
                     : currentLanguage === "fr"
-                      ? "Modifier"
-                      : "Edit"}
-                </Link>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+                    ? "Code"
+                    : "Code"}
+                </th>
+                <th scope="col" className="whitespace-nowrap px-6 py-3">
+                  {currentLanguage === "ar"
+                    ? "مستوى"
+                    : currentLanguage === "fr"
+                    ? "niveau"
+                    : "level"}
+                </th>
+                <th scope="col" className="whitespace-nowrap px-6 py-3">
+                  {currentLanguage === "ar"
+                    ? "لغة"
+                    : currentLanguage === "fr"
+                    ? "langue"
+                    : "language"}
+                </th>
+                <th scope="col" className="whitespace-nowrap px-6 py-3">
+                  {currentLanguage === "ar"
+                    ? "اسم النظام التعليمي"
+                    : currentLanguage === "fr"
+                    ? "Nom du système éducatif"
+                    : "System Name"}
+                </th>
+                <th scope="col" className="whitespace-nowrap px-6 py-3">
+                  {currentLanguage === "ar"
+                    ? "قسم المدرسة الثانوية"
+                    : currentLanguage === "fr"
+                    ? "écoles secondaires"
+                    : "secondary School"}
+                </th>
+                <th scope="col" className="whitespace-nowrap px-6 py-3">
+                  {currentLanguage === "ar"
+                    ? "القسم الفرعي"
+                    : currentLanguage === "fr"
+                    ? "sous-département"
+                    : "sub Department "}
+                </th>
+                <th scope="col" className="whitespace-nowrap px-6 py-3">
+                  {currentLanguage === "ar"
+                    ? "عرض"
+                    : currentLanguage === "fr"
+                      ? "Voir"
+                      : "View"}
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              {coursesData.data.map((course: any, index: number) => (
+                <tr
+                  key={course.courseSemesterRegistrationId}
+                  className="border-b border-borderPrimary bg-bgPrimary hover:bg-bgSecondary"
+                >
+                  <td className="whitespace-nowrap px-6 py-4">
+                    {course.courseResponse.name}
+                  </td>
+                  <td className="whitespace-nowrap px-6 py-4">
+                    {course.courseResponse.code}
+                  </td>
+                  <td className="whitespace-nowrap px-6 py-4">
+                    {course.courseResponse.level}
+                  </td>
+                  <td className="whitespace-nowrap px-6 py-4">
+                    {course.courseResponse.language}
+                  </td>
+                  <td className="whitespace-nowrap px-6 py-4">
+                    {course.courseResponse.eduSystemName}
+                  </td>
+                  <td className="whitespace-nowrap px-6 py-4">
+                    {course.courseResponse.secondarySchoolDepartment}
+                  </td>
+                  <td className="whitespace-nowrap px-6 py-4">
+                    {course.courseResponse.subDepartment}
+                  </td>
+                  <td className="whitespace-nowrap px-6 py-4">
+                      <Link
+                        href={`/document-management/transcript/${course.courseSemesterRegistrationId}`}
+                        className="font-medium text-blue-600 hover:underline"
+                      >
+                        View
+                      </Link>
+                    </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
     </>
   );
 };

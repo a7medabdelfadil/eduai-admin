@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import Spinner from "@/components/spinner";
 import { useCreateParentsMutation } from "@/features/User-Management/parentApi";
@@ -14,8 +14,10 @@ import { useSelector } from "react-redux";
 import BreadCrumbs from "@/components/BreadCrumbs";
 import SearchableSelect from "@/components/select";
 import PhoneNumberInput from "@/components/PhoneNumberInput";
+import { useRouter } from "next/navigation";
 
 const AddNewParent = () => {
+  const [backendError, setBackendError] = useState<string | null>(null);
   const breadcrumbs = [
     {
       nameEn: "Administration",
@@ -67,9 +69,11 @@ const AddNewParent = () => {
         label: `${rigion.regionName} - ${rigion.cityName}`,
       }),
     ) || [];
+    const router = useRouter();
+
   const { data: countryCode, isLoading: isCountryCode } =
     useGetAllCountryCodeQuery(null);
-
+    const passwordPattern = "^(?=.*[A-Z])(?=.*[~@#$^*()_+\\[\\]{}|\\\\,.?:'\"/;`%-])(?=.*[0-9])(?=.*[a-z]).{8,32}$";
   const onSubmit = async (data: any) => {
     const requestBody = {
       username: data.username,
@@ -95,8 +99,14 @@ const AddNewParent = () => {
     try {
       await createEmployee(requestBody).unwrap();
       toast.success("Parent created successfully");
-    } catch {
-      toast.error("Failed to create parent");
+      router.push("/parent");
+    } catch (error: any) {
+      if (error.data && error.data.data && error.data.data.length > 0) {
+        setBackendError(error.data.data[0]);
+      } else {
+        setBackendError("Failed to create parent");
+      }
+      toast.error(error.data.message);
     }
   };
 
@@ -129,6 +139,11 @@ const AddNewParent = () => {
       >
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="my-10 grid items-center justify-center gap-5 rounded-xl bg-bgPrimary p-10 sm:w-[500px] md:w-[600px] lg:w-[750px] xl:w-[1000px]">
+          {backendError && (
+              <div className="text-error text-center">
+                {backendError}
+              </div>
+            )}
             <div className="flex items-center justify-start gap-2">
               <svg
                 className="h-6 w-6 font-bold text-secondary group-hover:text-hover"
@@ -222,34 +237,49 @@ const AddNewParent = () => {
                 )}
               </label>
               <label
-                htmlFor="password"
-                className="grid font-sans text-[18px] font-semibold"
-              >
-                {currentLanguage === "en"
-                  ? "Password"
-                  : currentLanguage === "ar"
-                    ? "كلمة المرور"
-                    : currentLanguage === "fr"
-                      ? "Mot de passe"
-                      : "Password"}
-                <input
-                  id="password"
-                  type="password"
-                  className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
-                  {...register("password", { required: true })}
-                />
-                {errors.password && (
-                  <span className="text-error">
-                    {currentLanguage === "en"
-                      ? "This field is required"
-                      : currentLanguage === "ar"
-                        ? "هذا الحقل مطلوب"
-                        : currentLanguage === "fr"
-                          ? "Ce champ est requis"
-                          : "This field is required"}
-                  </span>
-                )}
-              </label>
+      htmlFor="password"
+      className="grid font-sans text-[18px] font-semibold"
+    >
+      {currentLanguage === "en"
+        ? "Password"
+        : currentLanguage === "ar"
+          ? "كلمة المرور"
+          : currentLanguage === "fr"
+            ? "Mot de passe"
+            : "Password"}
+      <input
+        id="password"
+        type="password"
+        className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+        {...register("password", {
+          required: {
+            value: true,
+            message: currentLanguage === "en"
+              ? "This field is required"
+              : currentLanguage === "ar"
+                ? "هذا الحقل مطلوب"
+                : currentLanguage === "fr"
+                  ? "Ce champ est requis" 
+                  : "This field is required"
+          },
+          pattern: {
+            value: new RegExp(passwordPattern),
+            message: currentLanguage === "en"
+              ? "Password must contain at least 8 characters, one uppercase letter, one lowercase letter, one number and one special character"
+              : currentLanguage === "ar"
+                ? "يجب أن تحتوي كلمة المرور على 8 أحرف على الأقل، حرف كبير، حرف صغير، رقم وحرف خاص"
+                : currentLanguage === "fr"
+                  ? "Le mot de passe doit contenir au moins 8 caractères, une majuscule, une minuscule, un chiffre et un caractère spécial"
+                  : "Password must contain at least 8 characters, one uppercase letter, one lowercase letter, one number and one special character"
+          }
+        })}
+      />
+      {errors.password && (
+        <span className="text-error">
+          {errors.password?.message?.toString()}
+        </span>
+      )}
+    </label>
               <label
                 htmlFor="nid"
                 className="grid font-sans text-[18px] font-semibold"

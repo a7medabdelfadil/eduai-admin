@@ -11,6 +11,7 @@ import BreadCrumbs from "@/components/BreadCrumbs";
 import { useState } from "react";
 import { FaCloudUploadAlt } from "react-icons/fa";
 import { useGetAllStudentsQuery } from "@/features/User-Management/studentApi";
+import { useRouter } from "next/navigation";
 
 const AddNewCertificate = () => {
   const breadcrumbs = [
@@ -46,14 +47,16 @@ const AddNewCertificate = () => {
     handleSubmit,
     formState: { errors },
   } = useForm();
+  const router = useRouter();
   const [createCertificate, { isLoading }] = useCreateCertificatesMutation();
   const [fileName, setFileName] = useState("");
   const { data: students, isLoading: isStudentsLoading } =
-    useGetAllStudentsQuery({
-      archived: "false",
-      page: 0,
-      size: 1000000,
-    });
+  useGetAllStudentsQuery({
+    archived: "false",
+    page: 0,
+    size: 1000000,
+    graduated: "false"
+  });
   const handleFileChange = (event: any) => {
     const file = event.target.files[0];
     if (file) {
@@ -75,6 +78,7 @@ const AddNewCertificate = () => {
     try {
       await createCertificate(data).unwrap();
       toast.success("Certificate created successfully");
+      router.push("/document-management/certificate/");
     } catch (err) {
       toast.error("Failed to create Certificate");
     }
@@ -150,7 +154,7 @@ const AddNewCertificate = () => {
                 <select
                   id="studentId"
                   {...register("studentId")}
-                  className="h-full w-[400px] rounded-xl border px-4 py-3 text-[18px] text-black outline-none max-[458px]:w-[350px]"
+                  className="h-full w-[400px] rounded-xl border px-4 py-3 text-[18px] outline-none max-[458px]:w-[350px]"
                 >
                   <option value="">
                     {currentLanguage === "en"

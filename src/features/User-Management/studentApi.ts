@@ -28,8 +28,14 @@ export const studentApi = createApi({
   }),
   endpoints: builder => ({
     getAllStudents: builder.query({
-      query: ({ archived, page, size }) =>
-        `/api/v1/management/student/all?size=${size}&page=${page}&archived=${archived}`,
+      query: ({ archived, page, size, graduated, gender = "", classRoom = "" }) =>
+        `/api/v1/management/student/all?size=${size}&page=${page}&archived=${archived}&graduated=${graduated}&genders=${gender}&classroom-names=${classRoom}`,
+    }),
+    //
+    exportStudentsFile: builder.query({
+      query: ({ archived, page, size, graduated }) =>
+        `/api/v1/export/student/excel?size=${size}&page=${page}&archived=${archived}&graduated=${graduated}`,
+      transformResponse: (response: any) => response.blob(),
     }),
     //
     deleteStudents: builder.mutation({
@@ -50,6 +56,11 @@ export const studentApi = createApi({
     getStudentById: builder.query({
       query: id => `/api/v1/management/student/${id}`,
     }),
+    //
+    getStudentExams: builder.query({
+      query: ({id, date}) => `/api/v1/student-study/schedule-at-date-for-admin-to-student?date=${date}&studentId=${id}`,
+    }),
+    //
     getStudentUpdateById: builder.query({
       query: id => `/api/v1/management/student/${id}/update`,
     }),
@@ -74,6 +85,8 @@ export const studentApi = createApi({
 
 export const {
   useGetAllStudentsQuery,
+  useGetStudentExamsQuery,
+  useLazyExportStudentsFileQuery,
   useGetStudentByIdUpdateQuery,
   useDeleteStudentsMutation,
   useCreateStudentsMutation,

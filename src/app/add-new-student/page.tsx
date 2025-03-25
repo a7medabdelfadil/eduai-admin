@@ -4,6 +4,7 @@ import { useForm } from "react-hook-form";
 import Spinner from "@/components/spinner";
 import { useCreateStudentsMutation, useGetAllEducationsQuery } from "@/features/User-Management/studentApi";
 import { useGetAllParentsQuery } from "@/features/User-Management/parentApi";
+import { useRouter } from "next/navigation";
 import {
   useGetAllCountryCodeQuery,
   useGetAllLanguagesQuery,
@@ -21,6 +22,7 @@ import PhoneNumberInput from "@/components/PhoneNumberInput";
 import SearchableSelect from "@/components/select";
 
 const AddNewStudent = () => {
+  const [backendError, setBackendError] = useState<string | null>(null);
   const breadcrumbs = [
     {
       nameEn: "Administration",
@@ -54,7 +56,7 @@ const AddNewStudent = () => {
   const [studentProfilePhoto, setStudentProfilePhoto] = useState("");
   const [studentIdPhoto, setStudentIdPhoto] = useState("");
   const [fileName, setFileName] = useState("");
-
+  const router = useRouter();
   const handleFileChange = (
     event: any,
     setFileName: (name: string) => void,
@@ -84,11 +86,22 @@ const AddNewStudent = () => {
         label: `${rigion.regionName} - ${rigion.cityName}`,
       }),
     ) || [];
-  const { data: parentData, isLoading: parentLoading } = useGetAllParentsQuery({
-    archived: "false",
-    page: 0,
-    size: 1000000,
-  });
+    
+    const { data: parentData, isLoading: parentLoading } = useGetAllParentsQuery({
+      archived: "false",
+      page: 0,
+      size: 1000000,
+    });
+    const parentOptions =
+      parentData?.data.content?.map(
+        (parent: {
+          id: any;
+          name: any;
+        }) => ({
+          value: parent.id,
+          label: `${parent.name}`,
+        }),
+      ) || [];
   const { data: countryCode, isLoading: isCountryCode } =
     useGetAllCountryCodeQuery(null);
   const { data: LevelData, isLoading: LevelLoading } =
@@ -115,6 +128,7 @@ const AddNewStudent = () => {
         nid: data.nid,
         gender: data.gender,
         religion: "OTHERS",
+        graduated: false,
         nationality: data.nationality,
         regionId: data.regionId,
         name_en: data.name_en,
@@ -148,8 +162,14 @@ const AddNewStudent = () => {
     try {
       await createStudent(formData).unwrap();
       toast.success("Student created successfully");
-    } catch {
-      toast.error("Failed to create student");
+      router.push("/student");
+    } catch (error: any) {
+      if (error.data && error.data.data && error.data.data.length > 0) {
+        setBackendError(error.data.data[0]);
+      } else {
+        setBackendError("Failed to create parent");
+      }
+      toast.error(error.data.message);
     }
   };
 
@@ -188,6 +208,11 @@ const AddNewStudent = () => {
       >
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="my-10 grid items-center justify-center gap-5 rounded-xl bg-bgPrimary p-10 sm:w-[500px] md:w-[600px] lg:w-[750px] xl:w-[1000px]">
+          {backendError && (
+              <div className="text-error text-center">
+                {backendError}
+              </div>
+            )}
             <div className="grid grid-cols-2 gap-4 max-[1278px]:grid-cols-1">
               {/* Parent ID dropdown */}
               <label
@@ -199,25 +224,14 @@ const AddNewStudent = () => {
                   : currentLanguage === "ar"
                     ? "الوالد"
                     : "Parent"}
-                <select
-                  id="parentId"
-                  className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
-                  {...register("parentId", { required: true })}
-                >
-                  <option value="">
-                    {currentLanguage === "en"
-                      ? "Select Parent"
-                      : currentLanguage === "ar"
-                        ? "اختر الوالد"
-                        : "Sélectionner un parent"}
-                  </option>
-                  {parentData &&
-                    parentData?.data.content?.map((parent: any) => (
-                      <option key={parent.id} value={parent.id}>
-                        {parent.name}
-                      </option>
-                    ))}
-                </select>
+                <SearchableSelect
+                  name="parentId"
+                  control={control}
+                  errors={errors}
+                  options={parentOptions}
+                  currentLanguage={currentLanguage}
+                  placeholder="Select Parent"
+                />
                 {errors.parentId && (
                   <span className="text-error">
                     {currentLanguage === "en"
@@ -723,11 +737,11 @@ const AddNewStudent = () => {
                 <input
                   id="studentIdPhoto"
                   type="file"
-                  className="cursor-pointer opacity-0"
-                  {...register("studentIdPhoto")}
+                  className={`cursor-pointer opacity-0`}
+                  {...register("studentIdPhoto", { required: true })}
                   onChange={e => handleFileChange(e, setStudentIdPhoto)}
                 />
-                <span className="-mt-8 w-[400px] cursor-pointer overflow-hidden text-ellipsis whitespace-nowrap rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]">
+                <span className={`-mt-8 w-[400px] cursor-pointer overflow-hidden text-ellipsis whitespace-nowrap rounded-xl border  ${errors.studentIdPhoto ? "border-warning" : "border-borderPrimary"} px-4 py-3 outline-none max-[471px]:w-[350px]`}>
                   <div className="flex">
                     <FaCloudUploadAlt className="mx-2 mt-1" />
                     {studentIdPhoto
@@ -741,6 +755,17 @@ const AddNewStudent = () => {
                             : "Choose a file"}
                   </div>
                 </span>
+                {errors.studentIdPhoto && (
+                  <span className="text-[13px] text-error">
+                    {currentLanguage === "en"
+                        ? "Choose a file"
+                        : currentLanguage === "ar"
+                          ? "اختر ملف"
+                          : currentLanguage === "fr"
+                            ? "Choisir un fichier"
+                            : "Choose a file"}
+                  </span>
+                )}
               </label>
 
               {/* Student Profile Photo */}
@@ -759,10 +784,10 @@ const AddNewStudent = () => {
                   id="studentProfilePhoto"
                   type="file"
                   className="cursor-pointer opacity-0"
-                  {...register("studentProfilePhoto")}
+                  {...register("studentProfilePhoto", { required: true })}
                   onChange={e => handleFileChange(e, setStudentProfilePhoto)}
                 />
-                <span className="-mt-8 w-[400px] cursor-pointer overflow-hidden text-ellipsis whitespace-nowrap rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]">
+                <span className={`-mt-8 w-[400px] cursor-pointer overflow-hidden text-ellipsis whitespace-nowrap rounded-xl border  ${errors.studentProfilePhoto ? "border-warning" : "border-borderPrimary"} px-4 py-3 outline-none max-[471px]:w-[350px]`}>
                   <div className="flex">
                     <FaCloudUploadAlt className="mx-2 mt-1" />
                     {studentProfilePhoto
@@ -776,6 +801,17 @@ const AddNewStudent = () => {
                             : "Choose a file"}
                   </div>
                 </span>
+                {errors.studentProfilePhoto && (
+                  <span className="text-[13px] text-error">
+                    {currentLanguage === "en"
+                        ? "Choose a file"
+                        : currentLanguage === "ar"
+                          ? "اختر ملف"
+                          : currentLanguage === "fr"
+                            ? "Choisir un fichier"
+                            : "Choose a file"}
+                  </span>
+                )}
               </label>
               <label
                 htmlFor="studentCertificatesOfAchievement"
@@ -792,12 +828,12 @@ const AddNewStudent = () => {
                   id="studentCertificatesOfAchievement"
                   type="file"
                   className="cursor-pointer opacity-0"
-                  {...register("studentCertificatesOfAchievement")}
+                  {...register("studentCertificatesOfAchievement", { required: true })}
                   onChange={e =>
                     handleFileChange(e, setStudentCertificatesOfAchievement)
                   }
                 />
-                <span className="-mt-8 w-[400px] cursor-pointer overflow-hidden text-ellipsis whitespace-nowrap rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]">
+                <span className={`-mt-8 w-[400px] cursor-pointer overflow-hidden text-ellipsis whitespace-nowrap rounded-xl border  ${errors.studentCertificatesOfAchievement ? "border-warning" : "border-borderPrimary"} px-4 py-3 outline-none max-[471px]:w-[350px]`}>
                   <div className="flex">
                     <FaCloudUploadAlt className="mx-2 mt-1" />
                     {studentCertificatesOfAchievement
@@ -811,6 +847,17 @@ const AddNewStudent = () => {
                             : "Choose a file"}
                   </div>
                 </span>
+                {errors.studentCertificatesOfAchievement && (
+                  <span className="text-[13px] text-error">
+                    {currentLanguage === "en"
+                        ? "Choose a file"
+                        : currentLanguage === "ar"
+                          ? "اختر ملف"
+                          : currentLanguage === "fr"
+                            ? "Choisir un fichier"
+                            : "Choose a file"}
+                  </span>
+                )}
               </label>
             </div>
 

@@ -28,7 +28,7 @@ export const eventsApi = createApi({
   }),
   endpoints: builder => ({
     getAllEvents: builder.query({
-      query: () => "/api/v1/event/all?size=10&page=0&getActive=1",
+      query: () => "/api/v1/event/all?size=1000000&page=0&getActive=1",
     }),
     //
     getSchoolLogo: builder.query({
@@ -55,6 +55,46 @@ export const eventsApi = createApi({
       }),
     }),
     //
+    uploadEvent: builder.mutation({
+      query: formData => ({
+        url: `/api/v1/upload-data/timetable/excel`,
+        method: "POST",
+        body: formData,
+      }),
+    }),
+    //
+    uploadEmployee: builder.mutation({
+      query: formData => ({
+        url: `/api/v1/upload-data/employees/excel`,
+        method: "POST",
+        body: formData,
+      }),
+    }),
+    //
+    uploadTeacher: builder.mutation({
+      query: formData => ({
+        url: `/api/v1/upload-data/teachers/excel`,
+        method: "POST",
+        body: formData,
+      }),
+    }),
+    //
+    uploadParent: builder.mutation({
+      query: formData => ({
+        url: `/api/v1/upload-data/parents/excel`,
+        method: "POST",
+        body: formData,
+      }),
+    }),
+    //
+    uploadClassrooms: builder.mutation({
+      query: formData => ({
+        url: `/api/v1/upload-data/classrooms/excel`,
+        method: "POST",
+        body: formData,
+      }),
+    }),
+    //
     getEventById: builder.query({
       query: id => `/api/v1/event/${id}`,
     }),
@@ -74,6 +114,11 @@ export const {
   useGetAllEventsDashboardQuery,
   useDeleteEventsMutation,
   useGetSchoolLogoQuery,
+  useUploadEventMutation,
+  useUploadEmployeeMutation,
+  useUploadTeacherMutation,
+  useUploadClassroomsMutation,
+  useUploadParentMutation,
   useCreateEventsMutation,
   useGetEventByIdQuery,
   useUpdateEventsMutation,

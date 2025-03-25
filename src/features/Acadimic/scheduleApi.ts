@@ -27,9 +27,24 @@ export const scheduleApi = createApi({
     },
   }),
   endpoints: builder => ({
+    averageGradesAtSchool: builder.query({
+      query: () =>
+        `/api/v1/daily-exam/grade/average-grades-at-school?period=SEMESTER`,
+    }),
+    //
+    averageAttendance: builder.query({
+      query: () =>
+        `/api/v1/aiInsights/average-attendance-at-school`,
+    }),
+    //
+    topStudentsInClass: builder.query({
+      query: ({classRoom}) =>
+        `/api/v1/ai-insights/top-student-in-classroom?classroom-id=${classRoom}`,
+    }),
+    //
     getAllTeacherSchedule: builder.query({
       query: teacherId =>
-        `/api/v1/schedule/teacher?size=&page=&teacherId=${teacherId}&getActive=1`,
+        `/api/v1/schedule/teacher?size=1000000&page=0&teacherId=${teacherId}&getActive=1`,
     }),
     //
     getAllClassSchedule: builder.query({
@@ -71,6 +86,9 @@ export const scheduleApi = createApi({
 });
 
 export const {
+  useAverageGradesAtSchoolQuery,
+  useAverageAttendanceQuery,
+  useTopStudentsInClassQuery,
   useGetAllTeacherScheduleQuery,
   useGetAllClassScheduleQuery,
   useGetSchedualByIdQuery,

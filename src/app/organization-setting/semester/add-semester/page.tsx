@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import Spinner from "@/components/spinner";
 import { useCreateSemestersMutation } from "@/features/Organization-Setteings/semesterApi";
@@ -8,8 +9,8 @@ import { toast } from "react-toastify";
 import { useSelector } from "react-redux";
 import { RootState } from "@/GlobalRedux/store";
 import BreadCrumbs from "@/components/BreadCrumbs";
-
 const AddSemester = () => {
+  const router = useRouter();
   const breadcrumbs = [
     {
       nameEn: "Administration",
@@ -49,6 +50,7 @@ const AddSemester = () => {
     try {
       await createSemester(data).unwrap();
       toast.success("Semester created successfully");
+      router.push("/organization-setting/semester");
     } catch (err) {
       toast.error("Failed to create Semester");
     }
@@ -69,15 +71,14 @@ const AddSemester = () => {
       <BreadCrumbs breadcrumbs={breadcrumbs} />
       <div
         dir={currentLanguage === "ar" ? "rtl" : "ltr"}
-        className={` ${
-          currentLanguage === "ar"
+        className={` ${currentLanguage === "ar"
             ? booleanValue
               ? "lg:mr-[100px]"
               : "lg:mr-[270px]"
             : booleanValue
               ? "lg:ml-[100px]"
               : "lg:ml-[270px]"
-        } mx-3 mt-[40px] grid h-[850px] items-center justify-center`}
+          } mx-3 mt-[40px] grid h-[850px] items-center justify-center`}
       >
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="grid h-[900px] items-center justify-center gap-5 rounded-xl bg-bgPrimary p-10 sm:w-[500px] md:w-[600px] lg:w-[750px] xl:h-[800px] xl:w-[1000px]">
@@ -114,21 +115,25 @@ const AddSemester = () => {
             </div>
             <div className="grid grid-cols-2 gap-4 max-[1278px]:grid-cols-1">
               <label
-                htmlFor="name"
+                htmlFor="season"
                 className="grid font-sans text-[18px] font-semibold"
               >
                 {currentLanguage === "ar"
-                  ? "الاسم"
+                  ? "الموسم"
                   : currentLanguage === "fr"
-                    ? "Nom"
-                    : "Name"}
-                <input
-                  id="name"
-                  type="text"
+                    ? "Saison"
+                    : "Season"}
+                <select
+                  id="season"
                   className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                   {...register("name", { required: true })}
-                />
-                {errors.name && (
+                >
+                  <option value="">Select season</option>
+                  <option value="WINTER">WINTER</option>
+                  <option value="SUMMER">SUMMER</option>
+                  <option value="FALL">FALL</option>
+                </select>
+                {errors.season && (
                   <span className="text-error">
                     {currentLanguage === "ar"
                       ? "هذا الحقل مطلوب"
