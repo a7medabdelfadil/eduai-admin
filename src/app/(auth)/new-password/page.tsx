@@ -14,12 +14,21 @@ import {
   initializeLanguage,
   setLanguage,
 } from "@/features/language/languageSlice";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 const ResetPassword = () => {
   const { language: currentLanguage, loading } = useSelector(
     (state: RootState) => state.language,
   );
+
+  const [theme, setTheme] = useState("light");
+  
+    useEffect(() => {
+      if (typeof window !== "undefined") {
+        const storedTheme = localStorage.getItem("theme") || "light";
+        setTheme(storedTheme);
+      }
+    }, []);
 
   const dispatchLang = useDispatch();
   useEffect(() => {
@@ -63,14 +72,15 @@ const ResetPassword = () => {
 
   if (loading) {
     return (
-      <div className="grid h-screen grid-cols-2 items-center justify-center bg-bgSecondary duration-300 ease-in max-[1040px]:grid-cols-1">
+      <div className="flex h-screen w-full items-center justify-center bg-bgSecondary duration-300 ease-in">
         <Spinner />
       </div>
     );
   }
+
   return (
     <>
-      <div className="absolute right-5 top-5">
+      <div className="absolute right-5 top-5 z-30">
         <DropdownMenu.Root>
           <DropdownMenu.Trigger asChild>
             <button
@@ -139,8 +149,8 @@ const ResetPassword = () => {
           </DropdownMenu.Portal>
         </DropdownMenu.Root>
       </div>
-      <div className="grid h-screen grid-cols-2 items-center justify-center bg-bgSecondary duration-300 ease-in max-[1040px]:grid-cols-1">
-        <div className="gird items-center justify-center text-center">
+      <div className="relative h-screen flex items-center justify-center overflow-hidden bg-bgSecondary duration-300 ease-in">
+        <div className="z-20 gird w-full items-center justify-center text-center">
           <div className="mb-10 grid">
             <h1 className="font-sans text-[28px] font-bold text-primary">
               {currentLanguage === "ar"
@@ -214,11 +224,21 @@ const ResetPassword = () => {
             </form>
           </div>
         </div>
-        <div className="flex h-full w-full justify-end">
-          <div className="flex h-full w-[600px] items-center justify-end bg-[#2a3469] max-[1040px]:hidden">
+        <div
+          className={`absolute -bottom-40 ${currentLanguage === "ar" ? "right-0 scale-x-[-1]" : "left-0"} z-10 hidden h-[600px] w-[600px] lg:block`}
+        >
+          <img
+            src={theme === "light" ? "/images/bottomleft-login.png" : "/images/bottomleft-login-dark.png"}
+            // src="/images/bottomleft-login.png"
+            alt="Logo"
+            className="m-0 w-full p-0"
+          />
+        </div>
+        <div className="flex h-full justify-end">
+          <div className="h-full w-[250px] lg:w-[600px] items-center justify-end bg-[#B2BDF9] dark:bg-[#2a3469] hidden md:flex">
             <img
-              className="h-[300px] w-[500px] -translate-x-[260px]"
-              src="images/forget.png"
+              className="md:h-[250px] lg:h-[400px] md:-translate-x-[40px] lg:-translate-x-[140px] xl:-translate-x-[260px]"
+              src="images/newpassword.png"
               alt="#"
             />
           </div>

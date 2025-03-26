@@ -24,6 +24,7 @@ import {
   initializeLanguage,
   setLanguage,
 } from "@/features/language/languageSlice";
+import { Text } from "@/components/Text";
 
 // Define the validation schema using Zod
 const signupSchema = z.object({
@@ -70,6 +71,15 @@ const Signup = () => {
   const { language: currentLanguage, loading } = useSelector(
     (state: RootState) => state.language,
   );
+
+  const [theme, setTheme] = useState("light");
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const storedTheme = localStorage.getItem("theme") || "light";
+      setTheme(storedTheme);
+    }
+  }, []);
 
   const dispatchLang = useDispatch();
   useEffect(() => {
@@ -139,6 +149,15 @@ const Signup = () => {
     if (nationalityError) {
     }
   }, [nationalityData, nationalityError]);
+  const [pageHeight, setPageHeight] = useState(0);
+
+  useEffect(() => {
+    const updateHeight = () => setPageHeight(window.innerHeight);
+    updateHeight();
+
+    window.addEventListener("resize", updateHeight);
+    return () => window.removeEventListener("resize", updateHeight);
+  }, []);
 
   const onSubmit = async (data: any) => {
     const formData = { ...data, religion: "OTHERS" };
@@ -213,110 +232,158 @@ const Signup = () => {
     }
   }, [currentLanguage, errors]);
 
-  if (loading)
+  const steps = [
+    {
+      id: 1,
+      label:
+        currentLanguage === "ar"
+          ? "بيانات الحساب"
+          : currentLanguage === "fr"
+            ? "Identifiants utilisateur"
+            : "User Credentials",
+    },
+    {
+      id: 2,
+      label:
+        currentLanguage === "ar"
+          ? "معلومات شخصية"
+          : currentLanguage === "fr"
+            ? "Informations personnelles"
+            : "Personal Info",
+    },
+    {
+      id: 3,
+      label:
+        currentLanguage === "ar"
+          ? "معلومات العنوان"
+          : currentLanguage === "fr"
+            ? "Détails de l'adresse"
+            : "Address Details",
+    },
+    {
+      id: 4,
+      label:
+        currentLanguage === "ar"
+          ? "معلومات الوظيفة"
+          : currentLanguage === "fr"
+            ? "Infos professionnelles"
+            : "Professional Info",
+    },
+  ];
+
+  if (loading) {
     return (
-      <div className="grid h-screen grid-cols-2 items-center justify-center bg-bgSecondary duration-300 ease-in max-[1040px]:grid-cols-1">
+      <div className="flex h-screen w-full items-center justify-center bg-bgSecondary duration-300 ease-in">
         <Spinner />
       </div>
     );
+  }
 
   return (
     <>
-      <div className="absolute right-5 top-5">
-        <DropdownMenu.Root>
-          <DropdownMenu.Trigger asChild>
-            <button
-              className="text-violet11 hover:bg-violet3 inline-flex h-[35px] w-[35px] items-center justify-center rounded-full bg-bgPrimary outline-none"
-              aria-label="Customise options"
-            >
-              {currentLanguage === "en" ? (
-                <img src="/images/en.png" alt="#" />
-              ) : currentLanguage === "ar" ? (
-                <img src="/images/ar.png" alt="#" />
-              ) : currentLanguage === "fr" ? (
-                <img src="/images/fr.png" alt="#" />
-              ) : (
-                <img src="/images/fr.png" alt="#" />
-              )}
-            </button>
-          </DropdownMenu.Trigger>
-          <DropdownMenu.Portal>
-            <DropdownMenu.Content
-              className="data-[side=top]:animate-slideDownAndFade data-[side=right]:animate-slideLeftAndFade data-[side=bottom]:animate-slideUpAndFade data-[side=left]:animate-slideRightAndFade z-50 mx-2 mt-5 grid min-w-[150px] justify-center gap-5 rounded-md bg-bgPrimary p-[5px] font-semibold shadow-[0px_10px_38px_-10px_rgba(22,_23,_24,_0.35),_0px_10px_20px_-15px_rgba(22,_23,_24,_0.2)] will-change-[opacity,transform]"
-              sideOffset={5}
-            >
-              <DropdownMenu.Item className="text-violet11 data-[disabled]:text-mauve8 data-[highlighted]:bg-violet9 data-[highlighted]:text-violet1 group relative mt-2 flex h-[25px] select-none items-center rounded-[3px] px-[5px] text-[13px] leading-none outline-none data-[disabled]:pointer-events-none">
-                <button
-                  onClick={() => handleLanguageChange("ar")}
-                  className="rounded-lg px-4 py-2 text-[20px] hover:bg-bgSecondary"
-                >
-                  {currentLanguage === "en"
-                    ? "Arabic"
-                    : currentLanguage === "ar"
-                      ? "العربية"
-                      : currentLanguage === "fr"
-                        ? "Arabe"
-                        : "Arabic"}
-                </button>
-              </DropdownMenu.Item>
-              <DropdownMenu.Item className="text-violet11 data-[disabled]:text-mauve8 data-[highlighted]:bg-violet9 data-[highlighted]:text-violet1 group relative flex h-[25px] select-none items-center rounded-[3px] px-[5px] text-[13px] leading-none outline-none data-[disabled]:pointer-events-none">
-                <button
-                  onClick={() => handleLanguageChange("en")}
-                  className="rounded-lg px-4 py-2 text-[20px] hover:bg-bgSecondary"
-                >
-                  {currentLanguage === "en"
-                    ? "English"
-                    : currentLanguage === "ar"
-                      ? "الإنجليزية"
-                      : currentLanguage === "fr"
-                        ? "Anglais"
-                        : "English"}
-                </button>
-              </DropdownMenu.Item>
-              <DropdownMenu.Item className="text-violet11 data-[disabled]:text-mauve8 data-[highlighted]:bg-violet9 data-[highlighted]:text-violet1 group relative mb-2 flex h-[25px] select-none items-center rounded-[3px] px-[5px] text-[13px] leading-none outline-none data-[disabled]:pointer-events-none">
-                <button
-                  onClick={() => handleLanguageChange("fr")}
-                  className="rounded-lg px-4 py-2 text-[20px] hover:bg-bgSecondary"
-                >
-                  {currentLanguage === "en"
-                    ? "French"
-                    : currentLanguage === "ar"
-                      ? "الفرنسية"
-                      : currentLanguage === "fr"
-                        ? "Français"
-                        : "French"}
-                </button>
-              </DropdownMenu.Item>
-            </DropdownMenu.Content>
-          </DropdownMenu.Portal>
-        </DropdownMenu.Root>
-      </div>
-      <div className="grid h-screen grid-cols-2 items-center justify-center bg-bgSecondary pl-4 duration-300 ease-in max-[1040px]:grid-cols-1">
-        <div className="gird items-center justify-center text-center">
+      <div
+        dir={currentLanguage === "ar" ? "rtl" : "ltr"}
+        className="relative flex h-[100vh] w-full items-center justify-center overflow-hidden"
+      >
+        <div
+          className={`absolute ${currentLanguage === "ar" ? "-left-6 scale-x-[-1]" : "-right-6"} top-0 z-10 hidden w-[450px] lg:block xl:w-[600px]`}
+        >
+          <img
+            src={theme === "light" ? "/images/topright-signup.png" : "/images/topright-signup-dark.png"}
+            alt="Logo"
+            className="h-auto w-full object-contain"
+          />
+        </div>
+        <div
+          className={`absolute ${currentLanguage === "ar" ? "left-10 scale-x-[-1]" : "right-10"} z-10 hidden max-h-[80vh] max-w-[30vw] md:bottom-52 lg:bottom-80 lg:block xl:bottom-32 2xl:bottom-[175px]`}
+        >
+          <img
+            src="/images/dashboard-signup.png"
+            alt="Logo"
+            className="h-auto w-full object-contain"
+          />
+        </div>
+
+        {/* Background */}
+        <div className="absolute inset-0 flex">
+          <div className="w-full bg-bgPrimary"></div>
+        </div>
+        {/* Card */}
+        <div
+          style={{ height: `${pageHeight - 100}px` }}
+          className="relative my-0 w-full rounded-xl border-borderPrimary bg-transparent dark:border md:my-[40px] lg:shadow-2xl lg:w-[75%] xl:w-[80%]"
+        >
           <div className="mb-20">
             <img
-              className="absolute left-5 top-5 w-[300px]"
+              className={`absolute ${currentLanguage === "ar" ? "right-5" : "left-5"} left-5 top-5 w-[200px]`}
               src="images/logo.png"
-              alt="#"
+              alt="EduAi Logo"
             />
           </div>
-          <div className="mb-5 grid">
-            <h1 className="font-sans text-[28px] font-bold text-primary">
+
+          <div className="p-10">
+            <Text font={"bold"} size={"4xl"}>
               {currentLanguage === "ar"
-                ? "التسجيل"
+                ? "إنشاء حساب"
                 : currentLanguage === "fr"
-                  ? "S'inscrire"
-                  : "Sign Up"}
-            </h1>
-            <p className="font-sans text-[20px] font-semibold text-secondary">
+                  ? "Créer un compte"
+                  : "Sign up"}
+            </Text>
+            <Text font={"medium"} size={"xl"} color={"gray"} className="mt-2">
               {currentLanguage === "ar"
-                ? "سجل للاستمتاع بالتطبيق"
+                ? "أنشئ حسابًا للاستمتاع بالتطبيق"
                 : currentLanguage === "fr"
-                  ? "Inscrivez-vous pour profiter de l'application"
+                  ? "Créez un compte pour profiter de l'application"
                   : "Sign up to enjoy the application"}
-            </p>
+            </Text>
           </div>
-          <div className="grid items-center justify-center">
+          <div className="grid lg:grid-cols-[80px_1fr] grid-cols-1 md:grid-cols-[200px_1fr] justify-start gap-6 p-8">
+            <div className="flex flex-row md:flex-col items-start gap-8 md:gap-0 lg:items-center pr-4">
+              {steps.map((stepItem, idx) => (
+                <div key={stepItem.id} className="flex items-center gap-3">
+                  <div className="flex flex-col items-center">
+                    <div
+                      className={`flex h-12 w-12 items-center justify-center rounded-full border-2 text-sm font-semibold ${
+                        step > idx + 1
+                          ? "border-primary bg-primary text-white"
+                          : "border-borderPrimary bg-bgPrimary text-textSecondary"
+                      }`}
+                    >
+                      {step > idx + 1 ? (
+                        <svg
+                          className="h-6 w-6"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="3"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        >
+                          <polyline points="20 6 9 17 4 12" />
+                        </svg>
+                      ) : (
+                        stepItem.id
+                      )}
+                    </div>
+                    {idx < steps.length - 1 && (
+                      <div className="h-0 md:h-10 w-px bg-bgSecondary" />
+                    )}
+                  </div>
+                  <div className="-mt-12">
+                    <span
+                      className={`lg:absolute hidden md:block ${currentLanguage === "ar" ? "lg:-right-[90px] xl:-right-[120px]" : "lg:-left-[120px] xl:-left-[120px]"} text-xs lg:text-sm ${
+                        step >= idx + 1
+                          ? "font-bold text-primary"
+                          : "text-gray-500"
+                      }`}
+                    >
+                      {stepItem.label}
+                    </span>
+                  </div>
+                </div>
+              ))}
+            </div>
+
             <form
               dir={currentLanguage === "ar" ? "rtl" : "ltr"}
               className="grid gap-2"
@@ -440,9 +507,9 @@ const Signup = () => {
                   </label>
                   <div
                     dir="ltr"
-                    className="mt-12 flex w-full justify-end gap-3"
+                    className="z-30 mt-12 flex w-full justify-center gap-3"
                   >
-                    <p className="flex w-[120px] cursor-no-drop items-center justify-center gap-2 rounded-xl border border-[#e6e8e7] bg-white px-3 py-2 font-semibold text-primary">
+                    <button className="flex w-fit cursor-no-drop items-center justify-center gap-2 rounded-xl border border-borderPrimary bg-bgPrimary px-8 py-2 font-semibold text-primary">
                       <svg
                         className="h-5 w-5"
                         width="24"
@@ -463,9 +530,9 @@ const Signup = () => {
                         : currentLanguage === "fr"
                           ? "Précédent"
                           : "Previous"}
-                    </p>
+                    </button>
                     <button
-                      className="flex w-[120px] items-center justify-center gap-2 rounded-xl bg-primary px-3 py-2 font-semibold text-white duration-300 ease-in hover:bg-hover hover:shadow-xl"
+                      className="flex w-fit items-center justify-center gap-2 rounded-xl bg-primary px-10 py-2 font-semibold text-white duration-300 ease-in hover:bg-hover hover:shadow-xl"
                       onClick={handleNext}
                     >
                       {currentLanguage === "ar"
@@ -576,10 +643,10 @@ const Signup = () => {
                   </label>
                   <div
                     dir="ltr"
-                    className="mt-12 flex w-full justify-end gap-3"
+                    className="z-30 mt-12 flex w-full items-end justify-center gap-3"
                   >
                     <button
-                      className="flex w-[120px] items-center justify-center gap-2 rounded-xl bg-primary px-3 py-2 font-semibold text-white duration-300 ease-in hover:bg-hover hover:shadow-xl"
+                      className="flex w-fit cursor-pointer items-center justify-center gap-2 rounded-xl border border-borderPrimary bg-bgPrimary px-8 py-2 font-semibold text-primary"
                       onClick={handlePrevious}
                     >
                       <svg
@@ -604,7 +671,7 @@ const Signup = () => {
                           : "Previous"}
                     </button>
                     <button
-                      className="flex w-[120px] items-center justify-center gap-2 rounded-xl bg-primary px-3 py-2 font-semibold text-white duration-300 ease-in hover:bg-hover hover:shadow-xl"
+                      className="flex w-fit items-center justify-center gap-2 rounded-xl bg-primary px-10 py-2 font-semibold text-white duration-300 ease-in hover:bg-hover hover:shadow-xl"
                       onClick={handleNext}
                     >
                       {currentLanguage === "ar"
@@ -820,10 +887,10 @@ const Signup = () => {
 
                   <div
                     dir="ltr"
-                    className="mt-12 flex w-full justify-end gap-3"
+                    className="z-30 mt-12 flex w-full justify-center gap-3"
                   >
                     <button
-                      className="flex w-[120px] items-center justify-center gap-2 rounded-xl bg-primary px-3 py-2 font-semibold text-white duration-300 ease-in hover:bg-hover hover:shadow-xl"
+                      className="flex w-fit cursor-pointer items-center justify-center gap-2 rounded-xl border border-borderPrimary bg-bgPrimary px-8 py-2 font-semibold text-primary"
                       onClick={handlePrevious}
                     >
                       <svg
@@ -848,7 +915,7 @@ const Signup = () => {
                           : "Previous"}
                     </button>
                     <button
-                      className="flex w-[120px] items-center justify-center gap-2 rounded-xl bg-primary px-3 py-2 font-semibold text-white duration-300 ease-in hover:bg-hover hover:shadow-xl"
+                      className="flex w-fit items-center justify-center gap-2 rounded-xl bg-primary px-10 py-2 font-semibold text-white duration-300 ease-in hover:bg-hover hover:shadow-xl"
                       onClick={handleNext}
                     >
                       {currentLanguage === "ar"
@@ -996,10 +1063,10 @@ const Signup = () => {
                   </label>
                   <div
                     dir="ltr"
-                    className="mt-12 flex w-full justify-end gap-3"
+                    className="z-30 mt-12 flex w-full justify-center gap-3"
                   >
                     <button
-                      className="flex w-[120px] items-center justify-center gap-2 rounded-xl bg-primary px-3 py-2 font-semibold text-white duration-300 ease-in hover:bg-hover hover:shadow-xl"
+                      className="flex w-fit cursor-pointer items-center justify-center gap-2 rounded-xl border border-borderPrimary bg-bgPrimary px-8 py-2 font-semibold text-primary"
                       onClick={handlePrevious}
                     >
                       <svg
@@ -1026,7 +1093,7 @@ const Signup = () => {
                     <button
                       disabled={isLoading}
                       type="submit"
-                      className="flex w-[120px] items-center justify-center gap-2 rounded-xl bg-primary px-3 py-2 font-semibold text-white duration-300 ease-in hover:bg-hover hover:shadow-xl"
+                      className="flex w-fit items-center justify-center gap-2 rounded-xl bg-primary px-10 py-2 font-semibold text-white duration-300 ease-in hover:bg-hover hover:shadow-xl"
                     >
                       {isLoading
                         ? currentLanguage === "ar"
@@ -1052,27 +1119,8 @@ const Signup = () => {
                       : "You may not have completed the data or entered it correctly!"}
                 </p>
               )}
-              <div className="mt-4 flex items-center justify-center gap-2 text-center">
-                <p className="font-sans font-medium text-secondary">
-                  {currentLanguage === "ar"
-                    ? "هل لديك حساب بالفعل؟"
-                    : currentLanguage === "fr"
-                      ? "Vous avez déjà un compte ?"
-                      : "Already have an account?"}
-                </p>
-                <a
-                  href="/login"
-                  className="flex font-sans font-medium text-primary hover:underline"
-                >
-                  {currentLanguage === "ar"
-                    ? "تسجيل الدخول"
-                    : currentLanguage === "fr"
-                      ? "Se connecter"
-                      : "Login"}
-                </a>
-              </div>
             </form>
-            <div className="text-red-500">
+            <div className="w-fit min-w-[300px] text-red-500">
               {Array.isArray(errorMessage) &&
                 errorMessage.map((err: string, index: number) => (
                   <div key={index}>
@@ -1081,14 +1129,76 @@ const Signup = () => {
                 ))}
             </div>
           </div>
-        </div>
-        <div className="flex h-full w-full justify-end">
-          <div className="flex h-full w-[600px] items-center justify-end bg-[#2a3469] max-[1040px]:hidden">
-            <img
-              className="h-[530px] w-[500px] -translate-x-[260px]"
-              src="images/labtop.png"
-              alt="#"
-            />
+          <div
+            className={`absolute ${currentLanguage === "ar" ? "left-5 scale-x-[-1]" : "right-5"} top-5 z-20`}
+          >
+            <DropdownMenu.Root>
+              <DropdownMenu.Trigger asChild>
+                <button
+                  className="text-violet11 hover:bg-violet3 inline-flex h-[35px] w-[35px] items-center justify-center rounded-full bg-bgPrimary outline-none"
+                  aria-label="Customise options"
+                >
+                  {currentLanguage === "en" ? (
+                    <img src="/images/en.png" alt="#" />
+                  ) : currentLanguage === "ar" ? (
+                    <img src="/images/ar.png" alt="#" />
+                  ) : currentLanguage === "fr" ? (
+                    <img src="/images/fr.png" alt="#" />
+                  ) : (
+                    <img src="/images/fr.png" alt="#" />
+                  )}
+                </button>
+              </DropdownMenu.Trigger>
+              <DropdownMenu.Portal>
+                <DropdownMenu.Content
+                  className="data-[side=top]:animate-slideDownAndFade data-[side=right]:animate-slideLeftAndFade data-[side=bottom]:animate-slideUpAndFade data-[side=left]:animate-slideRightAndFade z-50 mx-2 mt-5 grid min-w-[150px] justify-center gap-5 rounded-md bg-bgPrimary p-[5px] font-semibold shadow-[0px_10px_38px_-10px_rgba(22,_23,_24,_0.35),_0px_10px_20px_-15px_rgba(22,_23,_24,_0.2)] will-change-[opacity,transform]"
+                  sideOffset={5}
+                >
+                  <DropdownMenu.Item className="text-violet11 data-[disabled]:text-mauve8 data-[highlighted]:bg-violet9 data-[highlighted]:text-violet1 group relative mt-2 flex h-[25px] select-none items-center rounded-[3px] px-[5px] text-[13px] leading-none outline-none data-[disabled]:pointer-events-none">
+                    <button
+                      onClick={() => handleLanguageChange("ar")}
+                      className="rounded-lg px-4 py-2 text-[20px] hover:bg-bgSecondary"
+                    >
+                      {currentLanguage === "en"
+                        ? "Arabic"
+                        : currentLanguage === "ar"
+                          ? "العربية"
+                          : currentLanguage === "fr"
+                            ? "Arabe"
+                            : "Arabic"}
+                    </button>
+                  </DropdownMenu.Item>
+                  <DropdownMenu.Item className="text-violet11 data-[disabled]:text-mauve8 data-[highlighted]:bg-violet9 data-[highlighted]:text-violet1 group relative flex h-[25px] select-none items-center rounded-[3px] px-[5px] text-[13px] leading-none outline-none data-[disabled]:pointer-events-none">
+                    <button
+                      onClick={() => handleLanguageChange("en")}
+                      className="rounded-lg px-4 py-2 text-[20px] hover:bg-bgSecondary"
+                    >
+                      {currentLanguage === "en"
+                        ? "English"
+                        : currentLanguage === "ar"
+                          ? "الإنجليزية"
+                          : currentLanguage === "fr"
+                            ? "Anglais"
+                            : "English"}
+                    </button>
+                  </DropdownMenu.Item>
+                  <DropdownMenu.Item className="text-violet11 data-[disabled]:text-mauve8 data-[highlighted]:bg-violet9 data-[highlighted]:text-violet1 group relative mb-2 flex h-[25px] select-none items-center rounded-[3px] px-[5px] text-[13px] leading-none outline-none data-[disabled]:pointer-events-none">
+                    <button
+                      onClick={() => handleLanguageChange("fr")}
+                      className="rounded-lg px-4 py-2 text-[20px] hover:bg-bgSecondary"
+                    >
+                      {currentLanguage === "en"
+                        ? "French"
+                        : currentLanguage === "ar"
+                          ? "الفرنسية"
+                          : currentLanguage === "fr"
+                            ? "Français"
+                            : "French"}
+                    </button>
+                  </DropdownMenu.Item>
+                </DropdownMenu.Content>
+              </DropdownMenu.Portal>
+            </DropdownMenu.Root>
           </div>
         </div>
       </div>

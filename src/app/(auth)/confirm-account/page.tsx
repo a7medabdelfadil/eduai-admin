@@ -23,6 +23,15 @@ const OTP = () => {
   const { language: currentLanguage, loading } = useSelector(
     (state: RootState) => state.language,
   );
+  const [theme, setTheme] = useState("light");
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const storedTheme = localStorage.getItem("theme") || "light";
+      setTheme(storedTheme);
+    }
+  }, []);
+  
 
   const ID = useSelector((state: RootState) => state.user.id);
   const EMAIL = useSelector((state: RootState) => state.user.email);
@@ -111,18 +120,20 @@ const OTP = () => {
     const remainingSeconds = seconds % 60;
     return `${minutes}:${remainingSeconds < 10 ? "0" : ""}${remainingSeconds}`;
   };
+ 
 
   if (loading) {
     return (
-      <div className="grid h-screen grid-cols-2 items-center justify-center bg-bgSecondary duration-300 ease-in max-[1040px]:grid-cols-1">
+      <div className="flex h-screen w-full items-center justify-center bg-bgSecondary duration-300 ease-in">
         <Spinner />
       </div>
     );
   }
 
+
   return (
     <>
-      <div className="absolute right-5 top-5">
+      <div className="absolute right-5 top-5 z-30">
         <DropdownMenu.Root>
           <DropdownMenu.Trigger asChild>
             <button
@@ -191,15 +202,15 @@ const OTP = () => {
           </DropdownMenu.Portal>
         </DropdownMenu.Root>
       </div>
-      <div className="grid h-screen grid-cols-2 items-center justify-center bg-bgSecondary duration-300 ease-in max-[1040px]:grid-cols-1">
-        <div className="grid items-center justify-center text-center">
+      <div className="relative flex h-screen items-center justify-center overflow-hidden bg-bgSecondary duration-300 ease-in md:justify-around">
+        <div className="grid z-20 items-center justify-center text-center">
           <div className="mb-10 grid">
-            <h1 className="font-sans text-[28px] font-bold text-primary">
+            <h1 className="font-sans text-3xl font-bold text-textPrimary">
               {currentLanguage === "ar"
-                ? "تحقق من بريدك الإلكتروني"
+                ? "رمز التحقق"
                 : currentLanguage === "fr"
-                  ? "Vérifiez votre email"
-                  : "Check your Email"}
+                  ? "Vérification"
+                  : "Verification"}
             </h1>
             <p className="font-sans text-[20px] font-semibold text-secondary">
               {currentLanguage === "ar"
@@ -264,14 +275,24 @@ const OTP = () => {
             </form>
           </div>
         </div>
-        <div className="flex h-full w-full justify-end">
-          <div className="flex h-full w-[600px] items-center justify-end bg-[#2a3469] max-[1040px]:hidden">
-            <img
-              className="h-[300px] w-[500px] -translate-x-[260px]"
-              src="images/forget.png"
-              alt="#"
-            />
-          </div>
+        <div></div>
+        <div
+          className={`absolute ${currentLanguage === "ar" ? "-left-20 scale-x-[-1] lg:-left-6" : "-right-20 lg:-right-6"} top-0 z-10 hidden w-[400px] md:block md:w-[450px]`}
+        >
+          <img
+            src={theme === "light" ? "/images/topright-signup.png" : "/images/topright-signup-dark.png"}
+            alt="Logo"
+            className="h-auto w-full object-contain"
+          />
+        </div>
+        <div
+          className={`absolute ${currentLanguage === "ar" ? "left-10 scale-x-[-1]" : "right-10"} z-10 hidden max-h-[80vh] max-w-[30vw] md:bottom-[450px] md:block lg:bottom-96 lg:max-w-[35vw] xl:bottom-80 2xl:bottom-[250px]`}
+        >
+          <img
+            src="images/forget.png"
+            alt="Logo"
+            className="h-auto w-full object-contain"
+          />
         </div>
       </div>
     </>

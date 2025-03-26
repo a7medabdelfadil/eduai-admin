@@ -32,6 +32,15 @@ const Login = () => {
   const [emailFocused, setEmailFocused] = useState(false);
   const [passwordFocused, setPasswordFocused] = useState(false);
 
+  const [theme, setTheme] = useState("light");
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const storedTheme = localStorage.getItem("theme") || "light";
+      setTheme(storedTheme);
+    }
+  }, []);
+
   const { language: currentLanguage, loading } = useSelector(
     (state: RootState) => state.language,
   );
@@ -131,16 +140,20 @@ const Login = () => {
         className="relative flex h-[100vh] w-full items-center justify-center overflow-hidden"
       >
         <div
-          className={`absolute -bottom-28 ${currentLanguage === "ar" ? "right-0 scale-x-[-1]" : "left-0"} z-10 hidden h-[400px] w-[400px] lg:block`}
+          className={`absolute -bottom-40 ${currentLanguage === "ar" ? "right-0 scale-x-[-1]" : "left-0"} z-10 hidden h-[600px] w-[600px] lg:block`}
         >
           <img
-            src="/images/bottomleft-login.png"
+            src={
+              theme === "light"
+                ? "/images/bottomleft-login.png"
+                : "/images/bottomleft-login-dark.png"
+            }
             alt="Logo"
             className="m-0 w-full p-0"
           />
         </div>
         <div
-          className={`absolute ${currentLanguage === "ar" ? "left-10 scale-x-[-1]" : "right-10"} z-10 hidden max-h-[80vh] max-w-[40vw] md:top-52 lg:top-48 lg:block xl:top-32 2xl:top-20`}
+          className={`absolute ${currentLanguage === "ar" ? "left-10 scale-x-[-1]" : "right-10"} z-10 hidden max-h-[80vh] max-w-[40vw] md:top-52 lg:top-48 lg:block xl:top-32 2xl:top-28`}
         >
           <img
             src="/images/dashboard-login.png"
@@ -152,7 +165,7 @@ const Login = () => {
         {/* Background */}
         <div className="absolute inset-0 flex">
           <div className="w-full bg-bgPrimary lg:w-2/3"></div>
-          <div className="w-0 bg-bgPrimary opacity-40 lg:w-1/3 lg:bg-[#3E5AF0]" />
+          <div className="w-0 bg-bgPrimary lg:w-1/3 lg:bg-[#B2BDF9] dark:lg:bg-[#2a3469]" />
         </div>
         {/* Card */}
         <div
@@ -184,7 +197,7 @@ const Login = () => {
             </Text>
             <form
               dir={currentLanguage === "ar" ? "rtl" : "ltr"}
-              className="mt-6 grid w-full gap-10 md:w-fit"
+              className="z-20 mt-6 grid w-full gap-10 md:w-fit"
               onSubmit={handleSubmit(onSubmit)}
             >
               <div className="relative mt-6 w-full md:w-fit">
@@ -263,7 +276,7 @@ const Login = () => {
                         ? "Entrez votre mot de passe"
                         : "Enter Your Password"
                   }
-                  className={`w-full rounded-xl border bg-white p-4 text-textPrimary outline-none transition-all duration-200 md:w-[450px] ${
+                  className={`w-full rounded-xl border bg-bgPrimary p-4 text-textPrimary outline-none transition-all duration-200 md:w-[450px] ${
                     errors.password
                       ? "border-warning"
                       : passwordFocused
@@ -346,7 +359,7 @@ const Login = () => {
             </form>
           </div>
           <div
-            className={`absolute ${currentLanguage === "ar" ? "left-5 scale-x-[-1]" : "right-5"} top-5`}
+            className={`absolute ${currentLanguage === "ar" ? "left-5 scale-x-[-1]" : "right-5"} top-5 z-20`}
           >
             <DropdownMenu.Root>
               <DropdownMenu.Trigger asChild>
