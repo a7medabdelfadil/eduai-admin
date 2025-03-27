@@ -90,7 +90,6 @@ const EditParent: React.FC<ViewParentProps> = ({ params }) => {
       setValue("name_fr", "");
       setValue("birthDate", data?.data?.birthDate);
     }
-
   }, [data, error]);
 
   const onSubmit = async (data: any) => {
@@ -155,7 +154,7 @@ const EditParent: React.FC<ViewParentProps> = ({ params }) => {
                 <line x1="12" y1="14" x2="12" y2="17" />
                 <line x1="16" y1="14" x2="16" y2="17" />
               </svg>
-              <h1 className="font-sans text-[22px] font-semibold">
+              <h1 className="text-[22px] font-semibold">
                 {currentLanguage === "en"
                   ? "Parent Information"
                   : currentLanguage === "ar"
@@ -167,10 +166,7 @@ const EditParent: React.FC<ViewParentProps> = ({ params }) => {
             </div>
             <div className="grid grid-cols-2 gap-4 max-[1278px]:grid-cols-1">
               {/* Input fields for parent information */}
-              <label
-                htmlFor="email"
-                className="grid font-sans text-[18px] font-semibold"
-              >
+              <label htmlFor="email" className="grid text-[18px] font-semibold">
                 {currentLanguage === "en"
                   ? "Email"
                   : currentLanguage === "ar"
@@ -196,10 +192,7 @@ const EditParent: React.FC<ViewParentProps> = ({ params }) => {
                   </span>
                 )}
               </label>
-              <label
-                htmlFor="nid"
-                className="grid font-sans text-[18px] font-semibold"
-              >
+              <label htmlFor="nid" className="grid text-[18px] font-semibold">
                 {currentLanguage === "en"
                   ? "NID"
                   : currentLanguage === "ar"
@@ -227,7 +220,7 @@ const EditParent: React.FC<ViewParentProps> = ({ params }) => {
               </label>
               <label
                 htmlFor="gender"
-                className="grid font-sans text-[18px] font-semibold"
+                className="grid text-[18px] font-semibold"
               >
                 {currentLanguage === "en"
                   ? "Gender"
@@ -284,7 +277,7 @@ const EditParent: React.FC<ViewParentProps> = ({ params }) => {
 
               <label
                 htmlFor="nationality"
-                className="grid font-sans text-[18px] font-semibold"
+                className="grid text-[18px] font-semibold"
               >
                 {currentLanguage === "en"
                   ? "Your Nationality"
@@ -308,11 +301,13 @@ const EditParent: React.FC<ViewParentProps> = ({ params }) => {
                           : "Select Nationality"}
                   </option>
                   {nationalityData &&
-                    Object.entries(nationalityData?.data).map(([key, value]) => (
-                      <option key={key} value={key}>
-                        {String(value)}
-                      </option>
-                    ))}
+                    Object.entries(nationalityData?.data).map(
+                      ([key, value]) => (
+                        <option key={key} value={key}>
+                          {String(value)}
+                        </option>
+                      ),
+                    )}
                 </select>
                 {errors.nationality && (
                   <span className="text-error">
@@ -328,7 +323,7 @@ const EditParent: React.FC<ViewParentProps> = ({ params }) => {
               </label>
               <label
                 htmlFor="regionId"
-                className="grid font-sans text-[18px] font-semibold"
+                className="grid text-[18px] font-semibold"
               >
                 {currentLanguage === "en"
                   ? "RegionId"
@@ -348,7 +343,7 @@ const EditParent: React.FC<ViewParentProps> = ({ params }) => {
               </label>
               <label
                 htmlFor="name_en"
-                className="grid font-sans text-[18px] font-semibold"
+                className="grid text-[18px] font-semibold"
               >
                 {currentLanguage === "en"
                   ? "Name EN"
@@ -377,7 +372,7 @@ const EditParent: React.FC<ViewParentProps> = ({ params }) => {
               </label>
               <label
                 htmlFor="name_ar"
-                className="grid font-sans text-[18px] font-semibold"
+                className="grid text-[18px] font-semibold"
               >
                 {currentLanguage === "en"
                   ? "Name AR"
@@ -406,7 +401,7 @@ const EditParent: React.FC<ViewParentProps> = ({ params }) => {
               </label>
               <label
                 htmlFor="name_fr"
-                className="grid font-sans text-[18px] font-semibold"
+                className="grid text-[18px] font-semibold"
               >
                 {currentLanguage === "en"
                   ? "Name FR"
@@ -435,7 +430,7 @@ const EditParent: React.FC<ViewParentProps> = ({ params }) => {
               </label>
               <label
                 htmlFor="birthDate"
-                className="grid font-sans text-[18px] font-semibold"
+                className="grid text-[18px] font-semibold"
               >
                 {currentLanguage === "en"
                   ? "Date Of Birth"
@@ -488,10 +483,7 @@ const EditParent: React.FC<ViewParentProps> = ({ params }) => {
                 )}
               </label>
 
-              <label
-                htmlFor="about"
-                className="grid font-sans text-[18px] font-semibold"
-              >
+              <label htmlFor="about" className="grid text-[18px] font-semibold">
                 {currentLanguage === "en"
                   ? "About"
                   : currentLanguage === "ar"
@@ -519,7 +511,7 @@ const EditParent: React.FC<ViewParentProps> = ({ params }) => {
               </label>
               <label
                 htmlFor="occupation_en"
-                className="grid font-sans text-[18px] font-semibold"
+                className="grid text-[18px] font-semibold"
               >
                 {currentLanguage === "en"
                   ? "Occupation EN"
@@ -549,7 +541,7 @@ const EditParent: React.FC<ViewParentProps> = ({ params }) => {
 
               <label
                 htmlFor="occupation_ar"
-                className="grid font-sans text-[18px] font-semibold"
+                className="grid text-[18px] font-semibold"
               >
                 {currentLanguage === "en"
                   ? "Occupation AR"
@@ -578,7 +570,7 @@ const EditParent: React.FC<ViewParentProps> = ({ params }) => {
               </label>
               <label
                 htmlFor="occupation_fr"
-                className="grid font-sans text-[18px] font-semibold"
+                className="grid text-[18px] font-semibold"
               >
                 {currentLanguage === "en"
                   ? "Occupation FR"
@@ -606,7 +598,9 @@ const EditParent: React.FC<ViewParentProps> = ({ params }) => {
                 )}
               </label>
               <PhoneNumberInput
-                countryCodeData={countryCode?.data !== null ? countryCode?.data : {} }
+                countryCodeData={
+                  countryCode?.data !== null ? countryCode?.data : {}
+                }
                 currentLanguage="en"
                 label="Your Phone Number"
                 register={register}

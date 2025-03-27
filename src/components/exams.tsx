@@ -10,7 +10,7 @@ const Exams = () => {
     <>
       <div className="grid w-[500px] rounded-xl bg-bgPrimary p-5 max-[1342px]:w-full">
         <div className="mb-5 flex justify-between">
-          <h1 className="font-sans font-semibold text-textPrimary">
+          <h1 className="font-semibold text-textPrimary">
             {currentLanguage === "ar"
               ? "جميع نتائج الامتحانات"
               : currentLanguage === "fr"

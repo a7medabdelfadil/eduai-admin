@@ -31,7 +31,6 @@ const OTP = () => {
       setTheme(storedTheme);
     }
   }, []);
-  
 
   const ID = useSelector((state: RootState) => state.user.id);
   const EMAIL = useSelector((state: RootState) => state.user.email);
@@ -120,7 +119,6 @@ const OTP = () => {
     const remainingSeconds = seconds % 60;
     return `${minutes}:${remainingSeconds < 10 ? "0" : ""}${remainingSeconds}`;
   };
- 
 
   if (loading) {
     return (
@@ -129,7 +127,6 @@ const OTP = () => {
       </div>
     );
   }
-
 
   return (
     <>
@@ -203,16 +200,16 @@ const OTP = () => {
         </DropdownMenu.Root>
       </div>
       <div className="relative flex h-screen items-center justify-center overflow-hidden bg-bgSecondary duration-300 ease-in md:justify-around">
-        <div className="grid z-20 items-center justify-center text-center">
+        <div className="z-20 grid items-center justify-center text-center">
           <div className="mb-10 grid">
-            <h1 className="font-sans text-3xl font-bold text-textPrimary">
+            <h1 className="text-3xl font-bold text-textPrimary">
               {currentLanguage === "ar"
                 ? "رمز التحقق"
                 : currentLanguage === "fr"
                   ? "Vérification"
                   : "Verification"}
             </h1>
-            <p className="font-sans text-[20px] font-semibold text-secondary">
+            <p className="text-[20px] font-semibold text-secondary">
               {currentLanguage === "ar"
                 ? `تم إرسال رمز التحقق إلى ${email}`
                 : currentLanguage === "fr"
@@ -255,7 +252,7 @@ const OTP = () => {
                         ? "Vérifier"
                         : "Verify"}
                   </button>
-                  <p className="font-sans text-[17px] font-semibold text-warning">{`${formatTime(timer)}`}</p>
+                  <p className="text-[17px] font-semibold text-warning">{`${formatTime(timer)}`}</p>
                   <button
                     onClick={() => {
                       SendOtpAgian();
@@ -280,7 +277,11 @@ const OTP = () => {
           className={`absolute ${currentLanguage === "ar" ? "-left-20 scale-x-[-1] lg:-left-6" : "-right-20 lg:-right-6"} top-0 z-10 hidden w-[400px] md:block md:w-[450px]`}
         >
           <img
-            src={theme === "light" ? "/images/topright-signup.png" : "/images/topright-signup-dark.png"}
+            src={
+              theme === "light"
+                ? "/images/topright-signup.png"
+                : "/images/topright-signup-dark.png"
+            }
             alt="Logo"
             className="h-auto w-full object-contain"
           />

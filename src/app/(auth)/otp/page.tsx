@@ -192,14 +192,14 @@ const OTP = () => {
       <div className="grid h-screen grid-cols-2 items-center justify-center bg-bgSecondary duration-300 ease-in max-[1040px]:grid-cols-1">
         <div className="grid items-center justify-center text-center">
           <div className="mb-10 grid">
-            <h1 className="font-sans text-[28px] font-bold text-primary">
+            <h1 className="text-[28px] font-bold text-primary">
               {currentLanguage === "ar"
                 ? "تحقق من بريدك الإلكتروني"
                 : currentLanguage === "fr"
                   ? "Vérifiez votre email"
                   : "Check your Email"}
             </h1>
-            <p className="font-sans text-[20px] font-semibold text-secondary">
+            <p className="text-[20px] font-semibold text-secondary">
               {currentLanguage === "ar"
                 ? `تم إرسال رمز التحقق إلى ${email}`
                 : currentLanguage === "fr"
@@ -242,7 +242,7 @@ const OTP = () => {
                         ? "Vérifier"
                         : "Verify"}
                   </button>
-                  <p className="font-sans text-[17px] font-semibold text-warning">{`${formatTime(timer)}`}</p>
+                  <p className="text-[17px] font-semibold text-warning">{`${formatTime(timer)}`}</p>
                   <button
                     onClick={() => {
                       SendOtpAgian();

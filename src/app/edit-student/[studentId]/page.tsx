@@ -95,7 +95,7 @@ const EditStudent = ({ params }: { params: Params }) => {
       setNameFr(studentData.name_fr);
       setAbout(studentData.about);
       setBirthDate(studentData.birthDate);
-      console.log("👾 ~ useEffect ~ studentData:", studentData)
+      console.log("👾 ~ useEffect ~ studentData:", studentData);
     }
   }, [data]);
 
@@ -140,10 +140,7 @@ const EditStudent = ({ params }: { params: Params }) => {
           <div className="my-10 grid items-center justify-center gap-5 rounded-xl bg-bgPrimary p-10 sm:w-[500px] md:w-[600px] lg:w-[750px] xl:w-[1000px]">
             <div className="grid grid-cols-2 gap-4 max-[1278px]:grid-cols-1">
               {/* Email */}
-              <label
-                htmlFor="email"
-                className="grid font-sans text-[18px] font-semibold"
-              >
+              <label htmlFor="email" className="grid text-[18px] font-semibold">
                 {currentLanguage === "ar"
                   ? "البريد الإلكتروني"
                   : currentLanguage === "fr"
@@ -154,16 +151,13 @@ const EditStudent = ({ params }: { params: Params }) => {
                   type="email"
                   className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                   value={email || ""}
-                  onChange={(e) => setEmail(e.target.value)}
+                  onChange={e => setEmail(e.target.value)}
                 />
                 {/* Validation error */}
               </label>
 
               {/* NID */}
-              <label
-                htmlFor="nid"
-                className="grid font-sans text-[18px] font-semibold"
-              >
+              <label htmlFor="nid" className="grid text-[18px] font-semibold">
                 {currentLanguage === "ar"
                   ? "الرقم الهوية"
                   : currentLanguage === "fr"
@@ -174,7 +168,7 @@ const EditStudent = ({ params }: { params: Params }) => {
                   type="number"
                   className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                   value={nid}
-                  onChange={(e) => setNid(e.target.value)}
+                  onChange={e => setNid(e.target.value)}
                 />
                 {/* Validation error */}
               </label>
@@ -182,7 +176,7 @@ const EditStudent = ({ params }: { params: Params }) => {
               {/* Gender */}
               <label
                 htmlFor="gender"
-                className="grid font-sans text-[18px] font-semibold"
+                className="grid text-[18px] font-semibold"
               >
                 {currentLanguage === "ar"
                   ? "الجنس"
@@ -193,7 +187,7 @@ const EditStudent = ({ params }: { params: Params }) => {
                   id="gender"
                   className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                   value={gender}
-                  onChange={(e) => setGender(e.target.value)}
+                  onChange={e => setGender(e.target.value)}
                 >
                   <option value="">
                     {currentLanguage === "en"
@@ -215,7 +209,7 @@ const EditStudent = ({ params }: { params: Params }) => {
               {/* Nationality */}
               <label
                 htmlFor="nationality"
-                className="grid font-sans text-[18px] font-semibold"
+                className="grid text-[18px] font-semibold"
               >
                 {currentLanguage === "ar"
                   ? "جنسيتك"
@@ -226,7 +220,7 @@ const EditStudent = ({ params }: { params: Params }) => {
                   id="nationality"
                   className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                   value={nationality}
-                  onChange={(e) => setNationality(e.target.value)}
+                  onChange={e => setNationality(e.target.value)}
                 >
                   <option value="">
                     {currentLanguage === "ar"
@@ -248,7 +242,7 @@ const EditStudent = ({ params }: { params: Params }) => {
               {/* Region */}
               <label
                 htmlFor="regionId"
-                className="grid font-sans text-[18px] font-semibold"
+                className="grid text-[18px] font-semibold"
               >
                 {currentLanguage === "ar"
                   ? "المنطقة"
@@ -259,7 +253,7 @@ const EditStudent = ({ params }: { params: Params }) => {
                   id="regionId"
                   className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                   value={regionId}
-                  onChange={(e) => setRegionId(e.target.value)}
+                  onChange={e => setRegionId(e.target.value)}
                 >
                   <option value="">
                     {currentLanguage === "ar"
@@ -279,7 +273,7 @@ const EditStudent = ({ params }: { params: Params }) => {
               {/* Graduation Status */}
               <label
                 htmlFor="graduated"
-                className="grid font-sans text-[18px] font-semibold"
+                className="grid text-[18px] font-semibold"
               >
                 {currentLanguage === "ar"
                   ? "تخرج"
@@ -290,7 +284,7 @@ const EditStudent = ({ params }: { params: Params }) => {
                   id="graduated"
                   className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                   value={graduated}
-                  onChange={(e) => setGraduated(e.target.value)}
+                  onChange={e => setGraduated(e.target.value)}
                 >
                   <option value="false">
                     {currentLanguage === "ar" ? "لا" : "No"}
@@ -304,7 +298,7 @@ const EditStudent = ({ params }: { params: Params }) => {
               {/* Name in English */}
               <label
                 htmlFor="name_en"
-                className="grid font-sans text-[18px] font-semibold"
+                className="grid text-[18px] font-semibold"
               >
                 {currentLanguage === "ar"
                   ? "الاسم بالإنجليزي"
@@ -316,7 +310,7 @@ const EditStudent = ({ params }: { params: Params }) => {
                   type="text"
                   className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                   value={name_en}
-                  onChange={(e) => setNameEn(e.target.value)}
+                  onChange={e => setNameEn(e.target.value)}
                 />
                 {/* Validation error */}
               </label>
@@ -324,7 +318,7 @@ const EditStudent = ({ params }: { params: Params }) => {
               {/* Name in Arabic */}
               <label
                 htmlFor="name_ar"
-                className="grid font-sans text-[18px] font-semibold"
+                className="grid text-[18px] font-semibold"
               >
                 {currentLanguage === "ar"
                   ? "الاسم بالعربي"
@@ -336,7 +330,7 @@ const EditStudent = ({ params }: { params: Params }) => {
                   type="text"
                   className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                   value={name_ar}
-                  onChange={(e) => setNameAr(e.target.value)}
+                  onChange={e => setNameAr(e.target.value)}
                 />
                 {/* Validation error */}
               </label>
@@ -344,7 +338,7 @@ const EditStudent = ({ params }: { params: Params }) => {
               {/* Name in French */}
               <label
                 htmlFor="name_fr"
-                className="grid font-sans text-[18px] font-semibold"
+                className="grid text-[18px] font-semibold"
               >
                 {currentLanguage === "ar"
                   ? "الاسم بالفرنسي"
@@ -356,16 +350,13 @@ const EditStudent = ({ params }: { params: Params }) => {
                   type="text"
                   className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                   value={name_fr}
-                  onChange={(e) => setNameFr(e.target.value)}
+                  onChange={e => setNameFr(e.target.value)}
                 />
                 {/* Validation error */}
               </label>
 
               {/* About */}
-              <label
-                htmlFor="about"
-                className="grid font-sans text-[18px] font-semibold"
-              >
+              <label htmlFor="about" className="grid text-[18px] font-semibold">
                 {currentLanguage === "ar"
                   ? "نبذة"
                   : currentLanguage === "fr"
@@ -375,14 +366,14 @@ const EditStudent = ({ params }: { params: Params }) => {
                   id="about"
                   className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                   value={about}
-                  onChange={(e) => setAbout(e.target.value)}
+                  onChange={e => setAbout(e.target.value)}
                 />
               </label>
 
               {/* Birth Date */}
               <label
                 htmlFor="birthDate"
-                className="grid font-sans text-[18px] font-semibold"
+                className="grid text-[18px] font-semibold"
               >
                 {currentLanguage === "ar"
                   ? "تاريخ الميلاد"
@@ -394,13 +385,13 @@ const EditStudent = ({ params }: { params: Params }) => {
                   type="date"
                   className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                   value={birthDate}
-                  onChange={(e) => setBirthDate(e.target.value)}
+                  onChange={e => setBirthDate(e.target.value)}
                 />
               </label>
             </div>
             <button
               type="submit"
-              className="mt-5 w-full rounded-lg bg-primary py-3 text-white font-semibold text-[18px] hover:bg-blue-700 transition-all duration-200"
+              className="mt-5 w-full rounded-lg bg-primary py-3 text-[18px] font-semibold text-white transition-all duration-200 hover:bg-blue-700"
               disabled={isLoading}
             >
               {isLoading ? "Updating..." : "Update Student"}

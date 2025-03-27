@@ -69,7 +69,7 @@ const NewScholarship = () => {
     archived: "false",
     page: 0,
     size: 1000000,
-    graduated: "false"
+    graduated: "false",
   });
   const onSubmit = async (data: any) => {
     const formData = new FormData();
@@ -124,7 +124,7 @@ const NewScholarship = () => {
         <form onSubmit={handleSubmit(onSubmit)} encType="multipart/form-data">
           <div className="grid items-center justify-center gap-5 rounded-xl bg-bgPrimary p-10 sm:w-[500px] md:w-[600px] lg:w-[750px] xl:w-[1000px]">
             <div className="flex items-center justify-start gap-2">
-              <h1 className="font-sans text-[22px] font-semibold">
+              <h1 className="text-[22px] font-semibold">
                 {currentLanguage === "en"
                   ? "Scholarship Information"
                   : currentLanguage === "ar"
@@ -136,7 +136,7 @@ const NewScholarship = () => {
               {/* Student ID Field */}
               <label
                 htmlFor="studentId"
-                className="grid font-sans text-[18px] font-semibold"
+                className="grid text-[18px] font-semibold"
               >
                 {currentLanguage === "en"
                   ? "Student ID"
@@ -181,7 +181,7 @@ const NewScholarship = () => {
               {/* Scholarship Name Field */}
               <label
                 htmlFor="scholarshipName"
-                className="grid font-sans text-[18px] font-semibold"
+                className="grid text-[18px] font-semibold"
               >
                 {currentLanguage === "en"
                   ? "Scholarship Name"
@@ -204,7 +204,7 @@ const NewScholarship = () => {
               {/* Scholarship Type Field */}
               <label
                 htmlFor="scholarshipType"
-                className="grid font-sans text-[18px] font-semibold"
+                className="grid text-[18px] font-semibold"
               >
                 {currentLanguage === "en"
                   ? "Scholarship Type"
@@ -243,7 +243,7 @@ const NewScholarship = () => {
               {/* Start Date Field */}
               <label
                 htmlFor="startDate"
-                className="grid font-sans text-[18px] font-semibold"
+                className="grid text-[18px] font-semibold"
               >
                 {currentLanguage === "en"
                   ? "Start Date"
@@ -264,7 +264,7 @@ const NewScholarship = () => {
               {/* Expiration Date Field */}
               <label
                 htmlFor="expirationDate"
-                className="grid font-sans text-[18px] font-semibold"
+                className="grid text-[18px] font-semibold"
               >
                 {currentLanguage === "en"
                   ? "Expiration Date"
@@ -283,7 +283,7 @@ const NewScholarship = () => {
                   </span>
                 )}
               </label>
-              <div className="grid font-sans text-[18px] font-semibold">
+              <div className="grid text-[18px] font-semibold">
                 {currentLanguage === "en"
                   ? "Paid Invoices"
                   : currentLanguage === "ar"
@@ -366,10 +366,7 @@ const NewScholarship = () => {
               </div>
 
               {/* File Upload Field */}
-              <label
-                htmlFor="file"
-                className="grid font-sans text-[18px] font-semibold"
-              >
+              <label htmlFor="file" className="grid text-[18px] font-semibold">
                 {currentLanguage === "en"
                   ? "Upload File"
                   : currentLanguage === "ar"

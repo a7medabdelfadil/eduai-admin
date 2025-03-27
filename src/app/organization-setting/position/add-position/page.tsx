@@ -41,7 +41,7 @@ const AddPosition = () => {
   ];
   const router = useRouter();
   const { data: positionData, isLoading: isPosition } =
-  useGetAllDepartmentsQuery(null);
+    useGetAllDepartmentsQuery(null);
   const booleanValue = useSelector((state: RootState) => state.boolean.value);
   const {
     register,
@@ -109,7 +109,7 @@ const AddPosition = () => {
                 <line x1="12" y1="14" x2="12" y2="17" />{" "}
                 <line x1="16" y1="14" x2="16" y2="17" />
               </svg>
-              <h1 className="font-sans text-[22px] font-semibold">
+              <h1 className="text-[22px] font-semibold">
                 {currentLanguage === "ar"
                   ? "معلومات الوظيفة"
                   : currentLanguage === "fr"
@@ -120,7 +120,7 @@ const AddPosition = () => {
             <div className="grid grid-cols-2 gap-4 max-[1278px]:grid-cols-1">
               <label
                 htmlFor="departmentId"
-                className="grid font-sans text-[18px] font-semibold"
+                className="grid text-[18px] font-semibold"
               >
                 {currentLanguage === "ar"
                   ? "معرف القسم"
@@ -184,7 +184,7 @@ const AddPosition = () => {
               </label>
               <label
                 htmlFor="title_en"
-                className="grid font-sans text-[18px] font-semibold"
+                className="grid text-[18px] font-semibold"
               >
                 {currentLanguage === "ar"
                   ? "العنوان (بالإنجليزية)"
@@ -209,7 +209,7 @@ const AddPosition = () => {
               </label>
               <label
                 htmlFor="title_fr"
-                className="grid font-sans text-[18px] font-semibold"
+                className="grid text-[18px] font-semibold"
               >
                 {currentLanguage === "ar"
                   ? "العنوان (بالفرنسية)"
@@ -234,7 +234,7 @@ const AddPosition = () => {
               </label>
               <label
                 htmlFor="title_ar"
-                className="grid font-sans text-[18px] font-semibold"
+                className="grid text-[18px] font-semibold"
               >
                 {currentLanguage === "ar"
                   ? "العنوان (بالعربي)"

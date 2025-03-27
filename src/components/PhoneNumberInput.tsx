@@ -56,10 +56,7 @@ const PhoneNumberInput: React.FC<PhoneNumberInputProps> = ({
   );
 
   return (
-    <label
-      htmlFor="phoneNumber"
-      className="grid font-sans text-[18px] font-semibold"
-    >
+    <label htmlFor="phoneNumber" className="grid text-[18px] font-semibold">
       {label || getTranslation("phoneNumber")}
       <div className="flex w-[400px] max-w-full items-center gap-2 rounded-xl border border-borderPrimary px-4 py-2">
         <div className="w-[150px]">
@@ -79,10 +76,10 @@ const PhoneNumberInput: React.FC<PhoneNumberInputProps> = ({
           pattern="[0-9]*"
           placeholder={getTranslation("phoneNumber")}
           className="flex-1 rounded-xl border-none outline-none"
-          {...register("number", { 
+          {...register("number", {
             required: true,
-            onChange: (e) => {
-              e.target.value = e.target.value.replace(/\D/g, '');
+            onChange: e => {
+              e.target.value = e.target.value.replace(/\D/g, "");
             },
           })}
         />

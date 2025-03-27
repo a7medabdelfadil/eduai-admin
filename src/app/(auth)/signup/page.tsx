@@ -289,7 +289,11 @@ const Signup = () => {
           className={`absolute ${currentLanguage === "ar" ? "-left-6 scale-x-[-1]" : "-right-6"} top-0 z-10 hidden w-[450px] lg:block xl:w-[600px]`}
         >
           <img
-            src={theme === "light" ? "/images/topright-signup.png" : "/images/topright-signup-dark.png"}
+            src={
+              theme === "light"
+                ? "/images/topright-signup.png"
+                : "/images/topright-signup-dark.png"
+            }
             alt="Logo"
             className="h-auto w-full object-contain"
           />
@@ -311,14 +315,16 @@ const Signup = () => {
         {/* Card */}
         <div
           style={{ height: `${pageHeight - 100}px` }}
-          className="relative my-0 w-full rounded-xl border-borderPrimary bg-transparent dark:border md:my-[40px] lg:shadow-2xl lg:w-[75%] xl:w-[80%]"
+          className="relative my-0 w-full rounded-xl border-borderPrimary bg-transparent dark:border md:my-[40px] lg:w-[75%] lg:shadow-2xl xl:w-[80%]"
         >
           <div className="mb-20">
-            <img
-              className={`absolute ${currentLanguage === "ar" ? "right-5" : "left-5"} left-5 top-5 w-[200px]`}
-              src="images/logo.png"
-              alt="EduAi Logo"
-            />
+            <a href="/login">
+              <img
+                className={`absolute ${currentLanguage === "ar" ? "right-5" : "left-5"} left-5 top-5 w-[200px]`}
+                src="images/logo.png"
+                alt="EduAi Logo"
+              />
+            </a>
           </div>
 
           <div className="p-10">
@@ -337,8 +343,8 @@ const Signup = () => {
                   : "Sign up to enjoy the application"}
             </Text>
           </div>
-          <div className="grid lg:grid-cols-[80px_1fr] grid-cols-1 md:grid-cols-[200px_1fr] justify-start gap-6 p-8">
-            <div className="flex flex-row md:flex-col items-start gap-8 md:gap-0 lg:items-center pr-4">
+          <div className="grid grid-cols-1 justify-start gap-6 p-8 md:grid-cols-[200px_1fr] lg:grid-cols-[80px_1fr]">
+            <div className="flex flex-row items-start gap-8 pr-4 md:flex-col md:gap-0 lg:items-center">
               {steps.map((stepItem, idx) => (
                 <div key={stepItem.id} className="flex items-center gap-3">
                   <div className="flex flex-col items-center">
@@ -366,12 +372,12 @@ const Signup = () => {
                       )}
                     </div>
                     {idx < steps.length - 1 && (
-                      <div className="h-0 md:h-10 w-px bg-bgSecondary" />
+                      <div className="h-0 w-1 bg-bgSecondary md:h-10" />
                     )}
                   </div>
                   <div className="-mt-12">
                     <span
-                      className={`lg:absolute hidden md:block ${currentLanguage === "ar" ? "lg:-right-[90px] xl:-right-[120px]" : "lg:-left-[120px] xl:-left-[120px]"} text-xs lg:text-sm ${
+                      className={`hidden md:block lg:absolute ${currentLanguage === "ar" ? "lg:-right-[90px] xl:-right-[120px]" : "lg:-left-[120px] xl:-left-[120px]"} text-xs lg:text-sm ${
                         step >= idx + 1
                           ? "font-bold text-primary"
                           : "text-gray-500"
@@ -393,7 +399,7 @@ const Signup = () => {
                 <div className="grid w-full grid-cols-1 gap-3">
                   <label
                     htmlFor="username"
-                    className="grid w-full text-start font-sans text-[15px] font-semibold text-[#9a9a9a]"
+                    className="grid w-full text-start text-[15px] font-semibold text-[#9a9a9a]"
                   >
                     <input
                       id="username"
@@ -426,7 +432,7 @@ const Signup = () => {
                   </label>
                   <label
                     htmlFor="email"
-                    className="grid w-full text-start font-sans text-[15px] font-semibold text-[#9a9a9a]"
+                    className="grid w-full text-start text-[15px] font-semibold text-[#9a9a9a]"
                   >
                     <input
                       id="email"
@@ -453,7 +459,7 @@ const Signup = () => {
                   </label>
                   <label
                     htmlFor="password"
-                    className="grid w-full text-start font-sans text-[15px] font-semibold text-[#9a9a9a]"
+                    className="grid w-full text-start text-[15px] font-semibold text-[#9a9a9a]"
                   >
                     <input
                       id="password"
@@ -480,7 +486,7 @@ const Signup = () => {
                   </label>
                   <label
                     htmlFor="nid"
-                    className="grid w-full text-start font-sans text-[15px] font-semibold text-[#9a9a9a]"
+                    className="grid w-full text-start text-[15px] font-semibold text-[#9a9a9a]"
                   >
                     <input
                       id="nid"
@@ -560,7 +566,7 @@ const Signup = () => {
                 <div className="grid grid-cols-1 gap-3">
                   <label
                     htmlFor="regionId"
-                    className="grid w-[400px] text-start font-sans text-[15px] font-semibold text-[#9a9a9a] max-[458px]:w-[350px]"
+                    className="grid w-[400px] text-start text-[15px] font-semibold text-[#9a9a9a] max-[458px]:w-[350px]"
                   >
                     <SearchableSelect
                       name="regionId"
@@ -573,7 +579,7 @@ const Signup = () => {
                   </label>
                   <label
                     htmlFor="gender"
-                    className="grid text-start font-sans text-[15px] font-semibold text-[#9a9a9a]"
+                    className="grid text-start text-[15px] font-semibold text-[#9a9a9a]"
                   >
                     <select
                       defaultValue=""
@@ -616,7 +622,7 @@ const Signup = () => {
                   </label>
                   <label
                     htmlFor="number"
-                    className="grid text-start font-sans text-[15px] font-semibold text-[#9a9a9a]"
+                    className="grid text-start text-[15px] font-semibold text-[#9a9a9a]"
                   >
                     <input
                       id="number"
@@ -699,7 +705,7 @@ const Signup = () => {
                 <div className="grid grid-cols-1 gap-3">
                   <label
                     htmlFor="nationality"
-                    className="grid text-start font-sans text-[15px] font-semibold text-[#9a9a9a]"
+                    className="grid text-start text-[15px] font-semibold text-[#9a9a9a]"
                   >
                     <select
                       defaultValue=""
@@ -735,7 +741,7 @@ const Signup = () => {
                   </label>
                   <label
                     htmlFor="employeeType"
-                    className="grid text-start font-sans text-[15px] font-semibold text-[#9a9a9a]"
+                    className="grid text-start text-[15px] font-semibold text-[#9a9a9a]"
                   >
                     <select
                       defaultValue=""
@@ -784,7 +790,7 @@ const Signup = () => {
                   </label>
                   <label
                     htmlFor="qualification"
-                    className="grid text-start font-sans text-[15px] font-semibold text-[#9a9a9a]"
+                    className="grid text-start text-[15px] font-semibold text-[#9a9a9a]"
                   >
                     <select
                       defaultValue=""
@@ -840,7 +846,7 @@ const Signup = () => {
                   </label>
                   <label
                     htmlFor="birthDate"
-                    className="grid text-start font-sans text-[15px] font-semibold text-[#9a9a9a]"
+                    className="grid text-start text-[15px] font-semibold text-[#9a9a9a]"
                   >
                     {currentLanguage === "ar"
                       ? "تاريخ الميلاد"
@@ -943,7 +949,7 @@ const Signup = () => {
                 <div className="grid grid-cols-1 gap-3">
                   <label
                     htmlFor="name_en"
-                    className="grid text-start font-sans text-[15px] font-semibold text-[#9a9a9a]"
+                    className="grid text-start text-[15px] font-semibold text-[#9a9a9a]"
                   >
                     <input
                       id="name_en"
@@ -970,7 +976,7 @@ const Signup = () => {
                   </label>
                   <label
                     htmlFor="name_ar"
-                    className="grid text-start font-sans text-[15px] font-semibold text-[#9a9a9a]"
+                    className="grid text-start text-[15px] font-semibold text-[#9a9a9a]"
                   >
                     <input
                       id="name_ar"
@@ -997,7 +1003,7 @@ const Signup = () => {
                   </label>
                   <label
                     htmlFor="name_fr"
-                    className="grid text-start font-sans text-[15px] font-semibold text-[#9a9a9a]"
+                    className="grid text-start text-[15px] font-semibold text-[#9a9a9a]"
                   >
                     <input
                       id="name_fr"
@@ -1024,7 +1030,7 @@ const Signup = () => {
                   </label>
                   <label
                     htmlFor="schoolId"
-                    className="grid w-[400px] text-start font-sans text-[15px] font-semibold text-[#9a9a9a] max-[458px]:w-[350px]"
+                    className="grid w-[400px] text-start text-[15px] font-semibold text-[#9a9a9a] max-[458px]:w-[350px]"
                   >
                     <SearchableSelect
                       name="schoolId"
@@ -1037,7 +1043,7 @@ const Signup = () => {
                   </label>
                   <label
                     htmlFor="about"
-                    className="grid w-full text-start font-sans text-[15px] font-semibold text-[#9a9a9a]"
+                    className="grid w-full text-start text-[15px] font-semibold text-[#9a9a9a]"
                   >
                     <textarea
                       id="about"

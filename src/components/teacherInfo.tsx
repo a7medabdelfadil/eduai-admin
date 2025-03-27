@@ -13,7 +13,7 @@ const TeacherInfo = ({ data }: { data: any }) => {
     <>
       <div className="grid rounded-xl bg-bgPrimary p-5">
         <div className="flex justify-between">
-          <h1 className="font-sans font-semibold text-textPrimary">
+          <h1 className="font-semibold text-textPrimary">
             {currentLanguage === "ar"
               ? "معلومات المعلم"
               : currentLanguage === "fr"
@@ -51,12 +51,10 @@ const TeacherInfo = ({ data }: { data: any }) => {
               alt="#"
             />
           )}
-          <h1 className="font-sans font-semibold text-textPrimary">
-            {data?.data?.name}
-          </h1>
-          <p className="font-sans font-semibold text-textPrimary">
+          <h1 className="font-semibold text-textPrimary">{data?.data?.name}</h1>
+          <p className="font-semibold text-textPrimary">
             {" "}
-            <span className="font-sans font-semibold text-textSecondary">
+            <span className="font-semibold text-textSecondary">
               {currentLanguage === "ar"
                 ? "رقم المعلم:"
                 : currentLanguage === "fr"
@@ -68,7 +66,7 @@ const TeacherInfo = ({ data }: { data: any }) => {
         </div>
 
         <div className="grid justify-start">
-          <h1 className="font-sans text-[22px] font-semibold text-textPrimary">
+          <h1 className="text-[22px] font-semibold text-textPrimary">
             {currentLanguage === "ar"
               ? "التفاصيل الأساسية"
               : currentLanguage === "fr"
@@ -76,114 +74,114 @@ const TeacherInfo = ({ data }: { data: any }) => {
                 : "Basic Details"}
           </h1>
           <div className="grid w-[400px] grid-cols-2 max-[485px]:w-[240px]">
-            <h3 className="font-sans font-semibold text-textSecondary">
+            <h3 className="font-semibold text-textSecondary">
               {currentLanguage === "ar"
                 ? "البريد الإلكتروني:"
                 : currentLanguage === "fr"
                   ? "Email :"
                   : "Email:"}
             </h3>
-            <p className="font-sans font-semibold text-textPrimary">
+            <p className="font-semibold text-textPrimary">
               {data?.data?.email}
             </p>
-            <h3 className="font-sans font-semibold text-textSecondary">
+            <h3 className="font-semibold text-textSecondary">
               {currentLanguage === "ar"
                 ? "الراتب:"
                 : currentLanguage === "fr"
                   ? "Salaire :"
                   : "Salary:"}
             </h3>
-            <p className="font-sans font-semibold text-textPrimary">
-              {data?.data?.salary == null ? `Not specified` : data?.data?.salary}
+            <p className="font-semibold text-textPrimary">
+              {data?.data?.salary == null
+                ? `Not specified`
+                : data?.data?.salary}
             </p>
-            <h3 className="font-sans font-semibold text-textSecondary">
+            <h3 className="font-semibold text-textSecondary">
               {currentLanguage === "ar"
                 ? "تاريخ الميلاد:"
                 : currentLanguage === "fr"
                   ? "Date de naissance :"
                   : "Date Of Birth:"}
             </h3>
-            <p className="font-sans font-semibold text-textPrimary">
+            <p className="font-semibold text-textPrimary">
               {data?.data?.birthDate}
             </p>
-            <h3 className="font-sans font-semibold text-textSecondary">
+            <h3 className="font-semibold text-textSecondary">
               {currentLanguage === "ar"
                 ? "الجنس:"
                 : currentLanguage === "fr"
                   ? "Sexe :"
                   : "Gender:"}
             </h3>
-            <p className="font-sans font-semibold text-textPrimary">
+            <p className="font-semibold text-textPrimary">
               {data?.data?.gender}
             </p>
-            <h3 className="font-sans font-semibold text-textSecondary">
+            <h3 className="font-semibold text-textSecondary">
               {currentLanguage === "ar"
                 ? "الجنسية:"
                 : currentLanguage === "fr"
                   ? "Nationalité :"
                   : "Nationality:"}
             </h3>
-            <p className="font-sans font-semibold text-textPrimary">
+            <p className="font-semibold text-textPrimary">
               {data?.data?.nationality}
             </p>
-            <h3 className="font-sans font-semibold text-textSecondary">
+            <h3 className="font-semibold text-textSecondary">
               {currentLanguage === "ar"
                 ? "الجنس:"
                 : currentLanguage === "fr"
                   ? "Sexe :"
                   : "Gender:"}
             </h3>
-            <p className="font-sans font-semibold text-textPrimary">
+            <p className="font-semibold text-textPrimary">
               {data?.data?.gender}
             </p>
-            <h3 className="font-sans font-semibold text-textSecondary">
+            <h3 className="font-semibold text-textSecondary">
               {currentLanguage === "ar"
                 ? "المؤهل:"
                 : currentLanguage === "fr"
                   ? "Qualification :"
                   : "Qualification:"}
             </h3>
-            <p className="font-sans font-semibold text-textPrimary">
+            <p className="font-semibold text-textPrimary">
               {data?.data?.qualification}
             </p>
-            <h3 className="font-sans font-semibold text-textSecondary">
+            <h3 className="font-semibold text-textSecondary">
               {currentLanguage === "ar"
                 ? "العنوان:"
                 : currentLanguage === "fr"
                   ? "Adresse :"
                   : "Address:"}
             </h3>
-            <p className="font-sans font-semibold text-textPrimary">
+            <p className="font-semibold text-textPrimary">
               {data?.data?.address}
             </p>
-            <h3 className="font-sans font-semibold text-textSecondary">
+            <h3 className="font-semibold text-textSecondary">
               {currentLanguage === "ar"
                 ? "الهاتف المحمول:"
                 : currentLanguage === "fr"
                   ? "Mobile :"
                   : "Mobile:"}
             </h3>
-            <p className="font-sans font-semibold text-textPrimary">
+            <p className="font-semibold text-textPrimary">
               {data?.data?.number}
             </p>
           </div>
         </div>
 
         <div className="mt-4 grid grid-cols-1">
-          <p className="font-sans text-[20px] font-semibold text-textPrimary">
+          <p className="text-[20px] font-semibold text-textPrimary">
             {currentLanguage === "ar"
               ? "حول المعلم:"
               : currentLanguage === "fr"
                 ? "À propos de l'enseignant :"
                 : "About the Teacher:"}
           </p>
-          <p className="mb-5 font-sans text-[16px] font-semibold text-textSecondary">
+          <p className="mb-5 text-[16px] font-semibold text-textSecondary">
             {data?.data?.about}
           </p>
-          <p className="mb-5 font-sans text-[16px] font-semibold text-textSecondary">
-            {data?.data?.subjects.map((sub: string) => (
-              <p key={sub}>{sub}</p>
-            ))}
+          <p className="mb-5 text-[16px] font-semibold text-textSecondary">
+            {data?.data?.subjects.map((sub: string) => <p key={sub}>{sub}</p>)}
           </p>
         </div>
       </div>

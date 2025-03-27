@@ -21,8 +21,8 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 
 const AddNewTeacher = () => {
-    const [backendError, setBackendError] = useState<string | null>(null);
-  
+  const [backendError, setBackendError] = useState<string | null>(null);
+
   const { data: positionData, isLoading: isPosition } =
     useGetAllPositionsQuery(null);
 
@@ -117,13 +117,13 @@ const AddNewTeacher = () => {
       toast.success("Teacher created successfully");
       router.push("/teacher");
     } catch (error: any) {
-          if (error.data && error.data.data && error.data.data.length > 0) {
-            setBackendError(error.data.data[0]);
-          } else {
-            setBackendError("Failed to create parent");
-          }
-          toast.error("Failed to create parent");
-        }
+      if (error.data && error.data.data && error.data.data.length > 0) {
+        setBackendError(error.data.data[0]);
+      } else {
+        setBackendError("Failed to create parent");
+      }
+      toast.error("Failed to create parent");
+    }
   };
 
   const booleanValue = useSelector((state: RootState) => state.boolean.value);
@@ -157,11 +157,9 @@ const AddNewTeacher = () => {
         <FormProvider {...formMethods}>
           <form onSubmit={handleSubmit(onSubmit)}>
             <div className="my-10 grid items-center justify-center gap-5 rounded-xl bg-bgPrimary p-10 sm:w-[500px] md:w-[600px] lg:w-[750px] xl:w-[1000px]">
-            {backendError && (
-              <div className="text-error text-center">
-                {backendError}
-              </div>
-            )}
+              {backendError && (
+                <div className="text-center text-error">{backendError}</div>
+              )}
               <div className="flex items-center justify-start gap-2">
                 <svg
                   className="h-6 w-6 font-bold text-secondary group-hover:text-hover"
@@ -184,7 +182,7 @@ const AddNewTeacher = () => {
                   <line x1="12" y1="14" x2="12" y2="17" />
                   <line x1="16" y1="14" x2="16" y2="17" />
                 </svg>
-                <h1 className="font-sans text-[22px] font-semibold">
+                <h1 className="text-[22px] font-semibold">
                   {currentLanguage === "en"
                     ? "Teacher Information"
                     : currentLanguage === "ar"
@@ -197,7 +195,7 @@ const AddNewTeacher = () => {
               <div className="grid grid-cols-2 gap-4 max-[1278px]:grid-cols-1">
                 <label
                   htmlFor="username"
-                  className="grid font-sans text-[18px] font-semibold"
+                  className="grid text-[18px] font-semibold"
                 >
                   {currentLanguage === "en"
                     ? "Username"
@@ -217,7 +215,7 @@ const AddNewTeacher = () => {
 
                 <label
                   htmlFor="email"
-                  className="grid font-sans text-[18px] font-semibold"
+                  className="grid text-[18px] font-semibold"
                 >
                   {currentLanguage === "en"
                     ? "Email"
@@ -237,7 +235,7 @@ const AddNewTeacher = () => {
 
                 <label
                   htmlFor="password"
-                  className="grid font-sans text-[18px] font-semibold"
+                  className="grid text-[18px] font-semibold"
                 >
                   {currentLanguage === "en"
                     ? "Password"
@@ -255,10 +253,7 @@ const AddNewTeacher = () => {
                   )}
                 </label>
 
-                <label
-                  htmlFor="nid"
-                  className="grid font-sans text-[18px] font-semibold"
-                >
+                <label htmlFor="nid" className="grid text-[18px] font-semibold">
                   {currentLanguage === "en"
                     ? "NID"
                     : currentLanguage === "ar"
@@ -277,7 +272,7 @@ const AddNewTeacher = () => {
 
                 <label
                   htmlFor="gender"
-                  className="grid font-sans text-[18px] font-semibold"
+                  className="grid text-[18px] font-semibold"
                 >
                   {currentLanguage === "en"
                     ? "Gender"
@@ -327,7 +322,7 @@ const AddNewTeacher = () => {
               <div className="grid grid-cols-2 gap-4 max-[1278px]:grid-cols-1">
                 <label
                   htmlFor="nationality"
-                  className="grid font-sans text-[18px] font-semibold"
+                  className="grid text-[18px] font-semibold"
                 >
                   {currentLanguage === "en"
                     ? "Your Nationality"
@@ -368,7 +363,7 @@ const AddNewTeacher = () => {
 
                 <label
                   htmlFor="regionId"
-                  className="grid font-sans text-[18px] font-semibold"
+                  className="grid text-[18px] font-semibold"
                 >
                   {currentLanguage === "en"
                     ? "RegionId"
@@ -387,7 +382,7 @@ const AddNewTeacher = () => {
 
                 <label
                   htmlFor="name_en"
-                  className="grid font-sans text-[18px] font-semibold"
+                  className="grid text-[18px] font-semibold"
                 >
                   {currentLanguage === "en"
                     ? "Name (EN)"
@@ -413,7 +408,7 @@ const AddNewTeacher = () => {
 
                 <label
                   htmlFor="name_ar"
-                  className="grid font-sans text-[18px] font-semibold"
+                  className="grid text-[18px] font-semibold"
                 >
                   {currentLanguage === "en"
                     ? "Name (AR)"
@@ -439,7 +434,7 @@ const AddNewTeacher = () => {
 
                 <label
                   htmlFor="name_fr"
-                  className="grid font-sans text-[18px] font-semibold"
+                  className="grid text-[18px] font-semibold"
                 >
                   {currentLanguage === "en"
                     ? "Name (FR)"
@@ -465,7 +460,7 @@ const AddNewTeacher = () => {
 
                 <label
                   htmlFor="about"
-                  className="grid font-sans text-[18px] font-semibold"
+                  className="grid text-[18px] font-semibold"
                 >
                   {currentLanguage === "en"
                     ? "About"
@@ -491,7 +486,7 @@ const AddNewTeacher = () => {
 
                 <label
                   htmlFor="birthDate"
-                  className="grid font-sans text-[18px] font-semibold"
+                  className="grid text-[18px] font-semibold"
                 >
                   {currentLanguage === "en"
                     ? "Date Of Birth"
@@ -548,7 +543,7 @@ const AddNewTeacher = () => {
 
                 <label
                   htmlFor="qualification"
-                  className="mt-4 grid items-center font-sans text-[18px] font-semibold"
+                  className="mt-4 grid items-center text-[18px] font-semibold"
                 >
                   <select
                     defaultValue=""
@@ -606,7 +601,7 @@ const AddNewTeacher = () => {
               <div className="grid grid-cols-2 gap-4 max-[1278px]:grid-cols-1">
                 <label
                   htmlFor="hireDate"
-                  className="grid font-sans text-[18px] font-semibold"
+                  className="grid text-[18px] font-semibold"
                 >
                   {currentLanguage === "en"
                     ? "Hire Date"
@@ -654,7 +649,7 @@ const AddNewTeacher = () => {
 
                 <label
                   htmlFor="positionId"
-                  className="grid font-sans text-[18px] font-semibold"
+                  className="grid text-[18px] font-semibold"
                 >
                   {currentLanguage === "en"
                     ? "Position Id"
@@ -714,17 +709,19 @@ const AddNewTeacher = () => {
                           : "Ce champ est requis"}
                     </span>
                   )}
-{
-  positionData.data.content.length == 0 && (
-    <Link href="/organization-setting/position/add-position" className="mt-4 text-sm text-primary underline font-medium">Add Position</Link>
-
-  )
-}
+                  {positionData.data.content.length == 0 && (
+                    <Link
+                      href="/organization-setting/position/add-position"
+                      className="mt-4 text-sm font-medium text-primary underline"
+                    >
+                      Add Position
+                    </Link>
+                  )}
                 </label>
 
                 <label
                   htmlFor="salary"
-                  className="grid font-sans text-[18px] font-semibold"
+                  className="grid text-[18px] font-semibold"
                 >
                   {currentLanguage === "en"
                     ? "Salary"

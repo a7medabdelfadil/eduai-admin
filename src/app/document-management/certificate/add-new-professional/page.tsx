@@ -50,7 +50,7 @@ const AddNewProfessional = () => {
       archived: "false",
       page: 0,
       size: 1000000,
-      graduated: "false"
+      graduated: "false",
     });
   const [createCertificate, { isLoading }] = useCreateProfessionalsMutation();
   const [fileName, setFileName] = useState("");
@@ -133,7 +133,7 @@ const AddNewProfessional = () => {
                 <line x1="12" y1="14" x2="12" y2="17" />
                 <line x1="16" y1="14" x2="16" y2="17" />
               </svg>
-              <h1 className="font-sans text-[22px] font-semibold">
+              <h1 className="text-[22px] font-semibold">
                 {currentLanguage === "ar"
                   ? "الشهادات المهنية"
                   : currentLanguage === "fr"
@@ -144,7 +144,7 @@ const AddNewProfessional = () => {
             <div className="grid grid-cols-2 gap-4 max-[1278px]:grid-cols-1">
               <label
                 htmlFor="userId"
-                className="grid font-sans text-[18px] font-semibold"
+                className="grid text-[18px] font-semibold"
               >
                 {currentLanguage === "en"
                   ? "Student ID"
@@ -190,10 +190,7 @@ const AddNewProfessional = () => {
                   </span>
                 )}
               </label>
-              <label
-                htmlFor="type"
-                className="grid font-sans text-[18px] font-semibold"
-              >
+              <label htmlFor="type" className="grid text-[18px] font-semibold">
                 {currentLanguage === "ar"
                   ? "النوع"
                   : currentLanguage === "fr"
@@ -217,7 +214,7 @@ const AddNewProfessional = () => {
               </label>
               <label
                 htmlFor="issueDate"
-                className="grid font-sans text-[18px] font-semibold"
+                className="grid text-[18px] font-semibold"
               >
                 {currentLanguage === "ar"
                   ? "فصل التخرج"
@@ -242,7 +239,7 @@ const AddNewProfessional = () => {
               </label>
               <label
                 htmlFor="endData"
-                className="grid font-sans text-[18px] font-semibold"
+                className="grid text-[18px] font-semibold"
               >
                 {currentLanguage === "ar"
                   ? "وثيقة"

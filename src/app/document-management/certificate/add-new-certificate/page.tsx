@@ -51,12 +51,12 @@ const AddNewCertificate = () => {
   const [createCertificate, { isLoading }] = useCreateCertificatesMutation();
   const [fileName, setFileName] = useState("");
   const { data: students, isLoading: isStudentsLoading } =
-  useGetAllStudentsQuery({
-    archived: "false",
-    page: 0,
-    size: 1000000,
-    graduated: "false"
-  });
+    useGetAllStudentsQuery({
+      archived: "false",
+      page: 0,
+      size: 1000000,
+      graduated: "false",
+    });
   const handleFileChange = (event: any) => {
     const file = event.target.files[0];
     if (file) {
@@ -132,7 +132,7 @@ const AddNewCertificate = () => {
                 <line x1="12" y1="14" x2="12" y2="17" />
                 <line x1="16" y1="14" x2="16" y2="17" />
               </svg>
-              <h1 className="font-sans text-[22px] font-semibold">
+              <h1 className="text-[22px] font-semibold">
                 {currentLanguage === "ar"
                   ? "شهادات إتمام"
                   : currentLanguage === "fr"
@@ -143,7 +143,7 @@ const AddNewCertificate = () => {
             <div className="grid grid-cols-2 gap-4 max-[1278px]:grid-cols-1">
               <label
                 htmlFor="studentId"
-                className="grid font-sans text-[18px] font-semibold"
+                className="grid text-[18px] font-semibold"
               >
                 {currentLanguage === "en"
                   ? "Student ID"
@@ -190,10 +190,7 @@ const AddNewCertificate = () => {
                   </span>
                 )}
               </label>
-              <label
-                htmlFor="stage"
-                className="grid font-sans text-[18px] font-semibold"
-              >
+              <label htmlFor="stage" className="grid text-[18px] font-semibold">
                 {currentLanguage === "ar"
                   ? "المرحلة التعليمية"
                   : currentLanguage === "fr"
@@ -252,7 +249,7 @@ const AddNewCertificate = () => {
               </label>
               <label
                 htmlFor="issueDate"
-                className="grid font-sans text-[18px] font-semibold"
+                className="grid text-[18px] font-semibold"
               >
                 {currentLanguage === "ar"
                   ? "فصل التخرج"
@@ -275,10 +272,7 @@ const AddNewCertificate = () => {
                   </span>
                 )}
               </label>
-              <label
-                htmlFor="file"
-                className="grid font-sans text-[18px] font-semibold"
-              >
+              <label htmlFor="file" className="grid text-[18px] font-semibold">
                 {currentLanguage === "en"
                   ? "Student Certificates Of Achievement"
                   : currentLanguage === "ar"

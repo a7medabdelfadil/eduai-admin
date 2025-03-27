@@ -56,12 +56,12 @@ const AddNewAchievement = () => {
     }
   };
   const { data: students, isLoading: isStudentsLoading } =
-  useGetAllStudentsQuery({
-    archived: "false",
-    page: 0,
-    size: 1000000,
-    graduated: "false"
-  });
+    useGetAllStudentsQuery({
+      archived: "false",
+      page: 0,
+      size: 1000000,
+      graduated: "false",
+    });
   const onSubmit = async (formData: any) => {
     const data = new FormData();
     data.append(
@@ -132,7 +132,7 @@ const AddNewAchievement = () => {
                 <line x1="12" y1="14" x2="12" y2="17" />
                 <line x1="16" y1="14" x2="16" y2="17" />
               </svg>
-              <h1 className="font-sans text-[22px] font-semibold">
+              <h1 className="text-[22px] font-semibold">
                 {currentLanguage === "ar"
                   ? "شهادات الإنجاز"
                   : currentLanguage === "fr"
@@ -143,7 +143,7 @@ const AddNewAchievement = () => {
             <div className="grid grid-cols-2 gap-4 max-[1278px]:grid-cols-1">
               <label
                 htmlFor="studentId"
-                className="grid font-sans text-[18px] font-semibold"
+                className="grid text-[18px] font-semibold"
               >
                 {currentLanguage === "en"
                   ? "Student ID"
@@ -190,10 +190,7 @@ const AddNewAchievement = () => {
                   </span>
                 )}
               </label>
-              <label
-                htmlFor="stage"
-                className="grid font-sans text-[18px] font-semibold"
-              >
+              <label htmlFor="stage" className="grid text-[18px] font-semibold">
                 {currentLanguage === "ar"
                   ? "المرحلة التعليمية"
                   : currentLanguage === "fr"
@@ -252,7 +249,7 @@ const AddNewAchievement = () => {
               </label>
               <label
                 htmlFor="subject"
-                className="grid font-sans text-[18px] font-semibold"
+                className="grid text-[18px] font-semibold"
               >
                 {currentLanguage === "ar"
                   ? "المادة"
@@ -277,7 +274,7 @@ const AddNewAchievement = () => {
               </label>
               <label
                 htmlFor="issueDate"
-                className="grid font-sans text-[18px] font-semibold"
+                className="grid text-[18px] font-semibold"
               >
                 {currentLanguage === "ar"
                   ? "فصل التخرج"
@@ -302,7 +299,7 @@ const AddNewAchievement = () => {
               </label>
               {/* <label
                 htmlFor="endDate"
-                className="grid font-sans text-[18px] font-semibold"
+                className="grid text-[18px] font-semibold"
               >
                 {currentLanguage === "ar"
                   ? "وثيقة"
@@ -317,7 +314,7 @@ const AddNewAchievement = () => {
                 /> */}
               <label
                 htmlFor="endDate"
-                className="grid font-sans text-[18px] font-semibold"
+                className="grid text-[18px] font-semibold"
               >
                 {currentLanguage === "ar"
                   ? "وثيقة"

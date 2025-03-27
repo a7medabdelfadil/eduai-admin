@@ -81,13 +81,13 @@ const AddNewEmployee = () => {
       toast.success("Employee created successfully");
       router.push("/employee");
     } catch (error: any) {
-          if (error.data && error.data.data && error.data.data.length > 0) {
-            setBackendError(error.data.data[0]);
-          } else {
-            setBackendError("Failed to create parent");
-          }
-          toast.error(error.data.message);
-        }
+      if (error.data && error.data.data && error.data.data.length > 0) {
+        setBackendError(error.data.data[0]);
+      } else {
+        setBackendError("Failed to create parent");
+      }
+      toast.error(error.data.message);
+    }
   };
 
   const { language: currentLanguage, loading } = useSelector(
@@ -118,10 +118,8 @@ const AddNewEmployee = () => {
       >
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="my-10 grid items-center justify-center gap-5 rounded-xl bg-bgPrimary p-10 sm:w-[500px] md:w-[600px] lg:w-[750px] xl:w-[1000px]">
-          {backendError && (
-              <div className="text-error text-center">
-                {backendError}
-              </div>
+            {backendError && (
+              <div className="text-center text-error">{backendError}</div>
             )}
             <div className="flex items-center justify-start gap-2">
               <svg
@@ -145,7 +143,7 @@ const AddNewEmployee = () => {
                 <line x1="12" y1="14" x2="12" y2="17" />
                 <line x1="16" y1="14" x2="16" y2="17" />
               </svg>
-              <h1 className="font-sans text-[22px] font-semibold">
+              <h1 className="text-[22px] font-semibold">
                 {currentLanguage === "ar"
                   ? "معلومات الموظف"
                   : currentLanguage === "fr"
@@ -156,7 +154,7 @@ const AddNewEmployee = () => {
             <div className="grid grid-cols-2 gap-4 max-[1278px]:grid-cols-1">
               <label
                 htmlFor="username"
-                className="grid font-sans text-[18px] font-semibold"
+                className="grid text-[18px] font-semibold"
               >
                 {currentLanguage === "ar"
                   ? "اسم المستخدم"
@@ -179,10 +177,7 @@ const AddNewEmployee = () => {
                   </span>
                 )}
               </label>
-              <label
-                htmlFor="email"
-                className="grid font-sans text-[18px] font-semibold"
-              >
+              <label htmlFor="email" className="grid text-[18px] font-semibold">
                 {currentLanguage === "ar"
                   ? "البريد الإلكتروني"
                   : currentLanguage === "fr"
@@ -206,7 +201,7 @@ const AddNewEmployee = () => {
               </label>
               <label
                 htmlFor="password"
-                className="grid font-sans text-[18px] font-semibold"
+                className="grid text-[18px] font-semibold"
               >
                 {currentLanguage === "ar"
                   ? "كلمة المرور"
@@ -230,10 +225,7 @@ const AddNewEmployee = () => {
                   </span>
                 )}
               </label>
-              <label
-                htmlFor="nid"
-                className="grid font-sans text-[18px] font-semibold"
-              >
+              <label htmlFor="nid" className="grid text-[18px] font-semibold">
                 {currentLanguage === "ar"
                   ? "الرقم الهوية"
                   : currentLanguage === "fr"
@@ -257,7 +249,7 @@ const AddNewEmployee = () => {
               </label>
               <label
                 htmlFor="gender"
-                className="grid font-sans text-[18px] font-semibold"
+                className="grid text-[18px] font-semibold"
               >
                 {currentLanguage === "ar"
                   ? "الجنس"
@@ -304,7 +296,7 @@ const AddNewEmployee = () => {
               </label>
               <label
                 htmlFor="nationality"
-                className="grid font-sans text-[18px] font-semibold"
+                className="grid text-[18px] font-semibold"
               >
                 {currentLanguage === "ar"
                   ? "جنسيتك"
@@ -344,7 +336,7 @@ const AddNewEmployee = () => {
             <div className="grid grid-cols-2 gap-4 max-[1278px]:grid-cols-1">
               <label
                 htmlFor="regionId"
-                className="grid font-sans text-[18px] font-semibold"
+                className="grid text-[18px] font-semibold"
               >
                 {currentLanguage === "en"
                   ? "Region Id"
@@ -365,7 +357,7 @@ const AddNewEmployee = () => {
               </label>
               <label
                 htmlFor="name_en"
-                className="grid font-sans text-[18px] font-semibold"
+                className="grid text-[18px] font-semibold"
               >
                 {currentLanguage === "ar"
                   ? "الاسم (إنجليزي)"
@@ -390,7 +382,7 @@ const AddNewEmployee = () => {
               </label>
               <label
                 htmlFor="name_en"
-                className="grid font-sans text-[18px] font-semibold"
+                className="grid text-[18px] font-semibold"
               >
                 {currentLanguage === "ar"
                   ? "الاسم (عربي)"
@@ -415,7 +407,7 @@ const AddNewEmployee = () => {
               </label>
               <label
                 htmlFor="name_fr"
-                className="grid font-sans text-[18px] font-semibold"
+                className="grid text-[18px] font-semibold"
               >
                 {currentLanguage === "ar"
                   ? "الاسم (فرنسي)"
@@ -438,10 +430,7 @@ const AddNewEmployee = () => {
                   </span>
                 )}
               </label>
-              <label
-                htmlFor="about"
-                className="grid font-sans text-[18px] font-semibold"
-              >
+              <label htmlFor="about" className="grid text-[18px] font-semibold">
                 {currentLanguage === "ar"
                   ? "حول"
                   : currentLanguage === "fr"
@@ -465,7 +454,7 @@ const AddNewEmployee = () => {
               </label>
               <label
                 htmlFor="birthDate"
-                className="grid font-sans text-[18px] font-semibold"
+                className="grid text-[18px] font-semibold"
               >
                 {currentLanguage === "ar"
                   ? "تاريخ الميلاد"
@@ -517,7 +506,7 @@ const AddNewEmployee = () => {
               </label>
               <label
                 htmlFor="qualification"
-                className="mt-4 grid items-center font-sans text-[18px] font-semibold"
+                className="mt-4 grid items-center text-[18px] font-semibold"
               >
                 {currentLanguage === "ar"
                   ? "المؤهل"
@@ -578,7 +567,7 @@ const AddNewEmployee = () => {
               </label>
               <label
                 htmlFor="hireDate"
-                className="grid font-sans text-[18px] font-semibold"
+                className="grid text-[18px] font-semibold"
               >
                 {currentLanguage === "ar"
                   ? "تاريخ التوظيف"
@@ -613,7 +602,7 @@ const AddNewEmployee = () => {
               />
               <label
                 htmlFor="positionId"
-                className="grid font-sans text-[18px] font-semibold"
+                className="grid text-[18px] font-semibold"
               >
                 {currentLanguage === "ar"
                   ? "رقم الوظيفة"
@@ -676,7 +665,7 @@ const AddNewEmployee = () => {
               </label>
               <label
                 htmlFor="salary"
-                className="grid font-sans text-[18px] font-semibold"
+                className="grid text-[18px] font-semibold"
               >
                 {currentLanguage === "ar"
                   ? "الراتب"

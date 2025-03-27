@@ -42,11 +42,15 @@ const AddDepartment = () => {
   const router = useRouter();
   const booleanValue = useSelector((state: RootState) => state.boolean.value);
   const { data, isLoading: isRoles } = useGetAllRolesQuery(null);
-    const { data: employees, error, refetch } = useGetAllEmployeesQuery({
-      archived: "false",
-      page: 0,
-      size: 1000000,
-    });
+  const {
+    data: employees,
+    error,
+    refetch,
+  } = useGetAllEmployeesQuery({
+    archived: "false",
+    page: 0,
+    size: 1000000,
+  });
   const {
     register,
     handleSubmit,
@@ -120,7 +124,7 @@ const AddDepartment = () => {
                 <line x1="12" y1="14" x2="12" y2="17" />{" "}
                 <line x1="16" y1="14" x2="16" y2="17" />
               </svg>
-              <h1 className="font-sans text-[22px] font-semibold">
+              <h1 className="text-[22px] font-semibold">
                 {currentLanguage === "ar"
                   ? "معلومات القسم"
                   : currentLanguage === "fr"
@@ -131,7 +135,7 @@ const AddDepartment = () => {
             <div className="grid grid-cols-2 gap-4 max-[1278px]:grid-cols-1">
               <label
                 htmlFor="name_en"
-                className="grid font-sans text-[18px] font-semibold"
+                className="grid text-[18px] font-semibold"
               >
                 {currentLanguage === "ar"
                   ? "الاسم الكامل (بالإنجليزية)"
@@ -156,7 +160,7 @@ const AddDepartment = () => {
               </label>
               <label
                 htmlFor="name_fr"
-                className="grid font-sans text-[18px] font-semibold"
+                className="grid text-[18px] font-semibold"
               >
                 {currentLanguage === "ar"
                   ? "الاسم الكامل (بالفرنسية)"
@@ -181,7 +185,7 @@ const AddDepartment = () => {
               </label>
               <label
                 htmlFor="name_ar"
-                className="grid font-sans text-[18px] font-semibold"
+                className="grid text-[18px] font-semibold"
               >
                 {currentLanguage === "ar"
                   ? "الاسم الكامل (بالعربي)"
@@ -206,7 +210,7 @@ const AddDepartment = () => {
               </label>
               <label
                 htmlFor="description_en"
-                className="grid font-sans text-[18px] font-semibold"
+                className="grid text-[18px] font-semibold"
               >
                 {currentLanguage === "ar"
                   ? "الوصف (بالإنجليزية)"
@@ -231,7 +235,7 @@ const AddDepartment = () => {
               </label>
               <label
                 htmlFor="description_fr"
-                className="grid font-sans text-[18px] font-semibold"
+                className="grid text-[18px] font-semibold"
               >
                 {currentLanguage === "ar"
                   ? "الوصف (بالفرنسية)"
@@ -257,7 +261,7 @@ const AddDepartment = () => {
               </label>
               <label
                 htmlFor="description_ar"
-                className="grid font-sans text-[18px] font-semibold"
+                className="grid text-[18px] font-semibold"
               >
                 {currentLanguage === "ar"
                   ? "الوصف (بالعربي)"
@@ -282,7 +286,7 @@ const AddDepartment = () => {
               </label>
               <label
                 htmlFor="abbreviation_en"
-                className="grid font-sans text-[18px] font-semibold"
+                className="grid text-[18px] font-semibold"
               >
                 {currentLanguage === "ar"
                   ? "الاختصار (بالإنجليزي)"
@@ -307,7 +311,7 @@ const AddDepartment = () => {
               </label>
               <label
                 htmlFor="abbreviation_fr"
-                className="grid font-sans text-[18px] font-semibold"
+                className="grid text-[18px] font-semibold"
               >
                 {currentLanguage === "ar"
                   ? "الاختصار (بالفرنسي)"
@@ -333,7 +337,7 @@ const AddDepartment = () => {
               </label>
               <label
                 htmlFor="abbreviation_ar"
-                className="grid font-sans text-[18px] font-semibold"
+                className="grid text-[18px] font-semibold"
               >
                 {currentLanguage === "ar"
                   ? "اختصار (بالعربي)"
@@ -357,48 +361,45 @@ const AddDepartment = () => {
                 )}
               </label>
               <label
-  htmlFor="headId"
-  className="grid font-sans text-[18px] font-semibold"
->
-  {currentLanguage === "ar"
-    ? "المعرف الرئيسي"
-    : currentLanguage === "fr"
-      ? "ID du Responsable"
-      : "HeadId"}
-
-  <select
-    id="headId"
-    className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
-    {...register("headId", { required: true })}
-  >
-    <option value="">
-      {currentLanguage === "ar"
-        ? "اختر موظفًا"
-        : currentLanguage === "fr"
-          ? "Sélectionner un employé"
-          : "Select an employee"}
-    </option>
-    {employees?.data?.content?.map((employee: any) => (
-      <option key={employee.id} value={employee.id}>
-        {employee.name}
-      </option>
-    ))}
-  </select>
-  
-  {errors.headId && (
-    <span className="text-error">
-      {currentLanguage === "ar"
-        ? "هذا الحقل مطلوب"
-        : currentLanguage === "fr"
-          ? "Ce champ est requis"
-          : "This field is required"}
-    </span>
-  )}
-</label>
-              <label
-                htmlFor="roles"
-                className="grid font-sans text-[18px] font-semibold"
+                htmlFor="headId"
+                className="grid text-[18px] font-semibold"
               >
+                {currentLanguage === "ar"
+                  ? "المعرف الرئيسي"
+                  : currentLanguage === "fr"
+                    ? "ID du Responsable"
+                    : "HeadId"}
+
+                <select
+                  id="headId"
+                  className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  {...register("headId", { required: true })}
+                >
+                  <option value="">
+                    {currentLanguage === "ar"
+                      ? "اختر موظفًا"
+                      : currentLanguage === "fr"
+                        ? "Sélectionner un employé"
+                        : "Select an employee"}
+                  </option>
+                  {employees?.data?.content?.map((employee: any) => (
+                    <option key={employee.id} value={employee.id}>
+                      {employee.name}
+                    </option>
+                  ))}
+                </select>
+
+                {errors.headId && (
+                  <span className="text-error">
+                    {currentLanguage === "ar"
+                      ? "هذا الحقل مطلوب"
+                      : currentLanguage === "fr"
+                        ? "Ce champ est requis"
+                        : "This field is required"}
+                  </span>
+                )}
+              </label>
+              <label htmlFor="roles" className="grid text-[18px] font-semibold">
                 {currentLanguage === "ar"
                   ? "حدد الدور"
                   : currentLanguage === "fr"
@@ -413,9 +414,9 @@ const AddDepartment = () => {
                   <option selected value="">
                     {currentLanguage === "ar"
                       ? "حدد الدور"
-                  : currentLanguage === "fr"
-                    ? "sélectionner le rôle"
-                    : "Select Role"}
+                      : currentLanguage === "fr"
+                        ? "sélectionner le rôle"
+                        : "Select Role"}
                   </option>
                   {data &&
                     Object.entries(data.data).map(([key, value]) => (

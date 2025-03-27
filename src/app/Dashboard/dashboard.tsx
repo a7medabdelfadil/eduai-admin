@@ -13,14 +13,16 @@ import {
   useGetExpensesQuery,
   useGetNoticesQuery,
   useDeleteNoteMutation,
+  useGetTeacherAttendenceQuery,
+  useGetEmployeeAttendenceQuery,
+  useGetWorkerAttendenceQuery,
+  useGetEventsInWeekQuery,
 } from "@/features/dashboard/dashboardApi";
 import {
   useCreateEventsMutation,
   useGetAllEventsDashboardQuery,
 } from "@/features/events/eventsApi";
-import { format, parseISO } from "date-fns";
 import dynamic from "next/dynamic";
-import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -29,6 +31,18 @@ import Link from "next/link";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import { z } from "zod";
+import { HiOutlineArrowNarrowUp } from "react-icons/hi";
+import { Text } from "@/components/Text";
+import { formatDistanceToNow, parseISO, format } from "date-fns";
+import { ar, fr, enUS } from "date-fns/locale";
+
+// Define the type for notice items
+interface Notice {
+  id: number;
+  title: string;
+  description: string;
+  createdAt: string;
+}
 
 const ReactApexChart = dynamic(() => import("react-apexcharts"), {
   ssr: false,
@@ -48,19 +62,26 @@ const eventSchema = z.object({
 });
 
 const Dashboard: React.FC = () => {
-  const router = useRouter();
   const ID = useSelector((state: RootState) => state.user.id);
   const { data: events, isLoading: isEvents } = useGetEventsInMonthQuery(null);
+  const { data: eventsWeek, isLoading: isEventsWeekLoading } =
+    useGetEventsInWeekQuery(null);
   const currentYear = new Date().getFullYear();
   const start = format(new Date(currentYear, 0, 1), "yyyy-MM-dd");
   const end = format(new Date(currentYear, 11, 30), "yyyy-MM-dd");
   const { language: currentLanguage, loading } = useSelector(
     (state: RootState) => state.language,
   );
+
+  const locale = currentLanguage === "ar" ? ar : currentLanguage === "fr" ? fr : enUS;
+
   const { data: expenses, isLoading: isExpenses } = useGetExpensesQuery({
     start: start,
     end: end,
   });
+  const { data: teacherAttendance } = useGetTeacherAttendenceQuery(null);
+  const { data: employeeAttendance } = useGetEmployeeAttendenceQuery(null);
+  const { data: workersAttendance } = useGetWorkerAttendenceQuery(null);
   const {
     data: students,
     error: err1,
@@ -82,15 +103,30 @@ const Dashboard: React.FC = () => {
     isLoading: isWorker,
   } = useGetAllWorkersQuery(null);
   const { data: mettings, isLoading: isMeeting } =
-  useGetAllEventsDashboardQuery(null);
-  console.log("👾 ~ mettings:", mettings)
+    useGetAllEventsDashboardQuery(null);
+
+  const [noticesState, setNoticesState] = useState<Notice[]>([]);
+
   const {
     data: notices,
     isLoading: isNotices,
     refetch,
   } = useGetNoticesQuery(null);
+
+  useEffect(() => {
+    if (notices?.data?.content) {
+      setNoticesState(notices.data.content);
+    }
+  }, [notices]);
+
+  const nameColors = [
+    "text-orange-500",
+    "text-blue-500",
+    "text-green-500",
+    "text-red-500",
+  ];
+
   const [createEvent] = useCreateEventsMutation();
-  
 
   const {
     register,
@@ -233,17 +269,9 @@ const Dashboard: React.FC = () => {
     <>
       <div
         dir={currentLanguage === "ar" ? "rtl" : "ltr"}
-        className={`grid text-start ${
-          currentLanguage === "ar"
-            ? booleanValue
-              ? "lg:mr-[100px]"
-              : ""
-            : booleanValue
-              ? "lg:ml-[100px]"
-              : ""
-        }`}
+        className={`grid text-start`}
       >
-        <h1 className="mb-2 font-sans text-[28px] font-bold text-[#041631] dark:text-white">
+        <h1 className="mx-4 mb-2 text-[28px] font-bold text-[#041631] dark:text-white lg:mx-0">
           {currentLanguage === "en"
             ? "Dashboard"
             : currentLanguage === "ar"
@@ -252,7 +280,7 @@ const Dashboard: React.FC = () => {
                 ? "tableau de bord"
                 : "tableau de bord"}
         </h1>
-        <p className="font-sans text-[20px] text-[#526484] max-[490px]:text-[18px]">
+        <p className="mx-4 text-[20px] text-textSecondary max-[490px]:text-[18px] lg:mx-0">
           {currentLanguage === "en"
             ? "Welcome to Learning Management Dashboard."
             : currentLanguage === "ar"
@@ -262,121 +290,178 @@ const Dashboard: React.FC = () => {
                 : "Bienvenue dans le tableau de bord de gestion de l'apprentissage."}
         </p>
       </div>
-      <div className="mr-10 grid w-full justify-center overflow-x-auto p-6">
+      <div
+        className={`${currentLanguage === "ar" ? "pl-4 pr-4 lg:pl-10 lg:pr-0" : "pl-4 pr-4 lg:pl-0 lg:pr-10"} mt-6 grid w-full overflow-x-auto`}
+      >
         <div className="grid overflow-x-auto">
-          <div className="mb-6 flex w-full justify-evenly gap-4 whitespace-nowrap max-[812px]:justify-center max-[576px]:h-[120px]">
+          <div className="mb-6 grid w-full grid-cols-2 justify-center gap-4 whitespace-nowrap max-[812px]:justify-center md:grid-cols-3 2xl:grid-cols-5">
             <div
               dir={currentLanguage === "ar" ? "rtl" : "ltr"}
-              className="h-[80px] w-[201px] items-center justify-center rounded-xl bg-bgPrimary p-2 shadow-xl max-[576px]:h-[100px]"
+              className="flex h-[120px] w-full flex-col justify-evenly rounded-xl bg-bgPrimary p-4 shadow-md max-[576px]:h-[100px]"
             >
-              <p className="text-[12px] text-textSecondary">
+              <p className="text-sm font-medium text-secondary">
                 {currentLanguage === "ar"
-                  ? "عدد الطلاب"
+                  ? "إجمالي الطلاب"
                   : currentLanguage === "fr"
-                    ? "Nombre d'étudiants"
-                    : "Students count"}
+                    ? "Total des étudiants"
+                    : "Total student"}
               </p>
-              <h1 className="text-[17px] font-semibold">{students?.data} 🧑‍🎓</h1>
+              <h1 className="text-3xl font-semibold">{students?.data} </h1>
+              <div className="flex gap-2">
+                <div className="flex text-success">
+                  <HiOutlineArrowNarrowUp className="mt-[2px]" /> 4.63%
+                </div>
+                <div>
+                  <Text>
+                    {currentLanguage === "ar"
+                      ? "مقارنة بالسنة الماضية"
+                      : currentLanguage === "fr"
+                        ? "vs. l'année dernière"
+                        : "vs. last Year"}
+                  </Text>
+                </div>
+              </div>
             </div>
             <div
               dir={currentLanguage === "ar" ? "rtl" : "ltr"}
-              className="h-[80px] w-[201px] items-center justify-center rounded-xl bg-bgPrimary p-2 shadow-xl max-[576px]:h-[100px]"
+              className="flex h-[120px] w-full flex-col justify-evenly rounded-xl bg-bgPrimary p-4 shadow-md max-[576px]:h-[100px]"
             >
-              <p className="text-[12px] text-textSecondary">
+              <p className="text-sm font-medium text-secondary">
                 {currentLanguage === "ar"
-                  ? "عدد الموظفين"
+                  ? "إجمالي المعلمين"
                   : currentLanguage === "fr"
-                    ? "Nombre d'employés"
-                    : "Employees count"}
+                    ? "Total des enseignants"
+                    : "Total teacher"}
               </p>
-              <h1 className="text-[17px] font-semibold">
-                {employees?.data} 👨‍💼
-              </h1>
+              <h1 className="text-3xl font-semibold">{teachers?.data} </h1>
+              <div className="flex gap-2">
+                <Text color={"success"}>{teacherAttendance?.data}</Text>
+                <Text>
+                  {currentLanguage === "ar"
+                    ? "الحضور اليوم"
+                    : currentLanguage === "fr"
+                      ? "Présences aujourd'hui"
+                      : "Attendances today"}
+                </Text>
+              </div>
             </div>
             <div
               dir={currentLanguage === "ar" ? "rtl" : "ltr"}
-              className="h-[80px] w-[201px] items-center justify-center rounded-xl bg-bgPrimary p-2 shadow-xl max-[576px]:h-[100px]"
+              className="flex h-[120px] w-full flex-col justify-evenly rounded-xl bg-bgPrimary p-4 shadow-md max-[576px]:h-[100px]"
             >
-              <p className="text-[12px] text-textSecondary">
+              <p className="text-sm font-medium text-secondary">
                 {currentLanguage === "ar"
-                  ? "عدد المدرسين"
+                  ? "إجمالي الموظفين"
                   : currentLanguage === "fr"
-                    ? "Nombre d'enseignants"
-                    : "Teachers count"}
+                    ? "Total des employés"
+                    : "Total employee"}
               </p>
-              <h1 className="text-[17px] font-semibold">{teachers?.data} 👨‍🏫</h1>
+              <h1 className="text-3xl font-semibold">{employees?.data}</h1>
+              <div className="flex gap-2">
+                <Text color={"success"}>{employeeAttendance?.data}</Text>
+                <Text>
+                  {currentLanguage === "ar"
+                    ? "الحضور اليوم"
+                    : currentLanguage === "fr"
+                      ? "Présences aujourd'hui"
+                      : "Attendances today"}
+                </Text>
+              </div>
             </div>
             <div
               dir={currentLanguage === "ar" ? "rtl" : "ltr"}
-              className="h-[80px] w-[201px] items-center justify-center rounded-xl bg-bgPrimary p-2 shadow-xl max-[576px]:h-[100px]"
+              className="flex h-[120px] w-full flex-col justify-evenly rounded-xl bg-bgPrimary p-4 shadow-md max-[576px]:h-[100px]"
             >
-              <p className="text-[12px] text-textSecondary">
+              <p className="text-sm font-medium text-secondary">
                 {currentLanguage === "ar"
-                  ? "عدد العمال"
+                  ? "إجمالي العمال"
                   : currentLanguage === "fr"
-                    ? "Nombre de travailleurs"
-                    : "Workers count"}
+                    ? "Total des travailleurs"
+                    : "Total Worker"}
               </p>
-              <h1 className="text-[17px] font-semibold">{workers?.data} 🧑‍🏭</h1>
+              <h1 className="text-3xl font-semibold">{workers?.data} </h1>
+              <div className="flex gap-2">
+                <Text color={"success"}>{workersAttendance?.data}</Text>
+                <Text>
+                  {currentLanguage === "ar"
+                    ? "الحضور اليوم"
+                    : currentLanguage === "fr"
+                      ? "Présences aujourd'hui"
+                      : "Attendances today"}
+                </Text>
+              </div>
             </div>
             <div
               dir={currentLanguage === "ar" ? "rtl" : "ltr"}
-              className="h-[80px] w-[201px] items-center justify-center rounded-xl bg-bgPrimary p-2 shadow-xl max-[576px]:h-[100px]"
+              className="flex h-[120px] w-full flex-col justify-evenly rounded-xl bg-bgPrimary p-4 shadow-md max-[576px]:h-[100px]"
             >
-              <p className="text-[12px] text-textSecondary">
+              <p className="text-sm font-medium text-secondary">
                 {currentLanguage === "ar"
-                  ? "الأحداث"
+                  ? "الفعاليات"
                   : currentLanguage === "fr"
                     ? "Événements"
                     : "Events"}
               </p>
-              <h1 className="text-[17px] font-semibold">
-                {events?.data}⏰{" "}
-                {currentLanguage === "en"
-                  ? "in this month"
-                  : currentLanguage === "ar"
-                    ? "هذا الشهر"
+              <div className="flex items-end gap-2">
+                <h1 className="text-3xl font-semibold">{events?.data}</h1>
+                <Text className="mb-[1px]">
+                  {currentLanguage === "en"
+                    ? "in this month"
+                    : currentLanguage === "ar"
+                      ? "هذا الشهر"
+                      : currentLanguage === "fr"
+                        ? "ce mois-ci"
+                        : "in this month"}
+                </Text>
+              </div>
+              <div className="flex gap-2">
+                <Text color="success">{eventsWeek?.data}</Text>
+                <Text>
+                  {currentLanguage === "ar"
+                    ? "خلال هذا الأسبوع"
                     : currentLanguage === "fr"
-                      ? "ce mois-ci"
-                      : "in this month"}
-              </h1>
+                      ? "Cette semaine"
+                      : "In this week"}
+                </Text>
+              </div>
             </div>
           </div>
         </div>
 
-        <div className="mb-6 grid w-full grid-cols-1 justify-between gap-10 overflow-x-auto 2xl:flex">
-          <div className="flex overflow-x-auto rounded-xl max-[1535px]:justify-center">
+        <div className="grid w-full grid-cols-1 gap-6 overflow-x-auto pb-4 lg:grid-cols-3">
+          <div className="col-span-1 flex overflow-x-auto rounded-xl lg:col-span-2">
             <div
               id="chart"
-              className="w-[850px] overflow-x-auto rounded-xl bg-bgPrimary p-2 shadow-xl"
+              className="w-full overflow-hidden rounded-xl bg-bgPrimary p-4 shadow"
             >
               <p
                 dir={currentLanguage === "ar" ? "rtl" : "ltr"}
                 className="pb-3 text-[18px] font-semibold"
               >
-                {" "}
                 {currentLanguage === "en"
                   ? "School Finance"
                   : currentLanguage === "ar"
                     ? "مالية المدرسة"
-                    : currentLanguage === "fr"
-                      ? "Finance de l'école"
-                      : "School Finance"}
+                    : "Finance de l'école"}
               </p>
               <ReactApexChart
                 options={options}
                 series={series}
                 type="area"
-                width={options.chart.width}
+                width="100%"
                 height={options.chart.height}
               />
             </div>
           </div>
-          <div className="flex justify-center">
-            <div className="grid overflow-x-auto rounded-2xl">
-              <div className="grid w-[550px]  overflow-x-auto rounded-2xl bg-bgPrimary p-2 shadow-xl max-[1536px]:h-[450px] max-[1536px]:w-[850px]">
-                <div className="flex justify-start text-start w-full" dir={currentLanguage === "ar" ? "rtl" : "ltr"}>
-                  <h1 className="text-xl font-bold">
+
+          <div className="col-span-1 flex justify-center">
+            <div className="grid w-full overflow-hidden rounded-2xl">
+              <div className="grid max-h-[450px] w-full overflow-hidden rounded-2xl bg-bgPrimary p-4 shadow-xl">
+                <div
+                  className="flex w-full justify-start text-start"
+                  dir={currentLanguage === "ar" ? "rtl" : "ltr"}
+                >
+                  <h1 className="text-xl font-semibold">
                     {currentLanguage === "ar"
                       ? "الفعاليات القادمة"
                       : currentLanguage === "fr"
@@ -384,58 +469,57 @@ const Dashboard: React.FC = () => {
                         : "Upcoming Events"}
                   </h1>
                 </div>
-                {mettings?.data.content.map((meeting: Meeting) => (
-                  <div
-                    dir={currentLanguage === "ar" ? "rtl" : "ltr"}
-                    key={meeting.id}
-                    className="flex items-center justify-evenly"
-                  >
-                    <div className="mx-3 h-[75px] w-[66px] items-center justify-center rounded-xl bg-[#F9DCA4] p-2 text-center">
-                      <h1 className="text-[18px] font-semibold text-warning">
-                        {format(parseISO(meeting.startDate), "d")}
-                      </h1>
-                      <h1 className="text-[18px] font-semibold text-warning">
-                        {format(parseISO(meeting.startDate), "EEE")}
-                      </h1>
-                    </div>
-                    <div className="grid w-[150px] gap-2">
-                      <p className="text-[13px] text-warning">
-                        {format(
-                          parseISO(meeting.startDate),
-                          "dd - MMMM - yyyy",
-                        )}
-                      </p>
-                      <p className="text-[16px] text-gray-400 truncate">
-                        {meeting.title}
-                      </p>
-                      <div className="h-2.5 w-full rounded-full bg-gray-200">
-                        <div
-                          className="h-2.5 rounded-full bg-warning"
-                          style={{ width: `22%` }}
-                        ></div>
+
+                {mettings?.data.content.length > 0 ? (
+                  mettings?.data.content.map((meeting: Meeting) => (
+                    <div
+                      key={meeting.id}
+                      className="flex items-center justify-between"
+                    >
+                      <div className="mx-3 flex h-[75px] w-[66px] items-center justify-center rounded-xl bg-[#F9DCA4] p-2 text-center">
+                        <h1 className="text-[18px] font-semibold text-warning">
+                          {format(parseISO(meeting.startDate), "d")}
+                        </h1>
+                        <h1 className="text-[18px] font-semibold text-warning">
+                          {format(parseISO(meeting.startDate), "EEE")}
+                        </h1>
+                      </div>
+                      <div className="grid w-[150px] gap-2">
+                        <p className="text-[13px] text-warning">
+                          {format(
+                            parseISO(meeting.startDate),
+                            "dd - MMMM - yyyy",
+                          )}
+                        </p>
+                        <p className="truncate text-[16px] text-gray-400">
+                          {meeting.title}
+                        </p>
+                        <div className="h-2.5 w-full rounded-full bg-gray-200">
+                          <div
+                            className="h-2.5 rounded-full bg-warning"
+                            style={{ width: `22%` }}
+                          ></div>
+                        </div>
+                      </div>
+                      <div className="ml-3 grid w-[200px] gap-8">
+                        <p className="text-[13px] text-warning">
+                          {format(parseISO(meeting.startDate), "hh:mm a")} -{" "}
+                          {format(parseISO(meeting.endDate), "hh:mm a")}
+                        </p>
                       </div>
                     </div>
-                    <div className="ml-3 grid w-[200px] gap-8">
-                      <p className="text-[13px] text-warning">
-                        {format(parseISO(meeting.startDate), "hh:mm a")} -{" "}
-                        {format(parseISO(meeting.endDate), "hh:mm a")}
-                      </p>
-                      
-                    </div>
-                  </div>
-                ))}
-                {(mettings?.data.content.length == 0 || mettings == null) && (
-                  <div className="flex w-full text-secondary justify-center py-3 text-center text-[18px] font-semibold">
+                  ))
+                ) : (
+                  <div className="flex w-full justify-center py-3 text-center text-[18px] font-semibold text-secondary">
                     {currentLanguage === "en"
                       ? "No Events Found"
                       : currentLanguage === "ar"
                         ? "لم يتم العثور على أحداث"
-                        : currentLanguage === "fr"
-                          ? "Aucun événement trouvé"
-                          : "No Events Found"}
+                        : "Aucun événement trouvé"}
                   </div>
                 )}
-                <div className="flex h-full justify-evenly items-center">
+
+                <div className="flex h-full items-center justify-evenly">
                   <button
                     onClick={handleOpenModal}
                     className="mx-3 whitespace-nowrap rounded-xl bg-primary px-2.5 py-2 text-[14px] font-semibold text-white duration-300 ease-in hover:bg-[#4a5cc5] hover:shadow-xl"
@@ -446,25 +530,27 @@ const Dashboard: React.FC = () => {
                         ? "+ Nouvel événement"
                         : "+ New Event"}
                   </button>
-                  <Link
-                    href="/educational-affairs/events"
-                    className="font-semibold text-primary underline"
-                  >
-                    {currentLanguage === "ar"
-                      ? "المزيد من الفعاليات"
-                      : currentLanguage === "fr"
-                        ? "Plus d'événements"
-                        : "More Events"}
-                  </Link>
+                  {mettings.data.content.length > 3 && (
+                    <Link
+                      href="/educational-affairs/events"
+                      className="font-semibold text-primary underline"
+                    >
+                      {currentLanguage === "ar"
+                        ? "المزيد من الفعاليات"
+                        : currentLanguage === "fr"
+                          ? "Plus d'événements"
+                          : "More Events"}
+                    </Link>
+                  )}
                 </div>
               </div>
             </div>
           </div>
         </div>
 
-        <div className="mb-6 grid w-full grid-cols-1 justify-between gap-10 overflow-x-auto 2xl:flex">
-          <div className="grid overflow-x-auto rounded-2xl">
-            <div className="flex w-[850px] flex-col items-center justify-center overflow-x-auto rounded-2xl bg-bgPrimary shadow-xl max-[1536px]:w-full">
+        <div className="mb-6 grid w-full grid-cols-1 gap-6 overflow-x-auto lg:grid-cols-2">
+          <div className="grid w-full overflow-x-auto rounded-2xl">
+            <div className="flex w-full flex-col items-center justify-center overflow-x-auto rounded-2xl bg-bgPrimary shadow">
               <div
                 dir={currentLanguage === "ar" ? "rtl" : "ltr"}
                 className="mt-4 flex w-full flex-col items-start px-4"
@@ -489,9 +575,9 @@ const Dashboard: React.FC = () => {
           </div>
           <div
             dir={currentLanguage === "ar" ? "rtl" : "ltr"}
-            className="grid overflow-x-auto rounded-xl"
+            className="grid w-full overflow-x-auto rounded-xl"
           >
-            <div className="grid h-[500px] w-[550px] overflow-x-auto overflow-y-auto rounded-xl bg-bgPrimary p-2  max-[1536px]:w-full">
+            <div className="w-full overflow-x-auto overflow-y-auto rounded-xl bg-bgPrimary p-4">
               <div className="flex w-full justify-between">
                 <p className="text-[20px] font-bold">
                   {currentLanguage === "en"
@@ -516,68 +602,43 @@ const Dashboard: React.FC = () => {
                   {/* Default to English */}
                 </Link>
               </div>
-              <div className="">
-                {notices?.data?.content.map(
-                  (note: {
-                    id: React.Key | null | undefined;
-                    title:
-                      | string
-                      | number
-                      | bigint
-                      | boolean
-                      | React.ReactElement<
-                          any,
-                          string | React.JSXElementConstructor<any>
-                        >
-                      | Iterable<React.ReactNode>
-                      | React.ReactPortal
-                      | null
-                      | undefined;
-                    description:
-                      | string
-                      | number
-                      | bigint
-                      | boolean
-                      | React.ReactElement<
-                          any,
-                          string | React.JSXElementConstructor<any>
-                        >
-                      | Iterable<React.ReactNode>
-                      | React.ReactPortal
-                      | null
-                      | undefined;
-                  }) => (
-                    <div key={note.id}>
-                      <h1 className="flex items-center gap-2 text-[18px] font-semibold text-primary">
-                        <button
-                          onClick={() =>
-                            typeof note.id === "number" && handleDelete(note.id)
-                          }
-                        >
-                          <svg
-                            className="h-6 w-6 text-error"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            stroke="currentColor"
+              <div className="w-full">
+                {isNotices ? (
+                  <p className="text-center text-gray-500">Loading...</p>
+                ) : noticesState.length === 0 ? (
+                  <p className="text-center text-gray-500">
+                    No notices available
+                  </p>
+                ) : (
+                  noticesState.map((item, index) => (
+                    <div key={item.id} className="mb-6">
+                      {/* Name + Time */}
+                      <div className="flex items-center justify-between">
+                        <div className="flex gap-2 items-center">
+                          <p
+                            className={`text-lg font-semibold ${nameColors[index % nameColors.length]}`}
                           >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth="2"
-                              d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-                            />
-                          </svg>
-                        </button>
-                        {String(note.title)}
-                      </h1>
-                      <p
-                        className="text-textSecondary"
-                        dangerouslySetInnerHTML={{
-                          __html: note.description || "",
-                        }}
-                      />
+                            {item.title}
+                          </p>
+                          <span className="text-sm text-textSecondary">
+                            {formatDistanceToNow(parseISO(item.createdAt), {
+                              addSuffix: true,
+                              locale,
+                            })}
+                          </span>
+                        </div>
+                        {/* Date on the right */}
+                        <div className={`text-right text-sm font-semibold ${nameColors[index % nameColors.length]}`}>
+                          {format(parseISO(item.createdAt), "dd - MMM - yyyy", {
+                            locale,
+                          })}
+                        </div>
+                      </div>
+
+                      {/* Description */}
+                      <p className="mt-1 text-gray-500">{item.description}</p>
                     </div>
-                  ),
+                  ))
                 )}
               </div>
             </div>

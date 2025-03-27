@@ -61,7 +61,6 @@ const EditCourse = ({ params }: EditCourseProps) => {
       setValue("desc_fr", data.data.desc_fr);
       setValue("desc_ar", data.data.desc_ar);
     }
-
   }, [data, error]);
 
   const {
@@ -140,7 +139,7 @@ const EditCourse = ({ params }: EditCourseProps) => {
                 <line x1="12" y1="14" x2="12" y2="17" />{" "}
                 <line x1="16" y1="14" x2="16" y2="17" />
               </svg>
-              <h1 className="font-sans text-[22px] font-semibold">
+              <h1 className="text-[22px] font-semibold">
                 {currentLanguage === "ar"
                   ? "معلومات الدورة"
                   : currentLanguage === "fr"
@@ -151,7 +150,7 @@ const EditCourse = ({ params }: EditCourseProps) => {
             <div className="grid grid-cols-2 gap-4 max-[1278px]:grid-cols-1">
               <label
                 htmlFor="courseCode"
-                className="grid font-sans text-[18px] font-semibold"
+                className="grid text-[18px] font-semibold"
               >
                 {currentLanguage === "ar"
                   ? "رمز الدورة"
@@ -176,7 +175,7 @@ const EditCourse = ({ params }: EditCourseProps) => {
               </label>
               <label
                 htmlFor="code_en"
-                className="grid font-sans text-[18px] font-semibold"
+                className="grid text-[18px] font-semibold"
               >
                 {currentLanguage === "ar"
                   ? "اسم الدورة (بالإنجليزية)"
@@ -201,7 +200,7 @@ const EditCourse = ({ params }: EditCourseProps) => {
               </label>
               <label
                 htmlFor="code_fr"
-                className="grid font-sans text-[18px] font-semibold"
+                className="grid text-[18px] font-semibold"
               >
                 {currentLanguage === "ar"
                   ? "اسم الدورة (بالفرنسية)"
@@ -226,7 +225,7 @@ const EditCourse = ({ params }: EditCourseProps) => {
               </label>
               <label
                 htmlFor="code_ar"
-                className="grid font-sans text-[18px] font-semibold"
+                className="grid text-[18px] font-semibold"
               >
                 {currentLanguage === "ar"
                   ? "اسم الدورة (بالفرنسية)"
@@ -251,7 +250,7 @@ const EditCourse = ({ params }: EditCourseProps) => {
               </label>
               <label
                 htmlFor="desc_en"
-                className="grid font-sans text-[18px] font-semibold"
+                className="grid text-[18px] font-semibold"
               >
                 {currentLanguage === "ar"
                   ? "الوصف (بالإنجليزية)"
@@ -276,7 +275,7 @@ const EditCourse = ({ params }: EditCourseProps) => {
               </label>
               <label
                 htmlFor="desc_fr"
-                className="grid font-sans text-[18px] font-semibold"
+                className="grid text-[18px] font-semibold"
               >
                 {currentLanguage === "ar"
                   ? "الوصف (بالفرنسية)"
@@ -301,7 +300,7 @@ const EditCourse = ({ params }: EditCourseProps) => {
               </label>
               <label
                 htmlFor="desc_ar"
-                className="grid font-sans text-[18px] font-semibold"
+                className="grid text-[18px] font-semibold"
               >
                 {currentLanguage === "ar"
                   ? "الوصف (بالعربية)"

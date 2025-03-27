@@ -104,7 +104,7 @@ const AddOffice = () => {
                 <line x1="12" y1="14" x2="12" y2="17" />{" "}
                 <line x1="16" y1="14" x2="16" y2="17" />
               </svg>
-              <h1 className="font-sans text-[22px] font-semibold">
+              <h1 className="text-[22px] font-semibold">
                 {currentLanguage === "ar"
                   ? "معلومات المكتب"
                   : currentLanguage === "fr"
@@ -115,7 +115,7 @@ const AddOffice = () => {
             <div className="grid grid-cols-2 gap-4 max-[1278px]:grid-cols-1">
               <label
                 htmlFor="buildingNumber"
-                className="grid font-sans text-[18px] font-semibold"
+                className="grid text-[18px] font-semibold"
               >
                 {currentLanguage === "ar"
                   ? "رقم المبنى"
@@ -134,7 +134,7 @@ const AddOffice = () => {
               </label>
               <label
                 htmlFor="roomNumber"
-                className="grid font-sans text-[18px] font-semibold"
+                className="grid text-[18px] font-semibold"
               >
                 {currentLanguage === "ar"
                   ? "رقم الغرفة"
@@ -153,7 +153,7 @@ const AddOffice = () => {
               </label>
               <label
                 htmlFor="floorNumber"
-                className="grid font-sans text-[18px] font-semibold"
+                className="grid text-[18px] font-semibold"
               >
                 {currentLanguage === "ar"
                   ? "رقم الطابق"
@@ -170,10 +170,7 @@ const AddOffice = () => {
                   <span className="text-error">This field is required</span>
                 )}
               </label>
-              <label
-                htmlFor="type"
-                className="grid font-sans text-[18px] font-semibold"
-              >
+              <label htmlFor="type" className="grid text-[18px] font-semibold">
                 {currentLanguage === "ar"
                   ? "النوع"
                   : currentLanguage === "fr"
@@ -191,7 +188,7 @@ const AddOffice = () => {
               </label>
               <label
                 htmlFor="maxCapacity"
-                className="grid font-sans text-[18px] font-semibold"
+                className="grid text-[18px] font-semibold"
               >
                 {currentLanguage === "ar"
                   ? "الطاقة الاستيعابية القصوى"
@@ -210,7 +207,7 @@ const AddOffice = () => {
               </label>
               <label
                 htmlFor="schoolId"
-                className="grid font-sans text-[18px] font-semibold"
+                className="grid text-[18px] font-semibold"
               >
                 {currentLanguage === "ar"
                   ? "معرف المدرسة"
@@ -229,7 +226,7 @@ const AddOffice = () => {
               </label>
               <label
                 htmlFor="labName"
-                className="grid font-sans text-[18px] font-semibold"
+                className="grid text-[18px] font-semibold"
               >
                 {currentLanguage === "ar"
                   ? "اسم المكتب"
@@ -248,7 +245,7 @@ const AddOffice = () => {
               </label>
               <label
                 htmlFor="labType"
-                className="grid font-sans text-[18px] font-semibold"
+                className="grid text-[18px] font-semibold"
               >
                 {currentLanguage === "ar"
                   ? "نوع المكتب"

@@ -280,7 +280,7 @@ const Profile = () => {
                   </div>
                 </div>
                 <div className="grid grid-cols-2 gap-4 max-[1278px]:grid-cols-1">
-                  <label className="grid font-sans text-[18px] font-semibold">
+                  <label className="grid text-[18px] font-semibold">
                     {currentLanguage === "ar"
                       ? "اسم المستخدم"
                       : currentLanguage === "fr"
@@ -292,7 +292,7 @@ const Profile = () => {
                       className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                     />
                   </label>
-                  <label className="grid font-sans text-[18px] font-semibold">
+                  <label className="grid text-[18px] font-semibold">
                     {currentLanguage === "ar"
                       ? "البريد الإلكتروني"
                       : currentLanguage === "fr"
@@ -304,7 +304,7 @@ const Profile = () => {
                       className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                     />
                   </label>
-                  <label className="grid font-sans text-[18px] font-semibold">
+                  <label className="grid text-[18px] font-semibold">
                     {currentLanguage === "ar"
                       ? "الرقم الوطني"
                       : currentLanguage === "fr"
@@ -317,7 +317,7 @@ const Profile = () => {
                       className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                     />
                   </label>
-                  <label className="grid font-sans text-[18px] font-semibold">
+                  <label className="grid text-[18px] font-semibold">
                     {currentLanguage === "ar"
                       ? "حول"
                       : currentLanguage === "fr"
@@ -332,7 +332,7 @@ const Profile = () => {
                   </label>
                   <label
                     htmlFor="gender"
-                    className="grid font-sans text-[18px] font-semibold"
+                    className="grid text-[18px] font-semibold"
                   >
                     {currentLanguage === "ar"
                       ? "الجنس"
@@ -379,7 +379,7 @@ const Profile = () => {
                   </label>
                   <label
                     htmlFor="nationality"
-                    className="grid font-sans text-[18px] font-semibold"
+                    className="grid text-[18px] font-semibold"
                   >
                     {currentLanguage === "ar"
                       ? "جنسيتك"
@@ -419,7 +419,7 @@ const Profile = () => {
                   </label>
                   <label
                     htmlFor="regionId"
-                    className="grid w-[400px] font-sans text-[18px] font-semibold max-[471px]:w-[350px]"
+                    className="grid w-[400px] text-[18px] font-semibold max-[471px]:w-[350px]"
                   >
                     {currentLanguage === "en"
                       ? "Region Id"
@@ -448,7 +448,7 @@ const Profile = () => {
                   />
                   <label
                     htmlFor="name_en"
-                    className="grid font-sans text-[18px] font-semibold"
+                    className="grid text-[18px] font-semibold"
                   >
                     {currentLanguage === "ar"
                       ? "الاسم (إنجليزي)"
@@ -473,7 +473,7 @@ const Profile = () => {
                   </label>
                   <label
                     htmlFor="qualification"
-                    className="mt-4 grid items-center font-sans text-[18px] font-semibold"
+                    className="mt-4 grid items-center text-[18px] font-semibold"
                   >
                     {currentLanguage === "ar"
                       ? "المؤهل"
@@ -534,7 +534,7 @@ const Profile = () => {
                   </label>
                   <label
                     htmlFor="name_en"
-                    className="grid font-sans text-[18px] font-semibold"
+                    className="grid text-[18px] font-semibold"
                   >
                     {currentLanguage === "ar"
                       ? "الاسم (عربي)"
@@ -559,7 +559,7 @@ const Profile = () => {
                   </label>
                   <label
                     htmlFor="name_fr"
-                    className="grid font-sans text-[18px] font-semibold"
+                    className="grid text-[18px] font-semibold"
                   >
                     {currentLanguage === "ar"
                       ? "الاسم (فرنسي)"
@@ -582,7 +582,7 @@ const Profile = () => {
                       </span>
                     )}
                   </label>
-                  <label className="grid font-sans text-[18px] font-semibold">
+                  <label className="grid text-[18px] font-semibold">
                     {currentLanguage === "ar"
                       ? "تاريخ الميلاد"
                       : currentLanguage === "fr"

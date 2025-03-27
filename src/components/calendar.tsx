@@ -10,9 +10,9 @@ interface CalendarProps {
   initialDate?: Date;
 }
 
-const Calendar: React.FC<CalendarProps> = ({ 
+const Calendar: React.FC<CalendarProps> = ({
   onDateSelect,
-  initialDate = new Date()
+  initialDate = new Date(),
 }) => {
   const { language: currentLanguage } = useSelector(
     (state: RootState) => state.language,
@@ -68,7 +68,7 @@ const Calendar: React.FC<CalendarProps> = ({
         <div className="mb-7 flex items-center justify-between">
           <button
             aria-label="Previous month"
-            className="rounded-lg border border-borderPrimary p-2 font-sans text-[23px] font-semibold text-primary"
+            className="rounded-lg border border-borderPrimary p-2 text-[23px] font-semibold text-primary"
             onClick={goToPreviousMonth}
           >
             <svg
@@ -88,13 +88,13 @@ const Calendar: React.FC<CalendarProps> = ({
           </button>
           <h2
             aria-live="polite"
-            className="mb-3 font-sans font-semibold text-textSecondary"
+            className="mb-3 font-semibold text-textSecondary"
           >
             {monthYear}
           </h2>
           <button
             aria-label="Next month"
-            className="rounded-lg border border-borderPrimary p-2 font-sans text-[23px] font-semibold text-primary"
+            className="rounded-lg border border-borderPrimary p-2 text-[23px] font-semibold text-primary"
             onClick={goToNextMonth}
           >
             <svg
@@ -112,41 +112,41 @@ const Calendar: React.FC<CalendarProps> = ({
         </div>
         <div className="grid grid-cols-7 gap-8" role="row">
           {/* Day headers */}
-          {["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"].map((day) => (
+          {["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"].map(day => (
             <div
               key={day}
               role="columnheader"
-              className="font-sans font-medium text-textSecondary"
+              className="font-medium text-textSecondary"
             >
               {currentLanguage === "ar"
                 ? day === "SUN"
                   ? "الأحد"
                   : day === "MON"
-                  ? "الإثنين"
-                  : day === "TUE"
-                  ? "الثلاثاء"
-                  : day === "WED"
-                  ? "الأربعاء"
-                  : day === "THU"
-                  ? "الخميس"
-                  : day === "FRI"
-                  ? "الجمعة"
-                  : "السبت"
+                    ? "الإثنين"
+                    : day === "TUE"
+                      ? "الثلاثاء"
+                      : day === "WED"
+                        ? "الأربعاء"
+                        : day === "THU"
+                          ? "الخميس"
+                          : day === "FRI"
+                            ? "الجمعة"
+                            : "السبت"
                 : currentLanguage === "fr"
-                ? day === "SUN"
-                  ? "DIM"
-                  : day === "MON"
-                  ? "LUN"
-                  : day === "TUE"
-                  ? "MAR"
-                  : day === "WED"
-                  ? "MER"
-                  : day === "THU"
-                  ? "JEU"
-                  : day === "FRI"
-                  ? "VEN"
-                  : "SAM"
-                : day}
+                  ? day === "SUN"
+                    ? "DIM"
+                    : day === "MON"
+                      ? "LUN"
+                      : day === "TUE"
+                        ? "MAR"
+                        : day === "WED"
+                          ? "MER"
+                          : day === "THU"
+                            ? "JEU"
+                            : day === "FRI"
+                              ? "VEN"
+                              : "SAM"
+                  : day}
             </div>
           ))}
         </div>

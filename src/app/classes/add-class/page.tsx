@@ -12,7 +12,7 @@ import { useRouter } from "next/navigation";
 const AddClass = () => {
   const router = useRouter();
   const getStudyLevels = (currentLanguage: any) => {
-    if (currentLanguage === 'ar') {
+    if (currentLanguage === "ar") {
       return {
         GRADE12: "الصف 12",
         GRADE9: "الصف 9",
@@ -29,7 +29,7 @@ const AddClass = () => {
         KG2: "روضة أطفال 2",
         GRADE4: "الصف 4",
       };
-    } else if (currentLanguage === 'en') {
+    } else if (currentLanguage === "en") {
       return {
         GRADE12: "Grade 12",
         GRADE9: "Grade 9",
@@ -46,7 +46,7 @@ const AddClass = () => {
         KG2: "Kindergarten 2",
         GRADE4: "Grade 4",
       };
-    } else if (currentLanguage === 'fr') {
+    } else if (currentLanguage === "fr") {
       return {
         GRADE12: "12ème année",
         GRADE9: "9ème année",
@@ -66,23 +66,25 @@ const AddClass = () => {
     }
     return {};
   };
-  
-  const getStudyCategories = (currentLanguage: any): { [key: string]: string } => {
-    if (currentLanguage === 'ar') {
+
+  const getStudyCategories = (
+    currentLanguage: any,
+  ): { [key: string]: string } => {
+    if (currentLanguage === "ar") {
       return {
         KINDERGARTEN: "روضة أطفال",
         SECONDARY: "السنة الثانوية",
         PRIMARY: "السنة الابتدائية",
         PREPARATORY: "السنة الاعدادية",
       };
-    } else if (currentLanguage === 'en') {
+    } else if (currentLanguage === "en") {
       return {
         KINDERGARTEN: "Kindergarten",
         SECONDARY: "Secondary School",
         PRIMARY: "Primary School",
         PREPARATORY: "Preparatory School",
       };
-    } else if (currentLanguage === 'fr') {
+    } else if (currentLanguage === "fr") {
       return {
         KINDERGARTEN: "Maternelle",
         SECONDARY: "École Secondaire",
@@ -92,23 +94,25 @@ const AddClass = () => {
     }
     return {};
   };
-  
-  const getJobCategories = (currentLanguage: any): { [key: string]: string } => {
-    if (currentLanguage === 'ar') {
+
+  const getJobCategories = (
+    currentLanguage: any,
+  ): { [key: string]: string } => {
+    if (currentLanguage === "ar") {
       return {
         EDUCATIONAL: "التعليمية",
         ADMINISTRATIVE: "إداري",
         SPECIALIZED: "متخصص",
         FACILITIES_SERVICES: "خدمة المرافق",
       };
-    } else if (currentLanguage === 'en') {
+    } else if (currentLanguage === "en") {
       return {
         EDUCATIONAL: "Educational",
         ADMINISTRATIVE: "Administrative",
         SPECIALIZED: "Specialized",
         FACILITIES_SERVICES: "Facilities Services",
       };
-    } else if (currentLanguage === 'fr') {
+    } else if (currentLanguage === "fr") {
       return {
         EDUCATIONAL: "Éducatif",
         ADMINISTRATIVE: "Administratif",
@@ -151,7 +155,7 @@ const AddClass = () => {
     try {
       await createDriver(data).unwrap();
       toast.success("Class created successfully");
-      router.push("/classes")
+      router.push("/classes");
     } catch {
       toast.error("Failed to create Class: you may enter data incorrectly ");
     }
@@ -162,8 +166,8 @@ const AddClass = () => {
   );
 
   const studyLevels = getStudyLevels(currentLanguage);
-const studyCategories = getStudyCategories(currentLanguage);
-const jobCategories = getJobCategories(currentLanguage);
+  const studyCategories = getStudyCategories(currentLanguage);
+  const jobCategories = getJobCategories(currentLanguage);
 
   if (loading || isLoading)
     return (
@@ -211,7 +215,7 @@ const jobCategories = getJobCategories(currentLanguage);
                 <line x1="12" y1="14" x2="12" y2="17" />
                 <line x1="16" y1="14" x2="16" y2="17" />
               </svg>
-              <h1 className="font-sans text-[22px] font-semibold">
+              <h1 className="text-[22px] font-semibold">
                 {currentLanguage === "ar"
                   ? "معلومات الفصل"
                   : currentLanguage === "fr"
@@ -222,7 +226,7 @@ const jobCategories = getJobCategories(currentLanguage);
             <div className="grid grid-cols-2 gap-4 max-[1278px]:grid-cols-1">
               <label
                 htmlFor="buildingNumber"
-                className="grid font-sans text-[18px] font-semibold"
+                className="grid text-[18px] font-semibold"
               >
                 {currentLanguage === "ar"
                   ? "رقم المبنى"
@@ -247,7 +251,7 @@ const jobCategories = getJobCategories(currentLanguage);
               </label>
               <label
                 htmlFor="roomNumber"
-                className="grid font-sans text-[18px] font-semibold"
+                className="grid text-[18px] font-semibold"
               >
                 {currentLanguage === "ar"
                   ? "رقم الغرفة"
@@ -272,7 +276,7 @@ const jobCategories = getJobCategories(currentLanguage);
               </label>
               <label
                 htmlFor="floorNumber"
-                className="grid font-sans text-[18px] font-semibold"
+                className="grid text-[18px] font-semibold"
               >
                 {currentLanguage === "ar"
                   ? "رقم الطابق"
@@ -295,10 +299,7 @@ const jobCategories = getJobCategories(currentLanguage);
                   </span>
                 )}
               </label>
-              <label
-                htmlFor="type"
-                className="grid font-sans text-[18px] font-semibold"
-              >
+              <label htmlFor="type" className="grid text-[18px] font-semibold">
                 {currentLanguage === "ar"
                   ? "النوع"
                   : currentLanguage === "fr"
@@ -337,7 +338,7 @@ const jobCategories = getJobCategories(currentLanguage);
               </label>
               <label
                 htmlFor="maxCapacity"
-                className="grid font-sans text-[18px] font-semibold"
+                className="grid text-[18px] font-semibold"
               >
                 {currentLanguage === "ar"
                   ? "القدرة القصوى"
@@ -362,7 +363,7 @@ const jobCategories = getJobCategories(currentLanguage);
               </label>
               <label
                 htmlFor="classroomName"
-                className="grid font-sans text-[18px] font-semibold"
+                className="grid text-[18px] font-semibold"
               >
                 {currentLanguage === "ar"
                   ? "اسم الفصل"
@@ -387,7 +388,7 @@ const jobCategories = getJobCategories(currentLanguage);
               </label>
               <label
                 htmlFor="classroomNumber"
-                className="grid font-sans text-[18px] font-semibold"
+                className="grid text-[18px] font-semibold"
               >
                 {currentLanguage === "ar"
                   ? "رقم الفصل"
@@ -412,7 +413,7 @@ const jobCategories = getJobCategories(currentLanguage);
               </label>
               <label
                 htmlFor="classroomStudyLevel"
-                className="grid font-sans text-[18px] font-semibold"
+                className="grid text-[18px] font-semibold"
               >
                 {currentLanguage === "ar"
                   ? "مستوى دراسة الفصل"
@@ -452,7 +453,7 @@ const jobCategories = getJobCategories(currentLanguage);
               </label>
               <label
                 htmlFor="classroomStudyStage"
-                className="grid font-sans text-[18px] font-semibold"
+                className="grid text-[18px] font-semibold"
               >
                 {currentLanguage === "ar"
                   ? "مرحلة دراسة الفصل"

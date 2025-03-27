@@ -13,7 +13,7 @@ import { useGetAllCoursesQuery } from "@/features/Acadimic/courseApi";
 const AddExam = () => {
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
-  
+
   const breadcrumbs = [
     {
       nameEn: "Administration",
@@ -40,27 +40,28 @@ const AddExam = () => {
       href: "/organization-setting/exams/add-exam",
     },
   ];
-  
+
   // Legal type options
   const legalTypeOptions = {
-    "FIRST": "First",
-    "SECOND": "Second",
-    "THIRD": "Third", 
-    "FOURTH": "Fourth",
-    "INTEGRATED_ACTIVITIES": "Integrated Activities"
+    FIRST: "First",
+    SECOND: "Second",
+    THIRD: "Third",
+    FOURTH: "Fourth",
+    INTEGRATED_ACTIVITIES: "Integrated Activities",
   };
-  
+
   const {
     register,
     handleSubmit,
     formState: { errors },
-    reset
+    reset,
   } = useForm();
 
   // Get course data for course selection
-  
+
   // Use the create exam type mutation
-  const [createExamType, { isLoading: isCreating }] = useCreateExamTypeMutation();
+  const [createExamType, { isLoading: isCreating }] =
+    useCreateExamTypeMutation();
 
   const booleanValue = useSelector((state: RootState) => state.boolean.value);
   const { language: currentLanguage, loading } = useSelector(
@@ -79,16 +80,16 @@ const AddExam = () => {
         studyLevel: data.studyLevel,
         legalType: data.legalType,
       };
-      
+
       const response = await createExamType(payload).unwrap();
-      
+
       if (response) {
         toast.success(
           currentLanguage === "ar"
             ? "تم إضافة الامتحان بنجاح"
             : currentLanguage === "fr"
               ? "Examen ajouté avec succès"
-              : "Exam added successfully"
+              : "Exam added successfully",
         );
         reset(); // Reset form after successful submission
         router.push("/organization-setting/exams"); // Redirect to exams page
@@ -99,7 +100,7 @@ const AddExam = () => {
           ? "حدث خطأ أثناء إضافة الامتحان"
           : currentLanguage === "fr"
             ? "Une erreur s'est produite lors de l'ajout de l'examen"
-            : "An error occurred while adding the exam"
+            : "An error occurred while adding the exam",
       );
       console.error("Error creating exam type:", error);
     } finally {
@@ -113,7 +114,7 @@ const AddExam = () => {
         <Spinner />
       </div>
     );
-    
+
   return (
     <>
       <BreadCrumbs breadcrumbs={breadcrumbs} />
@@ -153,7 +154,7 @@ const AddExam = () => {
                 <line x1="12" y1="14" x2="12" y2="17" />
                 <line x1="16" y1="14" x2="16" y2="17" />
               </svg>
-              <h1 className="font-sans text-[22px] font-semibold">
+              <h1 className="text-[22px] font-semibold">
                 {currentLanguage === "ar"
                   ? "إضافة امتحان"
                   : currentLanguage === "fr"
@@ -161,11 +162,11 @@ const AddExam = () => {
                     : "Add Exam"}
               </h1>
             </div>
-          
+
             <div className="grid grid-cols-2 gap-4 max-[1278px]:grid-cols-1">
               <label
                 htmlFor="examName"
-                className="grid font-sans text-[18px] font-semibold"
+                className="grid text-[18px] font-semibold"
               >
                 {currentLanguage === "ar"
                   ? "اسم الامتحان"
@@ -195,10 +196,10 @@ const AddExam = () => {
                   </span>
                 )}
               </label>
-              
+
               <label
                 htmlFor="examGrade"
-                className="grid font-sans text-[18px] font-semibold"
+                className="grid text-[18px] font-semibold"
               >
                 {currentLanguage === "ar"
                   ? "درجة الامتحان"
@@ -228,10 +229,10 @@ const AddExam = () => {
                   </span>
                 )}
               </label>
-              
+
               <label
                 htmlFor="passingGrade"
-                className="grid font-sans text-[18px] font-semibold"
+                className="grid text-[18px] font-semibold"
               >
                 {currentLanguage === "ar"
                   ? "درجة النجاح"
@@ -264,7 +265,7 @@ const AddExam = () => {
 
               <label
                 htmlFor="studyLevel"
-                className="grid font-sans text-[18px] font-semibold"
+                className="grid text-[18px] font-semibold"
               >
                 {currentLanguage === "ar"
                   ? "المستوى الدراسي"
@@ -300,11 +301,11 @@ const AddExam = () => {
                   </span>
                 )}
               </label>
-              
+
               {/* Legal Type Selection */}
               <label
                 htmlFor="legalType"
-                className="grid font-sans text-[18px] font-semibold"
+                className="grid text-[18px] font-semibold"
               >
                 {currentLanguage === "ar"
                   ? "النوع القانوني"
@@ -344,10 +345,10 @@ const AddExam = () => {
             <div className="flex justify-center text-center">
               <button
                 type="submit"
-                className="w-fit rounded-xl bg-primary px-4 py-2 text-[18px] text-white duration-300 ease-in hover:bg-hover hover:shadow-xl disabled:opacity-70 disabled:cursor-not-allowed"
+                className="w-fit rounded-xl bg-primary px-4 py-2 text-[18px] text-white duration-300 ease-in hover:bg-hover hover:shadow-xl disabled:cursor-not-allowed disabled:opacity-70"
                 disabled={isSubmitting || isCreating}
               >
-                {(isSubmitting || isCreating) ? (
+                {isSubmitting || isCreating ? (
                   <span className="flex items-center gap-2">
                     {currentLanguage === "ar"
                       ? "جاري الحفظ..."
@@ -355,12 +356,12 @@ const AddExam = () => {
                         ? "Sauvegarde en cours..."
                         : "Saving..."}
                   </span>
+                ) : currentLanguage === "ar" ? (
+                  "حفظ"
+                ) : currentLanguage === "fr" ? (
+                  "Sauvegarder"
                 ) : (
-                  currentLanguage === "ar"
-                    ? "حفظ"
-                    : currentLanguage === "fr"
-                      ? "Sauvegarder"
-                      : "Save"
+                  "Save"
                 )}
               </button>
             </div>

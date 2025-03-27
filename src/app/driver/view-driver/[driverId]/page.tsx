@@ -46,7 +46,6 @@ const ViewDriver: React.FC<ViewDriverProps> = ({ params }) => {
 
   const { data, error, isLoading } = useGetDriverByIdQuery(params.driverId);
 
-
   const { language: currentLanguage, loading } = useSelector(
     (state: RootState) => state.language,
   );
@@ -66,7 +65,7 @@ const ViewDriver: React.FC<ViewDriverProps> = ({ params }) => {
           <DriverInfo data={data} />
           <div className="grid h-[400px] items-center justify-center gap-10 rounded-xl bg-bgPrimary p-5">
             <div className="flex justify-between">
-              <h1 className="font-sans font-semibold text-textPrimary">
+              <h1 className="font-semibold text-textPrimary">
                 {currentLanguage === "ar"
                   ? "عدد الطلاب في الحافلة"
                   : currentLanguage === "fr"

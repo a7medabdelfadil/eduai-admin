@@ -127,7 +127,7 @@ const AddPosition = ({ params }: ParamsType) => {
                 <line x1="12" y1="14" x2="12" y2="17" />
                 <line x1="16" y1="14" x2="16" y2="17" />
               </svg>
-              <h1 className="font-sans text-[22px] font-semibold">
+              <h1 className="text-[22px] font-semibold">
                 {currentLanguage === "ar"
                   ? "معلومات الوظيفة"
                   : currentLanguage === "fr"
@@ -138,7 +138,7 @@ const AddPosition = ({ params }: ParamsType) => {
             <div className="grid grid-cols-2 gap-4 max-[1278px]:grid-cols-1">
               <label
                 htmlFor="departmentId"
-                className="grid font-sans text-[18px] font-semibold"
+                className="grid text-[18px] font-semibold"
               >
                 {currentLanguage === "ar"
                   ? "معرف القسم"
@@ -191,7 +191,7 @@ const AddPosition = ({ params }: ParamsType) => {
               {/* Other input fields */}
               <label
                 htmlFor="title_en"
-                className="grid font-sans text-[18px] font-semibold"
+                className="grid text-[18px] font-semibold"
               >
                 {currentLanguage === "ar"
                   ? "العنوان (بالإنجليزية)"
@@ -217,7 +217,7 @@ const AddPosition = ({ params }: ParamsType) => {
 
               <label
                 htmlFor="title_fr"
-                className="grid font-sans text-[18px] font-semibold"
+                className="grid text-[18px] font-semibold"
               >
                 {currentLanguage === "ar"
                   ? "العنوان (بالفرنسية)"
@@ -243,7 +243,7 @@ const AddPosition = ({ params }: ParamsType) => {
 
               <label
                 htmlFor="title_ar"
-                className="grid font-sans text-[18px] font-semibold"
+                className="grid text-[18px] font-semibold"
               >
                 {currentLanguage === "ar"
                   ? "العنوان (بالعربي)"

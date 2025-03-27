@@ -2,7 +2,10 @@
 import React from "react";
 import { useForm } from "react-hook-form";
 import Spinner from "@/components/spinner";
-import { useCreateStudentsMutation, useGetAllEducationsQuery } from "@/features/User-Management/studentApi";
+import {
+  useCreateStudentsMutation,
+  useGetAllEducationsQuery,
+} from "@/features/User-Management/studentApi";
 import { useGetAllParentsQuery } from "@/features/User-Management/parentApi";
 import { useRouter } from "next/navigation";
 import {
@@ -71,7 +74,7 @@ const AddNewStudent = () => {
   const { data: nationalityData, isLoading: nationalityLoading } =
     useGetAllNationalitysQuery(null);
   const { data: educations, isLoading: isEducations } =
-  useGetAllEducationsQuery(null);
+    useGetAllEducationsQuery(null);
   const { data: regionData } = useGetAllReginionIDQuery(null);
   const optionsRigon =
     regionData?.data?.map(
@@ -86,22 +89,17 @@ const AddNewStudent = () => {
         label: `${rigion.regionName} - ${rigion.cityName}`,
       }),
     ) || [];
-    
-    const { data: parentData, isLoading: parentLoading } = useGetAllParentsQuery({
-      archived: "false",
-      page: 0,
-      size: 1000000,
-    });
-    const parentOptions =
-      parentData?.data.content?.map(
-        (parent: {
-          id: any;
-          name: any;
-        }) => ({
-          value: parent.id,
-          label: `${parent.name}`,
-        }),
-      ) || [];
+
+  const { data: parentData, isLoading: parentLoading } = useGetAllParentsQuery({
+    archived: "false",
+    page: 0,
+    size: 1000000,
+  });
+  const parentOptions =
+    parentData?.data.content?.map((parent: { id: any; name: any }) => ({
+      value: parent.id,
+      label: `${parent.name}`,
+    })) || [];
   const { data: countryCode, isLoading: isCountryCode } =
     useGetAllCountryCodeQuery(null);
   const { data: LevelData, isLoading: LevelLoading } =
@@ -208,16 +206,14 @@ const AddNewStudent = () => {
       >
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="my-10 grid items-center justify-center gap-5 rounded-xl bg-bgPrimary p-10 sm:w-[500px] md:w-[600px] lg:w-[750px] xl:w-[1000px]">
-          {backendError && (
-              <div className="text-error text-center">
-                {backendError}
-              </div>
+            {backendError && (
+              <div className="text-center text-error">{backendError}</div>
             )}
             <div className="grid grid-cols-2 gap-4 max-[1278px]:grid-cols-1">
               {/* Parent ID dropdown */}
               <label
                 htmlFor="parentId"
-                className="grid font-sans text-[18px] font-semibold"
+                className="grid text-[18px] font-semibold"
               >
                 {currentLanguage === "en"
                   ? "Parent"
@@ -244,7 +240,7 @@ const AddNewStudent = () => {
               {/* Username */}
               <label
                 htmlFor="username"
-                className="grid font-sans text-[18px] font-semibold"
+                className="grid text-[18px] font-semibold"
               >
                 {currentLanguage === "en"
                   ? "Username"
@@ -267,10 +263,7 @@ const AddNewStudent = () => {
               </label>
 
               {/* Email */}
-              <label
-                htmlFor="email"
-                className="grid font-sans text-[18px] font-semibold"
-              >
+              <label htmlFor="email" className="grid text-[18px] font-semibold">
                 {currentLanguage === "ar"
                   ? "البريد الإلكتروني"
                   : currentLanguage === "fr"
@@ -294,7 +287,7 @@ const AddNewStudent = () => {
               {/* Password */}
               <label
                 htmlFor="password"
-                className="grid font-sans text-[18px] font-semibold"
+                className="grid text-[18px] font-semibold"
               >
                 {currentLanguage === "ar"
                   ? "كلمة المرور"
@@ -317,10 +310,7 @@ const AddNewStudent = () => {
               </label>
 
               {/* NID */}
-              <label
-                htmlFor="nid"
-                className="grid font-sans text-[18px] font-semibold"
-              >
+              <label htmlFor="nid" className="grid text-[18px] font-semibold">
                 {currentLanguage === "ar"
                   ? "الرقم الهوية"
                   : currentLanguage === "fr"
@@ -344,7 +334,7 @@ const AddNewStudent = () => {
               {/* Gender */}
               <label
                 htmlFor="gender"
-                className="grid font-sans text-[18px] font-semibold"
+                className="grid text-[18px] font-semibold"
               >
                 {currentLanguage === "ar"
                   ? "الجنس"
@@ -384,7 +374,7 @@ const AddNewStudent = () => {
               {/* Nationality */}
               <label
                 htmlFor="nationality"
-                className="grid font-sans text-[18px] font-semibold"
+                className="grid text-[18px] font-semibold"
               >
                 {currentLanguage === "ar"
                   ? "جنسيتك"
@@ -422,7 +412,7 @@ const AddNewStudent = () => {
               {/* Region */}
               <label
                 htmlFor="regionId"
-                className="grid font-sans text-[18px] font-semibold"
+                className="grid text-[18px] font-semibold"
               >
                 {currentLanguage === "en"
                   ? "Region Id"
@@ -445,7 +435,7 @@ const AddNewStudent = () => {
               {/* Name (English) */}
               <label
                 htmlFor="name_en"
-                className="grid font-sans text-[18px] font-semibold"
+                className="grid text-[18px] font-semibold"
               >
                 {currentLanguage === "ar"
                   ? "الاسم (إنجليزي)"
@@ -470,7 +460,7 @@ const AddNewStudent = () => {
               {/* Name (Arabic) */}
               <label
                 htmlFor="name_ar"
-                className="grid font-sans text-[18px] font-semibold"
+                className="grid text-[18px] font-semibold"
               >
                 {currentLanguage === "ar"
                   ? "الاسم (عربي)"
@@ -495,7 +485,7 @@ const AddNewStudent = () => {
               {/* Name (French) */}
               <label
                 htmlFor="name_fr"
-                className="grid font-sans text-[18px] font-semibold"
+                className="grid text-[18px] font-semibold"
               >
                 {currentLanguage === "ar"
                   ? "الاسم (فرنسي)"
@@ -518,10 +508,7 @@ const AddNewStudent = () => {
               </label>
 
               {/* About */}
-              <label
-                htmlFor="about"
-                className="grid font-sans text-[18px] font-semibold"
-              >
+              <label htmlFor="about" className="grid text-[18px] font-semibold">
                 {currentLanguage === "en"
                   ? "About"
                   : currentLanguage === "ar"
@@ -544,7 +531,7 @@ const AddNewStudent = () => {
               {/* Birth Date */}
               <label
                 htmlFor="birthDate"
-                className="grid font-sans text-[18px] font-semibold"
+                className="grid text-[18px] font-semibold"
               >
                 {currentLanguage === "en"
                   ? "Date Of Birth"
@@ -597,7 +584,7 @@ const AddNewStudent = () => {
 
               <label
                 htmlFor="studyLevel"
-                className="grid text-start font-sans text-[15px] font-semibold text-blackOrWhite"
+                className="grid text-start text-[15px] font-semibold text-blackOrWhite"
               >
                 {currentLanguage === "ar"
                   ? "مستوى الدراسة"
@@ -637,7 +624,7 @@ const AddNewStudent = () => {
 
               <label
                 htmlFor="language"
-                className="grid text-start font-sans text-[15px] font-semibold text-blackOrWhite"
+                className="grid text-start text-[15px] font-semibold text-blackOrWhite"
               >
                 {currentLanguage === "ar"
                   ? "اللغة"
@@ -687,24 +674,24 @@ const AddNewStudent = () => {
               {/* Educational System */}
               <label
                 htmlFor="eduSystemId"
-                className="grid font-sans text-[18px] font-semibold"
+                className="grid text-[18px] font-semibold"
               >
                 {currentLanguage === "en"
                   ? "Educational System"
                   : currentLanguage === "ar"
                     ? "النظام التعليمي"
                     : "Système éducatif"}
-                    <select
+                <select
                   id="eduSystemId"
                   className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                   {...register("eduSystemId", { required: true })}
                 >
                   <option value="">
-                  {currentLanguage === "en"
-                  ? "Educational System"
-                  : currentLanguage === "ar"
-                    ? "النظام التعليمي"
-                    : "Système éducatif"}
+                    {currentLanguage === "en"
+                      ? "Educational System"
+                      : currentLanguage === "ar"
+                        ? "النظام التعليمي"
+                        : "Système éducatif"}
                   </option>
                   {educations &&
                     educations?.data.content?.map((edu: any) => (
@@ -713,7 +700,7 @@ const AddNewStudent = () => {
                       </option>
                     ))}
                 </select>
-                
+
                 {errors.eduSystemId && (
                   <span className="text-error">
                     {currentLanguage === "en"
@@ -726,7 +713,7 @@ const AddNewStudent = () => {
               {/* Student ID Photo */}
               <label
                 htmlFor="studentIdPhoto"
-                className="grid font-sans text-[18px] font-semibold"
+                className="grid text-[18px] font-semibold"
               >
                 {currentLanguage === "ar"
                   ? "صورة بطاقة الطالب"
@@ -741,7 +728,9 @@ const AddNewStudent = () => {
                   {...register("studentIdPhoto", { required: true })}
                   onChange={e => handleFileChange(e, setStudentIdPhoto)}
                 />
-                <span className={`-mt-8 w-[400px] cursor-pointer overflow-hidden text-ellipsis whitespace-nowrap rounded-xl border  ${errors.studentIdPhoto ? "border-warning" : "border-borderPrimary"} px-4 py-3 outline-none max-[471px]:w-[350px]`}>
+                <span
+                  className={`-mt-8 w-[400px] cursor-pointer overflow-hidden text-ellipsis whitespace-nowrap rounded-xl border ${errors.studentIdPhoto ? "border-warning" : "border-borderPrimary"} px-4 py-3 outline-none max-[471px]:w-[350px]`}
+                >
                   <div className="flex">
                     <FaCloudUploadAlt className="mx-2 mt-1" />
                     {studentIdPhoto
@@ -758,12 +747,12 @@ const AddNewStudent = () => {
                 {errors.studentIdPhoto && (
                   <span className="text-[13px] text-error">
                     {currentLanguage === "en"
-                        ? "Choose a file"
-                        : currentLanguage === "ar"
-                          ? "اختر ملف"
-                          : currentLanguage === "fr"
-                            ? "Choisir un fichier"
-                            : "Choose a file"}
+                      ? "Choose a file"
+                      : currentLanguage === "ar"
+                        ? "اختر ملف"
+                        : currentLanguage === "fr"
+                          ? "Choisir un fichier"
+                          : "Choose a file"}
                   </span>
                 )}
               </label>
@@ -772,7 +761,7 @@ const AddNewStudent = () => {
 
               <label
                 htmlFor="studentProfilePhoto"
-                className="grid font-sans text-[18px] font-semibold"
+                className="grid text-[18px] font-semibold"
               >
                 {currentLanguage === "ar"
                   ? "صورة ملف الطالب"
@@ -787,7 +776,9 @@ const AddNewStudent = () => {
                   {...register("studentProfilePhoto", { required: true })}
                   onChange={e => handleFileChange(e, setStudentProfilePhoto)}
                 />
-                <span className={`-mt-8 w-[400px] cursor-pointer overflow-hidden text-ellipsis whitespace-nowrap rounded-xl border  ${errors.studentProfilePhoto ? "border-warning" : "border-borderPrimary"} px-4 py-3 outline-none max-[471px]:w-[350px]`}>
+                <span
+                  className={`-mt-8 w-[400px] cursor-pointer overflow-hidden text-ellipsis whitespace-nowrap rounded-xl border ${errors.studentProfilePhoto ? "border-warning" : "border-borderPrimary"} px-4 py-3 outline-none max-[471px]:w-[350px]`}
+                >
                   <div className="flex">
                     <FaCloudUploadAlt className="mx-2 mt-1" />
                     {studentProfilePhoto
@@ -804,18 +795,18 @@ const AddNewStudent = () => {
                 {errors.studentProfilePhoto && (
                   <span className="text-[13px] text-error">
                     {currentLanguage === "en"
-                        ? "Choose a file"
-                        : currentLanguage === "ar"
-                          ? "اختر ملف"
-                          : currentLanguage === "fr"
-                            ? "Choisir un fichier"
-                            : "Choose a file"}
+                      ? "Choose a file"
+                      : currentLanguage === "ar"
+                        ? "اختر ملف"
+                        : currentLanguage === "fr"
+                          ? "Choisir un fichier"
+                          : "Choose a file"}
                   </span>
                 )}
               </label>
               <label
                 htmlFor="studentCertificatesOfAchievement"
-                className="grid font-sans text-[18px] font-semibold"
+                className="grid text-[18px] font-semibold"
               >
                 {currentLanguage === "en"
                   ? "Student Certificates Of Achievement"
@@ -828,12 +819,16 @@ const AddNewStudent = () => {
                   id="studentCertificatesOfAchievement"
                   type="file"
                   className="cursor-pointer opacity-0"
-                  {...register("studentCertificatesOfAchievement", { required: true })}
+                  {...register("studentCertificatesOfAchievement", {
+                    required: true,
+                  })}
                   onChange={e =>
                     handleFileChange(e, setStudentCertificatesOfAchievement)
                   }
                 />
-                <span className={`-mt-8 w-[400px] cursor-pointer overflow-hidden text-ellipsis whitespace-nowrap rounded-xl border  ${errors.studentCertificatesOfAchievement ? "border-warning" : "border-borderPrimary"} px-4 py-3 outline-none max-[471px]:w-[350px]`}>
+                <span
+                  className={`-mt-8 w-[400px] cursor-pointer overflow-hidden text-ellipsis whitespace-nowrap rounded-xl border ${errors.studentCertificatesOfAchievement ? "border-warning" : "border-borderPrimary"} px-4 py-3 outline-none max-[471px]:w-[350px]`}
+                >
                   <div className="flex">
                     <FaCloudUploadAlt className="mx-2 mt-1" />
                     {studentCertificatesOfAchievement
@@ -850,12 +845,12 @@ const AddNewStudent = () => {
                 {errors.studentCertificatesOfAchievement && (
                   <span className="text-[13px] text-error">
                     {currentLanguage === "en"
-                        ? "Choose a file"
-                        : currentLanguage === "ar"
-                          ? "اختر ملف"
-                          : currentLanguage === "fr"
-                            ? "Choisir un fichier"
-                            : "Choose a file"}
+                      ? "Choose a file"
+                      : currentLanguage === "ar"
+                        ? "اختر ملف"
+                        : currentLanguage === "fr"
+                          ? "Choisir un fichier"
+                          : "Choose a file"}
                   </span>
                 )}
               </label>

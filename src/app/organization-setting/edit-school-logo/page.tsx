@@ -24,7 +24,7 @@ const EditSchool = () => {
     },
     {
       nameEn: "Edit School Logo",
-      nameAr:  "تعديل شعار المدرسة",
+      nameAr: "تعديل شعار المدرسة",
       nameFr: "Modifier le logo de l'école",
       href: "/organization-setting/edit-school-logo",
     },
@@ -125,7 +125,7 @@ const EditSchool = () => {
                 <line x1="12" y1="14" x2="12" y2="17" />
                 <line x1="16" y1="14" x2="16" y2="17" />
               </svg>
-              <h1 className="font-sans text-[22px] font-semibold">
+              <h1 className="text-[22px] font-semibold">
                 {logoData?.data?.name}
               </h1>
               <div className="flex h-[200px] w-[200px] items-center justify-center overflow-hidden">
@@ -138,7 +138,7 @@ const EditSchool = () => {
                     height={100}
                   />
                 ) : (
-                  <p className="font-sans text-[18px] font-semibold">
+                  <p className="text-[18px] font-semibold">
                     {currentLanguage === "en"
                       ? "No Logo"
                       : currentLanguage === "ar"
@@ -152,10 +152,7 @@ const EditSchool = () => {
             </div>
 
             <div className="grid grid-cols-2 gap-4 max-[1278px]:grid-cols-1">
-              <label
-                htmlFor="logo"
-                className="grid font-sans text-[18px] font-semibold"
-              >
+              <label htmlFor="logo" className="grid text-[18px] font-semibold">
                 {currentLanguage === "en"
                   ? "Upload Logo"
                   : currentLanguage === "ar"

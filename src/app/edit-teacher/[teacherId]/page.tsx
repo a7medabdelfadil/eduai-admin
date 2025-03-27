@@ -188,7 +188,7 @@ const EditTeacher: React.FC<ViewTeacherProps> = ({ params }) => {
                   <line x1="12" y1="14" x2="12" y2="17" />
                   <line x1="16" y1="14" x2="16" y2="17" />
                 </svg>
-                <h1 className="font-sans text-[22px] font-semibold">
+                <h1 className="text-[22px] font-semibold">
                   {currentLanguage === "en"
                     ? "Teacher Information"
                     : currentLanguage === "ar"
@@ -201,7 +201,7 @@ const EditTeacher: React.FC<ViewTeacherProps> = ({ params }) => {
               <div className="grid grid-cols-2 gap-4 max-[1278px]:grid-cols-1">
                 <label
                   htmlFor="email"
-                  className="grid font-sans text-[18px] font-semibold"
+                  className="grid text-[18px] font-semibold"
                 >
                   {currentLanguage === "en"
                     ? "Email"
@@ -224,10 +224,7 @@ const EditTeacher: React.FC<ViewTeacherProps> = ({ params }) => {
                   errors={errors}
                 />
 
-                <label
-                  htmlFor="nid"
-                  className="grid font-sans text-[18px] font-semibold"
-                >
+                <label htmlFor="nid" className="grid text-[18px] font-semibold">
                   {currentLanguage === "en"
                     ? "NID"
                     : currentLanguage === "ar"
@@ -246,7 +243,7 @@ const EditTeacher: React.FC<ViewTeacherProps> = ({ params }) => {
 
                 <label
                   htmlFor="gender"
-                  className="grid font-sans text-[18px] font-semibold"
+                  className="grid text-[18px] font-semibold"
                 >
                   {currentLanguage === "en"
                     ? "Gender"
@@ -294,7 +291,7 @@ const EditTeacher: React.FC<ViewTeacherProps> = ({ params }) => {
                 />
                 <label
                   htmlFor="about"
-                  className="grid font-sans text-[18px] font-semibold"
+                  className="grid text-[18px] font-semibold"
                 >
                   {currentLanguage === "en"
                     ? "About"
@@ -321,7 +318,7 @@ const EditTeacher: React.FC<ViewTeacherProps> = ({ params }) => {
               <div className="grid grid-cols-2 gap-4 max-[1278px]:grid-cols-1">
                 <label
                   htmlFor="nationality"
-                  className="grid font-sans text-[18px] font-semibold"
+                  className="grid text-[18px] font-semibold"
                 >
                   {currentLanguage === "en"
                     ? "Your Nationality"
@@ -362,7 +359,7 @@ const EditTeacher: React.FC<ViewTeacherProps> = ({ params }) => {
 
                 <label
                   htmlFor="regionId"
-                  className="grid font-sans text-[18px] font-semibold"
+                  className="grid text-[18px] font-semibold"
                 >
                   {currentLanguage === "en"
                     ? "RegionId"
@@ -381,7 +378,7 @@ const EditTeacher: React.FC<ViewTeacherProps> = ({ params }) => {
 
                 <label
                   htmlFor="name_en"
-                  className="grid font-sans text-[18px] font-semibold"
+                  className="grid text-[18px] font-semibold"
                 >
                   {currentLanguage === "en"
                     ? "Name (EN)"
@@ -407,7 +404,7 @@ const EditTeacher: React.FC<ViewTeacherProps> = ({ params }) => {
 
                 <label
                   htmlFor="name_ar"
-                  className="grid font-sans text-[18px] font-semibold"
+                  className="grid text-[18px] font-semibold"
                 >
                   {currentLanguage === "en"
                     ? "Name (AR)"
@@ -433,7 +430,7 @@ const EditTeacher: React.FC<ViewTeacherProps> = ({ params }) => {
 
                 <label
                   htmlFor="name_fr"
-                  className="grid font-sans text-[18px] font-semibold"
+                  className="grid text-[18px] font-semibold"
                 >
                   {currentLanguage === "en"
                     ? "Name (FR)"
@@ -459,7 +456,7 @@ const EditTeacher: React.FC<ViewTeacherProps> = ({ params }) => {
 
                 <label
                   htmlFor="birthDate"
-                  className="grid font-sans text-[18px] font-semibold"
+                  className="grid text-[18px] font-semibold"
                 >
                   {currentLanguage === "en"
                     ? "Date Of Birth"
@@ -516,7 +513,7 @@ const EditTeacher: React.FC<ViewTeacherProps> = ({ params }) => {
 
                 <label
                   htmlFor="qualification"
-                  className="mt-4 grid items-center font-sans text-[18px] font-semibold"
+                  className="mt-4 grid items-center text-[18px] font-semibold"
                 >
                   <select
                     defaultValue=""

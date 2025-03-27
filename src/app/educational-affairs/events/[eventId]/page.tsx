@@ -166,7 +166,7 @@ const UpdateEvent = ({ params }: Props) => {
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="grid h-auto items-center justify-center gap-5 rounded-xl bg-bgPrimary p-10 sm:w-[500px] md:w-[600px] lg:w-[750px] xl:h-auto xl:w-[1000px]">
             <div className="flex items-center justify-start gap-2">
-              <h1 className="font-sans text-[22px] font-semibold">
+              <h1 className="text-[22px] font-semibold">
                 {currentLanguage === "en"
                   ? "Event Information"
                   : currentLanguage === "ar"
@@ -180,7 +180,7 @@ const UpdateEvent = ({ params }: Props) => {
               {/* Title English */}
               <label
                 htmlFor="title_en"
-                className="grid font-sans text-[18px] font-semibold"
+                className="grid text-[18px] font-semibold"
               >
                 {currentLanguage === "en"
                   ? "Event Title (English)"
@@ -204,7 +204,7 @@ const UpdateEvent = ({ params }: Props) => {
               {/* Title Arabic */}
               <label
                 htmlFor="title_ar"
-                className="grid font-sans text-[18px] font-semibold"
+                className="grid text-[18px] font-semibold"
               >
                 {currentLanguage === "en"
                   ? "Event Title (Arabic)"
@@ -228,7 +228,7 @@ const UpdateEvent = ({ params }: Props) => {
               {/* Title French */}
               <label
                 htmlFor="title_fr"
-                className="grid font-sans text-[18px] font-semibold"
+                className="grid text-[18px] font-semibold"
               >
                 {currentLanguage === "en"
                   ? "Event Title (French)"
@@ -252,7 +252,7 @@ const UpdateEvent = ({ params }: Props) => {
               {/* Description English */}
               <label
                 htmlFor="description_en"
-                className="grid font-sans text-[18px] font-semibold"
+                className="grid text-[18px] font-semibold"
               >
                 {currentLanguage === "en"
                   ? "Event Description (English)"
@@ -276,7 +276,7 @@ const UpdateEvent = ({ params }: Props) => {
               {/* Description Arabic */}
               <label
                 htmlFor="description_ar"
-                className="grid font-sans text-[18px] font-semibold"
+                className="grid text-[18px] font-semibold"
               >
                 {currentLanguage === "en"
                   ? "Event Description (Arabic)"
@@ -300,7 +300,7 @@ const UpdateEvent = ({ params }: Props) => {
               {/* Description French */}
               <label
                 htmlFor="description_fr"
-                className="grid font-sans text-[18px] font-semibold"
+                className="grid text-[18px] font-semibold"
               >
                 {currentLanguage === "en"
                   ? "Event Description (French)"
@@ -324,7 +324,7 @@ const UpdateEvent = ({ params }: Props) => {
               {/* Start Time */}
               <label
                 htmlFor="startTime"
-                className="grid font-sans text-[18px] font-semibold"
+                className="grid text-[18px] font-semibold"
               >
                 {currentLanguage === "en"
                   ? "Start Time"
@@ -348,7 +348,7 @@ const UpdateEvent = ({ params }: Props) => {
               {/* End Time */}
               <label
                 htmlFor="endTime"
-                className="grid font-sans text-[18px] font-semibold"
+                className="grid text-[18px] font-semibold"
               >
                 {currentLanguage === "en"
                   ? "End Time"

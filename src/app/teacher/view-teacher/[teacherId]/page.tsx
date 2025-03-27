@@ -23,7 +23,6 @@ const ViewTeacher: React.FC<ViewTeacherProps> = ({ params }) => {
 
   const booleanValue = useSelector((state: RootState) => state.boolean.value);
 
-
   const { language: currentLanguage, loading } = useSelector(
     (state: RootState) => state.language,
   );
@@ -36,73 +35,73 @@ const ViewTeacher: React.FC<ViewTeacherProps> = ({ params }) => {
     );
   return (
     <Container>
-        <div className="grid grid-cols-2 gap-7 pr-7 max-[1342px]:grid-cols-1 max-[1342px]:px-5">
-          <TeacherInfo data={data} />
-          <div className="grid h-[700px] items-center justify-center gap-10 rounded-xl bg-bgPrimary p-5">
-            <div className="flex justify-start">
-              <h1 className="font-sans font-semibold text-textPrimary">
-                {currentLanguage === "en"
-                  ? "Today Schedule"
-                  : currentLanguage === "ar"
-                    ? "جدول اليوم"
-                    : currentLanguage === "fr"
-                      ? "Programme du jour"
-                      : "Today Schedule"}
-              </h1>
-            </div>
-            <Calendar />
+      <div className="grid grid-cols-2 gap-7 pr-7 max-[1342px]:grid-cols-1 max-[1342px]:px-5">
+        <TeacherInfo data={data} />
+        <div className="grid h-[700px] items-center justify-center gap-10 rounded-xl bg-bgPrimary p-5">
+          <div className="flex justify-start">
+            <h1 className="font-semibold text-textPrimary">
+              {currentLanguage === "en"
+                ? "Today Schedule"
+                : currentLanguage === "ar"
+                  ? "جدول اليوم"
+                  : currentLanguage === "fr"
+                    ? "Programme du jour"
+                    : "Today Schedule"}
+            </h1>
           </div>
-          <div className="grid w-[500px] rounded-xl bg-bgPrimary p-5 max-[1342px]:w-full">
-            <div className="relative overflow-auto shadow-md sm:rounded-lg">
-              <table className="w-full overflow-x-auto text-left text-sm text-gray-500 rtl:text-right">
-                <thead className="bg-thead text-xs uppercase text-textPrimary">
-                  <tr>
-                    <th scope="col" className="whitespace-nowrap px-6 py-3">
-                      courseName
+          <Calendar />
+        </div>
+        <div className="grid w-[500px] rounded-xl bg-bgPrimary p-5 max-[1342px]:w-full">
+          <div className="relative overflow-auto shadow-md sm:rounded-lg">
+            <table className="w-full overflow-x-auto text-left text-sm text-gray-500 rtl:text-right">
+              <thead className="bg-thead text-xs uppercase text-textPrimary">
+                <tr>
+                  <th scope="col" className="whitespace-nowrap px-6 py-3">
+                    courseName
+                  </th>
+                  <th scope="col" className="whitespace-nowrap px-6 py-3">
+                    classroomName
+                  </th>
+                  <th scope="col" className="whitespace-nowrap px-6 py-3">
+                    startTime
+                  </th>
+                  <th scope="col" className="whitespace-nowrap px-6 py-3">
+                    endTime
+                  </th>
+                  <th scope="col" className="whitespace-nowrap px-6 py-3">
+                    day
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {Classes?.data?.map((classItem: any) => (
+                  <tr className="border-b border-borderPrimary bg-bgPrimary hover:bg-bgSecondary">
+                    <th
+                      scope="row"
+                      className="whitespace-nowrap px-6 py-4 font-medium text-textSecondary"
+                    >
+                      {classItem?.courseName}
                     </th>
-                    <th scope="col" className="whitespace-nowrap px-6 py-3">
-                      classroomName
-                    </th>
-                    <th scope="col" className="whitespace-nowrap px-6 py-3">
-                      startTime
-                    </th>
-                    <th scope="col" className="whitespace-nowrap px-6 py-3">
-                      endTime
-                    </th>
-                    <th scope="col" className="whitespace-nowrap px-6 py-3">
-                      day
-                    </th>
+                    <td className="whitespace-nowrap px-6 py-4">
+                      {classItem?.classroomName}
+                    </td>
+                    <td className="whitespace-nowrap px-6 py-4">
+                      {classItem?.startTime}
+                    </td>
+                    <td className="whitespace-nowrap px-6 py-4">
+                      {classItem?.endTime}
+                    </td>
+                    <td className="whitespace-nowrap px-6 py-4">
+                      {classItem?.day}
+                    </td>
                   </tr>
-                </thead>
-                <tbody>
-                  {Classes?.data?.map((classItem: any) => (
-                    <tr className="border-b border-borderPrimary bg-bgPrimary hover:bg-bgSecondary">
-                      <th
-                        scope="row"
-                        className="whitespace-nowrap px-6 py-4 font-medium text-textSecondary"
-                      >
-                        {classItem?.courseName}
-                      </th>
-                      <td className="whitespace-nowrap px-6 py-4">
-                        {classItem?.classroomName}
-                      </td>
-                      <td className="whitespace-nowrap px-6 py-4">
-                        {classItem?.startTime}
-                      </td>
-                      <td className="whitespace-nowrap px-6 py-4">
-                        {classItem?.endTime}
-                      </td>
-                      <td className="whitespace-nowrap px-6 py-4">
-                        {classItem?.day}
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
+                ))}
+              </tbody>
+            </table>
           </div>
         </div>
-        </Container>
+      </div>
+    </Container>
   );
 };
 

@@ -95,7 +95,7 @@ const AddExam = () => {
             <div className="grid grid-cols-2 gap-4 max-[1278px]:grid-cols-1">
               <label
                 htmlFor="examDate"
-                className="grid font-sans text-[18px] font-semibold"
+                className="grid text-[18px] font-semibold"
               >
                 {currentLanguage === "en"
                   ? "Exam Date"
@@ -124,7 +124,7 @@ const AddExam = () => {
               </label>
               <label
                 htmlFor="examBeginning"
-                className="grid font-sans text-[18px] font-semibold"
+                className="grid text-[18px] font-semibold"
               >
                 {currentLanguage === "en"
                   ? "Exam Beginning"
@@ -151,10 +151,7 @@ const AddExam = () => {
                   </span>
                 )}
               </label>
-              <label
-                htmlFor="name"
-                className="grid font-sans text-[18px] font-semibold"
-              >
+              <label htmlFor="name" className="grid text-[18px] font-semibold">
                 {currentLanguage === "en"
                   ? "Name"
                   : currentLanguage === "ar"
@@ -182,7 +179,7 @@ const AddExam = () => {
               </label>
               <label
                 htmlFor="examEnding"
-                className="grid font-sans text-[18px] font-semibold"
+                className="grid text-[18px] font-semibold"
               >
                 {currentLanguage === "en"
                   ? "Exam Ending"
@@ -211,7 +208,7 @@ const AddExam = () => {
               </label>
               <label
                 htmlFor="teacherCourseRegistrationId"
-                className="grid font-sans text-[18px] font-semibold"
+                className="grid text-[18px] font-semibold"
               >
                 {currentLanguage === "en"
                   ? "Teacher Course Registration ID"
@@ -250,7 +247,7 @@ const AddExam = () => {
               </label>
               <label
                 htmlFor="courseId"
-                className="grid font-sans text-[18px] font-semibold"
+                className="grid text-[18px] font-semibold"
               >
                 {currentLanguage === "en"
                   ? "Course ID"
@@ -289,7 +286,7 @@ const AddExam = () => {
               </label>
               <label
                 htmlFor="teacherCourseRegistrationId"
-                className="grid font-sans text-[18px] font-semibold"
+                className="grid text-[18px] font-semibold"
               >
                 {currentLanguage === "en"
                   ? "Class Room ID"
@@ -328,7 +325,7 @@ const AddExam = () => {
               </label>
               <label
                 htmlFor="examTypeId"
-                className="grid font-sans text-[18px] font-semibold"
+                className="grid text-[18px] font-semibold"
               >
                 {currentLanguage === "en"
                   ? "Exam Type ID"

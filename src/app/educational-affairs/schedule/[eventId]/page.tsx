@@ -172,7 +172,7 @@ const UpdateEvent = ({ params }: Props) => {
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="grid h-auto items-center justify-center gap-5 rounded-xl bg-bgPrimary p-10 sm:w-[500px] md:w-[600px] lg:w-[750px] xl:h-auto xl:w-[1000px]">
             <div className="flex items-center justify-start gap-2">
-              <h1 className="font-sans text-[22px] font-semibold">
+              <h1 className="text-[22px] font-semibold">
                 {currentLanguage === "en"
                   ? "Event Information"
                   : currentLanguage === "ar"
@@ -184,7 +184,7 @@ const UpdateEvent = ({ params }: Props) => {
             </div>
             <div className="grid grid-cols-2 gap-4 max-[1278px]:grid-cols-1">
               <div className="mt-1">
-                <label className="font-sans text-[16px] font-semibold">
+                <label className="text-[16px] font-semibold">
                   {currentLanguage === "ar"
                     ? "اليوم"
                     : currentLanguage === "fr"
@@ -264,7 +264,7 @@ const UpdateEvent = ({ params }: Props) => {
               {/* Start Time */}
               <label
                 htmlFor="startTime"
-                className="grid font-sans text-[18px] font-semibold"
+                className="grid text-[18px] font-semibold"
               >
                 {currentLanguage === "en"
                   ? "Start Time"
@@ -288,7 +288,7 @@ const UpdateEvent = ({ params }: Props) => {
               {/* End Time */}
               <label
                 htmlFor="endTime"
-                className="grid font-sans text-[18px] font-semibold"
+                className="grid text-[18px] font-semibold"
               >
                 {currentLanguage === "en"
                   ? "End Time"

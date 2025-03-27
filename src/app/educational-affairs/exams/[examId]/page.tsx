@@ -102,7 +102,7 @@ const EditExam = ({ params }: ParamsType) => {
             <div className="grid grid-cols-2 gap-4 max-[1278px]:grid-cols-1">
               <label
                 htmlFor="examDate"
-                className="grid font-sans text-[18px] font-semibold"
+                className="grid text-[18px] font-semibold"
               >
                 {currentLanguage === "en"
                   ? "Exam Date"
@@ -131,7 +131,7 @@ const EditExam = ({ params }: ParamsType) => {
               </label>
               <label
                 htmlFor="examBeginning"
-                className="grid font-sans text-[18px] font-semibold"
+                className="grid text-[18px] font-semibold"
               >
                 {currentLanguage === "en"
                   ? "Exam Beginning"
@@ -158,10 +158,7 @@ const EditExam = ({ params }: ParamsType) => {
                   </span>
                 )}
               </label>
-              <label
-                htmlFor="name"
-                className="grid font-sans text-[18px] font-semibold"
-              >
+              <label htmlFor="name" className="grid text-[18px] font-semibold">
                 {currentLanguage === "en"
                   ? "Name"
                   : currentLanguage === "ar"
@@ -189,7 +186,7 @@ const EditExam = ({ params }: ParamsType) => {
               </label>
               <label
                 htmlFor="examEnding"
-                className="grid font-sans text-[18px] font-semibold"
+                className="grid text-[18px] font-semibold"
               >
                 {currentLanguage === "en"
                   ? "Exam Ending"
@@ -218,7 +215,7 @@ const EditExam = ({ params }: ParamsType) => {
               </label>
               <label
                 htmlFor="teacherCourseRegistrationId"
-                className="grid font-sans text-[18px] font-semibold"
+                className="grid text-[18px] font-semibold"
               >
                 {currentLanguage === "en"
                   ? "Teacher Course Registration ID"
@@ -257,7 +254,7 @@ const EditExam = ({ params }: ParamsType) => {
               </label>
               <label
                 htmlFor="courseId"
-                className="grid font-sans text-[18px] font-semibold"
+                className="grid text-[18px] font-semibold"
               >
                 {currentLanguage === "en"
                   ? "Course ID"
@@ -296,7 +293,7 @@ const EditExam = ({ params }: ParamsType) => {
               </label>
               <label
                 htmlFor="teacherCourseRegistrationId"
-                className="grid font-sans text-[18px] font-semibold"
+                className="grid text-[18px] font-semibold"
               >
                 {currentLanguage === "en"
                   ? "Class Room ID"
@@ -335,7 +332,7 @@ const EditExam = ({ params }: ParamsType) => {
               </label>
               <label
                 htmlFor="examTypeId"
-                className="grid font-sans text-[18px] font-semibold"
+                className="grid text-[18px] font-semibold"
               >
                 {currentLanguage === "en"
                   ? "Exam Type ID"

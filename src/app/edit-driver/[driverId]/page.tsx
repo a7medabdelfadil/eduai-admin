@@ -108,7 +108,6 @@ const EditDriver: React.FC<ViewDriverProps> = ({ params }) => {
         data.data.role === "Employee" ? "EMPLOYEE" : "DRIVER",
       );
     }
-
   }, [data, error]);
 
   const onSubmit = async (data: any) => {
@@ -179,7 +178,7 @@ const EditDriver: React.FC<ViewDriverProps> = ({ params }) => {
                 <line x1="12" y1="14" x2="12" y2="17" />
                 <line x1="16" y1="14" x2="16" y2="17" />
               </svg>
-              <h1 className="font-sans text-[22px] font-semibold">
+              <h1 className="text-[22px] font-semibold">
                 {currentLanguage === "ar"
                   ? "معلومات السائق"
                   : currentLanguage === "fr"
@@ -188,10 +187,7 @@ const EditDriver: React.FC<ViewDriverProps> = ({ params }) => {
               </h1>
             </div>
             <div className="grid grid-cols-2 gap-4 max-[1278px]:grid-cols-1">
-              <label
-                htmlFor="email"
-                className="grid font-sans text-[18px] font-semibold"
-              >
+              <label htmlFor="email" className="grid text-[18px] font-semibold">
                 {currentLanguage === "ar"
                   ? "البريد الإلكتروني"
                   : currentLanguage === "fr"
@@ -213,10 +209,7 @@ const EditDriver: React.FC<ViewDriverProps> = ({ params }) => {
                   </span>
                 )}
               </label>
-              <label
-                htmlFor="nid"
-                className="grid font-sans text-[18px] font-semibold"
-              >
+              <label htmlFor="nid" className="grid text-[18px] font-semibold">
                 {currentLanguage === "ar"
                   ? "الرقم القومي"
                   : currentLanguage === "fr"
@@ -240,7 +233,7 @@ const EditDriver: React.FC<ViewDriverProps> = ({ params }) => {
               </label>
               <label
                 htmlFor="gender"
-                className="grid font-sans text-[18px] font-semibold"
+                className="grid text-[18px] font-semibold"
               >
                 {currentLanguage === "ar"
                   ? "الجنس"
@@ -288,7 +281,7 @@ const EditDriver: React.FC<ViewDriverProps> = ({ params }) => {
             <div className="grid grid-cols-2 gap-4 max-[1278px]:grid-cols-1">
               <label
                 htmlFor="name_en"
-                className="grid font-sans text-[18px] font-semibold"
+                className="grid text-[18px] font-semibold"
               >
                 {currentLanguage === "ar"
                   ? "الاسم (بالإنجليزية)"
@@ -314,7 +307,7 @@ const EditDriver: React.FC<ViewDriverProps> = ({ params }) => {
               </label>
               <label
                 htmlFor="name_en"
-                className="grid font-sans text-[18px] font-semibold"
+                className="grid text-[18px] font-semibold"
               >
                 {currentLanguage === "ar"
                   ? "الاسم (بالعربية)"
@@ -339,7 +332,7 @@ const EditDriver: React.FC<ViewDriverProps> = ({ params }) => {
               </label>
               <label
                 htmlFor="name_fr"
-                className="grid font-sans text-[18px] font-semibold"
+                className="grid text-[18px] font-semibold"
               >
                 {currentLanguage === "ar"
                   ? "الاسم (بالفرنسية)"
@@ -364,7 +357,7 @@ const EditDriver: React.FC<ViewDriverProps> = ({ params }) => {
               </label>
               <label
                 htmlFor="regionId"
-                className="grid font-sans text-[18px] font-semibold"
+                className="grid text-[18px] font-semibold"
               >
                 {currentLanguage === "en"
                   ? "Region Id"
@@ -385,7 +378,7 @@ const EditDriver: React.FC<ViewDriverProps> = ({ params }) => {
               </label>
               <label
                 htmlFor="nationality"
-                className="grid font-sans text-[18px] font-semibold"
+                className="grid text-[18px] font-semibold"
               >
                 {currentLanguage === "ar"
                   ? "جنسيتك"
@@ -421,10 +414,7 @@ const EditDriver: React.FC<ViewDriverProps> = ({ params }) => {
                   </span>
                 )}
               </label>
-              <label
-                htmlFor="about"
-                className="grid font-sans text-[18px] font-semibold"
-              >
+              <label htmlFor="about" className="grid text-[18px] font-semibold">
                 {currentLanguage === "ar"
                   ? "حول"
                   : currentLanguage === "fr"
@@ -448,7 +438,7 @@ const EditDriver: React.FC<ViewDriverProps> = ({ params }) => {
               </label>
               <label
                 htmlFor="birthDate"
-                className="grid font-sans text-[18px] font-semibold"
+                className="grid text-[18px] font-semibold"
               >
                 {currentLanguage === "en"
                   ? "Date Of Birth"
@@ -502,7 +492,7 @@ const EditDriver: React.FC<ViewDriverProps> = ({ params }) => {
               </label>
               <label
                 htmlFor="qualification"
-                className="grid items-center font-sans text-[18px] font-semibold"
+                className="grid items-center text-[18px] font-semibold"
               >
                 {currentLanguage === "ar"
                   ? "اختر المؤهل"
@@ -565,7 +555,7 @@ const EditDriver: React.FC<ViewDriverProps> = ({ params }) => {
             <div className="grid grid-cols-2 gap-4 max-[1278px]:grid-cols-1">
               <label
                 htmlFor="hireDate"
-                className="grid font-sans text-[18px] font-semibold"
+                className="grid text-[18px] font-semibold"
               >
                 {currentLanguage === "ar"
                   ? "تاريخ التوظيف"
@@ -598,7 +588,7 @@ const EditDriver: React.FC<ViewDriverProps> = ({ params }) => {
               />
               <label
                 htmlFor="positionId"
-                className="grid font-sans text-[18px] font-semibold"
+                className="grid text-[18px] font-semibold"
               >
                 {currentLanguage === "ar"
                   ? "معرف الوظيفة"
@@ -623,7 +613,7 @@ const EditDriver: React.FC<ViewDriverProps> = ({ params }) => {
               </label>
               <label
                 htmlFor="employeeStatus"
-                className="grid font-sans text-[18px] font-semibold"
+                className="grid text-[18px] font-semibold"
               >
                 {currentLanguage === "ar"
                   ? "حالة الموظف"
@@ -676,7 +666,7 @@ const EditDriver: React.FC<ViewDriverProps> = ({ params }) => {
               </label>
               <label
                 htmlFor="employeeType"
-                className="grid font-sans text-[18px] font-semibold"
+                className="grid text-[18px] font-semibold"
               >
                 {currentLanguage === "ar"
                   ? "نوع الموظف"
@@ -729,7 +719,7 @@ const EditDriver: React.FC<ViewDriverProps> = ({ params }) => {
               </label>
               <label
                 htmlFor="salary"
-                className="grid font-sans text-[18px] font-semibold"
+                className="grid text-[18px] font-semibold"
               >
                 {currentLanguage === "ar"
                   ? "الراتب"

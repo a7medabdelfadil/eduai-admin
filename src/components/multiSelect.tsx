@@ -204,7 +204,7 @@ const MultiSelectComponent = ({
   }, [selectedOptions, setValue, name]);
 
   return (
-    <div className="mt-4 grid items-start font-sans text-[18px] font-semibold">
+    <div className="mt-4 grid items-start text-[18px] font-semibold">
       <label>
         {currentLanguage === "en"
           ? "Subjects"

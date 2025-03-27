@@ -71,14 +71,15 @@ const AddSemester = () => {
       <BreadCrumbs breadcrumbs={breadcrumbs} />
       <div
         dir={currentLanguage === "ar" ? "rtl" : "ltr"}
-        className={` ${currentLanguage === "ar"
+        className={` ${
+          currentLanguage === "ar"
             ? booleanValue
               ? "lg:mr-[100px]"
               : "lg:mr-[270px]"
             : booleanValue
               ? "lg:ml-[100px]"
               : "lg:ml-[270px]"
-          } mx-3 mt-[40px] grid h-[850px] items-center justify-center`}
+        } mx-3 mt-[40px] grid h-[850px] items-center justify-center`}
       >
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="grid h-[900px] items-center justify-center gap-5 rounded-xl bg-bgPrimary p-10 sm:w-[500px] md:w-[600px] lg:w-[750px] xl:h-[800px] xl:w-[1000px]">
@@ -105,7 +106,7 @@ const AddSemester = () => {
                 <line x1="12" y1="14" x2="12" y2="17" />{" "}
                 <line x1="16" y1="14" x2="16" y2="17" />
               </svg>
-              <h1 className="font-sans text-[22px] font-semibold">
+              <h1 className="text-[22px] font-semibold">
                 {currentLanguage === "ar"
                   ? "معلومات الفصل الدراسي"
                   : currentLanguage === "fr"
@@ -116,7 +117,7 @@ const AddSemester = () => {
             <div className="grid grid-cols-2 gap-4 max-[1278px]:grid-cols-1">
               <label
                 htmlFor="season"
-                className="grid font-sans text-[18px] font-semibold"
+                className="grid text-[18px] font-semibold"
               >
                 {currentLanguage === "ar"
                   ? "الموسم"
@@ -143,10 +144,7 @@ const AddSemester = () => {
                   </span>
                 )}
               </label>
-              <label
-                htmlFor="code"
-                className="grid font-sans text-[18px] font-semibold"
-              >
+              <label htmlFor="code" className="grid text-[18px] font-semibold">
                 {currentLanguage === "ar"
                   ? "بداية الفصل الدراسي"
                   : currentLanguage === "fr"
@@ -169,10 +167,7 @@ const AddSemester = () => {
                   </span>
                 )}
               </label>
-              <label
-                htmlFor="about"
-                className="grid font-sans text-[18px] font-semibold"
-              >
+              <label htmlFor="about" className="grid text-[18px] font-semibold">
                 {currentLanguage === "ar"
                   ? "نهاية الفصل الدراسي"
                   : currentLanguage === "fr"

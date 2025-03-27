@@ -234,7 +234,7 @@ const AddSchedule = () => {
           <div>
             <label
               htmlFor="regionId"
-              className="grid w-full text-start font-sans text-[15px] font-semibold text-[#9a9a9a]"
+              className="grid w-full text-start text-[15px] font-semibold text-[#9a9a9a]"
             >
               {currentLanguage === "ar"
                 ? "معرف الدورة"

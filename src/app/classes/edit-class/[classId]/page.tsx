@@ -125,7 +125,7 @@ const EditClass: React.FC<ViewDriverProps> = ({ params }) => {
                 <line x1="12" y1="14" x2="12" y2="17" />
                 <line x1="16" y1="14" x2="16" y2="17" />
               </svg>
-              <h1 className="font-sans text-[22px] font-semibold">
+              <h1 className="text-[22px] font-semibold">
                 {currentLanguage === "ar"
                   ? "معلومات الفصل"
                   : currentLanguage === "fr"
@@ -136,7 +136,7 @@ const EditClass: React.FC<ViewDriverProps> = ({ params }) => {
             <div className="grid grid-cols-2 gap-4 max-[1278px]:grid-cols-1">
               <label
                 htmlFor="buildingNumber"
-                className="grid font-sans text-[18px] font-semibold"
+                className="grid text-[18px] font-semibold"
               >
                 {currentLanguage === "ar"
                   ? "رقم المبنى"
@@ -161,7 +161,7 @@ const EditClass: React.FC<ViewDriverProps> = ({ params }) => {
               </label>
               <label
                 htmlFor="roomNumber"
-                className="grid font-sans text-[18px] font-semibold"
+                className="grid text-[18px] font-semibold"
               >
                 {currentLanguage === "ar"
                   ? "رقم الغرفة"
@@ -186,7 +186,7 @@ const EditClass: React.FC<ViewDriverProps> = ({ params }) => {
               </label>
               <label
                 htmlFor="floorNumber"
-                className="grid font-sans text-[18px] font-semibold"
+                className="grid text-[18px] font-semibold"
               >
                 {currentLanguage === "ar"
                   ? "رقم الطابق"
@@ -209,10 +209,7 @@ const EditClass: React.FC<ViewDriverProps> = ({ params }) => {
                   </span>
                 )}
               </label>
-              <label
-                htmlFor="type"
-                className="grid font-sans text-[18px] font-semibold"
-              >
+              <label htmlFor="type" className="grid text-[18px] font-semibold">
                 {currentLanguage === "ar"
                   ? "النوع"
                   : currentLanguage === "fr"
@@ -236,7 +233,7 @@ const EditClass: React.FC<ViewDriverProps> = ({ params }) => {
               </label>
               <label
                 htmlFor="maxCapacity"
-                className="grid font-sans text-[18px] font-semibold"
+                className="grid text-[18px] font-semibold"
               >
                 {currentLanguage === "ar"
                   ? "القدرة القصوى"
@@ -261,7 +258,7 @@ const EditClass: React.FC<ViewDriverProps> = ({ params }) => {
               </label>
               <label
                 htmlFor="schoolId"
-                className="grid font-sans text-[18px] font-semibold"
+                className="grid text-[18px] font-semibold"
               >
                 {currentLanguage === "ar"
                   ? "معرف المدرسة"
@@ -286,7 +283,7 @@ const EditClass: React.FC<ViewDriverProps> = ({ params }) => {
               </label>
               <label
                 htmlFor="classroomName"
-                className="grid font-sans text-[18px] font-semibold"
+                className="grid text-[18px] font-semibold"
               >
                 {currentLanguage === "ar"
                   ? "اسم الفصل"
@@ -311,7 +308,7 @@ const EditClass: React.FC<ViewDriverProps> = ({ params }) => {
               </label>
               <label
                 htmlFor="classroomNumber"
-                className="grid font-sans text-[18px] font-semibold"
+                className="grid text-[18px] font-semibold"
               >
                 {currentLanguage === "ar"
                   ? "رقم الفصل"
@@ -336,7 +333,7 @@ const EditClass: React.FC<ViewDriverProps> = ({ params }) => {
               </label>
               <label
                 htmlFor="classroomStudyLevel"
-                className="grid font-sans text-[18px] font-semibold"
+                className="grid text-[18px] font-semibold"
               >
                 {currentLanguage === "ar"
                   ? "مستوى دراسة الفصل"
@@ -361,7 +358,7 @@ const EditClass: React.FC<ViewDriverProps> = ({ params }) => {
               </label>
               <label
                 htmlFor="classroomStudyStage"
-                className="grid font-sans text-[18px] font-semibold"
+                className="grid text-[18px] font-semibold"
               >
                 {currentLanguage === "ar"
                   ? "مرحلة دراسة الفصل"

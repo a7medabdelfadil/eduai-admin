@@ -120,7 +120,7 @@ const NewInvoice = () => {
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="grid items-center justify-center gap-5 rounded-xl bg-bgPrimary p-10 sm:w-[500px] md:w-[600px] lg:w-[750px] xl:w-[1000px]">
             <div className="flex items-center justify-start gap-2">
-              <h1 className="font-sans text-[22px] font-semibold">
+              <h1 className="text-[22px] font-semibold">
                 {currentLanguage === "en"
                   ? "Invoice Information"
                   : currentLanguage === "ar"
@@ -132,7 +132,7 @@ const NewInvoice = () => {
               {/* Paid Amount Field */}
               <label
                 htmlFor="paidAmount"
-                className="grid font-sans text-[18px] font-semibold"
+                className="grid text-[18px] font-semibold"
               >
                 {currentLanguage === "en"
                   ? "Paid Amount"
@@ -155,7 +155,7 @@ const NewInvoice = () => {
               {/* Discount Amount Field */}
               <label
                 htmlFor="discountAmount"
-                className="grid font-sans text-[18px] font-semibold"
+                className="grid text-[18px] font-semibold"
               >
                 {currentLanguage === "en"
                   ? "Discount Amount"
@@ -178,7 +178,7 @@ const NewInvoice = () => {
               {/* Billed To ID Field */}
               <label
                 htmlFor="billedToId"
-                className="grid font-sans text-[18px] font-semibold"
+                className="grid text-[18px] font-semibold"
               >
                 {currentLanguage === "en"
                   ? "Billed To ID"
@@ -199,10 +199,7 @@ const NewInvoice = () => {
               </label>
 
               {/* Item Rate Field */}
-              <label
-                htmlFor="rate"
-                className="grid font-sans text-[18px] font-semibold"
-              >
+              <label htmlFor="rate" className="grid text-[18px] font-semibold">
                 {currentLanguage === "en"
                   ? "Item Rate"
                   : currentLanguage === "ar"
@@ -222,10 +219,7 @@ const NewInvoice = () => {
               </label>
 
               {/* Item Quantity Field */}
-              <label
-                htmlFor="qty"
-                className="grid font-sans text-[18px] font-semibold"
-              >
+              <label htmlFor="qty" className="grid text-[18px] font-semibold">
                 {currentLanguage === "en"
                   ? "Item Quantity"
                   : currentLanguage === "ar"
@@ -245,10 +239,7 @@ const NewInvoice = () => {
               </label>
 
               {/* Item Type Field */}
-              <label
-                htmlFor="type"
-                className="grid font-sans text-[18px] font-semibold"
-              >
+              <label htmlFor="type" className="grid text-[18px] font-semibold">
                 {currentLanguage === "en"
                   ? "Item Type"
                   : currentLanguage === "ar"

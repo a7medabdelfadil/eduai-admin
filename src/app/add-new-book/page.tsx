@@ -82,7 +82,7 @@ const AddNewBook = () => {
                 <line x1="12" y1="14" x2="12" y2="17" />
                 <line x1="16" y1="14" x2="16" y2="17" />
               </svg>
-              <h1 className="font-sans text-[22px] font-semibold">
+              <h1 className="text-[22px] font-semibold">
                 {currentLanguage === "en"
                   ? "Book Information"
                   : currentLanguage === "ar"
@@ -94,10 +94,7 @@ const AddNewBook = () => {
               </h1>
             </div>
             <div className="grid grid-cols-2 gap-4 max-[1278px]:grid-cols-1">
-              <label
-                htmlFor="name"
-                className="grid font-sans text-[18px] font-semibold"
-              >
+              <label htmlFor="name" className="grid text-[18px] font-semibold">
                 {currentLanguage === "en"
                   ? "Book Number"
                   : currentLanguage === "ar"
@@ -112,10 +109,7 @@ const AddNewBook = () => {
                   className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                 />
               </label>
-              <label
-                htmlFor="code"
-                className="grid font-sans text-[18px] font-semibold"
-              >
+              <label htmlFor="code" className="grid text-[18px] font-semibold">
                 {currentLanguage === "en"
                   ? "Book Name"
                   : currentLanguage === "ar"
@@ -130,10 +124,7 @@ const AddNewBook = () => {
                   className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                 />
               </label>
-              <label
-                htmlFor="about"
-                className="grid font-sans text-[18px] font-semibold"
-              >
+              <label htmlFor="about" className="grid text-[18px] font-semibold">
                 {currentLanguage === "en"
                   ? "Writer"
                   : currentLanguage === "ar"
@@ -150,7 +141,7 @@ const AddNewBook = () => {
               </label>
               <label
                 htmlFor="subject"
-                className="grid font-sans text-[18px] font-semibold"
+                className="grid text-[18px] font-semibold"
               >
                 {currentLanguage === "en"
                   ? "Subject"
@@ -168,7 +159,7 @@ const AddNewBook = () => {
               </label>
               <label
                 htmlFor="creationDate"
-                className="grid font-sans text-[18px] font-semibold"
+                className="grid text-[18px] font-semibold"
               >
                 {currentLanguage === "en"
                   ? "Creation Date"

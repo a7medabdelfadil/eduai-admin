@@ -1,19 +1,21 @@
 "use client";
 
+import { useEffect } from "react";
+import { useForm } from "react-hook-form";
+import { useSelector } from "react-redux";
 import BreadCrumbs from "@/components/BreadCrumbs";
 import Spinner from "@/components/spinner";
-import { useGetClassByIdQuery } from "@/features/Infrastructure/classApi";
+import { useGetClassByIdQuery, useUpdateClasssMutation } from "@/features/Infrastructure/classApi";
 import { RootState } from "@/GlobalRedux/store";
-import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { toast } from "react-toastify";
 
-interface ViewDriverProps {
+interface ClassDetailsProps {
   params: {
     classId: string;
   };
 }
 
-const classDetails: React.FC<ViewDriverProps> = ({ params }) => {
+const ClassDetails: React.FC<ClassDetailsProps> = ({ params }) => {
   const breadcrumbs = [
     {
       nameEn: "Dashboard",
@@ -31,11 +33,11 @@ const classDetails: React.FC<ViewDriverProps> = ({ params }) => {
       nameEn: `Class details`,
       nameAr: `تفاصيل الفصل`,
       nameFr: `Détails de la classe`,
-      href: `/class-details/${params.classId}`,
+      href: `/class-detials/${params.classId}`,
     },
   ];
 
-  const tableHeaders: {
+  const formLabels: {
     [key: string]: { en: string; ar: string; fr: string };
   } = {
     buildingNumber: {
@@ -58,20 +60,15 @@ const classDetails: React.FC<ViewDriverProps> = ({ params }) => {
       ar: "النوع",
       fr: "Type",
     },
-    status: {
-      en: "Status",
-      ar: "الحالة",
-      fr: "Statut",
-    },
-    category: {
-      en: "Category",
-      ar: "الفئة",
-      fr: "Catégorie",
-    },
     maxCapacity: {
       en: "Max Capacity",
       ar: "الطاقة القصوى",
       fr: "Capacité maximale",
+    },
+    schoolId: {
+      en: "School ID",
+      ar: "معرف المدرسة",
+      fr: "ID de l'école",
     },
     classroomName: {
       en: "Classroom Name",
@@ -83,12 +80,12 @@ const classDetails: React.FC<ViewDriverProps> = ({ params }) => {
       ar: "رقم الفصل",
       fr: "Numéro de classe",
     },
-    studyLevel: {
+    classroomStudyLevel: {
       en: "Study Level",
       ar: "مستوى الدراسة",
       fr: "Niveau d'étude",
     },
-    studyStage: {
+    classroomStudyStage: {
       en: "Study Stage",
       ar: "مرحلة الدراسة",
       fr: "Étape d'étude",
@@ -96,60 +93,53 @@ const classDetails: React.FC<ViewDriverProps> = ({ params }) => {
   };
 
   const booleanValue = useSelector((state: RootState) => state.boolean.value);
-  const [selectAll, setSelectAll] = useState(false);
-
-  const handleSelectAll = () => {
-    setSelectAll(!selectAll);
-    const checkboxes = document.querySelectorAll<HTMLInputElement>(
-      'input[type="checkbox"]:not(#checkbox-all-search)',
-    );
-    checkboxes.forEach(checkbox => {
-      checkbox.checked = !selectAll;
-    });
-  };
-
-  useEffect(() => {
-    const handleOtherCheckboxes = () => {
-      const allCheckboxes = document.querySelectorAll<HTMLInputElement>(
-        'input[type="checkbox"]:not(#checkbox-all-search)',
-      );
-      const allChecked = Array.from(allCheckboxes).every(
-        checkbox => checkbox.checked,
-      );
-      const selectAllCheckbox = document.getElementById(
-        "checkbox-all-search",
-      ) as HTMLInputElement | null;
-      if (selectAllCheckbox) {
-        selectAllCheckbox.checked = allChecked;
-        setSelectAll(allChecked);
-      }
-    };
-
-    const otherCheckboxes = document.querySelectorAll<HTMLInputElement>(
-      'input[type="checkbox"]:not(#checkbox-all-search)',
-    );
-    otherCheckboxes.forEach(checkbox => {
-      checkbox.addEventListener("change", handleOtherCheckboxes);
-    });
-
-    return () => {
-      otherCheckboxes.forEach(checkbox => {
-        checkbox.removeEventListener("change", handleOtherCheckboxes);
-      });
-    };
-  }, []);
-
   const { data, isLoading } = useGetClassByIdQuery(params.classId);
+  const [updateClass, { isLoading: isUpdating }] = useUpdateClasssMutation();
   const { language: currentLanguage, loading } = useSelector(
-    (state: RootState) => state.language,
+    (state: RootState) => state.language
   );
 
-  if (loading || isLoading)
+  const { register, handleSubmit, reset, formState: { errors, isDirty } } = useForm();
+
+  useEffect(() => {
+    if (data && data.data) {
+      reset(data.data);
+    }
+  }, [data, reset]);
+
+  const onSubmit = async (formData: any) => {
+    try {
+      await updateClass({
+        id: params.classId,
+        formData: formData
+      }).unwrap();
+      
+      toast.success(
+        currentLanguage === "en"
+          ? "Class updated successfully!"
+          : currentLanguage === "ar"
+            ? "تم تحديث الفصل بنجاح!"
+            : "Classe mise à jour avec succès!"
+      );
+    } catch (error) {
+      console.error("Failed to update class:", error);
+      toast.error(
+        currentLanguage === "en"
+          ? "Failed to update class"
+          : currentLanguage === "ar"
+            ? "فشل تحديث الفصل"
+            : "Échec de la mise à jour de la classe"
+      );
+    }
+  };
+
+  if (loading || isLoading) {
     return (
       <div className="flex h-screen w-full items-center justify-center">
         <Spinner />
       </div>
     );
+  }
 
   return (
     <>
@@ -164,88 +154,101 @@ const classDetails: React.FC<ViewDriverProps> = ({ params }) => {
             : booleanValue
               ? "lg:ml-[100px]"
               : "lg:ml-[270px]"
-        } relative mx-3 mt-10 h-screen overflow-x-auto bg-transparent sm:rounded-lg`}
+        } relative mx-3 mt-10 overflow-x-auto bg-transparent sm:rounded-lg`}
       >
-        <div className="flex justify-between text-center max-[502px]:grid max-[502px]:justify-center">
-          <div className="flex justify-center"></div>
-        </div>
-        <div className="relative overflow-auto shadow-md sm:rounded-lg">
-          <table className="w-full overflow-x-auto text-left text-sm text-gray-500 rtl:text-right">
-            <thead className="bg-thead text-xs uppercase text-textPrimary">
-              <tr>
-                <th scope="col" className="p-4">
-                  <div className="flex items-center">
+        <div className="relative shadow-md sm:rounded-lg p-6 bg-white">
+          <h2 className="text-xl font-semibold mb-6">
+            {currentLanguage === "en"
+              ? "Edit Class Details"
+              : currentLanguage === "ar"
+                ? "تعديل تفاصيل الفصل"
+                : "Modifier les détails de la classe"}
+          </h2>
+
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {Object.keys(formLabels).map((key) => {
+                // Special handling for fields that should be numbers
+                const isNumberField = ["floorNumber", "maxCapacity", "schoolId", "classroomNumber"].includes(key);
+                // Special handling for fields that might be null in the API response
+                const acceptsNull = ["type", "classroomStudyLevel", "classroomStudyStage"].includes(key);
+                
+                return (
+                  <div key={key} className="mb-4">
+                    <label 
+                      htmlFor={key} 
+                      className="block mb-2 text-sm font-medium text-gray-900"
+                    >
+                      {formLabels[key][currentLanguage as keyof (typeof formLabels)[typeof key]]}
+                    </label>
                     <input
-                      id="checkbox-all-search"
-                      type="checkbox"
-                      className="-gray-800 h-4 w-4 rounded border-gray-300 bg-gray-100 text-blue-600 focus:ring-2 focus:ring-blue-500"
-                      onChange={handleSelectAll}
+                      type={isNumberField ? "number" : "text"}
+                      id={key}
+                      {...register(key, { 
+                        required: !acceptsNull,
+                        valueAsNumber: isNumberField 
+                      })}
+                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
                     />
+                    {errors[key] && (
+                      <p className="text-red-500 text-xs mt-1">
+                        {currentLanguage === "en"
+                          ? "This field is required"
+                          : currentLanguage === "ar"
+                            ? "هذا الحقل مطلوب"
+                            : "Ce champ est requis"}
+                      </p>
+                    )}
                   </div>
-                </th>
-                {Object.keys(tableHeaders).map(key => (
-                  <th
-                    key={key}
-                    scope="col"
-                    className="whitespace-nowrap px-6 py-3"
-                  >
-                    {
-                      tableHeaders[key][
-                        currentLanguage as keyof (typeof tableHeaders)[typeof key]
-                      ]
-                    }
-                  </th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              <tr className="border-b border-borderPrimary bg-bgPrimary hover:bg-bgSecondary">
-                <td className="w-4 p-4">
+                );
+              })}
+            </div>
+
+            <div className="flex items-center justify-end">
+              <button
+                type="button"
+                onClick={() => reset(data?.data)}
+                className="mr-4 px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-300 rounded-lg hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-blue-300"
+              >
+                {currentLanguage === "en"
+                  ? "Cancel"
+                  : currentLanguage === "ar"
+                    ? "إلغاء"
+                    : "Annuler"}
+              </button>
+              <button
+                type="submit"
+                disabled={!isDirty || isUpdating}
+                className={`px-4 py-2 text-sm font-medium text-white rounded-lg focus:ring-4 focus:outline-none ${
+                  !isDirty || isUpdating
+                    ? "bg-gray-400 cursor-not-allowed"
+                    : "bg-blue-700 hover:bg-blue-800 focus:ring-blue-300"
+                }`}
+              >
+                {isUpdating ? (
                   <div className="flex items-center">
-                    <input
-                      id="checkbox-table-search-1"
-                      type="checkbox"
-                      className="h-4 w-4 rounded border-borderPrimary bg-bgPrimary text-primary focus:ring-2 focus:ring-hover"
-                    />
+                    <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                    {currentLanguage === "en"
+                      ? "Saving..."
+                      : currentLanguage === "ar"
+                        ? "جاري الحفظ..."
+                        : "Enregistrement..."}
                   </div>
-                </td>
-                <td className="whitespace-nowrap px-6 py-4">
-                  {data.data.buildingNumber}
-                </td>
-                <td className="whitespace-nowrap px-6 py-4">
-                  {data.data.roomNumber}
-                </td>
-                <td className="whitespace-nowrap px-6 py-4">
-                  {data.data.floorNumber}
-                </td>
-                <td className="whitespace-nowrap px-6 py-4">
-                  {data.data.type}
-                </td>
-                <td className="whitespace-nowrap px-6 py-4">
-                  {data.data.status}
-                </td>
-                <td className="whitespace-nowrap px-6 py-4">
-                  {data.data.category}
-                </td>
-                <td className="whitespace-nowrap px-6 py-4">
-                  {data.data.maxCapacity}
-                </td>
-                <td className="whitespace-nowrap px-6 py-4">
-                  {data.data.classroomName}
-                </td>
-                <td className="whitespace-nowrap px-6 py-4">
-                  {data.data.classroomNumber}
-                </td>
-                <td className="whitespace-nowrap px-6 py-4">
-                  {data.data.studyLevel}
-                </td>
-                <td className="whitespace-nowrap px-6 py-4">
-                  {data.data.studyStage}
-                </td>
-              </tr>
-            </tbody>
-          </table>
-          {(data?.length === 0 || data == null) && (
+                ) : (
+                  currentLanguage === "en"
+                    ? "Save Changes"
+                    : currentLanguage === "ar"
+                      ? "حفظ التغييرات"
+                      : "Enregistrer les modifications"
+                )}
+              </button>
+            </div>
+          </form>
+          
+          {(!data || !data.data) && (
             <div className="flex w-full justify-center py-3 text-center text-[18px] font-semibold">
               {currentLanguage === "en"
                 ? "There is No Data"
@@ -262,4 +265,4 @@ const classDetails: React.FC<ViewDriverProps> = ({ params }) => {
   );
 };
 
-export default classDetails;
+export default ClassDetails;

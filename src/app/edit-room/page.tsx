@@ -77,7 +77,7 @@ const EditRoom = () => {
                 <line x1="12" y1="14" x2="12" y2="17" />{" "}
                 <line x1="16" y1="14" x2="16" y2="17" />
               </svg>
-              <h1 className="font-sans text-[22px] font-semibold">
+              <h1 className="text-[22px] font-semibold">
                 {currentLanguage === "ar"
                   ? "معلومات الغرفة"
                   : currentLanguage === "fr"
@@ -86,10 +86,7 @@ const EditRoom = () => {
               </h1>
             </div>
             <div className="grid grid-cols-2 gap-4 max-[1278px]:grid-cols-1">
-              <label
-                htmlFor="name"
-                className="grid font-sans text-[18px] font-semibold"
-              >
+              <label htmlFor="name" className="grid text-[18px] font-semibold">
                 {currentLanguage === "ar"
                   ? "رقم الغرفة"
                   : currentLanguage === "fr"
@@ -101,10 +98,7 @@ const EditRoom = () => {
                   className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                 />
               </label>
-              <label
-                htmlFor="code"
-                className="grid font-sans text-[18px] font-semibold"
-              >
+              <label htmlFor="code" className="grid text-[18px] font-semibold">
                 {currentLanguage === "ar"
                   ? "الطابق"
                   : currentLanguage === "fr"
@@ -116,10 +110,7 @@ const EditRoom = () => {
                   className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                 />
               </label>
-              <label
-                htmlFor="about"
-                className="grid font-sans text-[18px] font-semibold"
-              >
+              <label htmlFor="about" className="grid text-[18px] font-semibold">
                 {currentLanguage === "ar"
                   ? "نوع الغرفة"
                   : currentLanguage === "fr"
@@ -134,7 +125,7 @@ const EditRoom = () => {
 
               <label
                 htmlFor="Version"
-                className="grid font-sans text-[18px] font-semibold"
+                className="grid text-[18px] font-semibold"
               >
                 {currentLanguage === "ar"
                   ? "فئة الغرفة"
@@ -149,7 +140,7 @@ const EditRoom = () => {
               </label>
               <label
                 htmlFor="Version"
-                className="grid font-sans text-[18px] font-semibold"
+                className="grid text-[18px] font-semibold"
               >
                 {currentLanguage === "ar"
                   ? "الطاقة الاستيعابية"
@@ -164,7 +155,7 @@ const EditRoom = () => {
               </label>
               <label
                 htmlFor="Initial"
-                className="grid font-sans text-[18px] font-semibold"
+                className="grid text-[18px] font-semibold"
               >
                 {currentLanguage === "ar"
                   ? "الحالة"

@@ -69,11 +69,12 @@ const AddNewParent = () => {
         label: `${rigion.regionName} - ${rigion.cityName}`,
       }),
     ) || [];
-    const router = useRouter();
+  const router = useRouter();
 
   const { data: countryCode, isLoading: isCountryCode } =
     useGetAllCountryCodeQuery(null);
-    const passwordPattern = "^(?=.*[A-Z])(?=.*[~@#$^*()_+\\[\\]{}|\\\\,.?:'\"/;`%-])(?=.*[0-9])(?=.*[a-z]).{8,32}$";
+  const passwordPattern =
+    "^(?=.*[A-Z])(?=.*[~@#$^*()_+\\[\\]{}|\\\\,.?:'\"/;`%-])(?=.*[0-9])(?=.*[a-z]).{8,32}$";
   const onSubmit = async (data: any) => {
     const requestBody = {
       username: data.username,
@@ -139,10 +140,8 @@ const AddNewParent = () => {
       >
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="my-10 grid items-center justify-center gap-5 rounded-xl bg-bgPrimary p-10 sm:w-[500px] md:w-[600px] lg:w-[750px] xl:w-[1000px]">
-          {backendError && (
-              <div className="text-error text-center">
-                {backendError}
-              </div>
+            {backendError && (
+              <div className="text-center text-error">{backendError}</div>
             )}
             <div className="flex items-center justify-start gap-2">
               <svg
@@ -166,7 +165,7 @@ const AddNewParent = () => {
                 <line x1="12" y1="14" x2="12" y2="17" />
                 <line x1="16" y1="14" x2="16" y2="17" />
               </svg>
-              <h1 className="font-sans text-[22px] font-semibold">
+              <h1 className="text-[22px] font-semibold">
                 {currentLanguage === "en"
                   ? "Parent Information"
                   : currentLanguage === "ar"
@@ -180,7 +179,7 @@ const AddNewParent = () => {
               {/* Input fields for parent information */}
               <label
                 htmlFor="username"
-                className="grid font-sans text-[18px] font-semibold"
+                className="grid text-[18px] font-semibold"
               >
                 {currentLanguage === "en"
                   ? "Username"
@@ -207,10 +206,7 @@ const AddNewParent = () => {
                   </span>
                 )}
               </label>
-              <label
-                htmlFor="email"
-                className="grid font-sans text-[18px] font-semibold"
-              >
+              <label htmlFor="email" className="grid text-[18px] font-semibold">
                 {currentLanguage === "en"
                   ? "Email"
                   : currentLanguage === "ar"
@@ -237,53 +233,52 @@ const AddNewParent = () => {
                 )}
               </label>
               <label
-      htmlFor="password"
-      className="grid font-sans text-[18px] font-semibold"
-    >
-      {currentLanguage === "en"
-        ? "Password"
-        : currentLanguage === "ar"
-          ? "كلمة المرور"
-          : currentLanguage === "fr"
-            ? "Mot de passe"
-            : "Password"}
-      <input
-        id="password"
-        type="password"
-        className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
-        {...register("password", {
-          required: {
-            value: true,
-            message: currentLanguage === "en"
-              ? "This field is required"
-              : currentLanguage === "ar"
-                ? "هذا الحقل مطلوب"
-                : currentLanguage === "fr"
-                  ? "Ce champ est requis" 
-                  : "This field is required"
-          },
-          pattern: {
-            value: new RegExp(passwordPattern),
-            message: currentLanguage === "en"
-              ? "Password must contain at least 8 characters, one uppercase letter, one lowercase letter, one number and one special character"
-              : currentLanguage === "ar"
-                ? "يجب أن تحتوي كلمة المرور على 8 أحرف على الأقل، حرف كبير، حرف صغير، رقم وحرف خاص"
-                : currentLanguage === "fr"
-                  ? "Le mot de passe doit contenir au moins 8 caractères, une majuscule, une minuscule, un chiffre et un caractère spécial"
-                  : "Password must contain at least 8 characters, one uppercase letter, one lowercase letter, one number and one special character"
-          }
-        })}
-      />
-      {errors.password && (
-        <span className="text-error">
-          {errors.password?.message?.toString()}
-        </span>
-      )}
-    </label>
-              <label
-                htmlFor="nid"
-                className="grid font-sans text-[18px] font-semibold"
+                htmlFor="password"
+                className="grid text-[18px] font-semibold"
               >
+                {currentLanguage === "en"
+                  ? "Password"
+                  : currentLanguage === "ar"
+                    ? "كلمة المرور"
+                    : currentLanguage === "fr"
+                      ? "Mot de passe"
+                      : "Password"}
+                <input
+                  id="password"
+                  type="password"
+                  className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  {...register("password", {
+                    required: {
+                      value: true,
+                      message:
+                        currentLanguage === "en"
+                          ? "This field is required"
+                          : currentLanguage === "ar"
+                            ? "هذا الحقل مطلوب"
+                            : currentLanguage === "fr"
+                              ? "Ce champ est requis"
+                              : "This field is required",
+                    },
+                    pattern: {
+                      value: new RegExp(passwordPattern),
+                      message:
+                        currentLanguage === "en"
+                          ? "Password must contain at least 8 characters, one uppercase letter, one lowercase letter, one number and one special character"
+                          : currentLanguage === "ar"
+                            ? "يجب أن تحتوي كلمة المرور على 8 أحرف على الأقل، حرف كبير، حرف صغير، رقم وحرف خاص"
+                            : currentLanguage === "fr"
+                              ? "Le mot de passe doit contenir au moins 8 caractères, une majuscule, une minuscule, un chiffre et un caractère spécial"
+                              : "Password must contain at least 8 characters, one uppercase letter, one lowercase letter, one number and one special character",
+                    },
+                  })}
+                />
+                {errors.password && (
+                  <span className="text-error">
+                    {errors.password?.message?.toString()}
+                  </span>
+                )}
+              </label>
+              <label htmlFor="nid" className="grid text-[18px] font-semibold">
                 {currentLanguage === "en"
                   ? "NID"
                   : currentLanguage === "ar"
@@ -311,7 +306,7 @@ const AddNewParent = () => {
               </label>
               <label
                 htmlFor="gender"
-                className="grid font-sans text-[18px] font-semibold"
+                className="grid text-[18px] font-semibold"
               >
                 {currentLanguage === "en"
                   ? "Gender"
@@ -368,7 +363,7 @@ const AddNewParent = () => {
 
               <label
                 htmlFor="nationality"
-                className="grid font-sans text-[18px] font-semibold"
+                className="grid text-[18px] font-semibold"
               >
                 {currentLanguage === "en"
                   ? "Your Nationality"
@@ -412,7 +407,7 @@ const AddNewParent = () => {
               </label>
               <label
                 htmlFor="regionId"
-                className="grid font-sans text-[18px] font-semibold"
+                className="grid text-[18px] font-semibold"
               >
                 {currentLanguage === "en"
                   ? "RegionId"
@@ -432,7 +427,7 @@ const AddNewParent = () => {
               </label>
               <label
                 htmlFor="name_en"
-                className="grid font-sans text-[18px] font-semibold"
+                className="grid text-[18px] font-semibold"
               >
                 {currentLanguage === "en"
                   ? "Name EN"
@@ -461,7 +456,7 @@ const AddNewParent = () => {
               </label>
               <label
                 htmlFor="name_ar"
-                className="grid font-sans text-[18px] font-semibold"
+                className="grid text-[18px] font-semibold"
               >
                 {currentLanguage === "en"
                   ? "Name AR"
@@ -490,7 +485,7 @@ const AddNewParent = () => {
               </label>
               <label
                 htmlFor="name_fr"
-                className="grid font-sans text-[18px] font-semibold"
+                className="grid text-[18px] font-semibold"
               >
                 {currentLanguage === "en"
                   ? "Name FR"
@@ -519,7 +514,7 @@ const AddNewParent = () => {
               </label>
               <label
                 htmlFor="birthDate"
-                className="grid font-sans text-[18px] font-semibold"
+                className="grid text-[18px] font-semibold"
               >
                 {currentLanguage === "en"
                   ? "Date Of Birth"
@@ -572,10 +567,7 @@ const AddNewParent = () => {
                 )}
               </label>
 
-              <label
-                htmlFor="about"
-                className="grid font-sans text-[18px] font-semibold"
-              >
+              <label htmlFor="about" className="grid text-[18px] font-semibold">
                 {currentLanguage === "en"
                   ? "About"
                   : currentLanguage === "ar"
@@ -603,7 +595,7 @@ const AddNewParent = () => {
               </label>
               <label
                 htmlFor="occupation_en"
-                className="grid font-sans text-[18px] font-semibold"
+                className="grid text-[18px] font-semibold"
               >
                 {currentLanguage === "en"
                   ? "Occupation EN"
@@ -633,7 +625,7 @@ const AddNewParent = () => {
 
               <label
                 htmlFor="occupation_ar"
-                className="grid font-sans text-[18px] font-semibold"
+                className="grid text-[18px] font-semibold"
               >
                 {currentLanguage === "en"
                   ? "Occupation AR"
@@ -662,7 +654,7 @@ const AddNewParent = () => {
               </label>
               <label
                 htmlFor="occupation_fr"
-                className="grid font-sans text-[18px] font-semibold"
+                className="grid text-[18px] font-semibold"
               >
                 {currentLanguage === "en"
                   ? "Occupation FR"

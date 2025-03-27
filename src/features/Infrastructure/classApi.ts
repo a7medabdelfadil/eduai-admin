@@ -54,7 +54,7 @@ export const classApi = createApi({
     updateClasss: builder.mutation({
       query: ({ formData, id }) => ({
         url: `/api/v1/management/classroom/${id}`,
-        method: "PATCH",
+        method: "PUT",
         body: formData,
       }),
     }),

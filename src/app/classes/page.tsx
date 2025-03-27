@@ -147,7 +147,15 @@ const Infrastructure = () => {
 
   if (loading || isLoading)
     return (
-      <div className="container mx-auto px-4 py-8">
+      <div className={`${
+          currentLanguage === "ar"
+            ? booleanValue
+              ? "lg:mr-[150px]"
+              : "lg:mr-[320px]"
+            : booleanValue
+              ? "lg:ml-[150px]"
+              : "lg:ml-[320px]"
+        }`}>
         <BreadCrumbs breadcrumbs={breadcrumbs} />
         <div className="my-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <h1 className="text-2xl font-bold text-gray-800">
@@ -188,7 +196,7 @@ const Infrastructure = () => {
       <BreadCrumbs breadcrumbs={breadcrumbs} />
       <div
         dir={currentLanguage === "ar" ? "rtl" : "ltr"}
-        className={` justify-between ${
+        className={` ${
           currentLanguage === "ar"
             ? booleanValue
               ? "lg:mr-[150px]"

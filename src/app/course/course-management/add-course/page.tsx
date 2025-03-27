@@ -57,8 +57,6 @@ const AddCourse = () => {
   const { data: LangData, isLoading: LangLoading } =
     useGetAllLanguagesQuery(null);
 
-  
-
   const [createCourse, { isLoading }] = useCreateCoursesMutation();
 
   const onSubmit = async (data: any) => {
@@ -120,7 +118,7 @@ const AddCourse = () => {
                 <line x1="12" y1="14" x2="12" y2="17" />{" "}
                 <line x1="16" y1="14" x2="16" y2="17" />
               </svg>
-              <h1 className="font-sans text-[22px] font-semibold">
+              <h1 className="text-[22px] font-semibold">
                 {currentLanguage === "ar"
                   ? "معلومات الدورة"
                   : currentLanguage === "fr"
@@ -129,10 +127,7 @@ const AddCourse = () => {
               </h1>
             </div>
             <div className="grid grid-cols-2 gap-4 max-[1278px]:grid-cols-1">
-              <label
-                htmlFor="name"
-                className="grid font-sans text-[18px] font-semibold"
-              >
+              <label htmlFor="name" className="grid text-[18px] font-semibold">
                 {currentLanguage === "ar"
                   ? "(en) الاسم"
                   : currentLanguage === "fr"
@@ -154,10 +149,7 @@ const AddCourse = () => {
                   </span>
                 )}
               </label>
-              <label
-                htmlFor="name"
-                className="grid font-sans text-[18px] font-semibold"
-              >
+              <label htmlFor="name" className="grid text-[18px] font-semibold">
                 {currentLanguage === "ar"
                   ? "(ar) الاسم"
                   : currentLanguage === "fr"
@@ -179,10 +171,7 @@ const AddCourse = () => {
                   </span>
                 )}
               </label>
-              <label
-                htmlFor="name"
-                className="grid font-sans text-[18px] font-semibold"
-              >
+              <label htmlFor="name" className="grid text-[18px] font-semibold">
                 {currentLanguage === "ar"
                   ? "(fr) الاسم"
                   : currentLanguage === "fr"
@@ -204,10 +193,7 @@ const AddCourse = () => {
                   </span>
                 )}
               </label>
-              <label
-                htmlFor="name"
-                className="grid font-sans text-[18px] font-semibold"
-              >
+              <label htmlFor="name" className="grid text-[18px] font-semibold">
                 {currentLanguage === "ar"
                   ? "(en) الوصف"
                   : currentLanguage === "fr"
@@ -229,10 +215,7 @@ const AddCourse = () => {
                   </span>
                 )}
               </label>
-              <label
-                htmlFor="name"
-                className="grid font-sans text-[18px] font-semibold"
-              >
+              <label htmlFor="name" className="grid text-[18px] font-semibold">
                 {currentLanguage === "ar"
                   ? "(ar) الوصف"
                   : currentLanguage === "fr"
@@ -254,10 +237,7 @@ const AddCourse = () => {
                   </span>
                 )}
               </label>
-              <label
-                htmlFor="name"
-                className="grid font-sans text-[18px] font-semibold"
-              >
+              <label htmlFor="name" className="grid text-[18px] font-semibold">
                 {currentLanguage === "ar"
                   ? "(fr) الوصف"
                   : currentLanguage === "fr"
@@ -281,7 +261,7 @@ const AddCourse = () => {
               </label>
               <label
                 htmlFor="countryId"
-                className="grid text-start font-sans text-[15px] font-semibold text-blackOrWhite"
+                className="grid text-start text-[15px] font-semibold text-blackOrWhite"
               >
                 {currentLanguage === "ar"
                   ? "البلد"
@@ -320,7 +300,7 @@ const AddCourse = () => {
               </label>
               <label
                 htmlFor="level"
-                className="grid text-start font-sans text-[15px] font-semibold text-blackOrWhite"
+                className="grid text-start text-[15px] font-semibold text-blackOrWhite"
               >
                 {currentLanguage === "ar"
                   ? "مستوى الدراسة"
@@ -359,7 +339,7 @@ const AddCourse = () => {
               </label>
               <label
                 htmlFor="registrationType"
-                className="grid text-start font-sans text-[15px] font-semibold text-blackOrWhite"
+                className="grid text-start text-[15px] font-semibold text-blackOrWhite"
               >
                 {currentLanguage === "ar"
                   ? "التسجيل"
@@ -398,7 +378,7 @@ const AddCourse = () => {
               </label>
               <label
                 htmlFor="language"
-                className="grid text-start font-sans text-[15px] font-semibold text-blackOrWhite"
+                className="grid text-start text-[15px] font-semibold text-blackOrWhite"
               >
                 {currentLanguage === "ar"
                   ? "اللغة"
@@ -435,10 +415,7 @@ const AddCourse = () => {
                   </span>
                 )}
               </label>
-              <label
-                htmlFor="code"
-                className="grid font-sans text-[18px] font-semibold"
-              >
+              <label htmlFor="code" className="grid text-[18px] font-semibold">
                 {currentLanguage === "ar"
                   ? "الرمز"
                   : currentLanguage === "fr"
@@ -460,10 +437,7 @@ const AddCourse = () => {
                   </span>
                 )}
               </label>
-              <label
-                htmlFor="code"
-                className="grid font-sans text-[18px] font-semibold"
-              >
+              <label htmlFor="code" className="grid text-[18px] font-semibold">
                 {currentLanguage === "ar"
                   ? "معرف النظام التعليمي"
                   : currentLanguage === "fr"

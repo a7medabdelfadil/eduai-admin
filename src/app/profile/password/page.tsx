@@ -77,7 +77,7 @@ const Password = () => {
                   <div className="grid grid-cols-2 gap-4 max-[1278px]:grid-cols-1">
                     <label
                       htmlFor="password"
-                      className="grid font-sans text-[18px] font-semibold"
+                      className="grid text-[18px] font-semibold"
                     >
                       {currentLanguage === "ar"
                         ? "كلمة المرور الحالية"
@@ -94,7 +94,7 @@ const Password = () => {
                     </label>
                     <label
                       htmlFor="newPassword"
-                      className="grid font-sans text-[18px] font-semibold"
+                      className="grid text-[18px] font-semibold"
                     >
                       {currentLanguage === "ar"
                         ? "كلمة مرور جديدة"

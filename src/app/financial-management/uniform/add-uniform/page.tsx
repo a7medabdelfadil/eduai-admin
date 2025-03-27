@@ -89,7 +89,7 @@ const AddUniform = () => {
                 <line x1="12" y1="14" x2="12" y2="17" />
                 <line x1="16" y1="14" x2="16" y2="17" />
               </svg>
-              <h1 className="font-sans text-[22px] font-semibold">
+              <h1 className="text-[22px] font-semibold">
                 {currentLanguage === "ar"
                   ? "معلومات الزي الرسمي"
                   : currentLanguage === "fr"
@@ -100,10 +100,7 @@ const AddUniform = () => {
               </h1>
             </div>
             <div className="grid grid-cols-2 gap-4 max-[1278px]:grid-cols-1">
-              <label
-                htmlFor="grade"
-                className="grid font-sans text-[18px] font-semibold"
-              >
+              <label htmlFor="grade" className="grid text-[18px] font-semibold">
                 {currentLanguage === "ar"
                   ? "الدرجة"
                   : currentLanguage === "fr"
@@ -158,10 +155,7 @@ const AddUniform = () => {
                   </option>
                 </select>
               </label>
-              <label
-                htmlFor="cost"
-                className="grid font-sans text-[18px] font-semibold"
-              >
+              <label htmlFor="cost" className="grid text-[18px] font-semibold">
                 {currentLanguage === "ar"
                   ? "التكلفة"
                   : currentLanguage === "fr"
@@ -181,10 +175,7 @@ const AddUniform = () => {
                   }
                 />
               </label>
-              <label
-                htmlFor="about"
-                className="grid font-sans text-[18px] font-semibold"
-              >
+              <label htmlFor="about" className="grid text-[18px] font-semibold">
                 {currentLanguage === "ar"
                   ? "حول (اختياري)"
                   : currentLanguage === "fr"

@@ -22,13 +22,13 @@ const ResetPassword = () => {
   );
 
   const [theme, setTheme] = useState("light");
-  
-    useEffect(() => {
-      if (typeof window !== "undefined") {
-        const storedTheme = localStorage.getItem("theme") || "light";
-        setTheme(storedTheme);
-      }
-    }, []);
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const storedTheme = localStorage.getItem("theme") || "light";
+      setTheme(storedTheme);
+    }
+  }, []);
 
   const dispatchLang = useDispatch();
   useEffect(() => {
@@ -149,17 +149,17 @@ const ResetPassword = () => {
           </DropdownMenu.Portal>
         </DropdownMenu.Root>
       </div>
-      <div className="relative h-screen flex items-center justify-center overflow-hidden bg-bgSecondary duration-300 ease-in">
-        <div className="z-20 gird w-full items-center justify-center text-center">
+      <div className="relative flex h-screen items-center justify-center overflow-hidden bg-bgSecondary duration-300 ease-in">
+        <div className="gird z-20 w-full items-center justify-center text-center">
           <div className="mb-10 grid">
-            <h1 className="font-sans text-[28px] font-bold text-primary">
+            <h1 className="text-[28px] font-bold text-primary">
               {currentLanguage === "ar"
                 ? "إعادة تعيين كلمة المرور"
                 : currentLanguage === "fr"
                   ? "Réinitialiser votre mot de passe"
                   : "Reset your password"}
             </h1>
-            <p className="font-sans text-[20px] font-semibold text-secondary">
+            <p className="text-[20px] font-semibold text-secondary">
               {currentLanguage === "ar"
                 ? "أدخل كلمة المرور الجديدة"
                 : currentLanguage === "fr"
@@ -175,7 +175,7 @@ const ResetPassword = () => {
             >
               <label
                 htmlFor="password"
-                className="grid text-start font-sans text-[18px] font-semibold text-textSecondary"
+                className="grid text-start text-[18px] font-semibold text-textSecondary"
               >
                 {currentLanguage === "ar"
                   ? "كلمة المرور الجديدة"
@@ -228,16 +228,20 @@ const ResetPassword = () => {
           className={`absolute -bottom-40 ${currentLanguage === "ar" ? "right-0 scale-x-[-1]" : "left-0"} z-10 hidden h-[600px] w-[600px] lg:block`}
         >
           <img
-            src={theme === "light" ? "/images/bottomleft-login.png" : "/images/bottomleft-login-dark.png"}
+            src={
+              theme === "light"
+                ? "/images/bottomleft-login.png"
+                : "/images/bottomleft-login-dark.png"
+            }
             // src="/images/bottomleft-login.png"
             alt="Logo"
             className="m-0 w-full p-0"
           />
         </div>
         <div className="flex h-full justify-end">
-          <div className="h-full w-[250px] lg:w-[600px] items-center justify-end bg-[#B2BDF9] dark:bg-[#2a3469] hidden md:flex">
+          <div className="hidden h-full w-[250px] items-center justify-end bg-[#B2BDF9] dark:bg-[#2a3469] md:flex lg:w-[600px]">
             <img
-              className="md:h-[250px] lg:h-[400px] md:-translate-x-[40px] lg:-translate-x-[140px] xl:-translate-x-[260px]"
+              className="md:h-[250px] md:-translate-x-[40px] lg:h-[400px] lg:-translate-x-[140px] xl:-translate-x-[260px]"
               src="images/newpassword.png"
               alt="#"
             />

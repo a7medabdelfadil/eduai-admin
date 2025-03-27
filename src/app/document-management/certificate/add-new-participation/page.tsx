@@ -55,13 +55,13 @@ const AddNewParticipation = () => {
       setFileName(file.name);
     }
   };
-const { data: students, isLoading: isStudentsLoading } =
-  useGetAllStudentsQuery({
-    archived: "false",
-    page: 0,
-    size: 1000000,
-    graduated: "false"
-  });
+  const { data: students, isLoading: isStudentsLoading } =
+    useGetAllStudentsQuery({
+      archived: "false",
+      page: 0,
+      size: 1000000,
+      graduated: "false",
+    });
   const onSubmit = async (formData: any) => {
     const data = new FormData();
     data.append(
@@ -133,7 +133,7 @@ const { data: students, isLoading: isStudentsLoading } =
                 <line x1="12" y1="14" x2="12" y2="17" />
                 <line x1="16" y1="14" x2="16" y2="17" />
               </svg>
-              <h1 className="font-sans text-[22px] font-semibold">
+              <h1 className="text-[22px] font-semibold">
                 {currentLanguage === "ar"
                   ? "شهادات المشاركة"
                   : currentLanguage === "fr"
@@ -142,10 +142,9 @@ const { data: students, isLoading: isStudentsLoading } =
               </h1>
             </div>
             <div className="grid grid-cols-2 gap-4 max-[1278px]:grid-cols-1">
-              
               <label
                 htmlFor="userId"
-                className="grid font-sans text-[18px] font-semibold"
+                className="grid text-[18px] font-semibold"
               >
                 {currentLanguage === "en"
                   ? "Student ID"
@@ -194,7 +193,7 @@ const { data: students, isLoading: isStudentsLoading } =
               </label>
               <label
                 htmlFor="title_en"
-                className="grid font-sans text-[18px] font-semibold"
+                className="grid text-[18px] font-semibold"
               >
                 {currentLanguage === "ar"
                   ? "العنوان (بالإنجليزية)"
@@ -220,7 +219,7 @@ const { data: students, isLoading: isStudentsLoading } =
               </label>
               <label
                 htmlFor="title_ar"
-                className="grid font-sans text-[18px] font-semibold"
+                className="grid text-[18px] font-semibold"
               >
                 {currentLanguage === "ar"
                   ? "العنوان (بالعربي)"
@@ -245,7 +244,7 @@ const { data: students, isLoading: isStudentsLoading } =
               </label>
               <label
                 htmlFor="title_en"
-                className="grid font-sans text-[18px] font-semibold"
+                className="grid text-[18px] font-semibold"
               >
                 {currentLanguage === "ar"
                   ? "العنوان (بالفرنسية)"
@@ -271,7 +270,7 @@ const { data: students, isLoading: isStudentsLoading } =
               </label>
               <label
                 htmlFor="issueDate"
-                className="grid font-sans text-[18px] font-semibold"
+                className="grid text-[18px] font-semibold"
               >
                 {currentLanguage === "ar"
                   ? "فصل التخرج"
@@ -294,10 +293,7 @@ const { data: students, isLoading: isStudentsLoading } =
                   </span>
                 )}
               </label>
-              <label
-                htmlFor="file"
-                className="grid font-sans text-[18px] font-semibold"
-              >
+              <label htmlFor="file" className="grid text-[18px] font-semibold">
                 {currentLanguage === "ar"
                   ? "وثيقة"
                   : currentLanguage === "fr"
