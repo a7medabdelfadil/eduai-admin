@@ -36,7 +36,7 @@ const BreadCrumbs: React.FC<BreadCrumbsProps> = ({ breadcrumbs }) => {
           : booleanValue
             ? "lg:ml-[100px]"
             : "lg:ml-[270px]"
-      } mx-5 mt-10 flex-wrap text-[18px] max-[550px]:text-[15px]`}
+      } m-5 flex-wrap text-[18px] max-[550px]:text-[15px]`}
     >
       {breadcrumbs.map((crumb, index) => (
         <React.Fragment key={index}>

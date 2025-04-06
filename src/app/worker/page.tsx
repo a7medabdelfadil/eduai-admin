@@ -13,6 +13,10 @@ import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import BreadCrumbs from "@/components/BreadCrumbs";
 import { baseUrl } from "@/components/BaseURL";
+import { Text } from "@/components/Text";
+import { HiDownload } from "react-icons/hi";
+import { BiSearchAlt } from "react-icons/bi";
+import { MdEdit } from "react-icons/md";
 
 const Worker = () => {
   const breadcrumbs = [
@@ -36,6 +40,10 @@ const Worker = () => {
     },
   ];
 
+  const [selectedWorker, setSelectedWorker] = useState<Worker | null>(null);
+  console.log("👾 ~ Worker ~ selectedWorker:", selectedWorker);
+  const [showModal, setShowModal] = useState(false);
+
   const booleanValue = useSelector((state: RootState) => state.boolean.value);
 
   type Worker = Record<string, any>;
@@ -48,7 +56,6 @@ const Worker = () => {
     size: rowsPerPage,
   });
   const [selectAll, setSelectAll] = useState(false);
-
 
   const onPageChange = (page: SetStateAction<number>) => {
     setCurrentPage(page);
@@ -73,64 +80,63 @@ const Worker = () => {
   };
 
   const [isLoadingDownload, setIsLoadingDownload] = useState<boolean>(false);
-    
-        const getCookie = (name: string) => {
-          const value = `; ${document.cookie}`;
-          const parts = value.split(`; ${name}=`);
-          if (parts.length === 2) return parts.pop()?.split(";").shift();
-          return null;
-        };
-    
-        const handleExport = async (params: any) => {
-          // Add loading state
-      
-          try {
-            setIsLoadingDownload(true); // Start loading
-            
-            const queryParams = new URLSearchParams({
-              size: params.size?.toString() || '',
-              type: "WORKER",
-              page: params.page?.toString() || '',
-              archived: params.archived?.toString() || '',
-              graduated: params.graduated?.toString() || '',
-              'search-word': params.searchWord || '',
-              genders: params.genders?.join(',') || '',
-              'classroom-names': params.classroomNames?.join(',') || '',
-              address: params.address || ''
-            });
-        
-            const response = await fetch(
-              `${baseUrl}/api/v1/export/employee/excel?${queryParams}`,
-              {
-                method: 'GET',
-                headers: {
-                  'Content-Type': 'application/json',
-                  'Authorization': `Bearer ${getCookie("token")}`,
-                },
-              }
-            );
-        
-            if (!response.ok) {
-              throw new Error('Export failed');
-            }
-        
-            const blob = await response.blob();
-            const url = window.URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = 'workers.xlsx';
-            document.body.appendChild(a);
-            a.click();
-            window.URL.revokeObjectURL(url);
-            document.body.removeChild(a);
-        
-          } catch (error) {
-            toast.error("Failed to export students data");
-            console.error('Export error:', error);
-          } finally {
-            setIsLoadingDownload(false); // End loading regardless of success or failure
-          }
-        }
+
+  const getCookie = (name: string) => {
+    const value = `; ${document.cookie}`;
+    const parts = value.split(`; ${name}=`);
+    if (parts.length === 2) return parts.pop()?.split(";").shift();
+    return null;
+  };
+
+  const handleExport = async (params: any) => {
+    // Add loading state
+
+    try {
+      setIsLoadingDownload(true); // Start loading
+
+      const queryParams = new URLSearchParams({
+        size: params.size?.toString() || "",
+        type: "WORKER",
+        page: params.page?.toString() || "",
+        archived: params.archived?.toString() || "",
+        graduated: params.graduated?.toString() || "",
+        "search-word": params.searchWord || "",
+        genders: params.genders?.join(",") || "",
+        "classroom-names": params.classroomNames?.join(",") || "",
+        address: params.address || "",
+      });
+
+      const response = await fetch(
+        `${baseUrl}/api/v1/export/employee/excel?${queryParams}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${getCookie("token")}`,
+          },
+        },
+      );
+
+      if (!response.ok) {
+        throw new Error("Export failed");
+      }
+
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "workers.xlsx";
+      document.body.appendChild(a);
+      a.click();
+      window.URL.revokeObjectURL(url);
+      document.body.removeChild(a);
+    } catch (error) {
+      toast.error("Failed to export students data");
+      console.error("Export error:", error);
+    } finally {
+      setIsLoadingDownload(false); // End loading regardless of success or failure
+    }
+  };
 
   const handleSelectAll = () => {
     setSelectAll(!selectAll);
@@ -177,6 +183,18 @@ const Worker = () => {
     (state: RootState) => state.language,
   );
 
+  const getAgeFromBirthDate = (birthDate: string | null) => {
+    if (!birthDate) return "N/A";
+    const birth = new Date(birthDate);
+    const now = new Date();
+    return now.getFullYear() - birth.getFullYear();
+  };
+
+  const formatDate = (date: string | null) => {
+    if (!date) return "N/A";
+    return new Date(date).toLocaleDateString("en-GB");
+  };
+
   if (loading || isLoading)
     return (
       <div className="flex h-screen w-full items-center justify-center">
@@ -196,72 +214,83 @@ const Worker = () => {
             : booleanValue
               ? "lg:ml-[100px]"
               : "lg:ml-[270px]"
-        } bg-transstudent relative mx-3 mt-10 h-screen overflow-x-auto sm:rounded-lg`}
+        } relative mx-3 overflow-x-auto bg-transparent sm:rounded-lg`}
       >
-        <div className="flex justify-between text-center max-[502px]:grid max-[502px]:justify-center">
+        <div className="flex items-center justify-between">
+          <Text font="bold" size="3xl">
+            {currentLanguage === "ar"
+              ? "جميع العمال"
+              : currentLanguage === "fr"
+                ? "Tous les ouvriers"
+                : "All Workers"}
+          </Text>
+
+          <button
+            onClick={() =>
+              handleExport({
+                size: rowsPerPage,
+                page: currentPage,
+                archived: false,
+                graduated: false,
+              })
+            }
+            className="mx-3 mb-5 flex w-fit justify-center whitespace-nowrap rounded-xl border border-primary bg-bgPrimary px-4 py-2 text-[18px] font-semibold text-primary duration-300 ease-in hover:shadow-xl"
+          >
+            <HiDownload
+              size={20}
+              className={`${currentLanguage == "ar" ? "ml-2" : "mr-2"} mt-1`}
+            />
+            {isLoadingDownload
+              ? currentLanguage === "ar"
+                ? "جارٍ التنزيل..."
+                : currentLanguage === "fr"
+                  ? "Téléchargement..."
+                  : "Downloading..."
+              : currentLanguage === "ar"
+                ? "تحميل جميع العمال"
+                : currentLanguage === "fr"
+                  ? "Télécharger tous les ouvriers"
+                  : "Download All Workers"}
+          </button>
+        </div>
+        <div className="flex justify-between rounded-t-xl bg-bgPrimary p-4 text-center max-[502px]:grid max-[502px]:justify-center">
           <div className="mb-3">
             <label htmlFor="icon" className="sr-only">
               Search
             </label>
             <div className="relative min-w-72 md:min-w-80">
               <div className="pointer-events-none absolute inset-y-0 start-0 z-20 flex items-center ps-4">
-                <svg
-                  className="size-4 flex-shrink-0 text-gray-400"
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                >
-                  <circle cx="11" cy="11" r="8" />
-                  <path d="m21 21-4.3-4.3" />
-                </svg>
+                <BiSearchAlt className="text-secondary" size={18} />
               </div>
-              <input
-                onChange={e => setSearch(e.target.value)}
-                type="text"
-                id="icon"
-                name="icon"
-                className="block w-full rounded-lg border-2 border-borderPrimary px-4 py-2 ps-11 text-sm outline-none focus:border-blue-500 focus:ring-blue-500 disabled:pointer-events-none disabled:opacity-50"
-                placeholder={
-                  currentLanguage === "en"
-                    ? "Search"
-                    : currentLanguage === "ar"
-                      ? "بحث"
-                      : "Recherche"
-                }
-              />
+              <div className="flex items-center gap-2">
+                <input
+                  onChange={e => setSearch(e.target.value)}
+                  type="text"
+                  id="icon"
+                  name="icon"
+                  className="border-borderSecondary block w-full rounded-lg border-2 px-4 py-2 ps-11 text-lg outline-none disabled:pointer-events-none disabled:opacity-50 dark:border-borderPrimary"
+                  placeholder={
+                    currentLanguage === "ar"
+                      ? "ابحث عن أي شيء"
+                      : currentLanguage === "fr"
+                        ? "Rechercher n'importe quoi"
+                        : "Search anything"
+                  }
+                />
+                <span className="min-w-[120px] text-primary">
+                  {
+                    data?.data.content.filter((worker: Worker) => {
+                      return search.toLocaleLowerCase() === ""
+                        ? worker
+                        : worker.name.toLocaleLowerCase().includes(search);
+                    }).length
+                  }{" "}
+                  Result(s)
+                </span>
+              </div>
             </div>
           </div>
           <div className="flex justify-center">
-          <button
-              onClick={()=>handleExport({
-                size: rowsPerPage,
-                page: currentPage,
-                archived: false,
-                graduated: false
-              })}
-              className="mx-3 mb-5 w-[190px] flex justify-center whitespace-nowrap rounded-xl bg-bgPrimary px-4 py-2 text-[18px] font-semibold text-primary duration-300 ease-in border border-primary hover:shadow-xl"
-            >
-              {
-              isLoadingDownload ? <div role="status">
-              <svg aria-hidden="true" className="w-8 h-8 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z" fill="currentColor"/>
-                  <path d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z" fill="currentFill"/>
-              </svg>
-              <span className="sr-only">Loading...</span>
-          </div> : currentLanguage === "en"
-                ? "Export Data"
-                : currentLanguage === "ar"
-                ? "تصدير البيانات"
-                : "Exporter les données"
-            }
-              
-            </button>
             <Link
               href="/add-new-worker"
               className="mx-3 mb-5 w-fit whitespace-nowrap rounded-xl bg-primary px-4 py-2 text-[18px] font-semibold text-white duration-300 ease-in hover:bg-hover hover:shadow-xl"
@@ -291,16 +320,14 @@ const Worker = () => {
                     />
                   </div>
                 </th>
-                <th scope="col" className="whitespace-nowrap px-6 py-3">
-                  {currentLanguage === "en"
-                    ? "Name"
-                    : currentLanguage === "ar"
-                      ? "الاسم"
-                      : currentLanguage === "fr"
-                        ? "Nom"
-                        : "Name"}
+                <th scope="col" className="whitespace-nowrap px-6 py-1">
+                  {currentLanguage === "ar"
+                    ? "الاسم الكامل"
+                    : currentLanguage === "fr"
+                      ? "Nom complet"
+                      : "Full Name"}
                 </th>
-                <th scope="col" className="whitespace-nowrap px-6 py-3">
+                <th scope="col" className="whitespace-nowrap px-6 py-1">
                   {currentLanguage === "en"
                     ? "ID"
                     : currentLanguage === "ar"
@@ -309,7 +336,7 @@ const Worker = () => {
                         ? "ID"
                         : "ID"}
                 </th>
-                <th scope="col" className="whitespace-nowrap px-6 py-3">
+                <th scope="col" className="whitespace-nowrap px-6 py-1">
                   {currentLanguage === "en"
                     ? "Gender"
                     : currentLanguage === "ar"
@@ -318,7 +345,7 @@ const Worker = () => {
                         ? "Genre"
                         : "Gender"}
                 </th>
-                <th scope="col" className="whitespace-nowrap px-6 py-3">
+                <th scope="col" className="whitespace-nowrap px-6 py-1">
                   {currentLanguage === "en"
                     ? "Nationality"
                     : currentLanguage === "ar"
@@ -327,7 +354,7 @@ const Worker = () => {
                         ? "Nationalité"
                         : "Nationality"}
                 </th>
-                <th scope="col" className="whitespace-nowrap px-6 py-3">
+                <th scope="col" className="whitespace-nowrap px-6 py-1">
                   {currentLanguage === "en"
                     ? "Email"
                     : currentLanguage === "ar"
@@ -336,7 +363,7 @@ const Worker = () => {
                         ? "Email"
                         : "Email"}
                 </th>
-                <th scope="col" className="whitespace-nowrap px-6 py-3">
+                <th scope="col" className="whitespace-nowrap px-6 py-1">
                   {currentLanguage === "en"
                     ? "Mobile"
                     : currentLanguage === "ar"
@@ -345,7 +372,7 @@ const Worker = () => {
                         ? "Mobile"
                         : "Mobile"}
                 </th>
-                <th scope="col" className="whitespace-nowrap px-6 py-3">
+                <th scope="col" className="whitespace-nowrap px-6 py-1">
                   {currentLanguage === "en"
                     ? "View"
                     : currentLanguage === "ar"
@@ -354,7 +381,7 @@ const Worker = () => {
                         ? "Voir"
                         : "View"}
                 </th>
-                <th scope="col" className="whitespace-nowrap px-6 py-3">
+                <th scope="col" className="whitespace-nowrap px-6 py-1">
                   {currentLanguage === "en"
                     ? "Action"
                     : currentLanguage === "ar"
@@ -373,10 +400,16 @@ const Worker = () => {
                     ? worker
                     : worker.name.toLocaleLowerCase().includes(search);
                 })
-                .map((worker: Worker) => (
+                .map((worker: Worker, index: number) => (
                   <tr
                     key={worker.id}
-                    className="border-b border-borderPrimary bg-bgPrimary hover:bg-bgSecondary"
+                    onClick={() => {
+                      setSelectedWorker(worker);
+                      setShowModal(true);
+                    }}
+                    className={`cursor-pointer border-b border-borderPrimary text-textPrimary ${
+                      index % 2 === 0 ? "bg-bgRowTable" : "bg-bgPrimary"
+                    }`}
                   >
                     <td className="w-4 p-4">
                       <div className="flex items-center">
@@ -389,39 +422,35 @@ const Worker = () => {
                     </td>
                     <th
                       scope="row"
-                      className="flex items-center gap-2 whitespace-nowrap px-6 py-4 font-medium text-gray-900"
+                      className="whitespace-nowrap px-6 py-1 align-middle font-medium"
                     >
-                      <div className="w-[50px]">
-                        {worker.picture == null ? (
+                      <div className="flex items-center gap-2">
+                        <div className="w-[50px]">
                           <img
-                            src="/images/userr.png"
-                            className="mx-2 h-[40px] w-[40px] rounded-full"
+                            src={worker.picture ?? "/images/userr.png"}
+                            className="mx-2 h-[25px] w-[25px] rounded-full"
                             alt="#"
                           />
-                        ) : (
-                          <img
-                            src={worker.picture}
-                            className="mx-2 h-[40px] w-[40px] rounded-full"
-                            alt="#"
-                          />
-                        )}
+                        </div>
+                        <p className="text-textPrimary">
+                          {String(worker.name)}
+                        </p>
                       </div>
-                      <p className="text-textSecondart"> {worker.name} </p>
                     </th>
-                    <td className="whitespace-nowrap px-6 py-4">{worker.id}</td>
-                    <td className="whitespace-nowrap px-6 py-4">
+                    <td className="whitespace-nowrap px-6 py-1">{worker.id}</td>
+                    <td className="whitespace-nowrap px-6 py-1">
                       {worker.gender}
                     </td>
-                    <td className="whitespace-nowrap px-6 py-4">
+                    <td className="whitespace-nowrap px-6 py-1">
                       {worker.nationality}
                     </td>
-                    <td className="whitespace-nowrap px-6 py-4">
+                    <td className="whitespace-nowrap px-6 py-1">
                       {worker.email}
                     </td>
-                    <td className="whitespace-nowrap px-6 py-4">
+                    <td className="whitespace-nowrap px-6 py-1">
                       {worker.number}
                     </td>
-                    <td className="whitespace-nowrap px-6 py-4">
+                    <td className="whitespace-nowrap px-6 py-1">
                       <Link
                         href={`/worker/view-worker/${worker.id}`}
                         className="font-medium text-blue-600 hover:underline"
@@ -433,7 +462,7 @@ const Worker = () => {
                             : "Voir"}
                       </Link>
                     </td>
-                    <td className="whitespace-nowrap px-6 py-4">
+                    <td className="whitespace-nowrap px-6 py-1">
                       <button
                         onClick={() => handleDelete(worker.id)}
                         className="rounded-lg bg-error px-2 py-1 font-semibold text-white shadow-lg delay-150 duration-300 ease-in-out hover:-translate-y-1 hover:scale-110"
@@ -471,6 +500,78 @@ const Worker = () => {
           />
         </div>
       </div>
+      {showModal && selectedWorker && (
+        <div
+          onClick={() => setShowModal(false)}
+          className="fixed inset-0 z-[2000] flex justify-end bg-black/30"
+        >
+          <div
+            onClick={e => e.stopPropagation()}
+            className={`h-full w-full max-w-md overflow-y-auto bg-bgPrimary ${currentLanguage === "ar" ? "rounded-r-xl" : "rounded-l-xl"} p-6 shadow-xl sm:w-[450px]`}
+          >
+            {/* Close Button */}
+            <a
+              href={`/edit-worker/${selectedWorker.id}`}
+              className="absolute right-4 top-4 text-2xl font-bold text-gray-500 hover:text-gray-800"
+            >
+              <MdEdit />
+            </a>
+
+            {/* Header */}
+            <h2 className="mb-4 text-xl font-bold">
+              {currentLanguage === "ar"
+                ? "معلومات الموظف"
+                : currentLanguage === "fr"
+                  ? "Informations de l'employé"
+                  : "Employee Information"}
+            </h2>
+
+            {/* Profile */}
+            <div className="flex flex-col items-center gap-2">
+              <img
+                src={selectedWorker.picture ?? "/images/userr.png"}
+                alt="employee"
+                className="h-24 w-24 rounded-full object-cover"
+              />
+              <p className="text-lg font-semibold">{selectedWorker.name}</p>
+              <p className="text-sm text-gray-500">{selectedWorker.id}</p>
+            </div>
+
+            {/* Basic Details */}
+            <div className="mt-6 space-y-2 text-sm text-textSecondary">
+              {[
+                {
+                  label: "Age",
+                  value: getAgeFromBirthDate(selectedWorker.birthDate),
+                },
+                { label: "Gender", value: selectedWorker.gender ?? "N/A" },
+                {
+                  label: "Nationality",
+                  value: selectedWorker.nationality ?? "N/A",
+                },
+                { label: "Religion", value: selectedWorker.religion ?? "N/A" },
+                {
+                  label: "Date Of Birth",
+                  value: formatDate(selectedWorker.birthDate),
+                },
+                { label: "Email", value: selectedWorker.email },
+                { label: "Mobile", value: selectedWorker.phoneNumber },
+              ].map((item, idx) => (
+                <div
+                  key={idx}
+                  className="grid grid-cols-[150px_10px_1fr] gap-1"
+                >
+                  <span className="font-medium text-textPrimary">
+                    {item.label}
+                  </span>
+                  <span className="text-textPrimary">:</span>
+                  <span>{item.value}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
     </>
   );
 };

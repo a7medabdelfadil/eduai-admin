@@ -13,8 +13,9 @@ body {
   --primary: #3e5af0;
   --bg-primary: #ffffff;
   --bg-secondary: #f5f6fa;
+  --bg-row-table: #D9D9D980;
   --text-primary: #041631;
-  --text-secondary: #89939e;
+  --text-secondary: #89939e
   --warning: #f4bd0e;
   --error: #e53835;
   --success: #1ee0ac;
@@ -29,6 +30,7 @@ body {
   --primary: #566df2;
   --bg-primary: #0d0d0d;
   --bg-secondary: #171c23;
+  --bg-row-table: #40404080;
   --text-primary: #cee0fb;
   --text-secondary: #526484;
   --warning: #f89b22;

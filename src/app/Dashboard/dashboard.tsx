@@ -17,6 +17,7 @@ import {
   useGetEmployeeAttendenceQuery,
   useGetWorkerAttendenceQuery,
   useGetEventsInWeekQuery,
+  useGetStudentPercentageQuery,
 } from "@/features/dashboard/dashboardApi";
 import {
   useCreateEventsMutation,
@@ -74,11 +75,12 @@ const Dashboard: React.FC = () => {
   );
 
   const locale = currentLanguage === "ar" ? ar : currentLanguage === "fr" ? fr : enUS;
-
   const { data: expenses, isLoading: isExpenses } = useGetExpensesQuery({
     start: start,
     end: end,
   });
+  const { data: studentPercentage } = useGetStudentPercentageQuery(null);
+  console.log("👾 ~ studentPercentage:", studentPercentage?.data)
   const { data: teacherAttendance } = useGetTeacherAttendenceQuery(null);
   const { data: employeeAttendance } = useGetEmployeeAttendenceQuery(null);
   const { data: workersAttendance } = useGetWorkerAttendenceQuery(null);
@@ -308,8 +310,8 @@ const Dashboard: React.FC = () => {
               </p>
               <h1 className="text-3xl font-semibold">{students?.data} </h1>
               <div className="flex gap-2">
-                <div className="flex text-success">
-                  <HiOutlineArrowNarrowUp className="mt-[2px]" /> 4.63%
+                <div className={`flex ${studentPercentage?.data > 0 ? "text-error" : "text-success"} text-success`}>
+                  <HiOutlineArrowNarrowUp className="mt-[2px]" /> {studentPercentage?.data}%
                 </div>
                 <div>
                   <Text>

@@ -203,7 +203,7 @@ const Login = () => {
               <div className="relative mt-6 w-full md:w-fit">
                 <label
                   htmlFor="email"
-                  className={`absolute left-4 rounded px-1 font-sans text-sm font-semibold transition-all duration-200 ${
+                  className={`absolute left-4 rounded px-1 text-sm font-semibold transition-all duration-200 ${
                     emailFocused
                       ? "top-[-10px] bg-bgPrimary opacity-100"
                       : "top-4 opacity-0"
@@ -252,7 +252,7 @@ const Login = () => {
               <div className="relative w-full md:w-fit">
                 <label
                   htmlFor="password"
-                  className={`absolute left-4 rounded px-1 font-sans text-sm font-semibold transition-all duration-200 ${
+                  className={`absolute left-4 rounded px-1 text-sm font-semibold transition-all duration-200 ${
                     passwordFocused
                       ? "top-[-10px] bg-bgPrimary opacity-100"
                       : "top-4 opacity-0"
@@ -297,7 +297,7 @@ const Login = () => {
                 <div className="mt-2 flex justify-end text-end">
                   <a
                     href="/forget-password"
-                    className="flex font-sans text-[12px] font-medium text-secondary hover:underline"
+                    className="flex text-[12px] font-medium text-secondary hover:underline"
                   >
                     {currentLanguage === "ar"
                       ? "نسيت كلمة المرور؟"
@@ -338,7 +338,7 @@ const Login = () => {
                 </p>
               )}
               <div className="flex items-center justify-center gap-2 text-center">
-                <p className="font-sans font-medium text-secondary">
+                <p className="font-medium text-secondary">
                   {currentLanguage === "ar"
                     ? "تحتاج إلى حساب؟"
                     : currentLanguage === "fr"
@@ -347,7 +347,7 @@ const Login = () => {
                 </p>
                 <a
                   href="/signup"
-                  className="flex font-sans font-medium text-primary hover:underline"
+                  className="flex font-medium text-primary hover:underline"
                 >
                   {currentLanguage === "ar"
                     ? "إنشاء حساب"

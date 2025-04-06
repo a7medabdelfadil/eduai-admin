@@ -5,7 +5,8 @@ import { useState, useEffect, SetStateAction } from "react";
 import {
   useDeleteStudentsMutation,
   useGetAllStudentsQuery,
-  useLazyExportStudentsFileQuery
+  useGetStudentByIdQuery,
+  useLazyExportStudentsFileQuery,
 } from "@/features/User-Management/studentApi";
 import Spinner from "@/components/spinner";
 import { useSelector } from "react-redux";
@@ -14,6 +15,10 @@ import { toast } from "react-toastify";
 import Pagination from "@/components/pagination";
 import BreadCrumbs from "@/components/BreadCrumbs";
 import { baseUrl } from "@/components/BaseURL";
+import { BiSearchAlt } from "react-icons/bi";
+import { MdEdit } from "react-icons/md";
+import { Text } from "@/components/Text";
+import { HiDownload } from "react-icons/hi";
 
 const Student = () => {
   const breadcrumbs = [
@@ -36,6 +41,16 @@ const Student = () => {
       href: "/student",
     },
   ];
+
+  const [selectedStudent, setSelectedStudent] = useState<Student | null>(null);
+  const [showModal, setShowModal] = useState(false);
+
+  const {
+    data: dataStudent,
+    error: errorStudent,
+    isLoading: isLoadingStudent,
+  } = useGetStudentByIdQuery(selectedStudent?.id);
+
   const getCookie = (name: string) => {
     const value = `; ${document.cookie}`;
     const parts = value.split(`; ${name}=`);
@@ -64,6 +79,7 @@ const Student = () => {
     gender: selectedGender.toUpperCase(),
     classRoom: selectedClassroom,
   });
+
   const [isLoadingDownload, setIsLoadingDownload] = useState<boolean>(false);
 
   const handleExport = async (params: any) => {
@@ -71,53 +87,51 @@ const Student = () => {
 
     try {
       setIsLoadingDownload(true); // Start loading
-      
+
       const queryParams = new URLSearchParams({
-        size: params.size?.toString() || '',
-        page: params.page?.toString() || '',
-        archived: params.archived?.toString() || '',
-        graduated: params.graduated?.toString() || '',
-        'search-word': params.searchWord || '',
+        size: params.size?.toString() || "",
+        page: params.page?.toString() || "",
+        archived: params.archived?.toString() || "",
+        graduated: params.graduated?.toString() || "",
+        "search-word": params.searchWord || "",
         genders: selectedGender.toUpperCase(),
-        'classroom-names': params.classroomNames?.join(',') || '',
-        address: params.address || ''
+        "classroom-names": params.classroomNames?.join(",") || "",
+        address: params.address || "",
       });
-  
+
       const response = await fetch(
         `${baseUrl}/api/v1/export/student/excel?${queryParams}`,
         {
-          method: 'GET',
+          method: "GET",
           headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${getCookie("token")}`,
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${getCookie("token")}`,
           },
-        }
+        },
       );
-  
+
       if (!response.ok) {
-        throw new Error('Export failed');
+        throw new Error("Export failed");
       }
-  
+
       const blob = await response.blob();
       const url = window.URL.createObjectURL(blob);
-      const a = document.createElement('a');
+      const a = document.createElement("a");
       a.href = url;
-      a.download = 'students.xlsx';
+      a.download = "students.xlsx";
       document.body.appendChild(a);
       a.click();
       window.URL.revokeObjectURL(url);
       document.body.removeChild(a);
-  
     } catch (error) {
       toast.error("Failed to export students data");
-      console.error('Export error:', error);
+      console.error("Export error:", error);
     } finally {
       setIsLoadingDownload(false); // End loading regardless of success or failure
     }
-};
-  
+  };
+
   // Usage example:
-  
 
   const onPageChange = (page: SetStateAction<number>) => {
     setCurrentPage(page);
@@ -145,9 +159,9 @@ const Student = () => {
   const handleSelectAll = () => {
     setSelectAll(!selectAll);
     const checkboxes = document.querySelectorAll<HTMLInputElement>(
-      'input[type="checkbox"]:not(#checkbox-all-search)'
+      'input[type="checkbox"]:not(#checkbox-all-search)',
     );
-    checkboxes.forEach((checkbox) => {
+    checkboxes.forEach(checkbox => {
       checkbox.checked = !selectAll;
     });
   };
@@ -155,13 +169,13 @@ const Student = () => {
   useEffect(() => {
     const handleOtherCheckboxes = () => {
       const allCheckboxes = document.querySelectorAll<HTMLInputElement>(
-        'input[type="checkbox"]:not(#checkbox-all-search)'
+        'input[type="checkbox"]:not(#checkbox-all-search)',
       );
       const allChecked = Array.from(allCheckboxes).every(
-        (checkbox) => checkbox.checked
+        checkbox => checkbox.checked,
       );
       const selectAllCheckbox = document.getElementById(
-        "checkbox-all-search"
+        "checkbox-all-search",
       ) as HTMLInputElement | null;
       if (selectAllCheckbox) {
         selectAllCheckbox.checked = allChecked;
@@ -170,21 +184,21 @@ const Student = () => {
     };
 
     const otherCheckboxes = document.querySelectorAll<HTMLInputElement>(
-      'input[type="checkbox"]:not(#checkbox-all-search)'
+      'input[type="checkbox"]:not(#checkbox-all-search)',
     );
-    otherCheckboxes.forEach((checkbox) => {
+    otherCheckboxes.forEach(checkbox => {
       checkbox.addEventListener("change", handleOtherCheckboxes);
     });
 
     return () => {
-      otherCheckboxes.forEach((checkbox) => {
+      otherCheckboxes.forEach(checkbox => {
         checkbox.removeEventListener("change", handleOtherCheckboxes);
       });
     };
   }, []);
 
   const { language: currentLanguage, loading } = useSelector(
-    (state: RootState) => state.language
+    (state: RootState) => state.language,
   );
 
   if (loading || isLoading)
@@ -202,8 +216,8 @@ const Student = () => {
       (data?.data.content || [])
         // Take only classroomName that is not empty or null
         .map((student: Student) => student.classroomName)
-        .filter((classroomName: string | null) => !!classroomName)
-    )
+        .filter((classroomName: string | null) => !!classroomName),
+    ),
   );
 
   return (
@@ -217,27 +231,62 @@ const Student = () => {
               ? "lg:mr-[100px]"
               : "lg:mr-[270px]"
             : booleanValue
-            ? "lg:ml-[100px]"
-            : "lg:ml-[270px]"
-        } justify-left mb-4 ml-4 mt-5 flex gap-5 text-[20px] font-medium`}
+              ? "lg:ml-[100px]"
+              : "lg:ml-[270px]"
+        } justify-left mb-4 ml-4 mt-5 flex flex-col gap-5 text-[20px] font-medium`}
       >
-        <Link
-          href="/student"
-          className="text-blue-500 underline"
-        >
-          {currentLanguage === "ar"
-            ? "طالب نشط"
-            : currentLanguage === "fr"
-            ? "Étudiant actif"
-            : "Active Student"}
-        </Link>
-        <Link href="/student/graduated">
-          {currentLanguage === "ar"
-            ? "طالب خريج"
-            : currentLanguage === "fr"
-            ? "Étudiant diplômé"
-            : "Graduate Student"}
-        </Link>
+        <div className="flex items-center justify-between">
+          <Text font="bold" size="3xl">
+            {currentLanguage === "ar"
+              ? "جميع الطلاب"
+              : currentLanguage === "fr"
+                ? "Tous les étudiants"
+                : "All Students"}
+          </Text>
+          <button
+            onClick={() =>
+              handleExport({
+                size: rowsPerPage,
+                page: currentPage,
+                archived: false,
+                graduated: false,
+              })
+            }
+            className="mx-3 mb-5 flex w-fit justify-center whitespace-nowrap rounded-xl border border-primary bg-bgPrimary p-4 text-sm text-primary duration-300 ease-in hover:shadow-xl"
+          >
+            <HiDownload
+              size={20}
+              className={`${currentLanguage == "ar" ? "ml-2" : "mr-2"}`}
+            />
+            {isLoadingDownload
+              ? currentLanguage === "ar"
+                ? "جارٍ التنزيل..."
+                : currentLanguage === "fr"
+                  ? "Téléchargement..."
+                  : "Downloading..."
+              : currentLanguage === "en"
+                ? "Download All Student"
+                : currentLanguage === "ar"
+                  ? "تصدير البيانات"
+                  : "Exporter les données"}
+          </button>
+        </div>
+        <div className="mx-10 flex gap-5">
+          <Link href="/student" className="text-primary underline">
+            {currentLanguage === "ar"
+              ? "طالب نشط"
+              : currentLanguage === "fr"
+                ? "Étudiant actif"
+                : "Active Student"}
+          </Link>
+          <Link href="/student/graduated">
+            {currentLanguage === "ar"
+              ? "طالب خريج"
+              : currentLanguage === "fr"
+                ? "Étudiant diplômé"
+                : "Graduate Student"}
+          </Link>
+        </div>
       </div>
 
       <div
@@ -248,12 +297,12 @@ const Student = () => {
               ? "lg:mr-[100px]"
               : "lg:mr-[270px]"
             : booleanValue
-            ? "lg:ml-[100px]"
-            : "lg:ml-[270px]"
-        } bg-transstudent relative mx-3 mt-10 h-screen overflow-x-auto sm:rounded-lg`}
+              ? "lg:ml-[100px]"
+              : "lg:ml-[270px]"
+        } bg-transstudent relative mx-3 mt-2 h-screen overflow-x-auto sm:rounded-lg`}
       >
         {/* SEARCH + FILTERS + NEW STUDENT BUTTON */}
-        <div className="flex flex-wrap items-center justify-between gap-4 text-center">
+        <div className="flex flex-wrap items-center justify-between gap-4 bg-bgPrimary p-4 rounded-t-xl text-center">
           {/* Search Box */}
           <div className="mb-3">
             <label htmlFor="icon" className="sr-only">
@@ -261,41 +310,39 @@ const Student = () => {
             </label>
             <div className="relative min-w-72 md:min-w-80">
               <div className="pointer-events-none absolute inset-y-0 start-0 z-20 flex items-center ps-4">
-                <svg
-                  className="size-4 flex-shrink-0 text-gray-400"
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                >
-                  <circle cx="11" cy="11" r="8" />
-                  <path d="m21 21-4.3-4.3" />
-                </svg>
+                <BiSearchAlt className="text-secondary" size={18} />
               </div>
-              <input
-                onChange={(e) => setSearch(e.target.value)}
-                type="text"
-                id="icon"
-                name="icon"
-                className="block w-full rounded-lg border-2 border-borderPrimary px-4 py-2 ps-11 text-sm outline-none focus:border-blue-500 focus:ring-blue-500 disabled:pointer-events-none disabled:opacity-50"
-                placeholder={
-                  currentLanguage === "en"
-                    ? "Search"
-                    : currentLanguage === "ar"
-                    ? "بحث"
-                    : "Recherche"
-                }
-              />
+              <div className="flex items-center gap-2">
+                <input
+                  onChange={e => setSearch(e.target.value)}
+                  type="text"
+                  id="icon"
+                  name="icon"
+                  className="border-borderSecondary block w-full rounded-lg border-2 px-4 py-2 ps-11 text-lg outline-none disabled:pointer-events-none disabled:opacity-50 dark:border-borderPrimary"
+                  placeholder={
+                    currentLanguage === "ar"
+                      ? "ابحث عن أي شيء"
+                      : currentLanguage === "fr"
+                        ? "Rechercher n'importe quoi"
+                        : "Search anything"
+                  }
+                />
+                <span className="min-w-[100px] text-primary">
+                  {
+                    data?.data.content.filter((student: Student) => {
+                      return search.toLocaleLowerCase() === ""
+                        ? student
+                        : student.name.toLocaleLowerCase().includes(search);
+                    }).length
+                  }{" "}
+                  Result(s)
+                </span>
+              </div>
             </div>
           </div>
 
           {/* Filter by Gender */}
-          <div className="mb-3 flex items-center gap-5 flex-wrap">
+          <div className="mb-3 flex flex-wrap items-center gap-5">
             <label
               htmlFor="genderFilter"
               className="block text-sm font-semibold text-gray-700"
@@ -303,35 +350,35 @@ const Student = () => {
               {currentLanguage === "en"
                 ? "Gender"
                 : currentLanguage === "ar"
-                ? "الجنس"
-                : "Genre"}
+                  ? "الجنس"
+                  : "Genre"}
             </label>
             <select
               id="genderFilter"
               value={selectedGender}
-              onChange={(e) => setSelectedGender(e.target.value)}
+              onChange={e => setSelectedGender(e.target.value)}
               className="w-40 rounded-md border px-2 py-2 text-sm outline-none focus:border-blue-500 focus:ring-blue-500"
             >
               <option value="">
                 {currentLanguage === "en"
                   ? "All"
                   : currentLanguage === "ar"
-                  ? "الكل"
-                  : "Tous"}
+                    ? "الكل"
+                    : "Tous"}
               </option>
               <option value="male">
                 {currentLanguage === "en"
                   ? "Male"
                   : currentLanguage === "ar"
-                  ? "ذكر"
-                  : "Masculin"}
+                    ? "ذكر"
+                    : "Masculin"}
               </option>
               <option value="female">
                 {currentLanguage === "en"
                   ? "Female"
                   : currentLanguage === "ar"
-                  ? "أنثى"
-                  : "Féminin"}
+                    ? "أنثى"
+                    : "Féminin"}
               </option>
             </select>
             <label
@@ -341,21 +388,21 @@ const Student = () => {
               {currentLanguage === "en"
                 ? "Classroom"
                 : currentLanguage === "ar"
-                ? "الفصل الدراسي"
-                : "Classe"}
+                  ? "الفصل الدراسي"
+                  : "Classe"}
             </label>
             <select
               id="classroomFilter"
               value={selectedClassroom}
-              onChange={(e) => setSelectedClassroom(e.target.value)}
+              onChange={e => setSelectedClassroom(e.target.value)}
               className="w-40 rounded-md border px-2 py-2 text-sm outline-none focus:border-blue-500 focus:ring-blue-500"
             >
               <option value="">
                 {currentLanguage === "en"
                   ? "All"
                   : currentLanguage === "ar"
-                  ? "الكل"
-                  : "Tous"}
+                    ? "الكل"
+                    : "Tous"}
               </option>
               {uniqueClassrooms.map((classroom: any) => (
                 <option key={classroom} value={classroom}>
@@ -367,45 +414,17 @@ const Student = () => {
 
           {/* Filter by Classroom (Dynamically Populated) */}
 
-
-
           {/* New Student Button */}
           <div className="flex justify-center">
-            
-          <button
-              onClick={()=>handleExport({
-                size: rowsPerPage,
-                page: currentPage,
-                archived: false,
-                graduated: false
-              })}
-              className="mx-3 mb-5 w-[190px] flex justify-center whitespace-nowrap rounded-xl bg-bgPrimary px-4 py-2 text-[18px] font-semibold text-primary duration-300 ease-in border border-primary hover:shadow-xl"
-            >
-              {
-              isLoadingDownload ? <div role="status">
-              <svg aria-hidden="true" className="w-8 h-8 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z" fill="currentColor"/>
-                  <path d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z" fill="currentFill"/>
-              </svg>
-              <span className="sr-only">Loading...</span>
-          </div> : currentLanguage === "en"
-                ? "Export Data"
-                : currentLanguage === "ar"
-                ? "تصدير البيانات"
-                : "Exporter les données"
-            }
-              
-            </button>
-
             <Link
               href="/add-new-student"
-              className="mx-3 mb-5 w-[190px] whitespace-nowrap rounded-xl bg-primary px-4 py-2 text-[18px] font-semibold text-white duration-300 ease-in hover:bg-hover hover:shadow-xl"
+              className="mx-3 mb-5 w-fit whitespace-nowrap rounded-xl bg-primary p-4 text-[18px] font-semibold text-white duration-300 ease-in hover:bg-hover hover:shadow-xl"
             >
               {currentLanguage === "en"
                 ? "+ New Student"
                 : currentLanguage === "ar"
-                ? "+ طالب جديد"
-                : "+ Nouvel Élève"}
+                  ? "+ طالب جديد"
+                  : "+ Nouvel Élève"}
             </Link>
           </div>
         </div>
@@ -425,70 +444,70 @@ const Student = () => {
                     />
                   </div>
                 </th>
-                <th scope="col" className="whitespace-nowrap px-6 py-3">
-                  {currentLanguage === "en"
-                    ? "Name"
-                    : currentLanguage === "ar"
-                    ? "الاسم"
-                    : "Nom"}
+                <th scope="col" className="whitespace-nowrap px-6 py-1">
+                  {currentLanguage === "ar"
+                    ? "الاسم الكامل"
+                    : currentLanguage === "fr"
+                      ? "Nom complet"
+                      : "Full Name"}
                 </th>
-                <th scope="col" className="whitespace-nowrap px-6 py-3">
+                <th scope="col" className="whitespace-nowrap px-6 py-1">
                   {currentLanguage === "en"
                     ? "ID"
                     : currentLanguage === "ar"
-                    ? "الرقم التعريفي"
-                    : "ID"}
+                      ? "الرقم التعريفي"
+                      : "ID"}
                 </th>
-                <th scope="col" className="whitespace-nowrap px-6 py-3">
+                <th scope="col" className="whitespace-nowrap px-6 py-1">
                   {currentLanguage === "en"
                     ? "Gender"
                     : currentLanguage === "ar"
-                    ? "الجنس"
-                    : "Genre"}
+                      ? "الجنس"
+                      : "Genre"}
                 </th>
-                <th scope="col" className="whitespace-nowrap px-6 py-3">
+                <th scope="col" className="whitespace-nowrap px-6 py-1">
                   {currentLanguage === "en"
                     ? "Nationality"
                     : currentLanguage === "ar"
-                    ? "الجنسية"
-                    : "Nationalité"}
+                      ? "الجنسية"
+                      : "Nationalité"}
                 </th>
-                <th scope="col" className="whitespace-nowrap px-6 py-3">
+                <th scope="col" className="whitespace-nowrap px-6 py-1">
                   {currentLanguage === "en"
                     ? "Email"
                     : currentLanguage === "ar"
-                    ? "البريد الإلكتروني"
-                    : "E-mail"}
+                      ? "البريد الإلكتروني"
+                      : "E-mail"}
                 </th>
-                <th scope="col" className="whitespace-nowrap px-6 py-3">
+                <th scope="col" className="whitespace-nowrap px-6 py-1">
                   {currentLanguage === "en"
                     ? "Mobile"
                     : currentLanguage === "ar"
-                    ? "الهاتف المحمول"
-                    : "Mobile"}
+                      ? "الهاتف المحمول"
+                      : "Mobile"}
                 </th>
-                <th scope="col" className="whitespace-nowrap px-6 py-3">
+                <th scope="col" className="whitespace-nowrap px-6 py-1">
                   {currentLanguage === "en"
                     ? "Classroom"
                     : currentLanguage === "ar"
-                    ? "الفصل الدراسي"
-                    : currentLanguage === "fr"
-                    ? "Classe"
-                    : "Classe"}
+                      ? "الفصل الدراسي"
+                      : currentLanguage === "fr"
+                        ? "Classe"
+                        : "Classe"}
                 </th>
-                <th scope="col" className="whitespace-nowrap px-6 py-3">
+                <th scope="col" className="whitespace-nowrap px-6 py-1">
                   {currentLanguage === "en"
                     ? "View"
                     : currentLanguage === "ar"
-                    ? "عرض"
-                    : "Voir"}
+                      ? "عرض"
+                      : "Voir"}
                 </th>
-                <th scope="col" className="whitespace-nowrap px-6 py-3">
+                <th scope="col" className="whitespace-nowrap px-6 py-1">
                   {currentLanguage === "en"
                     ? "Action"
                     : currentLanguage === "ar"
-                    ? "الإجراء"
-                    : "Action"}
+                      ? "الإجراء"
+                      : "Action"}
                 </th>
               </tr>
             </thead>
@@ -499,62 +518,64 @@ const Student = () => {
                   return search.toLocaleLowerCase() === ""
                     ? student
                     : student.name.toLocaleLowerCase().includes(search);
-                }).map((student: Student) => (
+                })
+                .map((student: Student, index: number) => (
                   <tr
                     key={student.id}
-                    className="border-b border-borderPrimary bg-bgPrimary hover:bg-bgSecondary"
+                    onClick={() => {
+                      setSelectedStudent(student);
+                      setShowModal(true);
+                    }}
+                    className={`cursor-pointer border-b border-borderPrimary text-textPrimary ${
+                      index % 2 === 0 ? "bg-bgRowTable" : "bg-bgPrimary"
+                    }`}
                   >
                     <td className="w-4 p-4">
                       <div className="flex items-center">
                         <input
                           id={`checkbox-table-search-${student.id}`}
                           type="checkbox"
-                          className="h-4 w-4 rounded border-gray-300 bg-gray-100 text-blue-600 focus:ring-2 focus:ring-blue-500"
+                          className="h-4 w-4 rounded border-borderPrimary bg-bgSecondary text-blue-600 focus:ring-2 focus:ring-blue-500"
                         />
                       </div>
                     </td>
                     <th
                       scope="row"
-                      className="flex items-center gap-2 whitespace-nowrap px-6 py-4 font-medium text-textSecondary"
+                      className="whitespace-nowrap px-6 py-1 align-middle font-medium"
                     >
-                      <div className="w-[50px]">
-                        {student.picture == null ? (
+                      <div className="flex items-center gap-2">
+                        <div className="w-[50px]">
                           <img
-                            src="/images/userr.png"
-                            className="mx-2 h-[40px] w-[40px] rounded-full"
+                            src={student.picture ?? "/images/userr.png"}
+                            className="mx-2 h-[25px] w-[25px] rounded-full"
                             alt="#"
                           />
-                        ) : (
-                          <img
-                            src={student.picture}
-                            className="mx-2 h-[40px] w-[40px] rounded-full"
-                            alt="#"
-                          />
-                        )}
+                        </div>
+                        <p className="text-textPrimary">
+                          {String(student.name)}
+                        </p>
                       </div>
-                      <p className="text-textSecondary">
-                        {String(student.name)}
-                      </p>
                     </th>
-                    <td className="whitespace-nowrap px-6 py-4">
+
+                    <td className="whitespace-nowrap px-6 py-1">
                       {student.id}
                     </td>
-                    <td className="whitespace-nowrap px-6 py-4">
+                    <td className="whitespace-nowrap px-6 py-1">
                       {student.gender}
                     </td>
-                    <td className="whitespace-nowrap px-6 py-4">
+                    <td className="whitespace-nowrap px-6 py-1">
                       {student.nationality}
                     </td>
-                    <td className="whitespace-nowrap px-6 py-4">
+                    <td className="whitespace-nowrap px-6 py-1">
                       {student.email}
                     </td>
-                    <td className="whitespace-nowrap px-6 py-4">
+                    <td className="whitespace-nowrap px-6 py-1">
                       {student.number}
                     </td>
-                    <td className="whitespace-nowrap px-6 py-4">
+                    <td className="whitespace-nowrap px-6 py-1">
                       {student.classroomName}
                     </td>
-                    <td className="whitespace-nowrap px-6 py-4">
+                    <td className="whitespace-nowrap px-6 py-1">
                       <Link
                         href={`/student/view-student/${student.id}`}
                         className="font-medium text-primary hover:underline"
@@ -562,11 +583,11 @@ const Student = () => {
                         {currentLanguage === "en"
                           ? "View"
                           : currentLanguage === "ar"
-                          ? "عرض"
-                          : "Voir"}
+                            ? "عرض"
+                            : "Voir"}
                       </Link>
                     </td>
-                    <td className="whitespace-nowrap px-6 py-4">
+                    <td className="whitespace-nowrap px-6 py-1">
                       <button
                         onClick={() => handleDelete(student.id)}
                         className="rounded-lg bg-error px-2 py-1 font-semibold text-white shadow-lg delay-150 duration-300 ease-in-out hover:-translate-y-1 hover:scale-110"
@@ -574,8 +595,8 @@ const Student = () => {
                         {currentLanguage === "en"
                           ? "Lock"
                           : currentLanguage === "ar"
-                          ? "قفل"
-                          : "Verrouiller"}
+                            ? "قفل"
+                            : "Verrouiller"}
                       </button>
                     </td>
                   </tr>
@@ -587,8 +608,8 @@ const Student = () => {
               {currentLanguage === "en"
                 ? "There is No Data"
                 : currentLanguage === "ar"
-                ? "لا توجد بيانات"
-                : "Aucune donnée"}
+                  ? "لا توجد بيانات"
+                  : "Aucune donnée"}
             </div>
           )}
         </div>
@@ -602,6 +623,163 @@ const Student = () => {
           />
         </div>
       </div>
+      {showModal && selectedStudent && (
+        <div
+          onClick={() => setShowModal(false)}
+          className="fixed inset-0 z-[2000] flex justify-end bg-black/30"
+        >
+          <div
+            onClick={e => e.stopPropagation()}
+            className={`h-full w-full max-w-md overflow-y-auto bg-bgPrimary ${currentLanguage === "ar" ? "rounded-r-xl" : "rounded-l-xl"} p-6 shadow-xl sm:w-[450px]`}
+          >
+            {/* Close Button */}
+            <a
+              href={`/edit-student/${selectedStudent.id}`}
+              className="absolute right-4 top-4 text-2xl font-bold text-gray-500 hover:text-gray-800"
+            >
+              <MdEdit />
+            </a>
+
+            {/* Content */}
+            <h2 className="mb-4 text-xl font-bold">
+              {currentLanguage === "ar"
+                ? "معلومات الطالب"
+                : currentLanguage === "fr"
+                  ? "Informations de l'étudiant"
+                  : "Student Information"}
+            </h2>
+
+            <div className="flex flex-col items-center gap-2">
+              <img
+                src={selectedStudent.picture ?? "/images/userr.png"}
+                alt="student"
+                className="h-24 w-24 rounded-full object-cover"
+              />
+              <p className="text-lg font-semibold">{selectedStudent.name}</p>
+              <p className="text-sm text-gray-500">
+                {currentLanguage === "ar"
+                  ? "رقم الطالب"
+                  : currentLanguage === "fr"
+                    ? "ID étudiant"
+                    : "Stu ID"}{" "}
+                : {selectedStudent.id}
+              </p>
+            </div>
+
+            <div className="mt-6 space-y-2 text-sm text-textSecondary">
+              {[
+                {
+                  label:
+                    currentLanguage === "ar"
+                      ? "العمر"
+                      : currentLanguage === "fr"
+                        ? "Âge"
+                        : "Age",
+                  value: selectedStudent.age || "Unknown",
+                },
+                {
+                  label:
+                    currentLanguage === "ar"
+                      ? "الصف"
+                      : currentLanguage === "fr"
+                        ? "Classe"
+                        : "Class",
+                  value: selectedStudent.classroomName || "Unknown",
+                },
+                {
+                  label:
+                    currentLanguage === "ar"
+                      ? "الجنس"
+                      : currentLanguage === "fr"
+                        ? "Genre"
+                        : "Gender",
+                  value: selectedStudent.gender || "Unknown",
+                },
+                {
+                  label:
+                    currentLanguage === "ar"
+                      ? "تاريخ الميلاد"
+                      : currentLanguage === "fr"
+                        ? "Date de naissance"
+                        : "Date Of Birth",
+                  value: selectedStudent.dateOfBirth || "Unknown",
+                },
+                {
+                  label:
+                    currentLanguage === "ar"
+                      ? "الديانة"
+                      : currentLanguage === "fr"
+                        ? "Religion"
+                        : "Religion",
+                  value: selectedStudent.religion || "Unknown",
+                },
+                {
+                  label:
+                    currentLanguage === "ar"
+                      ? "العنوان"
+                      : currentLanguage === "fr"
+                        ? "Adresse"
+                        : "Address",
+                  value: selectedStudent.address || "Unknown",
+                },
+                {
+                  label:
+                    currentLanguage === "ar"
+                      ? "البريد الإلكتروني"
+                      : currentLanguage === "fr"
+                        ? "E-mail"
+                        : "Email",
+                  value: selectedStudent.email || "Unknown",
+                },
+                {
+                  label:
+                    currentLanguage === "ar"
+                      ? "رقم الجوال"
+                      : currentLanguage === "fr"
+                        ? "Portable"
+                        : "Mobile",
+                  value: selectedStudent.number || "Unknown",
+                },
+              ].map((item, idx) => (
+                <div
+                  key={idx}
+                  className="grid grid-cols-[150px_10px_1fr] gap-1"
+                >
+                  <span className="font-medium text-textPrimary">
+                    {item.label}
+                  </span>
+                  <span className="text-textPrimary">:</span>
+                  <span>{item.value}</span>
+                </div>
+              ))}
+            </div>
+
+            <div className="mt-6">
+              <h3 className="text-md font-bold">
+                {currentLanguage === "ar"
+                  ? "عن الطالب"
+                  : currentLanguage === "fr"
+                    ? "À propos de l'étudiant"
+                    : "About the student"}
+              </h3>
+              <p className="text-sm text-gray-700">{selectedStudent.about}</p>
+            </div>
+
+            <div className="mt-4">
+              <h3 className="text-md font-bold">
+                {currentLanguage === "ar"
+                  ? "شهادة"
+                  : currentLanguage === "fr"
+                    ? "Certification"
+                    : "Certification"}
+              </h3>
+              <p className="text-sm text-gray-700">
+                {selectedStudent.certification}
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
     </>
   );
 };

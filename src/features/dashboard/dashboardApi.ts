@@ -82,7 +82,9 @@ export const dashboardApi = createApi({
     getNotices: builder.query({
       query: () => "/api/management/note/all?page=0&size=100000",
     }),
-    //
+    getStudentPercentage: builder.query({
+      query: () => "/api/v1/dashboard/student-increase-percentage",
+    }),
     createNote: builder.mutation({
       query: ({ title, description }) => ({
         url: `/api/management/note`,
@@ -123,4 +125,5 @@ export const {
   useGetEmployeeAttendenceQuery,
   useGetWorkerAttendenceQuery,
   useGetNoticesQuery,
+  useGetStudentPercentageQuery,
 } = dashboardApi;
