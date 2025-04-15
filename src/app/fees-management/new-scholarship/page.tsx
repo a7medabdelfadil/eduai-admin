@@ -147,7 +147,7 @@ const NewScholarship = () => {
                 <select
                   id="studentId"
                   {...register("studentId")}
-                  className="h-full w-[400px] rounded-xl border px-4 py-3 text-[18px] text-black outline-none max-[458px]:w-[350px]"
+                  className="h-full w-[400px] bg-bgPrimary border border-borderPrimary text-textPrimary rounded-xl px-4 py-3 text-[18px] outline-none max-[458px]:w-[350px]"
                 >
                   <option value="">
                     {currentLanguage === "en"
@@ -214,7 +214,7 @@ const NewScholarship = () => {
 
                 <select
                   id="scholarshipType"
-                  className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-[400px] rounded-xl bg-bgPrimary border border-borderPrimary text-textPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                   {...register("scholarshipType", { required: true })}
                 >
                   <option value="">
