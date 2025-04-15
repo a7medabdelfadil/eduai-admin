@@ -4,6 +4,9 @@ import { RootState } from "@/GlobalRedux/store";
 import { useSelector } from "react-redux";
 import { useForm } from "react-hook-form";
 import Spinner from "@/components/spinner";
+import { useCreateActivityMutation, useGetActivityTypesQuery } from "@/features/Financial/feesApi";
+import { toast } from "react-toastify";
+import { useRouter } from "next/navigation";
 
 const AddActivity = () => {
   const breadcrumbs = [
@@ -32,6 +35,8 @@ const AddActivity = () => {
       href: "/financial-management/activity/add-activity",
     },
   ];
+
+  const router = useRouter();
   const {
     register,
     handleSubmit,
@@ -42,6 +47,21 @@ const AddActivity = () => {
   const { language: currentLanguage, loading } = useSelector(
     (state: RootState) => state.language,
   );
+
+  const { data, isLoading: activityLoading } = useGetActivityTypesQuery(null);
+  const [createActivity, { isLoading: submitting }] = useCreateActivityMutation();
+
+
+  const onSubmit = async (formData: any) => {
+    try {
+      await createActivity(formData).unwrap();
+      toast.success("Activity created successfully!")
+      router.push("/financial-management/activity");
+    } catch (error: any) {
+      toast.error("Error creating activity:", error);
+    }
+  };
+
 
   if (loading)
     return (
@@ -54,17 +74,16 @@ const AddActivity = () => {
       <BreadCrumbs breadcrumbs={breadcrumbs} />
       <div
         dir={currentLanguage === "ar" ? "rtl" : "ltr"}
-        className={`${
-          currentLanguage === "ar"
-            ? booleanValue
-              ? "lg:mr-[100px]"
-              : "lg:mr-[270px]"
-            : booleanValue
-              ? "lg:ml-[100px]"
-              : "lg:ml-[270px]"
-        } mx-3 mt-[40px] grid h-[500px] items-center justify-center`}
+        className={`${currentLanguage === "ar"
+          ? booleanValue
+            ? "lg:mr-[100px]"
+            : "lg:mr-[270px]"
+          : booleanValue
+            ? "lg:ml-[100px]"
+            : "lg:ml-[270px]"
+          } mx-3 mt-[40px] grid h-[500px] items-center justify-center`}
       >
-        <form>
+        <form onSubmit={handleSubmit(onSubmit)}>
           <div className="grid h-[400px] items-center justify-center gap-5 rounded-xl bg-bgPrimary p-10 sm:w-[500px] md:w-[600px] lg:w-[750px] xl:h-[500px] xl:w-[1000px]">
             <div className="flex items-center justify-start gap-2">
               <svg
@@ -108,18 +127,25 @@ const AddActivity = () => {
                     ? "Type d'activité"
                     : "Activity Type"}
                 {/* default */}
-                <input
+                <select
                   id="activityType"
-                  type="number"
-                  className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
-                  placeholder={
-                    currentLanguage === "ar"
-                      ? "أدخل نوع النشاط"
+                  {...register("activityType")}
+                  className="w-[400px] rounded-xl bg-bgPrimary text-textPrimary border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                >
+                  <option value="">
+                    {currentLanguage === "ar"
+                      ? "اختر نوع النشاط"
                       : currentLanguage === "fr"
-                        ? "Entrez le type d'activité"
-                        : "Enter Activity Type"
-                  }
-                />
+                        ? "Sélectionnez le type"
+                        : "Select Activity Type"}
+                  </option>
+                  {data?.data &&
+                    Object.entries(data.data).map(([key, value]) => (
+                      <option key={key} value={key}>
+                        {value as string}
+                      </option>
+                    ))}
+                </select>
               </label>
               <label htmlFor="cost" className="grid text-[18px] font-semibold">
                 {currentLanguage === "ar"
@@ -131,6 +157,7 @@ const AddActivity = () => {
                 <input
                   id="cost"
                   type="number"
+                  {...register("cost")}
                   className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                   placeholder={
                     currentLanguage === "ar"
@@ -151,6 +178,7 @@ const AddActivity = () => {
                 <input
                   id="about"
                   type="text"
+                  {...register("about")}
                   className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                   placeholder={
                     currentLanguage === "ar"
@@ -166,17 +194,24 @@ const AddActivity = () => {
             <div className="flex justify-center text-center">
               <button
                 type="submit"
-                className="w-fit rounded-xl bg-primary px-4 py-2 text-[18px] text-white duration-300 ease-in hover:bg-hover hover:shadow-xl"
+                disabled={submitting}
+                className={`w-fit rounded-xl px-4 py-2 text-[18px] text-white duration-300 ease-in hover:shadow-xl ${submitting ? "bg-gray-400 cursor-not-allowed" : "bg-primary hover:bg-hover"
+                  }`}
               >
-                {currentLanguage === "ar"
-                  ? "حفظ"
-                  : currentLanguage === "fr"
-                    ? "Sauvegarder"
-                    : "Save"}
-
-                {/* default */}
+                {submitting
+                  ? currentLanguage === "ar"
+                    ? "جاري الحفظ..."
+                    : currentLanguage === "fr"
+                      ? "Enregistrement..."
+                      : "Saving..."
+                  : currentLanguage === "ar"
+                    ? "حفظ"
+                    : currentLanguage === "fr"
+                      ? "Sauvegarder"
+                      : "Save"}
               </button>
             </div>
+
           </div>
         </form>
       </div>

@@ -57,6 +57,7 @@ export const bankApi = createApi({
         body: formData,
       }),
     }),
+    
   }),
 });
 

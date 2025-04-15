@@ -96,6 +96,16 @@ export const feesApi = createApi({
         body: formData,
       }),
     }),
+    getActivityTypes: builder.query({
+      query: () => "/api/v1/public/enumeration/activity-type",
+    }),
+    createActivity: builder.mutation({
+      query: body => ({
+        url: "/api/v1/activity-cost",
+        method: "POST",
+        body,
+      }),
+    }),    
   }),
 });
 
@@ -112,4 +122,6 @@ export const {
   useUpdateInvoicesMutation,
   useGetAllCurrencyQuery,
   useGetAllInvoicesItemsQuery,
+  useGetActivityTypesQuery,
+  useCreateActivityMutation,
 } = feesApi;
