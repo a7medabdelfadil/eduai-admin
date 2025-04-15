@@ -13,6 +13,7 @@
   "dependencies": {
     "@cometchat-pro/chat": "^3.0.13",
     "@hookform/resolvers": "^3.9.0",
+    "@radix-ui/react-dialog": "^1.1.7",
     "@radix-ui/react-dropdown-menu": "^2.1.1",
     "@radix-ui/react-tabs": "^1.1.0",
     "@reduxjs/toolkit": "^2.2.5",

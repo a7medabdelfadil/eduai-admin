@@ -39,6 +39,7 @@ import { taxesApi } from "@/features/Financial/taxesApi";
 import { paymentDueDateApi } from "@/features/Financial/paymentDueDateApi";
 import { chatApi } from "@/features/chat/chatApi";
 import { schoolApi } from "@/features/school/schoolLogo";
+import { activityApi } from "@/features/Financial/activityApi";
 
 export const store = configureStore({
   reducer: {
@@ -82,6 +83,7 @@ export const store = configureStore({
     [achievementApi.reducerPath]: achievementApi.reducer,
     [certificatesApi.reducerPath]: certificatesApi.reducer,
     [schoolApi.reducerPath]: schoolApi.reducer,
+    [activityApi.reducerPath]: activityApi.reducer,
   },
   middleware: getDefaultMiddleware =>
     getDefaultMiddleware()
@@ -121,7 +123,8 @@ export const store = configureStore({
       .concat(positionApi.middleware)
       .concat(studentApi.middleware)
       .concat(postApi.middleware)
-      .concat(schoolApi.middleware),
+      .concat(schoolApi.middleware)
+      .concat(activityApi.middleware),
 });
 
 export type RootState = ReturnType<typeof store.getState>;
