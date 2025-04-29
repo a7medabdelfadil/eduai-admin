@@ -6,7 +6,7 @@ import { useForm } from "react-hook-form";
 import Spinner from "@/components/spinner";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
-import { useCreateActivityMutation, useGetActivityTypesQuery } from "@/features/Financial/activityApi";
+import { useCreateActivityMutation, useGetUnusedActivitiesQuery } from "@/features/Financial/activityApi";
 
 const AddActivity = () => {
   const breadcrumbs = [
@@ -48,7 +48,7 @@ const AddActivity = () => {
     (state: RootState) => state.language,
   );
 
-  const { data, isLoading: activityLoading } = useGetActivityTypesQuery(null);
+  const { data, isLoading: activityLoading } = useGetUnusedActivitiesQuery(null);
   const [createActivity, { isLoading: submitting }] = useCreateActivityMutation();
 
 
@@ -63,7 +63,7 @@ const AddActivity = () => {
   };
 
 
-  if (loading)
+  if (activityLoading)
     return (
       <div className="flex h-screen w-full items-center justify-center">
         <Spinner />

@@ -73,7 +73,7 @@ const DocumentManagement = () => {
               : "Some information about Course List, List of points and GPA", // Default to English
     },
     {
-      href: "/document-management/enrollment",
+      href: "/document-management/enrollment/status",
       icon: <BsPersonLinesFill size={40} />,
       title:
         currentLanguage === "en"

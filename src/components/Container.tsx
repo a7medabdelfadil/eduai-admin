@@ -14,12 +14,12 @@ const Container = ({ children }: { children: ReactNode }) => {
         className={`${
           currentLanguage === "ar"
             ? booleanValue
-              ? "lg:mr-[110px]"
-              : "lg:mr-[290px]"
+              ? "lg:mr-[110px] ml-[15px]"
+              : "lg:mr-[270px] ml-[15px]"
             : booleanValue
-              ? "lg:ml-[110px]"
-              : "lg:ml-[290px]"
-        } mt-[40px] grid py-4`}
+              ? "lg:ml-[110px] mr-[15px]"
+              : "lg:ml-[270px] mr-[15px]"
+        } grid py-4 `}
       >
         {children}
       </div>

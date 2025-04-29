@@ -38,6 +38,9 @@ export const activityApi = createApi({
     getAllActivities: builder.query({
       query: () => "/api/v1/activity-cost/all",
     }),
+    getUnusedActivities: builder.query({
+      query: () => "/api/v1/activity-cost/unused-types",
+    }),
     getActivityById: builder.query({
       query: id => `/api/v1/activity-cost/update?activityCostId=${id}`,
     }),
@@ -62,6 +65,7 @@ export const {
   useCreateActivityMutation,
   useGetAllActivitiesQuery,
   useGetActivityByIdQuery,
+  useGetUnusedActivitiesQuery,
   useUpdateActivityMutation,
   useDeleteActivityMutation,
 } = activityApi;

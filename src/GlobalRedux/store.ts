@@ -40,6 +40,7 @@ import { paymentDueDateApi } from "@/features/Financial/paymentDueDateApi";
 import { chatApi } from "@/features/chat/chatApi";
 import { schoolApi } from "@/features/school/schoolLogo";
 import { activityApi } from "@/features/Financial/activityApi";
+import { enrollmentApi } from "@/features/Document-Management/enrollmentApi";
 
 export const store = configureStore({
   reducer: {
@@ -83,6 +84,7 @@ export const store = configureStore({
     [achievementApi.reducerPath]: achievementApi.reducer,
     [certificatesApi.reducerPath]: certificatesApi.reducer,
     [schoolApi.reducerPath]: schoolApi.reducer,
+    [enrollmentApi.reducerPath]: enrollmentApi.reducer,
     [activityApi.reducerPath]: activityApi.reducer,
   },
   middleware: getDefaultMiddleware =>
@@ -124,6 +126,7 @@ export const store = configureStore({
       .concat(studentApi.middleware)
       .concat(postApi.middleware)
       .concat(schoolApi.middleware)
+      .concat(enrollmentApi.middleware)
       .concat(activityApi.middleware),
 });
 
