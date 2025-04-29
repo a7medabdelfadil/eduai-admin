@@ -15,6 +15,7 @@ import { useForm, Controller } from "react-hook-form";
 import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 
 interface Params {
   studentId: string;
@@ -45,6 +46,8 @@ const EditStudent = ({ params }: { params: Params }) => {
   const { data, isLoading: isStudent } = useGetStudentByIdUpdateQuery(
     params.studentId,
   );
+
+  const router = useRouter();
 
   const { language: currentLanguage, loading } = useSelector(
     (state: RootState) => state.language,
@@ -105,14 +108,31 @@ const EditStudent = ({ params }: { params: Params }) => {
   const { handleSubmit } = useForm(); // handleSubmit here
 
   const onSubmit = async (data: any) => {
-    const formData = { ...data, religion: "OTHERS" };
+    const formData = {
+      ...data,
+      religion: null,
+      birthDate: birthDate === "" ? null : birthDate,
+      nid: nid === "" ? null : nid,
+      about: about === "" ? null : about,
+      regionId: regionId ? Number(regionId) : null,
+      graduated,
+      gender,
+      nationality,
+      name_en,
+      name_ar,
+      name_fr,
+      email,
+    };
+
     try {
-      await updateSudent({ id: params.studentId, formData: formData }).unwrap();
+      await updateSudent({ id: params.studentId, formData }).unwrap();
       toast.success("Student Updated successfully");
+      router.back();
     } catch (err: any) {
-      toast.error(err.data.message);
+      toast.error(err?.data?.message || "Update failed");
     }
   };
+
 
   if (loading || isStudent)
     return (
@@ -126,15 +146,14 @@ const EditStudent = ({ params }: { params: Params }) => {
       <BreadCrumbs breadcrumbs={breadcrumbs} />
       <div
         dir={currentLanguage === "ar" ? "rtl" : "ltr"}
-        className={`${
-          currentLanguage === "ar"
+        className={`${currentLanguage === "ar"
             ? booleanValue
               ? "lg:mr-[100px]"
               : "lg:mr-[270px]"
             : booleanValue
               ? "lg:ml-[100px]"
               : "lg:ml-[270px]"
-        } mx-3 mt-5 grid h-[850px] items-center justify-center`}
+          } mx-3 mt-5 grid h-[850px] items-center justify-center`}
       >
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="my-10 grid items-center justify-center gap-5 rounded-xl bg-bgPrimary p-10 sm:w-[500px] md:w-[600px] lg:w-[750px] xl:w-[1000px]">

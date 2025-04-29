@@ -38,7 +38,7 @@ const School = () => {
     },
     chrome: {
       label: "Chrome",
-      color: "#e23670",
+      color: "#34B3F15E",
     },
     safari: {
       label: "Safari",
@@ -155,38 +155,8 @@ const School = () => {
           </div>
         </div>
 
-        <div>
-          <Card className="flex flex-col bg-bgPrimary">
-            <CardHeader className="items-center pb-0">
-              <CardTitle>Subject Performance</CardTitle>
-            </CardHeader>
-            <CardContent className="flex-1 pb-0">
-              <ChartContainer
-                config={chartConfig}
-                className="mx-auto aspect-square max-h-[300px]"
-              >
-                <PieChart>
-                  <Pie
-                    data={chartData}
-                    dataKey="visitors"
-                    nameKey="browser"
-                    outerRadius={100}
-                  >
-                    <LabelList dataKey="visitors" position="inside" />
-                  </Pie>
-                  <Tooltip
-                    content={<ChartTooltipContent nameKey="browser" />}
-                  />
-                  <ChartLegend
-                    content={<ChartLegendContent nameKey="browser" />}
-                    className="-translate-y-2 flex-wrap gap-2 [&>*]:basis-1/4 [&>*]:justify-center"
-                  />
-                </PieChart>
-              </ChartContainer>
-            </CardContent>
-          </Card>
-
-          <Card className="flex w-[500px] flex-col bg-bgPrimary">
+        <div className="flex flex-col py-6 md:flex-row gap-6 max-md:px-6">
+        <Card className="flex flex-1 flex-col bg-bgPrimary">
             <CardHeader>
               <CardTitle>School Performance</CardTitle>
             </CardHeader>
@@ -223,6 +193,37 @@ const School = () => {
               </ChartContainer>
             </CardContent>
           </Card>
+          <Card className="flex flex-1 flex-col bg-bgPrimary">
+            <CardHeader className="items-center pb-0">
+              <CardTitle>Subject Performance</CardTitle>
+            </CardHeader>
+            <CardContent className="flex-1 pb-0">
+              <ChartContainer
+                config={chartConfig}
+                className="mx-auto aspect-square max-h-[300px]"
+              >
+                <PieChart>
+                  <Pie
+                    data={chartData}
+                    dataKey="visitors"
+                    nameKey="browser"
+                    outerRadius={100}
+                  >
+                    <LabelList dataKey="visitors" position="inside" />
+                  </Pie>
+                  <Tooltip
+                    content={<ChartTooltipContent nameKey="browser" />}
+                  />
+                  <ChartLegend
+                    content={<ChartLegendContent nameKey="browser" />}
+                    className="-translate-y-2 flex-wrap gap-2 [&>*]:basis-1/4 [&>*]:justify-center"
+                  />
+                </PieChart>
+              </ChartContainer>
+            </CardContent>
+          </Card>
+
+         
         </div>
       </div>
     </>

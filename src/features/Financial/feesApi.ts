@@ -58,8 +58,8 @@ export const feesApi = createApi({
     }),
     //
     createInvoices: builder.mutation({
-      query: formData => ({
-        url: `/api/v1/invoice?isForStudent=1`,
+      query: ({ formData, isForStudent }) => ({
+        url: `/api/v1/invoice?isForStudent=${isForStudent ? 1 : 0}`,
         method: "POST",
         body: formData,
       }),

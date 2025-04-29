@@ -36,6 +36,7 @@ const FeesManagement = () => {
 
   const [selectAll, setSelectAll] = useState(false);
   const { data, error, isLoading, refetch } = useGetAllTaxesQuery(null);
+  console.log("👾 ~ FeesManagement ~ data:", data)
   const booleanValue = useSelector((state: RootState) => state.boolean.value);
   type Invoice = Record<string, any>;
   const [search, setSearch] = useState("");
@@ -120,15 +121,14 @@ const FeesManagement = () => {
       <BreadCrumbs breadcrumbs={breadcrumbs} />
       <div
         dir={currentLanguage === "ar" ? "rtl" : "ltr"}
-        className={`${
-          currentLanguage === "ar"
-            ? booleanValue
-              ? "lg:mr-[100px]"
-              : "lg:mr-[270px]"
-            : booleanValue
-              ? "lg:ml-[100px]"
-              : "lg:ml-[270px]"
-        } relative mx-3 mt-10 h-screen overflow-x-auto bg-transparent sm:rounded-lg`}
+        className={`${currentLanguage === "ar"
+          ? booleanValue
+            ? "lg:mr-[100px]"
+            : "lg:mr-[270px]"
+          : booleanValue
+            ? "lg:ml-[100px]"
+            : "lg:ml-[270px]"
+          } relative mx-3 mt-10 h-screen overflow-x-auto bg-transparent sm:rounded-lg`}
       >
         <div className="flex justify-between text-center max-[502px]:grid max-[502px]:justify-center">
           <div className="mb-3">
@@ -314,6 +314,16 @@ const FeesManagement = () => {
                         : "Action"}{" "}
                   {/* Default to English */}
                 </th>
+                <th scope="col" className="whitespace-nowrap px-6 py-3">
+                  {currentLanguage === "en"
+                    ? "Receipt Image"
+                    : currentLanguage === "ar"
+                      ? "صورة الإيصال"
+                      : currentLanguage === "fr"
+                        ? "Image du reçu"
+                        : "Receipt Image"}
+                </th>
+
               </tr>
             </thead>
             <tbody>
@@ -364,8 +374,10 @@ const FeesManagement = () => {
                     <td className="whitespace-nowrap px-6 py-4">
                       {invoice.receiptNumber}
                     </td>
+
+
                     <td className="whitespace-nowrap px-6 py-4">
-                      <div className="flex items-center gap-3">
+                      <div className="flex justify-center items-center gap-3">
                         <button onClick={() => handleDelete(invoice.id)}>
                           <svg
                             className="h-6 w-6 text-red-500"
@@ -389,6 +401,36 @@ const FeesManagement = () => {
                         </Link>
                       </div>
                     </td>
+                    <td className="whitespace-nowrap px-6 py-4">
+                      {invoice.hasPhoto ? (
+                        <a
+                          href={invoice.photoLink}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-primary hover:underline"
+                        >
+                          {currentLanguage === "en"
+                            ? "View"
+                            : currentLanguage === "ar"
+                              ? "عرض"
+                              : currentLanguage === "fr"
+                                ? "Voir"
+                                : "View"}
+                        </a>
+                      ) : (
+                        <span className="text-gray-400">
+                          {currentLanguage === "en"
+                            ? "No image"
+                            : currentLanguage === "ar"
+                              ? "لا توجد صورة"
+                              : currentLanguage === "fr"
+                                ? "Pas d'image"
+                                : "No image"}
+                        </span>
+                      )}
+                    </td>
+
+
                   </tr>
                 ))}
             </tbody>

@@ -64,6 +64,8 @@ const Chat = () => {
     })) || [];
   const { data, isLoading, refetch: regetusers } = useGetAllChatsQuery(null);
   const [deleteChat] = useDeleteChatMutation();
+  const [creating, setCreating] = useState(false);
+  const [deleting, setDeleting] = useState(false);
 
   const [localChats, setLocalChats] = useState<ChatData[]>([]);
   const currentUserId =
@@ -75,38 +77,22 @@ const Chat = () => {
   useEffect(() => {
     if (data?.data?.content) {
       if (isInitialMount.current) {
-        // On first load, set local chats directly
         setLocalChats(data.data.content);
         isInitialMount.current = false;
       } else {
-        // On subsequent loads, merge with existing chats preserving read/unread status
         setLocalChats(prevChats => {
           const updatedChats = [...data.data.content];
-
-          // Preserve numberOfNewMessages for chats that aren't the active one
           return updatedChats.map(newChat => {
-            if (newChat.chatId === userId) {
-              // Reset counters for the active chat
-              return { ...newChat, numberOfNewMessages: 0 };
-            }
-
-            // For other chats, find matching chat in previous state and preserve count
-            const existingChat = prevChats.find(
-              chat => chat.chatId === newChat.chatId,
-            );
-            if (existingChat) {
-              return {
-                ...newChat,
-                numberOfNewMessages: existingChat.numberOfNewMessages,
-              };
-            }
-
-            return newChat;
+            const existingChat = prevChats.find(c => c.chatId === newChat.chatId);
+            return existingChat
+              ? { ...newChat, numberOfNewMessages: existingChat.numberOfNewMessages }
+              : newChat;
           });
         });
       }
     }
-  }, [data, userId]);
+  }, [data]);
+
 
   const handleChatUpdate = useCallback(
     (update: ChatData) => {
@@ -154,7 +140,7 @@ const Chat = () => {
           numberOfNewMessages: isActiveChat
             ? 0
             : (updatedChats[existingChatIndex].numberOfNewMessages || 0) +
-              (update.numberOfNewMessages || 1),
+            (update.numberOfNewMessages || 1),
           targetUser: {
             ...updatedChats[existingChatIndex].targetUser,
             ...(update.targetUser || {}),
@@ -206,32 +192,56 @@ const Chat = () => {
 
   const handleDelete = async (id: string) => {
     try {
+      setDeleting(true);
       await deleteChat(id).unwrap();
       toast.success(`Chat with ID ${id} deleted successfully`);
-      // Remove from local state immediately for better UX
       setLocalChats(prevChats => prevChats.filter(chat => chat.chatId !== id));
 
-      // If the deleted chat was the active one, clear the active chat
       if (userId === id) {
         setUserId("");
         setUserName("");
         setUserRole("");
         setRealUserId("");
       }
-
       regetusers();
     } catch (err) {
       toast.error("Failed to delete the chat");
+    } finally {
+      setDeleting(false);
     }
   };
 
-  const onSubmit = async (data: any) => {
-    try {
-      const result = await createChat(data).unwrap();
-      setModalOpen(false);
-      toast.success("Chat created successfully");
 
-      // Add the new chat to local state immediately
+  const onSubmit = async (formData: any) => {
+    setCreating(true); 
+    try {
+      const existingChat = localChats.find(
+        chat => chat.targetUser.id === formData.targetUserId,
+      );
+
+      if (existingChat) {
+        toast.info(getTranslation(
+          "Chat already exists",
+          "المحادثة موجودة بالفعل",
+          "La discussion existe déjà"
+        ));
+        setUserId(existingChat.chatId);
+        setUserName(existingChat.targetUser.name);
+        setUserRole(existingChat.targetUser.Role);
+        setRealUserId(existingChat.targetUser.id);
+        setModalOpen(false);
+        return;
+      }
+
+      const result = await createChat(formData).unwrap();
+
+      setModalOpen(false);
+      toast.success(getTranslation(
+        "Chat created successfully",
+        "تم إنشاء المحادثة بنجاح",
+        "Discussion créée avec succès"
+      ));
+
       if (result?.data) {
         handleChatUpdate({
           chatId: result.data.chatId,
@@ -240,7 +250,6 @@ const Chat = () => {
           targetUser: result.data.targetUser,
         });
 
-        // Auto-select the new chat
         setUserId(result.data.chatId);
         setUserName(result.data.targetUser.name);
         setUserRole(result.data.targetUser.Role);
@@ -248,10 +257,18 @@ const Chat = () => {
       }
 
       regetusers();
-    } catch (err) {
-      toast.error("Failed to create chat");
+    } catch (err: any) {
+      toast.error(getTranslation(
+        "Failed to create chat",
+        "فشل في إنشاء المحادثة",
+        "Échec de la création de la discussion"
+      ));
+    } finally {
+      setCreating(false); 
     }
   };
+
+
 
   const handleOpenModal = () => {
     setModalOpen(true);
@@ -321,15 +338,14 @@ const Chat = () => {
 
       <div
         dir={currentLanguage === "ar" ? "rtl" : "ltr"}
-        className={` ${
-          currentLanguage === "ar"
+        className={` ${currentLanguage === "ar"
             ? booleanValue
               ? "lg:mr-[100px]"
               : "lg:mr-[270px]"
             : booleanValue
               ? "lg:ml-[100px]"
               : "lg:ml-[270px]"
-        } mt-10`}
+          } mt-10`}
       >
         <div
           dir={currentLanguage === "ar" ? "rtl" : "ltr"}
@@ -421,8 +437,8 @@ const Chat = () => {
                         return search.toLocaleLowerCase() === ""
                           ? true
                           : chat.targetUser.name
-                              .toLocaleLowerCase()
-                              .includes(search.toLocaleLowerCase());
+                            .toLocaleLowerCase()
+                            .includes(search.toLocaleLowerCase());
                       })
                       .map((chat: ChatData) => (
                         <div
@@ -553,21 +569,21 @@ const Chat = () => {
                 />
               </label>
               <button
-                disabled={isLoading}
+                disabled={creating}
                 type="submit"
                 className="mt-5 w-fit rounded-xl bg-primary px-4 py-2 text-[18px] text-white duration-300 ease-in hover:bg-hover hover:shadow-xl"
               >
-                {isLoading
+                {creating
                   ? getTranslation(
-                      "Adding...",
-                      "يتم الإضافة...",
-                      "Ajout en cours...",
-                    )
+                    "Adding...",
+                    "يتم الإضافة...",
+                    "Ajout en cours...",
+                  )
                   : getTranslation(
-                      "Add Chat",
-                      "إضافة دردشة",
-                      "Ajouter un Chat",
-                    )}
+                    "Add Chat",
+                    "إضافة دردشة",
+                    "Ajouter un Chat",
+                  )}
               </button>
             </form>
           )}

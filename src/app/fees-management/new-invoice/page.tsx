@@ -56,6 +56,7 @@ const NewInvoice = () => {
       href: "/fees-management/new-invoice",
     },
   ];
+  const [isForStudent, setIsForStudent] = React.useState<1 | 0>(1);
 
   const booleanValue = useSelector((state: RootState) => state.boolean.value);
 
@@ -72,11 +73,13 @@ const NewInvoice = () => {
       invoiceItem: {
         rate: null,
         qty: null,
-        type: "",
+        type: "TRANSPORT",
         about: "",
       },
     },
   });
+
+
 
   const [createInvoice, { isLoading }] = useCreateInvoicesMutation();
   const { data: items, isLoading: isItemsLoading } =
@@ -84,11 +87,12 @@ const NewInvoice = () => {
 
   const onSubmit = async (data: any) => {
     try {
-      await createInvoice(data).unwrap();
+      await createInvoice({ formData: data, isForStudent }).unwrap();
       toast.success("Invoice created successfully");
-    } catch (err) {
-      toast.error("Failed to create invoice");
+    } catch (err: any) {
+      toast.error(err?.data?.message || "Failed to create invoice");
     }
+
   };
 
   const { language: currentLanguage, loading } = useSelector(
@@ -107,15 +111,14 @@ const NewInvoice = () => {
       <BreadCrumbs breadcrumbs={breadcrumbs} />
       <div
         dir={currentLanguage === "ar" ? "rtl" : "ltr"}
-        className={`${
-          currentLanguage === "ar"
-            ? booleanValue
-              ? "lg:mr-[100px]"
-              : "lg:mr-[270px]"
-            : booleanValue
-              ? "lg:ml-[100px]"
-              : "lg:ml-[270px]"
-        } mx-3 mt-[40px] grid h-[850px] items-center justify-center`}
+        className={`${currentLanguage === "ar"
+          ? booleanValue
+            ? "lg:mr-[100px]"
+            : "lg:mr-[270px]"
+          : booleanValue
+            ? "lg:ml-[100px]"
+            : "lg:ml-[270px]"
+          } mx-3 mt-[40px] grid items-center justify-center`}
       >
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="grid items-center justify-center gap-5 rounded-xl bg-bgPrimary p-10 sm:w-[500px] md:w-[600px] lg:w-[750px] xl:w-[1000px]">
@@ -239,6 +242,34 @@ const NewInvoice = () => {
               </label>
 
               {/* Item Type Field */}
+              <label htmlFor="userType" className="grid text-[18px] font-semibold">
+                {currentLanguage === "en"
+                  ? "User Type"
+                  : currentLanguage === "ar"
+                    ? "نوع المستخدم"
+                    : "Type d'utilisateur"}
+                <select
+                  id="userType"
+                  value={isForStudent}
+                  onChange={(e) => setIsForStudent(Number(e.target.value) as 1 | 0)}
+                  className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                >
+                  <option value={1}>
+                    {currentLanguage === "en"
+                      ? "Student"
+                      : currentLanguage === "ar"
+                        ? "طالب"
+                        : "Étudiant"}
+                  </option>
+                  <option value={0}>
+                    {currentLanguage === "en"
+                      ? "Teacher"
+                      : currentLanguage === "ar"
+                        ? "مدرس"
+                        : "Enseignant"}
+                  </option>
+                </select>
+              </label>
               <label htmlFor="type" className="grid text-[18px] font-semibold">
                 {currentLanguage === "en"
                   ? "Item Type"
@@ -270,6 +301,25 @@ const NewInvoice = () => {
                   </span>
                 )}
               </label>
+              <label htmlFor="about" className="grid text-[18px] font-semibold">
+                {currentLanguage === "en"
+                  ? "About Item"
+                  : currentLanguage === "ar"
+                    ? "عن العنصر"
+                    : "À propos de l'article"}
+                <input
+                  id="about"
+                  {...register("invoiceItem.about")}
+                  type="text"
+                  className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  placeholder={currentLanguage === "en"
+                    ? "Optional description"
+                    : currentLanguage === "ar"
+                      ? "وصف اختياري"
+                      : "Description facultative"}
+                />
+              </label>
+
             </div>
             <div className="flex justify-center text-center">
               {isLoading ? (
