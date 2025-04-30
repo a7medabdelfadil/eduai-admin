@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 "use client";
 import React, { useEffect, useState, useCallback } from "react";
-import { Client, Frame, Message } from "@stomp/stompjs";
+import { Client, Frame } from "@stomp/stompjs";
 import Cookies from "js-cookie";
 import { baseUrlStock } from "@/components/BaseURL";
 
