@@ -48,17 +48,21 @@ const AddActivity = () => {
     (state: RootState) => state.language,
   );
 
-  const { data, isLoading: activityLoading } = useGetUnusedActivitiesQuery(null);
+  const { data, isLoading: activityLoading, refetch } = useGetUnusedActivitiesQuery(null);
+  console.log("👾 ~ AddActivity ~ data:", data)
   const [createActivity, { isLoading: submitting }] = useCreateActivityMutation();
 
 
   const onSubmit = async (formData: any) => {
+    console.log("Form data submitted:", formData);
     try {
       await createActivity(formData).unwrap();
-      toast.success("Activity created successfully!")
+      toast.success("Activity created successfully!");
       router.push("/financial-management/activity");
+      refetch();
     } catch (error: any) {
-      toast.error("Error creating activity:", error);
+      console.error("Error creating activity:", error);
+      toast.error("Error creating activity: " + (error?.data?.message || ""));
     }
   };
 
@@ -69,6 +73,43 @@ const AddActivity = () => {
         <Spinner />
       </div>
     );
+  if (!activityLoading && (!Array.isArray(data?.data) || data.data.length === 0)) {
+    return (
+      <div
+        dir={currentLanguage === "ar" ? "rtl" : "ltr"}
+        className={`${currentLanguage === "ar"
+          ? booleanValue
+            ? "lg:mr-[100px]"
+            : "lg:mr-[270px]"
+          : booleanValue
+            ? "lg:ml-[100px]"
+            : "lg:ml-[270px]"
+          } mx-3 mt-[40px] flex h-[500px] items-center justify-center text-center`}
+      >
+        <div className="rounded-xl bg-bgPrimary p-10 shadow-md">
+          <h2 className="mb-4 text-[20px] font-semibold text-secondary">
+            {currentLanguage === "ar"
+              ? "لا توجد أنواع نشاط متاحة لإضافتها حالياً."
+              : currentLanguage === "fr"
+                ? "Aucun type d'activité disponible pour le moment."
+                : "No activity types available to add now."}
+          </h2>
+          <button
+            onClick={() => router.push("/financial-management/activity")}
+            className="rounded-xl bg-primary px-4 py-2 text-white hover:bg-hover"
+          >
+            {currentLanguage === "ar"
+              ? "العودة"
+              : currentLanguage === "fr"
+                ? "Retour"
+                : "Go Back"}
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+
   return (
     <>
       <BreadCrumbs breadcrumbs={breadcrumbs} />
@@ -139,12 +180,13 @@ const AddActivity = () => {
                         ? "Sélectionnez le type"
                         : "Select Activity Type"}
                   </option>
-                  {data?.data &&
-                    Object.entries(data.data).map(([key, value]) => (
-                      <option key={key} value={key}>
-                        {value as string}
+                  {Array.isArray(data?.data) &&
+                    data.data.map((activityType: string) => (
+                      <option key={activityType} value={activityType}>
+                        {activityType}
                       </option>
                     ))}
+
                 </select>
               </label>
               <label htmlFor="cost" className="grid text-[18px] font-semibold">

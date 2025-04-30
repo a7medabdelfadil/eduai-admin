@@ -172,7 +172,7 @@ const EnrollmentDate = () => {
                 </TableRow>
               ) : (
                 filteredData.map((student: any, index: number) => (
-                  <TableRow key={index}>
+                  <TableRow key={index} data-index={index}>
                     <TableCell>
                       <div className="flex items-center gap-3">
                         {student.hasPicture && student.picture?.startsWith("http") ? (
