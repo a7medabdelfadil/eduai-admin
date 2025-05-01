@@ -29,6 +29,7 @@ const Profile = () => {
     isLoading: userLoading,
     refetch,
   } = useGetAllCurrentUserQuery(null);
+    console.log("👾 ~ Profile ~ userData:", userData)
   const { data: nationalityData, isLoading: nationalityLoading } =
     useGetAllNationalitysQuery(null);
   const { data: rigiond } = useGetAllReginionIDQuery(null);
@@ -89,7 +90,7 @@ const Profile = () => {
   };
 
   const onSubmitPicture = async (data: any, event?: BaseSyntheticEvent) => {
-    if (event) event.preventDefault(); // منع السلوك الافتراضي
+    if (event) event.preventDefault(); 
     const formData = new FormData();
     if (data.picture && data.picture.length > 0) {
       formData.append("picture", data.picture[0]);

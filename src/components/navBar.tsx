@@ -91,13 +91,17 @@ const NavBar = () => {
   const dispatch = useDispatch();
   const dispatch2 = useDispatch();
   const url = usePathname();
-  dispatch(
-    setUser({
-      name: userData?.data?.name,
-      email: userData?.data?.email,
-      id: userData?.data?.id,
-    }),
-  );
+  useEffect(() => {
+    if (userData) {
+      dispatch(
+        setUser({
+          name: userData.data?.name,
+          email: userData.data?.email,
+          id: userData.data?.id,
+        }),
+      );
+    }
+  }, [userData, dispatch]);
 
   const userId = useSelector((state: RootState) => state.user?.id) || null;
   const { notificationsCount } = useNotificationsWebSocket(userId);

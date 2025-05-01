@@ -301,7 +301,7 @@ const Dashboard: React.FC = () => {
               dir={currentLanguage === "ar" ? "rtl" : "ltr"}
               className="flex h-[120px] w-full flex-col justify-evenly rounded-xl bg-bgPrimary p-4 shadow-md max-[576px]:h-[100px]"
             >
-              <p className="text-sm font-medium text-secondary">
+              <p className="text-xs md:text-sm font-medium text-secondary">
                 {currentLanguage === "ar"
                   ? "إجمالي الطلاب"
                   : currentLanguage === "fr"
@@ -328,7 +328,7 @@ const Dashboard: React.FC = () => {
               dir={currentLanguage === "ar" ? "rtl" : "ltr"}
               className="flex h-[120px] w-full flex-col justify-evenly rounded-xl bg-bgPrimary p-4 shadow-md max-[576px]:h-[100px]"
             >
-              <p className="text-sm font-medium text-secondary">
+              <p className="text-xs md:text-sm font-medium text-secondary">
                 {currentLanguage === "ar"
                   ? "إجمالي المعلمين"
                   : currentLanguage === "fr"
@@ -351,7 +351,7 @@ const Dashboard: React.FC = () => {
               dir={currentLanguage === "ar" ? "rtl" : "ltr"}
               className="flex h-[120px] w-full flex-col justify-evenly rounded-xl bg-bgPrimary p-4 shadow-md max-[576px]:h-[100px]"
             >
-              <p className="text-sm font-medium text-secondary">
+              <p className="text-xs md:text-sm font-medium text-secondary">
                 {currentLanguage === "ar"
                   ? "إجمالي الموظفين"
                   : currentLanguage === "fr"
@@ -374,7 +374,7 @@ const Dashboard: React.FC = () => {
               dir={currentLanguage === "ar" ? "rtl" : "ltr"}
               className="flex h-[120px] w-full flex-col justify-evenly rounded-xl bg-bgPrimary p-4 shadow-md max-[576px]:h-[100px]"
             >
-              <p className="text-sm font-medium text-secondary">
+              <p className="text-xs md:text-sm font-medium text-secondary">
                 {currentLanguage === "ar"
                   ? "إجمالي العمال"
                   : currentLanguage === "fr"
@@ -397,7 +397,7 @@ const Dashboard: React.FC = () => {
               dir={currentLanguage === "ar" ? "rtl" : "ltr"}
               className="flex h-[120px] w-full flex-col justify-evenly rounded-xl bg-bgPrimary p-4 shadow-md max-[576px]:h-[100px]"
             >
-              <p className="text-sm font-medium text-secondary">
+              <p className="text-xs md:text-sm font-medium text-secondary">
                 {currentLanguage === "ar"
                   ? "الفعاليات"
                   : currentLanguage === "fr"
