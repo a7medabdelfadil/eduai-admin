@@ -9,13 +9,13 @@ import { useGetClassByIdQuery, useUpdateClasssMutation } from "@/features/Infras
 import { RootState } from "@/GlobalRedux/store";
 import { toast } from "react-toastify";
 
-interface ClassDetailsProps {
+interface PageProps {
   params: {
     classId: string;
   };
 }
 
-const ClassDetails: React.FC<ClassDetailsProps> = ({ params }) => {
+const ClassDetails = ({ params }: PageProps) => {
   const breadcrumbs = [
     {
       nameEn: "Dashboard",
