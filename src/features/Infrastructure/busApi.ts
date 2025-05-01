@@ -12,52 +12,6 @@ const getTokenFromCookie = () => {
   return getCookie("token");
 };
 
-
-export type Region = {
-  id: number;
-  name: string;
-};
-
-export type MyRegion = {
-  id: number;
-  name: string;
-  latitude?: number | null;
-  longitude?: number | null;
-  zipCode?: string | null;
-};
-
-export type SubscriptionInfo = {
-  semesterId: number;
-  regionId: number;
-  regionName: string;
-  cityName: string;
-  cost: number;
-  about: string;
-  currency: string;
-  semesterStart: string;
-  semesterEnd: string;
-};
-
-type BusSubscriptionRequest = {
-  regionId: number;
-  notes?: string;
-  homeLocation: {
-    latitude: number;
-    longitude: number;
-  };
-};
-
-export type BusInfo = {
-  driverName: string;
-  busNumber: string;
-  speed: number;
-  phoneNumber: {
-    countryCode: number;
-    nationalNumber: string;
-  };
-};
-
-
 export const busApi = createApi({
   reducerPath: "busApi",
   baseQuery: fetchBaseQuery({
@@ -104,37 +58,6 @@ export const busApi = createApi({
         body: formData,
       }),
     }),
-    getAllRegions: builder.query<Region[], void>({
-      query: () => '/api/v1/location/public/region',
-    }),
-
-    getMyRegion: builder.query<MyRegion, void>({
-      query: () => '/api/v1/user/my-region',
-    }),
-
-    getBusSubscriptionInfo: builder.query<SubscriptionInfo, number>({
-      query: (regionId) => `/api/v1/bus-subscription/fees-and-period/${regionId}`,
-    }),
-
-    getStudentBusId: builder.query<string, string>({
-      query: (studentId) => `/api/v1/bus/student/${studentId}/bus`,
-      transformResponse: (response: { data: number }) => response.data.toString(),
-    }),
-
-    subscribeStudentToBus: builder.mutation<void, BusSubscriptionRequest>({
-      query: (body) => ({
-        url: '/api/v1/bus-subscription/teacher',
-        method: 'POST',
-        body,
-      }),
-    }),
-
-    getBusInfo: builder.query<BusInfo, number>({
-      query: (busId) => ({
-        url: `/api/v1/bus/bus-info`,
-        params: { busId },
-      }),
-    }),
   }),
 });
 
@@ -144,11 +67,4 @@ export const {
   useCreateBussMutation,
   useGetBusByIdQuery,
   useUpdateBussMutation,
-  useGetAllRegionsQuery,
-  useGetMyRegionQuery,
-  useGetBusSubscriptionInfoQuery,
-  useGetStudentBusIdQuery,
-  useSubscribeStudentToBusMutation,
-  useGetBusInfoQuery, 
-  
 } = busApi;

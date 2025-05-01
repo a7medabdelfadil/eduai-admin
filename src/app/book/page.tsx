@@ -31,9 +31,7 @@ const Book = () => {
   ];
 
   const booleanValue = useSelector((state: RootState) => state.boolean.value); // sidebar
-  const { language: currentLanguage, loading } = useSelector(
-    (state: RootState) => state.language,
-  );
+
   const [selectAll, setSelectAll] = useState(false); // State to track whether select all checkbox is checked
 
   // Function to handle click on select all checkbox
@@ -88,7 +86,9 @@ const Book = () => {
     };
   }, []);
 
-
+  const { language: currentLanguage, loading } = useSelector(
+    (state: RootState) => state.language,
+  );
 
   if (loading)
     return (
