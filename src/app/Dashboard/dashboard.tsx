@@ -296,7 +296,7 @@ const Dashboard: React.FC = () => {
         className={`${currentLanguage === "ar" ? "pl-4 pr-4 lg:pl-10 lg:pr-0" : "pl-4 pr-4 lg:pl-0 lg:pr-10"} mt-6 grid w-full overflow-x-auto`}
       >
         <div className="grid overflow-x-auto">
-          <div className="mb-6 grid w-full grid-cols-2 justify-center gap-4 whitespace-nowrap max-[812px]:justify-center md:grid-cols-3 2xl:grid-cols-5">
+          <div className="mb-6 grid w-full grid-cols-1 sm:grid-cols-2 justify-center gap-4 whitespace-nowrap max-[812px]:justify-center md:grid-cols-3 2xl:grid-cols-5">
             <div
               dir={currentLanguage === "ar" ? "rtl" : "ltr"}
               className="flex h-[120px] w-full flex-col justify-evenly rounded-xl bg-bgPrimary p-4 shadow-md max-[576px]:h-[100px]"
