@@ -214,7 +214,7 @@ const NavBar = () => {
                     type="text"
                     id="icon"
                     name="icon"
-                    className="block w-full rounded-lg border-none px-4 py-2 ps-11 text-lg outline-none focus:border-blue-500 focus:ring-blue-500 disabled:pointer-events-none disabled:opacity-50"
+                    className="block w-full bg-transparent rounded-lg border-none px-4 py-2 ps-11 text-lg outline-none focus:border-blue-500 focus:ring-blue-500 disabled:pointer-events-none disabled:opacity-50"
                     placeholder={
                       currentLanguage === "ar"
                         ? "ابحث عن أي شيء"
