@@ -9,7 +9,6 @@ import { toggle } from "@/features/boolyanSlice";
 import Cookie from "js-cookie";
 import { useGetAllCurrentUserQuery } from "@/features/dashboard/dashboardApi";
 import { useRouter } from "next/navigation";
-import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
 import { useSelector } from "react-redux";
 import { RootState } from "@/GlobalRedux/store";
 import { usePathname } from "next/navigation";
@@ -18,7 +17,6 @@ import {
   setLanguage,
 } from "@/features/language/languageSlice";
 import { useTheme } from "next-themes";
-import { FiSun, FiMoon } from "react-icons/fi";
 import { MdNavigateBefore, MdNavigateNext } from "react-icons/md";
 import { setUser } from "@/features/userSlice";
 import { useGetSchoolLogoQuery } from "@/features/events/eventsApi";
@@ -29,6 +27,7 @@ import Switch from "./Switch";
 import { IoIosArrowDown, IoMdNotificationsOutline } from "react-icons/io";
 import { BiSearchAlt } from "react-icons/bi";
 import { RiWechatLine } from "react-icons/ri";
+import { FaClock, FaMoneyBillWave, FaMapMarkedAlt } from "react-icons/fa";
 
 const NavBar = () => {
   const { language: currentLanguage, loading } = useSelector(
@@ -48,6 +47,7 @@ const NavBar = () => {
     error: userError,
     isLoading: userLoading,
   } = useGetAllCurrentUserQuery(null);
+  console.log(userData)
 
   const { theme, setTheme } = useTheme();
   const [isClient, setIsClient] = useState(false);
@@ -355,7 +355,7 @@ const NavBar = () => {
                         <div
                           className={`flex flex-col text-left ${currentLanguage === "ar" ? "mr-2" : "ml-2"}`}
                         >
-                          <span className="text-[16px] text-primary">
+                          <span className="text-xs sm:text-[16px] text-primary">
                             {currentLanguage === "ar"
                               ? "المسؤول"
                               : currentLanguage === "fr"
@@ -363,7 +363,7 @@ const NavBar = () => {
                                 : "Administrator"}
                           </span>
                           <div className="flex items-center gap-1">
-                            <span className="text-sm font-medium text-textPrimary">
+                            <span className="text-xs sm:text-sm font-medium text-textPrimary">
                               {userData?.data.name || "User"}
                             </span>
                             <IoIosArrowDown
@@ -575,63 +575,100 @@ const NavBar = () => {
                   )}
                 </div>
 
-                {navigationItems.map(item => (
-                  <li
-                    key={item.id}
-                    className={item.isDropdown ? "group relative" : ""}
-                  >
-                    {item.isDropdown ? (
-                      <>
-                        <button
-                          onClick={() => toggleDropdown(item.id)}
-                          className={`flex ${!small ? "w-full" : ""} text-md group mt-4 items-center gap-x-3.5 rounded-lg px-2.5 py-2 font-bold text-secondary hover:bg-bgSecondary hover:text-primary`}
-                        >
-                          {item.icon}
-                          {!small && (
-                            <p>
-                              {item.translations[
-                                currentLanguage as "en" | "ar" | "fr"
-                              ] || item.translations.en}
-                            </p>
-                          )}
-                        </button>
-                        {openDropdowns[item.id] && (
-                          <ul
-                            className={`${small ? "hidden w-fit translate-x-5 rounded-xl bg-bgPrimary p-2 group-hover:grid" : ""} mx-9 mt-2 grid gap-2 whitespace-nowrap text-nowrap text-[14px] font-semibold`}
-                          >
-                            {item.submenu.map(subItem => (
-                              <Link
-                                onClick={() => setIsOpen(false)}
-                                key={subItem.id}
-                                className={`hover:text-primary ${url === subItem.path ? "text-primary" : ""}`}
-                                href={subItem.path}
-                              >
-                                {subItem.translations[
-                                  currentLanguage as "en" | "ar" | "fr"
-                                ] || subItem.translations.en}
-                              </Link>
-                            ))}
-                          </ul>
-                        )}
-                      </>
-                    ) : (
-                      <Link
-                        onClick={() => setIsOpen(false)}
-                        className={`flex ${small ? "w-[40px]" : ""} text-md group mt-4 items-center gap-x-3.5 rounded-lg px-2.5 py-2 font-bold ${url === item.path ? "bg-bgSecondary text-primary" : "text-secondary"} hover:bg-bgSecondary hover:text-primary`}
-                        href={item.path}
+                {userData?.data?.employeeType === "DRIVER" ? (
+                 <>
+                 <li>
+                   <Link
+                     onClick={() => setIsOpen(false)}
+                     className={`flex ${small ? "w-[40px]" : ""} text-md group mt-4 items-center gap-x-3.5 rounded-lg px-2.5 py-2 font-bold text-secondary hover:bg-bgSecondary hover:text-primary`}
+                     href="/attendances"
+                   >
+                     <FaClock className="text-xl" />
+                     {!small && <p>{currentLanguage === "ar" ? "الحضور" : currentLanguage === "fr" ? "Présence" : "Attendance"}</p>}
+                   </Link>
+                 </li>
+                 <li>
+                   <Link
+                     onClick={() => setIsOpen(false)}
+                     className={`flex ${small ? "w-[40px]" : ""} text-md group mt-4 items-center gap-x-3.5 rounded-lg px-2.5 py-2 font-bold text-secondary hover:bg-bgSecondary hover:text-primary`}
+                     href="/driver/salary"
+                   >
+                     <FaMoneyBillWave className="text-xl" />
+                     {!small && <p>{currentLanguage === "ar" ? "الراتب" : currentLanguage === "fr" ? "Salaire" : "Salary"}</p>}
+                   </Link>
+                 </li>
+                 <li>
+                   <Link
+                     onClick={() => setIsOpen(false)}
+                     className={`flex ${small ? "w-[40px]" : ""} text-md group mt-4 items-center gap-x-3.5 rounded-lg px-2.5 py-2 font-bold text-secondary hover:bg-bgSecondary hover:text-primary`}
+                     href="/driver/gps"
+                   >
+                     <FaMapMarkedAlt className="text-xl" />
+                     {!small && <p>{currentLanguage === "ar" ? "تتبع GPS" : currentLanguage === "fr" ? "Suivi GPS" : "GPS Tracking"}</p>}
+                   </Link>
+                 </li>
+               </>
+                ) : (
+                  <>
+                    {navigationItems.map(item => (
+                      <li
+                        key={item.id}
+                        className={item.isDropdown ? "group relative" : ""}
                       >
-                        {item.icon}
-                        {!small && (
-                          <p>
-                            {item.translations[
-                              currentLanguage as "en" | "ar" | "fr"
-                            ] || item.translations.en}
-                          </p>
+                        {item.isDropdown ? (
+                          <>
+                            <button
+                              onClick={() => toggleDropdown(item.id)}
+                              className={`flex ${!small ? "w-full" : ""} text-md group mt-4 items-center gap-x-3.5 rounded-lg px-2.5 py-2 font-bold text-secondary hover:bg-bgSecondary hover:text-primary`}
+                            >
+                              {item.icon}
+                              {!small && (
+                                <p>
+                                  {item.translations[
+                                    currentLanguage as "en" | "ar" | "fr"
+                                  ] || item.translations.en}
+                                </p>
+                              )}
+                            </button>
+                            {openDropdowns[item.id] && (
+                              <ul
+                                className={`${small ? "hidden w-fit translate-x-5 rounded-xl bg-bgPrimary p-2 group-hover:grid" : ""} mx-9 mt-2 grid gap-2 whitespace-nowrap text-nowrap text-[14px] font-semibold`}
+                              >
+                                {item.submenu.map(subItem => (
+                                  <Link
+                                    onClick={() => setIsOpen(false)}
+                                    key={subItem.id}
+                                    className={`hover:text-primary ${url === subItem.path ? "text-primary" : ""}`}
+                                    href={subItem.path}
+                                  >
+                                    {subItem.translations[
+                                      currentLanguage as "en" | "ar" | "fr"
+                                    ] || subItem.translations.en}
+                                  </Link>
+                                ))}
+                              </ul>
+                            )}
+                          </>
+                        ) : (
+                          <Link
+                            onClick={() => setIsOpen(false)}
+                            className={`flex ${small ? "w-[40px]" : ""} text-md group mt-4 items-center gap-x-3.5 rounded-lg px-2.5 py-2 font-bold ${url === item.path ? "bg-bgSecondary text-primary" : "text-secondary"} hover:bg-bgSecondary hover:text-primary`}
+                            href={item.path}
+                          >
+                            {item.icon}
+                            {!small && (
+                              <p>
+                                {item.translations[
+                                  currentLanguage as "en" | "ar" | "fr"
+                                ] || item.translations.en}
+                              </p>
+                            )}
+                          </Link>
                         )}
-                      </Link>
-                    )}
-                  </li>
-                ))}
+                      </li>
+                    ))}
+                  </>
+                )}
               </ul>
             </nav>
           </div>
