@@ -354,17 +354,17 @@ const ViewInvoice: React.FC<ViewInvoiceProps> = ({ params }) => {
         </div>
         <div className="flex w-full justify-end">
           <div className="mt-14 grid rounded-xl border border-borderPrimary p-3">
-            <p className="flex items-center gap-1 border-b border-borderPrimary text-[18px] font-semibold text-secondary">
+            <p className="flex items-center justify-between gap-4 border-b border-borderPrimary text-[18px] font-semibold text-secondary">
               {translations[currentLanguage].paidAmount}:{" "}
               <p
-                className={`text-[18px] ${
+                className={`text-[18px] text-end ${
                   theme == "dark" ? "text-white" : "text-black"
                 }`}
               >
                 {data?.data?.paidAmount}
               </p>
             </p>
-            <p className="flex items-center gap-1 border-b border-borderPrimary text-[18px] font-semibold text-secondary">
+            <p className="flex items-center justify-between gap-4 border-b border-borderPrimary text-[18px] font-semibold text-secondary">
               {translations[currentLanguage].discountAmount}:{" "}
               <p
                 className={`text-[18px] ${
@@ -374,7 +374,7 @@ const ViewInvoice: React.FC<ViewInvoiceProps> = ({ params }) => {
                 {data?.data?.discountAmount}
               </p>
             </p>
-            <p className="flex items-center gap-1 border-b border-borderPrimary text-[18px] font-semibold text-secondary">
+            <p className="flex items-center justify-between gap-4 border-b border-borderPrimary text-[18px] font-semibold text-secondary">
               {translations[currentLanguage].taxAmount}:{" "}
               <p
                 className={`text-[18px] ${
@@ -384,7 +384,7 @@ const ViewInvoice: React.FC<ViewInvoiceProps> = ({ params }) => {
                 {data?.data?.taxAmount}
               </p>
             </p>
-            <p className="flex items-center gap-1 text-[18px] font-semibold text-secondary">
+            <p className="flex items-center justify-between gap-4 text-[18px] font-semibold text-secondary">
               {translations[currentLanguage].dueAmount}:{" "}
               <p
                 className={`text-[18px] ${

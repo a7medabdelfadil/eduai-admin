@@ -41,6 +41,7 @@ import { chatApi } from "@/features/chat/chatApi";
 import { schoolApi } from "@/features/school/schoolLogo";
 import { activityApi } from "@/features/Financial/activityApi";
 import { enrollmentApi } from "@/features/Document-Management/enrollmentApi";
+import { disciplinaryApi } from "@/features/Document-Management/disciplinaryApi";
 
 export const store = configureStore({
   reducer: {
@@ -85,6 +86,7 @@ export const store = configureStore({
     [certificatesApi.reducerPath]: certificatesApi.reducer,
     [schoolApi.reducerPath]: schoolApi.reducer,
     [enrollmentApi.reducerPath]: enrollmentApi.reducer,
+    [disciplinaryApi.reducerPath]: disciplinaryApi.reducer,
     [activityApi.reducerPath]: activityApi.reducer,
   },
   middleware: getDefaultMiddleware =>
@@ -127,6 +129,7 @@ export const store = configureStore({
       .concat(postApi.middleware)
       .concat(schoolApi.middleware)
       .concat(enrollmentApi.middleware)
+      .concat(disciplinaryApi.middleware)
       .concat(activityApi.middleware),
 });
 

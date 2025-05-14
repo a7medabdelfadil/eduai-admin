@@ -329,7 +329,7 @@ const FeesManagement = () => {
                     <td className="whitespace-nowrap px-6 py-4">
                       <div className="flex items-center gap-3">
                         <button
-                          onClick={() => handleDelete(invoice.billedToId)}
+                          onClick={() => handleDelete(invoice.id)}
                         >
                           <svg
                             className="h-6 w-6 text-red-500"
@@ -346,7 +346,7 @@ const FeesManagement = () => {
                           </svg>
                         </button>
                         <Link
-                          href={`/fees-management/${invoice.billedToId}`}
+                          href={`/fees-management/${invoice.id}`}
                           className="font-medium text-blue-600 hover:underline"
                         >
                           <svg
