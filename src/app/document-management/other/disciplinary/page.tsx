@@ -1,12 +1,20 @@
 /* eslint-disable @next/next/no-img-element */
 "use client";
 import Link from "next/link";
-import { useState, useEffect } from "react";
 import BreadCrumbs from "@/components/BreadCrumbs";
 import { useSelector } from "react-redux";
 import { RootState } from "@/GlobalRedux/store";
 import Spinner from "@/components/spinner";
 import { useGetAllDisciplinaryRecordsQuery } from "@/features/Document-Management/disciplinaryApi";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow
+} from "@/components/Table";
+import { Skeleton } from "@/components/Skeleton";
 
 const Disciplinary = () => {
   const breadcrumbs = [
@@ -58,12 +66,12 @@ const Disciplinary = () => {
       <div
         dir={currentLanguage === "ar" ? "rtl" : "ltr"}
         className={`${currentLanguage === "ar"
-            ? booleanValue
-              ? "lg:mr-[100px]"
-              : "lg:mr-[270px]"
-            : booleanValue
-              ? "lg:ml-[100px]"
-              : "lg:ml-[270px]"
+          ? booleanValue
+            ? "lg:mr-[100px]"
+            : "lg:mr-[270px]"
+          : booleanValue
+            ? "lg:ml-[100px]"
+            : "lg:ml-[270px]"
           } relative mx-3 mt-10 h-screen overflow-x-auto bg-transparent sm:rounded-lg`}
       >
         <div className="flex justify-between text-center max-[502px]:grid max-[502px]:justify-center">
@@ -154,141 +162,74 @@ const Disciplinary = () => {
           </Link>
         </div>
         <div className="relative overflow-auto shadow-md sm:rounded-lg">
-          <table className="w-full overflow-x-auto text-left text-sm text-textSecondary rtl:text-right">
-            <thead className="bg-thead text-xs uppercase text-textPrimary">
-              <tr>
-                <th scope="col" className="whitespace-nowrap px-6 py-3">
-                  {currentLanguage === "ar"
-                    ? "الاسم"
-                    : currentLanguage === "fr"
-                      ? "Nom"
-                      : "Name"}
-                </th>
-                <th scope="col" className="whitespace-nowrap px-6 py-3">
-                  {currentLanguage === "ar"
-                    ? "المعرف"
-                    : currentLanguage === "fr"
-                      ? "ID"
-                      : "ID"}
-                </th>
-                <th scope="col" className="whitespace-nowrap px-6 py-3">
-                  {currentLanguage === "ar"
-                    ? "الجنس"
-                    : currentLanguage === "fr"
-                      ? "Sexe"
-                      : "Gender"}
-                </th>
-                <th scope="col" className="whitespace-nowrap px-6 py-3">
-                  {currentLanguage === "ar"
-                    ? "رقم التاكسي"
-                    : currentLanguage === "fr"
-                      ? "Numéro de taxi"
-                      : "Taxi Number"}
-                </th>
-                <th scope="col" className="whitespace-nowrap px-6 py-3">
-                  {currentLanguage === "ar"
-                    ? "رقم الهاتف"
-                    : currentLanguage === "fr"
-                      ? "Mobile"
-                      : "Mobile"}
-                </th>
-                <th scope="col" className="whitespace-nowrap px-6 py-3">
-                  {currentLanguage === "ar"
-                    ? "عن السائق"
-                    : currentLanguage === "fr"
-                      ? "À propos"
-                      : "About"}
-                </th>
-                <th scope="col" className="whitespace-nowrap px-6 py-3">
-                  {currentLanguage === "ar"
-                    ? "عرض"
-                    : currentLanguage === "fr"
-                      ? "Voir"
-                      : "View"}
-                </th>
-              </tr>
-            </thead>
-            <tbody>
+          <Table>
+            <TableHeader>
+              <TableRow className="text-textPrimary">
+                <TableHead>{currentLanguage === "ar" ? "الاسم" : currentLanguage === "fr" ? "Nom" : "Name"}</TableHead>
+                <TableHead>ID</TableHead>
+                <TableHead>{currentLanguage === "ar" ? "الجنس" : currentLanguage === "fr" ? "Sexe" : "Gender"}</TableHead>
+                <TableHead>{currentLanguage === "ar" ? "الدور" : currentLanguage === "fr" ? "Rôle" : "Role"}</TableHead>
+                <TableHead>{currentLanguage === "ar" ? "رقم الهاتف" : currentLanguage === "fr" ? "Téléphone" : "Mobile"}</TableHead>
+                <TableHead>{currentLanguage === "ar" ? "المخالفة" : currentLanguage === "fr" ? "Infraction" : "Violation"}</TableHead>
+                <TableHead>{currentLanguage === "ar" ? "إجراء" : currentLanguage === "fr" ? "Action" : "Action Taken"}</TableHead>
+                <TableHead>{currentLanguage === "ar" ? "عرض" : currentLanguage === "fr" ? "Voir" : "View"}</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
               {isDisciplinaryLoading ? (
-                <tr>
-                  <td colSpan={8} className="p-4 text-center">
-                    <Spinner />
-                  </td>
-                </tr>
-              ) : isError ? (
-                <tr>
-                  <td colSpan={8} className="p-4 text-center text-red-500">
+                [...Array(3)].map((_, i) => (
+                  <TableRow key={i}>
+                    <TableCell><Skeleton className="h-4 w-24" /></TableCell>
+                    <TableCell><Skeleton className="h-4 w-10" /></TableCell>
+                    <TableCell><Skeleton className="h-4 w-14" /></TableCell>
+                    <TableCell><Skeleton className="h-4 w-14" /></TableCell>
+                    <TableCell><Skeleton className="h-4 w-14" /></TableCell>
+                    <TableCell><Skeleton className="h-4 w-14" /></TableCell>
+                    <TableCell><Skeleton className="h-4 w-14" /></TableCell>
+                    <TableCell><Skeleton className="h-4 w-14" /></TableCell>
+                  </TableRow>
+                ))
+              ) : isError || !disciplinaryData?.data?.content?.length ? (
+                <TableRow>
+                  <TableCell colSpan={8} className="text-center py-4 text-gray-500">
                     {currentLanguage === "ar"
-                      ? "حدث خطأ أثناء تحميل البيانات"
+                      ? "لا توجد سجلات"
                       : currentLanguage === "fr"
-                        ? "Erreur de chargement"
-                        : "Error loading data"}
-                  </td>
-                </tr>
-              ) : disciplinaryData?.data?.content?.length === 0 ? (
-                <tr>
-                  <td colSpan={8} className="p-4 text-center text-gray-500">
-                    {currentLanguage === "ar"
-                      ? "لا توجد سجلات تأديبية"
-                      : currentLanguage === "fr"
-                        ? "Aucun dossier disciplinaire"
-                        : "No disciplinary records found"}
-                  </td>
-                </tr>
+                        ? "Aucun dossier"
+                        : "No records found"}
+                  </TableCell>
+                </TableRow>
               ) : (
-                disciplinaryData?.data?.content?.map((record: any) => (
-                  <tr
-                    key={record.id}
-                    className="border-b border-borderPrimary bg-bgPrimary hover:bg-bgSecondary"
-                  >
-                    <th
-                      scope="row"
-                      className="flex items-center whitespace-nowrap px-6 py-4 font-medium text-textSecondary"
-                    >
-                      <img
-                        src={record.picture}
-                        className="mx-2 h-[40px] w-[40px] rounded-full"
-                        alt="profile"
-                      />
+                disciplinaryData.data.content.map((record: any, index: number) => (
+                  <TableRow key={index} data-index={index}>
+                    <TableCell className="flex items-center gap-2">
+                      <img src={record.picture || "/images/userr.png"} className="h-[24px] w-[24px] rounded-full" alt="profile" />
                       {record.name}
-                    </th>
-                    <td className="whitespace-nowrap px-6 py-4">{record.id}</td>
-                    <td className="whitespace-nowrap px-6 py-4">
+                    </TableCell>
+                    <TableCell>{record.id}</TableCell>
+                    <TableCell>
                       {record.gender === "MALE"
-                        ? currentLanguage === "ar"
-                          ? "ذكر"
-                          : currentLanguage === "fr"
-                            ? "Homme"
-                            : "Male"
-                        : currentLanguage === "ar"
-                          ? "أنثى"
-                          : currentLanguage === "fr"
-                            ? "Femme"
-                            : "Female"}
-                    </td>
-                    <td className="whitespace-nowrap px-6 py-4">{record.role}</td>
-                    <td className="whitespace-nowrap px-6 py-4">{record.mobile}</td>
-                    <td className="whitespace-nowrap px-6 py-4">
-                      {record.violationType.replace(/_/g, " ")}
-                    </td>
-                    <td className="whitespace-nowrap px-6 py-4">
+                        ? currentLanguage === "ar" ? "ذكر" : currentLanguage === "fr" ? "Homme" : "Male"
+                        : currentLanguage === "ar" ? "أنثى" : currentLanguage === "fr" ? "Femme" : "Female"}
+                    </TableCell>
+                    <TableCell>{record.role}</TableCell>
+                    <TableCell>{record.mobile}</TableCell>
+                    <TableCell>{record.violationType.replace(/_/g, " ")}</TableCell>
+                    <TableCell>{record.actionTaken.replace(/_/g, " ")}</TableCell>
+                    <TableCell>
                       <Link
                         href={`/document-management/other/disciplinary/${record.id}`}
-                        className="font-medium text-blue-600 hover:underline"
+                        className="text-blue-600 hover:underline"
                       >
-                        {currentLanguage === "ar"
-                          ? "عرض"
-                          : currentLanguage === "fr"
-                            ? "Voir"
-                            : "View"}
+                        {currentLanguage === "ar" ? "عرض" : currentLanguage === "fr" ? "Voir" : "View"}
                       </Link>
-                    </td>
-                  </tr>
+                    </TableCell>
+                  </TableRow>
                 ))
               )}
-            </tbody>
+            </TableBody>
+          </Table>
 
-          </table>
         </div>
       </div>
     </>
