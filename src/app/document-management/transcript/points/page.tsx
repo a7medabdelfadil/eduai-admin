@@ -31,7 +31,7 @@ const Points = () => {
   ];
 
   const booleanValue = useSelector((state: RootState) => state.boolean.value); // sidebar
-const {data, isLoading} = useGetAllListPointsQuery(null)
+  const { data, isLoading } = useGetAllListPointsQuery(null)
   const [selectAll, setSelectAll] = useState(false); // State to track whether select all checkbox is checked
   const [search, setSearch] = useState("");
   // Function to handle click on select all checkbox
@@ -95,55 +95,53 @@ const {data, isLoading} = useGetAllListPointsQuery(null)
       <BreadCrumbs breadcrumbs={breadcrumbs} />
       <div
         dir={currentLanguage === "ar" ? "rtl" : "ltr"}
-        className={`${
-          currentLanguage === "ar"
-            ? booleanValue
-              ? "lg:mr-[100px]"
-              : "lg:mr-[270px]"
-            : booleanValue
-            ? "lg:ml-[100px]"
-            : "lg:ml-[270px]"
-        } justify-left mb-4 ml-4 mt-5 flex gap-5 text-[20px] font-medium`}
-      >
-        <Link
-          href="/document-management/transcript"
-          
-        >
-          {currentLanguage === "ar"
-            ? "قائمة الدورات"
-            : currentLanguage === "fr"
-            ? "Liste des cours"
-            : "Course List"}
-        </Link>
-        <Link href="/document-management/transcript/points" className="text-blue-500 underline">
-          {currentLanguage === "ar"
-            ? "قائمة النقاط"
-            : currentLanguage === "fr"
-            ? "Liste des points"
-            : "List Of Points"}
-        </Link>
-      </div>
-      <div
-        dir={currentLanguage === "ar" ? "rtl" : "ltr"}
-        className={`${
-          currentLanguage === "ar"
+        className={`${currentLanguage === "ar"
             ? booleanValue
               ? "lg:mr-[100px]"
               : "lg:mr-[270px]"
             : booleanValue
               ? "lg:ml-[100px]"
               : "lg:ml-[270px]"
-        } relative mx-3 mt-10 h-screen overflow-x-auto bg-transparent sm:rounded-lg`}
+          } justify-left mb-4 ml-4 mt-5 flex gap-5 text-[20px] font-medium`}
+      >
+        <Link
+          href="/document-management/transcript"
+
+        >
+          {currentLanguage === "ar"
+            ? "قائمة الدورات"
+            : currentLanguage === "fr"
+              ? "Liste des cours"
+              : "Course List"}
+        </Link>
+        <Link href="/document-management/transcript/points" className="text-blue-500 underline">
+          {currentLanguage === "ar"
+            ? "قائمة النقاط"
+            : currentLanguage === "fr"
+              ? "Liste des points"
+              : "List Of Points"}
+        </Link>
+      </div>
+      <div
+        dir={currentLanguage === "ar" ? "rtl" : "ltr"}
+        className={`${currentLanguage === "ar"
+            ? booleanValue
+              ? "lg:mr-[100px]"
+              : "lg:mr-[270px]"
+            : booleanValue
+              ? "lg:ml-[100px]"
+              : "lg:ml-[270px]"
+          } relative mx-3 mt-10 overflow-x-auto bg-transparent sm:rounded-lg`}
       >
         <div className="flex justify-between text-center max-[502px]:grid max-[502px]:justify-center">
-        <div className="mb-3">
+          <div className="mb-3">
             <label htmlFor="icon" className="sr-only">
               Search
             </label>
             <div className="relative min-w-72 md:min-w-80">
               <div className="pointer-events-none absolute inset-y-0 start-0 z-20 flex items-center ps-4">
                 <svg
-                  className="size-4 flex-shrink-0 text-secondary"
+                  className="size-4 flex-shrink-0 text-secondary/50"
                   xmlns="http://www.w3.org/2000/svg"
                   width="24"
                   height="24"
@@ -174,7 +172,7 @@ const {data, isLoading} = useGetAllListPointsQuery(null)
               />
             </div>
           </div>
-          </div>
+        </div>
         <table className="w-full overflow-x-auto text-left text-sm text-gray-500 rtl:text-right">
           <thead className="bg-thead text-xs uppercase text-textPrimary">
             <tr>
@@ -243,11 +241,11 @@ const {data, isLoading} = useGetAllListPointsQuery(null)
           </thead>
           <tbody>
             {data?.data.content
-                .filter((employee: any) => {
-                  return search.toLocaleLowerCase() === ""
-                    ? employee
-                    : employee.studentName.toLocaleLowerCase().includes(search);
-                }).map((point: any)=>(
+              .filter((employee: any) => {
+                return search.toLocaleLowerCase() === ""
+                  ? employee
+                  : employee.studentName.toLocaleLowerCase().includes(search);
+              }).map((point: any) => (
                 <tr className="border-b border-borderPrimary bg-bgPrimary hover:bg-bgSecondary">
                   <td className="w-4 p-4">
                     <div className="flex items-center">
@@ -259,28 +257,28 @@ const {data, isLoading} = useGetAllListPointsQuery(null)
                     </div>
                   </td>
                   <th
-                      scope="row"
-                      className="flex items-center gap-2 whitespace-nowrap px-6 py-4 font-medium text-textSecondary"
-                    >
-                      <div className="w-[50px]">
-                        {point.photoLink == null ? (
-                          <img
-                            src="/images/userr.png"
-                            className="mx-2 h-[40px] w-[40px] rounded-full"
-                            alt="#"
-                          />
-                        ) : (
-                          <img
-                            src={point.photoLink}
-                            className="mx-2 h-[40px] w-[40px] rounded-full"
-                            alt="#"
-                          />
-                        )}
-                      </div>
-                      <p className="text-textSecondary">
+                    scope="row"
+                    className="flex items-center gap-2 whitespace-nowrap px-6 py-4 font-medium text-textSecondary"
+                  >
+                    <div className="w-[50px]">
+                      {point.photoLink == null ? (
+                        <img
+                          src="/images/userr.png"
+                          className="mx-2 h-[40px] w-[40px] rounded-full"
+                          alt="#"
+                        />
+                      ) : (
+                        <img
+                          src={point.photoLink}
+                          className="mx-2 h-[40px] w-[40px] rounded-full"
+                          alt="#"
+                        />
+                      )}
+                    </div>
+                    <p className="text-textSecondary">
                       {point.studentName}
-                      </p>
-                    </th>
+                    </p>
+                  </th>
                   <td className="whitespace-nowrap px-6 py-4">{point.studentId}</td>
                   <td className="whitespace-nowrap px-6 py-4">{point.gender}</td>
                   <td className="whitespace-nowrap px-6 py-4">{point.age}</td>
@@ -297,18 +295,18 @@ const {data, isLoading} = useGetAllListPointsQuery(null)
                 </tr>
               ))
             }
-            
+
           </tbody>
         </table>
         {(data?.data.content.length == 0 || data == null) && (
-            <div className="flex w-full justify-center py-3 text-center text-[18px] font-semibold">
-              {currentLanguage === "en"
-                ? "There is No Data"
-                : currentLanguage === "ar"
-                  ? "لا توجد بيانات"
-                  : "Aucune donnée"}
-            </div>
-          )}
+          <div className="flex w-full justify-center py-3 text-center text-[18px] font-semibold">
+            {currentLanguage === "en"
+              ? "There is No Data"
+              : currentLanguage === "ar"
+                ? "لا توجد بيانات"
+                : "Aucune donnée"}
+          </div>
+        )}
       </div>
     </>
   );

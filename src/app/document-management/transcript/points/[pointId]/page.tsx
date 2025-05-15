@@ -12,6 +12,14 @@ interface ParamsType {
     pointId: number;
   };
 }
+
+interface CourseGrade {
+  courseId: number;
+  courseName: string;
+  grade: number | string;
+}
+
+
 const ViewPoint = ({ params }: ParamsType) => {
   const breadcrumbs = [
     {
@@ -57,18 +65,17 @@ const ViewPoint = ({ params }: ParamsType) => {
   return (
     <div className="min-h-screen bg-bgSecondary">
       <BreadCrumbs breadcrumbs={breadcrumbs} />
-      
+
       <div
         dir={currentLanguage === "ar" ? "rtl" : "ltr"}
-        className={`${
-          currentLanguage === "ar"
+        className={`${currentLanguage === "ar"
             ? booleanValue
               ? "lg:mr-[100px]"
               : "lg:mr-[270px]"
             : booleanValue
-            ? "lg:ml-[100px]"
-            : "lg:ml-[270px]"
-        } p-6`}
+              ? "lg:ml-[100px]"
+              : "lg:ml-[270px]"
+          } p-6`}
       >
         {/* Student Information Section */}
         <div className="mb-8 rounded-lg bg-bgPrimary p-6 shadow-sm">
@@ -76,7 +83,7 @@ const ViewPoint = ({ params }: ParamsType) => {
             <User className="h-6 w-6" />
             {currentLanguage === "ar" ? "معلومات الطالب" : "Student Information"}
           </h2>
-          
+
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
             <div className="flex items-center gap-3">
               <User className="h-5 w-5 text-gray-500" />
@@ -85,7 +92,7 @@ const ViewPoint = ({ params }: ParamsType) => {
                 <p className="text-lg font-medium">{data?.data?.studentId}</p>
               </div>
             </div>
-            
+
             <div className="flex items-center gap-3">
               <BookOpen className="h-5 w-5 text-gray-500" />
               <div>
@@ -93,7 +100,7 @@ const ViewPoint = ({ params }: ParamsType) => {
                 <p className="text-lg font-medium">{data?.data?.studentName}</p>
               </div>
             </div>
-            
+
             <div className="flex items-center gap-3">
               <CalendarDays className="h-5 w-5 text-gray-500" />
               <div>
@@ -101,7 +108,7 @@ const ViewPoint = ({ params }: ParamsType) => {
                 <p className="text-lg font-medium">{data?.data?.dateOfBirth}</p>
               </div>
             </div>
-            
+
             <div className="flex items-center gap-3">
               <GraduationCap className="h-5 w-5 text-gray-500" />
               <div>
@@ -125,16 +132,13 @@ const ViewPoint = ({ params }: ParamsType) => {
                 <div>{currentLanguage === "ar" ? "المادة" : "Course"}</div>
                 <div>{currentLanguage === "ar" ? "الدرجة" : "Grade"}</div>
               </div>
-
-              {Object.entries(semester.courseGrades).map(([course, grade], idx) => (
-                <div
-                  key={idx}
-                  className="grid grid-cols-2 gap-4 border-t border-borderPrimary p-4"
-                >
-                  <div className="text-secondary">{course}</div>
-                  <div className="font-medium text-secondary">{grade as React.ReactNode}</div>
+              {(Object.values(semester.courseGrades) as CourseGrade[]).map((courseGrade, idx) => (
+                <div key={idx} className="grid grid-cols-2 gap-4 border-t border-borderPrimary p-4">
+                  <div className="text-secondary">{courseGrade.courseName}</div>
+                  <div className="font-medium text-secondary">{courseGrade.grade}</div>
                 </div>
               ))}
+
 
               <div className="grid grid-cols-2 gap-4 border-t border-borderPrimary bg-bgSecondary p-4">
                 <div className="font-medium text-secondary">

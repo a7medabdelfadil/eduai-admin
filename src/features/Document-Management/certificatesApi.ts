@@ -52,17 +52,18 @@ export const certificatesApi = createApi({
     }),
     //
     getAllTranscriptCourses: builder.query({
-      query: ( id ) => ({
-        url: `/api/v1/transcript/courses?semesterId=${id}`,
+      query: ({ semesterId, studentId }) => ({
+        url: `/api/v1/transcript/courses?semesterId=${semesterId}&studentId=${studentId}`,
       }),
     }),
+
     getAllGradeCourse: builder.query({
-      query: ( id ) => ({
+      query: (id) => ({
         url: `/api/v1/transcript/grades-of-course?courseSemesterRegistrationId=${id}`,
       }),
     }),
     getAllStudentGrads: builder.query({
-      query: ( id ) => ({
+      query: (id) => ({
         url: `/api/v1/transcript/list-of-points/grades-for-all-semesters?student-id=${id}`,
       }),
     }),
