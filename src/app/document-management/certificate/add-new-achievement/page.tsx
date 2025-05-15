@@ -11,6 +11,7 @@ import BreadCrumbs from "@/components/BreadCrumbs";
 import { useState } from "react";
 import { FaCloudUploadAlt } from "react-icons/fa";
 import { useGetAllStudentsQuery } from "@/features/User-Management/studentApi";
+import { useGetAllsubjectsQuery } from "@/features/signupApi";
 
 const AddNewAchievement = () => {
   const breadcrumbs = [
@@ -41,6 +42,8 @@ const AddNewAchievement = () => {
   ];
 
   const booleanValue = useSelector((state: RootState) => state.boolean.value);
+  const { data: subjectsResponse, isLoading: isSubjectsLoading } = useGetAllsubjectsQuery(null);
+
   const {
     register,
     handleSubmit,
@@ -73,6 +76,7 @@ const AddNewAchievement = () => {
         subject: formData.subject,
       }),
     );
+
     data.append("file", formData.endDate[0]); // Assuming 'endDate' is the file input
 
     try {
@@ -98,15 +102,14 @@ const AddNewAchievement = () => {
       <BreadCrumbs breadcrumbs={breadcrumbs} />
       <div
         dir={currentLanguage === "ar" ? "rtl" : "ltr"}
-        className={` ${
-          currentLanguage === "ar"
-            ? booleanValue
-              ? "lg:mr-[100px]"
-              : "lg:mr-[270px]"
-            : booleanValue
-              ? "lg:ml-[100px]"
-              : "lg:ml-[270px]"
-        } mx-3 mt-[40px] grid h-[850px] items-center justify-center`}
+        className={` ${currentLanguage === "ar"
+          ? booleanValue
+            ? "lg:mr-[100px]"
+            : "lg:mr-[270px]"
+          : booleanValue
+            ? "lg:ml-[100px]"
+            : "lg:ml-[270px]"
+          } mx-3 mt-[40px] grid h-[850px] items-center justify-center`}
       >
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="grid h-[900px] items-center justify-center gap-5 rounded-xl bg-bgPrimary p-10 sm:w-[500px] md:w-[600px] lg:w-[750px] xl:h-[800px] xl:w-[1000px]">
@@ -167,12 +170,12 @@ const AddNewAchievement = () => {
                     (student: {
                       id: string | null | undefined;
                       name:
-                        | string
-                        | number
-                        | bigint
-                        | boolean
-                        | null
-                        | undefined;
+                      | string
+                      | number
+                      | bigint
+                      | boolean
+                      | null
+                      | undefined;
                     }) => (
                       <option key={student.id} value={student.id ?? ""}>
                         {String(student.name)}
@@ -247,21 +250,37 @@ const AddNewAchievement = () => {
                   </span>
                 )}
               </label>
-              <label
-                htmlFor="subject"
-                className="grid text-[18px] font-semibold"
-              >
+              <label htmlFor="subject" className="grid text-[18px] font-semibold">
                 {currentLanguage === "ar"
                   ? "المادة"
                   : currentLanguage === "fr"
                     ? "Sujet"
                     : "Subject"}
-                <input
-                  id="stage"
-                  type="text"
-                  className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
-                  {...register("subject", { required: true })}
-                />
+
+                {isSubjectsLoading ? (
+                  <Spinner />
+                ) : (
+                  <select
+                    id="subject"
+                    {...register("subject", { required: true })}
+                    className="h-full w-[400px] rounded-xl border px-4 py-3 text-[18px] outline-none max-[458px]:w-[350px]"
+                  >
+                    <option value="">
+                      {currentLanguage === "en"
+                        ? "Select Subject"
+                        : currentLanguage === "ar"
+                          ? "اختر المادة"
+                          : "Sélectionner Sujet"}
+                    </option>
+                    {subjectsResponse?.data &&
+                      Object.entries(subjectsResponse.data).map(([key, label]) => (
+                        <option key={key} value={key}>
+                          {String(label)}
+                        </option>
+                      ))}
+                  </select>
+                )}
+
                 {errors.subject && (
                   <span className="text-error">
                     {currentLanguage === "ar"
@@ -272,6 +291,7 @@ const AddNewAchievement = () => {
                   </span>
                 )}
               </label>
+
               <label
                 htmlFor="issueDate"
                 className="grid text-[18px] font-semibold"

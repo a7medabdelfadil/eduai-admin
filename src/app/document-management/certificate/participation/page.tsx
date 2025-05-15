@@ -41,7 +41,6 @@ const Participation = () => {
     useGetAllParticipationsQuery(null);
   const [selectAll, setSelectAll] = useState(false);
 
-
   const handleSelectAll = () => {
     setSelectAll(!selectAll);
     const checkboxes = document.querySelectorAll<HTMLInputElement>(
