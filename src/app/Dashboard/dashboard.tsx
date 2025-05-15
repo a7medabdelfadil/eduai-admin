@@ -532,7 +532,7 @@ const Dashboard: React.FC = () => {
                         ? "+ Nouvel événement"
                         : "+ New Event"}
                   </button>
-                  {mettings.data.content.length > 3 && (
+                  {mettings?.data?.content?.length > 3 && (
                     <Link
                       href="/educational-affairs/events"
                       className="font-semibold text-primary underline"

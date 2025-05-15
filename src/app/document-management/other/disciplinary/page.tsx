@@ -5,7 +5,7 @@ import BreadCrumbs from "@/components/BreadCrumbs";
 import { useSelector } from "react-redux";
 import { RootState } from "@/GlobalRedux/store";
 import Spinner from "@/components/spinner";
-import { useGetAllDisciplinaryRecordsQuery } from "@/features/Document-Management/disciplinaryApi";
+import { useDeleteDisciplinaryRecordMutation, useGetAllDisciplinaryRecordsQuery } from "@/features/Document-Management/disciplinaryApi";
 import {
   Table,
   TableBody,
@@ -15,6 +15,19 @@ import {
   TableRow
 } from "@/components/Table";
 import { Skeleton } from "@/components/Skeleton";
+import {
+  Dialog,
+  DialogTrigger,
+  DialogContent,
+  DialogHeader,
+  DialogFooter,
+  DialogTitle,
+  DialogDescription,
+  DialogClose,
+} from "@/components/Dialog";
+import { toast } from "react-toastify";
+import { useState } from "react";
+import { RiDeleteBin6Fill } from "react-icons/ri";
 
 const Disciplinary = () => {
   const breadcrumbs = [
@@ -44,15 +57,24 @@ const Disciplinary = () => {
     },
   ];
   const booleanValue = useSelector((state: RootState) => state.boolean.value);
+  const [openDialogId, setOpenDialogId] = useState<number | null>(null);
+  const [searchTerm, setSearchTerm] = useState("");
+
   const {
     data: disciplinaryData,
     isLoading: isDisciplinaryLoading,
     isError,
+    refetch,
   } = useGetAllDisciplinaryRecordsQuery(null);
 
   const { language: currentLanguage, loading } = useSelector(
     (state: RootState) => state.language,
   );
+  const [deleteDisciplinaryRecord] = useDeleteDisciplinaryRecordMutation();
+  const filteredRecords = disciplinaryData?.data?.content?.filter((record: any) => {
+    const fullText = `${record.name} ${record.role} ${record.mobile} ${record.violationType}`.toLowerCase();
+    return fullText.includes(searchTerm);
+  });
 
   if (loading)
     return (
@@ -101,6 +123,8 @@ const Disciplinary = () => {
                 type="text"
                 id="icon"
                 name="icon"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value.toLowerCase())}
                 className="block w-full rounded-lg border-2 border-borderPrimary px-4 py-2 ps-11 text-sm outline-none focus:border-blue-500 focus:ring-blue-500 disabled:pointer-events-none disabled:opacity-50"
                 placeholder={
                   currentLanguage === "en"
@@ -110,6 +134,7 @@ const Disciplinary = () => {
                       : "Recherche"
                 }
               />
+
             </div>
           </div>
           <div className="flex justify-center">
@@ -172,7 +197,8 @@ const Disciplinary = () => {
                 <TableHead>{currentLanguage === "ar" ? "رقم الهاتف" : currentLanguage === "fr" ? "Téléphone" : "Mobile"}</TableHead>
                 <TableHead>{currentLanguage === "ar" ? "المخالفة" : currentLanguage === "fr" ? "Infraction" : "Violation"}</TableHead>
                 <TableHead>{currentLanguage === "ar" ? "إجراء" : currentLanguage === "fr" ? "Action" : "Action Taken"}</TableHead>
-                <TableHead>{currentLanguage === "ar" ? "عرض" : currentLanguage === "fr" ? "Voir" : "View"}</TableHead>
+                <TableHead className="flex items-center justify-center" >  {currentLanguage === "ar" ? "حذف" : currentLanguage === "fr" ? "Supprimer" : "Delete"}
+                </TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -189,7 +215,7 @@ const Disciplinary = () => {
                     <TableCell><Skeleton className="h-4 w-14" /></TableCell>
                   </TableRow>
                 ))
-              ) : isError || !disciplinaryData?.data?.content?.length ? (
+              ) : isError || !filteredRecords.length ? (
                 <TableRow>
                   <TableCell colSpan={8} className="text-center py-4 text-gray-500">
                     {currentLanguage === "ar"
@@ -200,7 +226,7 @@ const Disciplinary = () => {
                   </TableCell>
                 </TableRow>
               ) : (
-                disciplinaryData.data.content.map((record: any, index: number) => (
+                filteredRecords.map((record: any, index: number) => (
                   <TableRow key={index} data-index={index}>
                     <TableCell className="flex items-center gap-2">
                       <img src={record.picture || "/images/userr.png"} className="h-[24px] w-[24px] rounded-full" alt="profile" />
@@ -216,13 +242,81 @@ const Disciplinary = () => {
                     <TableCell>{record.mobile}</TableCell>
                     <TableCell>{record.violationType.replace(/_/g, " ")}</TableCell>
                     <TableCell>{record.actionTaken.replace(/_/g, " ")}</TableCell>
-                    <TableCell>
-                      <Link
-                        href={`/document-management/other/disciplinary/${record.id}`}
-                        className="text-blue-600 hover:underline"
-                      >
-                        {currentLanguage === "ar" ? "عرض" : currentLanguage === "fr" ? "Voir" : "View"}
-                      </Link>
+                    <TableCell className="flex items-center justify-center">
+                      <Dialog open={openDialogId === record.recordId} onOpenChange={(open) => !open && setOpenDialogId(null)}>
+                        <DialogTrigger asChild>
+                          <button
+                            onClick={() => setOpenDialogId(record.recordId)}
+                            className="text-red-600 hover:text-red-800"
+                          >
+                            <RiDeleteBin6Fill size={24} />
+
+                          </button>
+                        </DialogTrigger>
+                        <DialogContent>
+                          <DialogHeader>
+                            <DialogTitle>
+                              {currentLanguage === "ar"
+                                ? "تأكيد الحذف"
+                                : currentLanguage === "fr"
+                                  ? "Confirmer la suppression"
+                                  : "Confirm Deletion"}
+                            </DialogTitle>
+                            <DialogDescription>
+                              {currentLanguage === "ar"
+                                ? "هل أنت متأكد أنك تريد حذف هذا السجل؟"
+                                : currentLanguage === "fr"
+                                  ? "Êtes-vous sûr de vouloir supprimer cet enregistrement ?"
+                                  : "Are you sure you want to delete this record?"}
+                            </DialogDescription>
+                          </DialogHeader>
+                          <DialogFooter>
+                            <DialogClose asChild>
+                              <button className="rounded-md bg-gray-300 px-4 py-2 text-sm font-medium hover:bg-gray-400">
+                                {currentLanguage === "ar"
+                                  ? "إلغاء"
+                                  : currentLanguage === "fr"
+                                    ? "Annuler"
+                                    : "Cancel"}
+                              </button>
+                            </DialogClose>
+                            <button
+                              className="rounded-md bg-red-600 px-4 py-2 text-sm font-medium text-white hover:bg-red-700"
+                              onClick={async () => {
+                                try {
+                                  await deleteDisciplinaryRecord(record.recordId).unwrap();
+                                  toast.success(
+                                    currentLanguage === "ar"
+                                      ? "تم حذف السجل بنجاح"
+                                      : currentLanguage === "fr"
+                                        ? "Enregistrement supprimé avec succès"
+                                        : "Record deleted successfully"
+                                  );
+                                  setOpenDialogId(null);
+                                  refetch();
+                                } catch (error) {
+                                  toast.error(
+                                    currentLanguage === "ar"
+                                      ? "فشل في حذف السجل"
+                                      : currentLanguage === "fr"
+                                        ? "Échec de la suppression"
+                                        : "Failed to delete record"
+                                  );
+                                  setOpenDialogId(null);
+                                }
+                              }}
+                            >
+                              {currentLanguage === "ar"
+                                ? "حذف"
+                                : currentLanguage === "fr"
+                                  ? "Supprimer"
+                                  : "Delete"}
+                            </button>
+                          </DialogFooter>
+                        </DialogContent>
+                      </Dialog>
+
+
                     </TableCell>
                   </TableRow>
                 ))

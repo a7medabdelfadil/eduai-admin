@@ -10,11 +10,13 @@ import { useState } from "react";
 import { toast } from "react-toastify";
 import { useSelector } from "react-redux";
 import { RootState } from "@/GlobalRedux/store";
+import { useRouter } from "next/navigation";
 
 const AddDisciplinaryRecordForm = () => {
   const { language: currentLanguage } = useSelector(
     (state: RootState) => state.language
   );
+  const router = useRouter();
 
   const breadcrumbs = [
     {
@@ -83,17 +85,19 @@ const AddDisciplinaryRecordForm = () => {
         currentLanguage === "ar"
           ? "تم إنشاء السجل بنجاح"
           : currentLanguage === "fr"
-          ? "Dossier créé avec succès"
-          : "Record created successfully"
+            ? "Dossier créé avec succès"
+            : "Record created successfully"
       );
+      router.push(
+        "/document-management/other/disciplinary");
     } catch (err: any) {
       const errorMessage =
         err?.data?.message ||
         (currentLanguage === "ar"
           ? "فشل في إنشاء السجل"
           : currentLanguage === "fr"
-          ? "Échec de la création du dossier"
-          : "Failed to create record");
+            ? "Échec de la création du dossier"
+            : "Failed to create record");
       toast.error(errorMessage);
     }
   };
@@ -106,8 +110,8 @@ const AddDisciplinaryRecordForm = () => {
           {currentLanguage === "ar"
             ? "إشعار تأديبي"
             : currentLanguage === "fr"
-            ? "Avis disciplinaire"
-            : "Disciplinary Notice"}
+              ? "Avis disciplinaire"
+              : "Disciplinary Notice"}
         </h2>
 
         <form
@@ -120,8 +124,8 @@ const AddDisciplinaryRecordForm = () => {
                 {currentLanguage === "ar"
                   ? "معرف المستخدم"
                   : currentLanguage === "fr"
-                  ? "ID de l'utilisateur"
-                  : "User ID"}
+                    ? "ID de l'utilisateur"
+                    : "User ID"}
               </label>
               <input
                 type="number"
@@ -134,8 +138,8 @@ const AddDisciplinaryRecordForm = () => {
                   currentLanguage === "ar"
                     ? "أدخل معرف المستخدم"
                     : currentLanguage === "fr"
-                    ? "Entrez l'ID"
-                    : "Enter User ID"
+                      ? "Entrez l'ID"
+                      : "Enter User ID"
                 }
               />
             </div>
@@ -145,8 +149,8 @@ const AddDisciplinaryRecordForm = () => {
                 {currentLanguage === "ar"
                   ? "تاريخ الإصدار"
                   : currentLanguage === "fr"
-                  ? "Date d'émission"
-                  : "Date of Issue"}
+                    ? "Date d'émission"
+                    : "Date of Issue"}
               </label>
               <input
                 type="date"
@@ -164,8 +168,8 @@ const AddDisciplinaryRecordForm = () => {
               {currentLanguage === "ar"
                 ? "نوع المخالفة"
                 : currentLanguage === "fr"
-                ? "Type d'infraction"
-                : "Violation Type"}
+                  ? "Type d'infraction"
+                  : "Violation Type"}
             </label>
             <select
               name="violationType"
@@ -178,8 +182,8 @@ const AddDisciplinaryRecordForm = () => {
                 {currentLanguage === "ar"
                   ? "اختر المخالفة"
                   : currentLanguage === "fr"
-                  ? "Sélectionner une infraction"
-                  : "Select Violation"}
+                    ? "Sélectionner une infraction"
+                    : "Select Violation"}
               </option>
               {violationTypes?.data?.map((type: string) => (
                 <option key={type} value={type}>
@@ -194,8 +198,8 @@ const AddDisciplinaryRecordForm = () => {
               {currentLanguage === "ar"
                 ? "الإجراء المتخذ"
                 : currentLanguage === "fr"
-                ? "Action prise"
-                : "Action Taken"}
+                  ? "Action prise"
+                  : "Action Taken"}
             </label>
             <select
               name="actionTaken"
@@ -208,8 +212,8 @@ const AddDisciplinaryRecordForm = () => {
                 {currentLanguage === "ar"
                   ? "اختر إجراء"
                   : currentLanguage === "fr"
-                  ? "Sélectionner une action"
-                  : "Select Action"}
+                    ? "Sélectionner une action"
+                    : "Select Action"}
               </option>
               {actionsTaken?.data?.map((action: string) => (
                 <option key={action} value={action}>
@@ -224,8 +228,8 @@ const AddDisciplinaryRecordForm = () => {
               {currentLanguage === "ar"
                 ? "تفاصيل الواقعة"
                 : currentLanguage === "fr"
-                ? "Détails de l'incident"
-                : "Details of the Incident"}
+                  ? "Détails de l'incident"
+                  : "Details of the Incident"}
             </label>
             <textarea
               name="description"
@@ -237,8 +241,8 @@ const AddDisciplinaryRecordForm = () => {
                 currentLanguage === "ar"
                   ? "أدخل التفاصيل"
                   : currentLanguage === "fr"
-                  ? "Entrez les détails"
-                  : "Enter details"
+                    ? "Entrez les détails"
+                    : "Enter details"
               }
               rows={4}
             />
@@ -249,8 +253,8 @@ const AddDisciplinaryRecordForm = () => {
               {currentLanguage === "ar"
                 ? "نسخة مقدمة إلى"
                 : currentLanguage === "fr"
-                ? "Copie fournie à"
-                : "Copy Provided To"}
+                  ? "Copie fournie à"
+                  : "Copy Provided To"}
             </label>
             <input
               type="text"
@@ -262,8 +266,8 @@ const AddDisciplinaryRecordForm = () => {
                 currentLanguage === "ar"
                   ? "أدخل المستلم (اختياري)"
                   : currentLanguage === "fr"
-                  ? "Entrez le destinataire (facultatif)"
-                  : "Enter recipient (optional)"
+                    ? "Entrez le destinataire (facultatif)"
+                    : "Enter recipient (optional)"
               }
             />
           </div>
@@ -278,13 +282,13 @@ const AddDisciplinaryRecordForm = () => {
                 ? currentLanguage === "ar"
                   ? "جارٍ الحفظ..."
                   : currentLanguage === "fr"
-                  ? "Enregistrement..."
-                  : "Saving..."
+                    ? "Enregistrement..."
+                    : "Saving..."
                 : currentLanguage === "ar"
-                ? "حفظ"
-                : currentLanguage === "fr"
-                ? "Enregistrer"
-                : "Save"}
+                  ? "حفظ"
+                  : currentLanguage === "fr"
+                    ? "Enregistrer"
+                    : "Save"}
             </button>
           </div>
         </form>

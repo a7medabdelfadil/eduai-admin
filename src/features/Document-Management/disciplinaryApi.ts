@@ -43,13 +43,20 @@ export const disciplinaryApi = createApi({
             }),
             transformResponse: (response: any) => response.data,
         }),
+        deleteDisciplinaryRecord: builder.mutation({
+            query: (id: string | number) => ({
+                url: `/api/v1/disciplinary-Record/${id}`,
+                method: "DELETE",
+            }),
+        }),
 
     }),
 });
 
 export const {
-    useGetAllDisciplinaryRecordsQuery,
-    useGetViolationTypesQuery,
-    useGetActionsTakenQuery,
-    useCreateDisciplinaryRecordMutation,
+  useGetAllDisciplinaryRecordsQuery,
+  useGetViolationTypesQuery,
+  useGetActionsTakenQuery,
+  useCreateDisciplinaryRecordMutation,
+  useDeleteDisciplinaryRecordMutation,
 } = disciplinaryApi;
