@@ -39,12 +39,34 @@ export const otherOfficialDocumentsApi = createApi({
         };
       },
     }),
-      getStudentsWithMedicalStatus: builder.query({
-  query: () => '/api/v1/student/medical-record/students-with-status',
-  transformResponse: (response: any) => response.data.content,
-}),
+    getStudentsWithMedicalStatus: builder.query({
+      query: () => '/api/v1/student/medical-record/students-with-status',
+      transformResponse: (response: any) => response.data.content,
+    }),
+     createMedicalRecord: builder.mutation({
+      query: (formValues: {
+        file: File;
+        studentId: string;
+        title: string;
+        result: string;
+        note: string;
+      }) => {
+        const formData = new FormData();
+        formData.append("file", formValues.file);
+        formData.append("student-id", formValues.studentId);
+        formData.append("title", formValues.title);
+        formData.append("result", formValues.result);
+        formData.append("note", formValues.note);
+
+        return {
+          url: "/api/v1/student/medical-record/new",
+          method: "POST",
+          body: formData,
+        };
+      },
+    }),
 
   }),
 });
 
-export const { useGetAllIdCardsQuery, useGetStudentsWithMedicalStatusQuery } = otherOfficialDocumentsApi;
+export const { useGetAllIdCardsQuery, useGetStudentsWithMedicalStatusQuery, useCreateMedicalRecordMutation } = otherOfficialDocumentsApi;

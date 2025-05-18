@@ -54,13 +54,13 @@ const Card = () => {
       nameEn: "Other Official Documents",
       nameAr: "وثائق رسمية أخرى",
       nameFr: "Autres documents officiels",
-      href: "/document-management/other",
+      href: "/document-management/otherno",
     },
     {
       nameEn: "ID Cards",
       nameAr: "بطاقات الهوية",
       nameFr: "Cartes d'identité",
-      href: "/document-management/other/card",
+      href: "/document-management/other",
     },
   ];
   const booleanValue = useSelector((state: RootState) => state.boolean.value);

@@ -16,6 +16,8 @@ import {
   TableRow
 } from "@/components/Table";
 import { useState } from "react";
+import Container from "@/components/Container";
+import { BiSearchAlt } from "react-icons/bi";
 
 const Medical = () => {
   const breadcrumbs = [
@@ -68,17 +70,7 @@ const Medical = () => {
   return (
     <>
       <BreadCrumbs breadcrumbs={breadcrumbs} />
-      <div
-        dir={currentLanguage === "ar" ? "rtl" : "ltr"}
-        className={`${currentLanguage === "ar"
-          ? booleanValue
-            ? "lg:mr-[100px]"
-            : "lg:mr-[270px]"
-          : booleanValue
-            ? "lg:ml-[100px]"
-            : "lg:ml-[270px]"
-          } relative mx-3 mt-10 h-screen bg-transparent sm:rounded-lg`}
-      >
+      <Container>
 
         <Text font={"bold"} size={"3xl"}>Other Official Documents</Text>
         <div className="justify-left ml-4 my-8 flex flex-wrap gap-5 text-[20px] font-semibold max-[725px]:text-[15px]">
@@ -129,46 +121,55 @@ const Medical = () => {
                 : "Legal Documents"}
           </Link>
         </div>
-        <div className="flex justify-between text-center max-[502px]:grid max-[502px]:justify-center">
-          <div className="mb-3">
-            <label htmlFor="icon" className="sr-only">
-              Search
-            </label>
-            <div className="relative min-w-72 md:min-w-80">
-              <div className="pointer-events-none absolute inset-y-0 start-0 z-20 flex items-center ps-4">
-                <svg
-                  className="size-4 flex-shrink-0 text-gray-400"
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                >
-                  <circle cx="11" cy="11" r="8" />
-                  <path d="m21 21-4.3-4.3" />
-                </svg>
-              </div>
-              <input
-                type="text"
-                id="icon"
-                name="icon"
-                value={searchValue}
-                onChange={(e) => setSearchValue(e.target.value)}
-                className="block w-full rounded-lg border-2 border-borderPrimary px-4 py-2 ps-11 text-sm outline-none focus:border-blue-500 focus:ring-blue-500 disabled:pointer-events-none disabled:opacity-50"
-                placeholder={
-                  currentLanguage === "en"
-                    ? "Search by name"
-                    : currentLanguage === "ar"
-                      ? "ابحث بالاسم"
-                      : "Recherche par nom"
-                }
-              />
+        <div className="bg-bgPrimary rounded-xl">
 
+        <div className="flex justify-between items-center text-center max-[502px]:grid max-[502px]:justify-center">
+          <div className="flex justify-between rounded-t-xl bg-bgPrimary p-4 text-center max-[502px]:grid max-[502px]:justify-center">
+            <div className="mb-3">
+              <label htmlFor="icon" className="sr-only">
+                Search
+              </label>
+              <div className="relative min-w-72 md:min-w-80">
+                <div className="pointer-events-none absolute inset-y-0 start-0 z-20 flex items-center ps-4">
+                  <BiSearchAlt className="text-secondary" size={18} />
+                </div>
+                <div className="flex items-center gap-2">
+                  <input
+                    value={searchValue}
+                    onChange={(e) => setSearchValue(e.target.value)}
+                    type="text"
+                    id="icon"
+                    name="icon"
+                    className="border-borderSecondary block w-full rounded-lg border-2 px-4 py-2 ps-11 text-lg outline-none disabled:pointer-events-none disabled:opacity-50 dark:border-borderPrimary"
+                    placeholder={
+                      currentLanguage === "ar"
+                        ? "ابحث عن أي شيء"
+                        : currentLanguage === "fr"
+                          ? "Rechercher n'importe quoi"
+                          : "Search anything"
+                    }
+                  />
+                  <span className="min-w-[120px] text-primary">
+                    {
+                      filteredStudents?.length
+                    }{" "}
+                    Result(s)
+                  </span>
+                </div>
+              </div>
             </div>
+          </div>
+          <div className="flex  justify-center">
+            <Link
+              href="/document-management/other/medical/add-medical"
+              className="mx-3 mb-5 w-fit whitespace-nowrap rounded-xl bg-primary px-4 py-2 text-[18px] font-semibold text-white duration-300 ease-in hover:bg-hover hover:shadow-xl"
+            >
+              {currentLanguage === "ar"
+                ? "+ إضافة سجل طبي"
+                : currentLanguage === "fr"
+                  ? "+ Ajouter un dossier médical"
+                  : "+ Add Medical Record"}
+            </Link>
           </div>
         </div>
         <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
@@ -259,7 +260,9 @@ const Medical = () => {
           </Table>
 
         </div>
-      </div>
+        </div>
+
+      </Container>
     </>
   );
 };
