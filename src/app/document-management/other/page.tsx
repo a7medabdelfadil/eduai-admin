@@ -1,13 +1,42 @@
 /* eslint-disable @next/next/no-img-element */
 "use client";
-import Soon from "@/components/soon";
 import Link from "next/link";
 import { useState, useEffect } from "react";
 import BreadCrumbs from "@/components/BreadCrumbs";
 import { useSelector } from "react-redux";
 import { RootState } from "@/GlobalRedux/store";
 import Spinner from "@/components/spinner";
-const Other = () => {
+import { Text } from "@/components/Text";
+
+
+const cardData = [
+  {
+    name: 'Wade Warren',
+    id: '5412',
+    role: 'Teacher',
+    img: '/images/userr.png',
+    frontCard: '/images/card.png',
+    backCard: '/images/card.png',
+  },
+  {
+    name: 'Wade Warren',
+    id: '5412',
+    role: 'Teacher',
+    img: '/images/userr.png',
+    frontCard: '/images/card.png',
+    backCard: '/images/card.png',
+  },
+  {
+    name: 'Olivia Wilson',
+    id: '123456',
+    role: 'Student',
+    img: '/images/userr.png',
+    frontCard: '/images/card.png',
+    backCard: '/images/card.png',
+  },
+];
+
+const Card = () => {
   const breadcrumbs = [
     {
       nameEn: "Administration",
@@ -26,6 +55,12 @@ const Other = () => {
       nameAr: "وثائق رسمية أخرى",
       nameFr: "Autres documents officiels",
       href: "/document-management/other",
+    },
+    {
+      nameEn: "ID Cards",
+      nameAr: "بطاقات الهوية",
+      nameFr: "Cartes d'identité",
+      href: "/document-management/other/card",
     },
   ];
   const booleanValue = useSelector((state: RootState) => state.boolean.value);
@@ -83,22 +118,70 @@ const Other = () => {
         <Spinner />
       </div>
     );
+
   return (
     <>
-      {/* <Soon /> */}
       <BreadCrumbs breadcrumbs={breadcrumbs} />
       <div
         dir={currentLanguage === "ar" ? "rtl" : "ltr"}
-        className={`${
-          currentLanguage === "ar"
-            ? booleanValue
-              ? "lg:mr-[100px]"
-              : "lg:mr-[270px]"
-            : booleanValue
-              ? "lg:ml-[100px]"
-              : "lg:ml-[270px]"
-        } relative mx-3 mt-10 h-screen overflow-x-auto bg-transparent sm:rounded-lg`}
+        className={`${currentLanguage === "ar"
+          ? booleanValue
+            ? "lg:mr-[100px]"
+            : "lg:mr-[270px]"
+          : booleanValue
+            ? "lg:ml-[100px]"
+            : "lg:ml-[270px]"
+          } relative mx-3 mt-10 h-screen bg-transparent sm:rounded-lg`}
       >
+        <Text font={"bold"} size={"3xl"}>Other Official Documents</Text>
+        <div className="justify-left ml-4 my-8 flex flex-wrap gap-5 text-[20px] font-semibold max-[725px]:text-[15px]">
+          <Link
+            href="/document-management/other"
+            className="text-blue-500 underline"
+          >
+            {currentLanguage === "ar"
+              ? "بطاقات الهوية"
+              : currentLanguage === "fr"
+                ? "Cartes d'identité"
+                : "ID Cards"}
+          </Link>
+          <Link
+            className="hover:text-blue-500 hover:underline"
+            href="/document-management/other/medical">
+            {currentLanguage === "ar"
+              ? "السجلات الطبية"
+              : currentLanguage === "fr"
+                ? "Dossiers médicaux"
+                : "Medical Records"}
+          </Link>
+          <Link
+            className="hover:text-blue-500 hover:underline"
+            href="/document-management/other/disciplinary">
+            {currentLanguage === "ar"
+              ? "السجلات التأديبية"
+              : currentLanguage === "fr"
+                ? "Dossiers disciplinaires"
+                : "Disciplinary Records"}
+          </Link>
+          <Link
+            className="hover:text-blue-500 hover:underline"
+            href="/document-management/other/financial">
+            {currentLanguage === "ar"
+              ? "المساعدات المالية"
+              : currentLanguage === "fr"
+                ? "Aide financière"
+                : "Financial Aid"}
+          </Link>
+          <Link
+            className="hover:text-blue-500 hover:underline"
+            href="/document-management/other/legal">
+            {currentLanguage === "ar"
+              ? "الوثائق القانونية"
+              : currentLanguage === "fr"
+                ? "Documents légaux"
+                : "Legal Documents"}
+          </Link>
+        </div>
         <div className="flex justify-between text-center max-[502px]:grid max-[502px]:justify-center">
           <div className="mb-3">
             <label htmlFor="icon" className="sr-only">
@@ -137,218 +220,53 @@ const Other = () => {
               />
             </div>
           </div>
-          <div className="flex justify-center">
-            <Link
-              href="/"
-              className="mx-3 mb-5 w-fit whitespace-nowrap rounded-xl bg-primary px-4 py-2 text-[18px] font-semibold text-white duration-300 ease-in hover:bg-hover hover:shadow-xl"
-            >
-              {currentLanguage === "ar"
-                ? "+ أضف الفواتير"
-                : currentLanguage === "fr"
-                  ? "+ Ajouter des factures"
-                  : "+ Add Invoices"}
-            </Link>
+        </div>
+        <div className="relative bg-bgPrimary shadow-md sm:rounded-lg p-6">
+          <div className="space-y-6">
+            {cardData.map((card, index) => (
+              <div
+                key={index}
+                className="flex flex-col md:flex-row mt-4 items-center justify-between md:items-start gap-6 pb-6"
+              >
+                {/* Profile */}
+                <div className="flex items-center mx-4 mt-14 gap-4 min-w-[200px] h-full">
+                  <img
+                    src={card.img}
+                    alt={card.name}
+                    className="rounded-full w-[50px] object-cover"
+                  />
+                  <div>
+                    <h3 className="text-lg font-semibold">{card.name}</h3>
+                    <p className="text-sm text-gray-600">ID: {card.id}</p>
+                    <p className="text-sm font-medium">{card.role}</p>
+                  </div>
+                </div>
+                <div className="flex justify-evenly items-center gap-4 w-full">
+
+                  {/* Card Image front */}
+                  <div className="flex-1 max-w-[350px]">
+                    <img
+                      src={card.frontCard}
+                      alt="Front of ID Card"
+                      className="rounded w-full shadow-md"
+                    />
+                  </div>
+                  {/* Card Image back */}
+                  <div className="flex-1 max-w-[350px]">
+                    <img
+                      src={card.backCard}
+                      alt="Back of ID Card"
+                      className="rounded w-full shadow-md"
+                    />
+                  </div>
+                </div>
+              </div>
+            ))}
           </div>
-        </div>
-        <div className="justify-left mb-[80px] ml-4 mt-[50px] flex flex-wrap gap-5 text-[20px] font-semibold max-[725px]:text-[15px]">
-          <Link
-            href="/document-management/other"
-            className="text-blue-500 underline"
-          >
-            {currentLanguage === "ar"
-              ? "بطاقات الهوية"
-              : currentLanguage === "fr"
-                ? "Cartes d'identité"
-                : "ID Cards"}
-          </Link>
-          <Link href="/document-management/other/medical">
-            {currentLanguage === "ar"
-              ? "السجلات الطبية"
-              : currentLanguage === "fr"
-                ? "Dossiers médicaux"
-                : "Medical Records"}
-          </Link>
-          <Link href="/document-management/other/disciplinary">
-            {currentLanguage === "ar"
-              ? "السجلات التأديبية"
-              : currentLanguage === "fr"
-                ? "Dossiers disciplinaires"
-                : "Disciplinary Records"}
-          </Link>
-          <Link href="/document-management/other/financial">
-            {currentLanguage === "ar"
-              ? "المساعدات المالية"
-              : currentLanguage === "fr"
-                ? "Aide financière"
-                : "Financial Aid"}
-          </Link>
-          <Link href="/document-management/other/legal">
-            {currentLanguage === "ar"
-              ? "الوثائق القانونية"
-              : currentLanguage === "fr"
-                ? "Documents légaux"
-                : "Legal Documents"}
-          </Link>
-        </div>
-        <div className="relative overflow-auto shadow-md sm:rounded-lg">
-          <table className="text-bgSecondary0 w-full overflow-x-auto text-left text-sm rtl:text-right">
-            <thead className="bg-thead text-xs uppercase text-textPrimary">
-              <tr>
-                <th scope="col" className="p-4">
-                  <div className="flex items-center">
-                    <input
-                      id="checkbox-all-search"
-                      type="checkbox"
-                      className="-gray-800 h-4 w-4 rounded border-gray-300 bg-gray-100 text-blue-600 focus:ring-2 focus:ring-blue-500"
-                      onChange={handleSelectAll}
-                    />
-                  </div>
-                </th>
-                <th scope="col" className="whitespace-nowrap px-6 py-3">
-                  {currentLanguage === "ar"
-                    ? "الاسم"
-                    : currentLanguage === "fr"
-                      ? "Nom"
-                      : "Name"}
-                </th>
-                <th scope="col" className="whitespace-nowrap px-6 py-3">
-                  {currentLanguage === "ar"
-                    ? "المعرف"
-                    : currentLanguage === "fr"
-                      ? "ID"
-                      : "ID"}
-                </th>
-                <th scope="col" className="whitespace-nowrap px-6 py-3">
-                  {currentLanguage === "ar"
-                    ? "الجنس"
-                    : currentLanguage === "fr"
-                      ? "Sexe"
-                      : "Gender"}
-                </th>
-                <th scope="col" className="whitespace-nowrap px-6 py-3">
-                  {currentLanguage === "ar"
-                    ? "رقم التاكسي"
-                    : currentLanguage === "fr"
-                      ? "Numéro de taxi"
-                      : "Taxi Number"}
-                </th>
-                <th scope="col" className="whitespace-nowrap px-6 py-3">
-                  {currentLanguage === "ar"
-                    ? "العنوان"
-                    : currentLanguage === "fr"
-                      ? "Adresse"
-                      : "Address"}
-                </th>
-                <th scope="col" className="whitespace-nowrap px-6 py-3">
-                  {currentLanguage === "ar"
-                    ? "رقم الهاتف"
-                    : currentLanguage === "fr"
-                      ? "Mobile"
-                      : "Mobile"}
-                </th>
-                <th scope="col" className="whitespace-nowrap px-6 py-3">
-                  {currentLanguage === "ar"
-                    ? "عن السائق"
-                    : currentLanguage === "fr"
-                      ? "À propos"
-                      : "About"}
-                </th>
-                <th scope="col" className="whitespace-nowrap px-6 py-3">
-                  {currentLanguage === "ar"
-                    ? "عرض"
-                    : currentLanguage === "fr"
-                      ? "Voir"
-                      : "View"}
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr className="border-b border-borderPrimary bg-bgPrimary text-textSecondary hover:bg-bgSecondary">
-                <td className="w-4 p-4">
-                  <div className="flex items-center">
-                    <input
-                      id="checkbox-table-search-1"
-                      type="checkbox"
-                      className="h-4 w-4 rounded border-gray-300 bg-gray-100 text-blue-600 focus:ring-2 focus:ring-blue-500"
-                    />
-                  </div>
-                </td>
-                <th
-                  scope="row"
-                  className="flex items-center whitespace-nowrap px-6 py-4 font-medium text-textSecondary"
-                >
-                  <img
-                    src="/images/me.jpg"
-                    className="mx-2 h-[40px] w-[40px] rounded-full"
-                    alt="#"
-                  />
-                  Nahda
-                </th>
-                <td className="whitespace-nowrap px-6 py-4">1321312</td>
-                <td className="whitespace-nowrap px-6 py-4">Male</td>
-                <td className="whitespace-nowrap px-6 py-4">5515151</td>
-                <td className="whitespace-nowrap px-6 py-4">sdfsdfsdfsdf</td>
-                <td className="whitespace-nowrap px-6 py-4">002050030</td>
-                <td className="whitespace-nowrap px-6 py-4">This is text</td>
-                <td className="whitespace-nowrap px-6 py-4">
-                  <Link
-                    href="/driver/view-driver"
-                    className="font-medium text-blue-600 hover:underline"
-                  >
-                    {currentLanguage === "ar"
-                      ? "عرض"
-                      : currentLanguage === "fr"
-                        ? "Voir"
-                        : "View"}
-                  </Link>
-                </td>
-              </tr>
-              <tr className="border-b border-borderPrimary bg-bgPrimary text-textSecondary hover:bg-bgSecondary">
-                <td className="w-4 p-4">
-                  <div className="flex items-center">
-                    <input
-                      id="checkbox-table-search-1"
-                      type="checkbox"
-                      className="h-4 w-4 rounded border-gray-300 bg-gray-100 text-blue-600 focus:ring-2 focus:ring-blue-500"
-                    />
-                  </div>
-                </td>
-                <th
-                  scope="row"
-                  className="flex items-center whitespace-nowrap px-6 py-4 font-medium text-textSecondary"
-                >
-                  <img
-                    src="/images/me.jpg"
-                    className="mx-2 h-[40px] w-[40px] rounded-full"
-                    alt="#"
-                  />
-                  Nahda
-                </th>
-                <td className="whitespace-nowrap px-6 py-4">1321312</td>
-                <td className="whitespace-nowrap px-6 py-4">Male</td>
-                <td className="whitespace-nowrap px-6 py-4">5513131s</td>
-                <td className="whitespace-nowrap px-6 py-4">sdfs2df</td>
-                <td className="whitespace-nowrap px-6 py-4">00515</td>
-                <td className="whitespace-nowrap px-6 py-4">This is text</td>
-                <td className="whitespace-nowrap px-6 py-4">
-                  <Link
-                    href="/driver/view-driver"
-                    className="font-medium text-primary hover:underline"
-                  >
-                    {currentLanguage === "ar"
-                      ? "عرض"
-                      : currentLanguage === "fr"
-                        ? "Voir"
-                        : "View"}
-                  </Link>
-                </td>
-              </tr>
-            </tbody>
-          </table>
         </div>
       </div>
     </>
   );
 };
 
-export default Other;
+export default Card;
