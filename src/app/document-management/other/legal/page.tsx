@@ -1,7 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 "use client";
 import Link from "next/link";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, Suspense } from "react";
 import BreadCrumbs from "@/components/BreadCrumbs";
 import { useSelector } from "react-redux";
 import { RootState } from "@/GlobalRedux/store";
@@ -97,7 +97,7 @@ const Legal = () => {
   };
 
   return (
-    <>
+    <Suspense fallback={<div>Loading...</div>}>
       <BreadCrumbs breadcrumbs={breadcrumbs} />
       <Container>
 
@@ -678,7 +678,7 @@ const Legal = () => {
           </div>
         )}
       </Container>
-    </>
+    </Suspense >
   );
 };
 
