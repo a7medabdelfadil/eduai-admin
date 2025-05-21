@@ -1,6 +1,6 @@
 "use client";
 
-import React, { ReactNode, useEffect } from "react";
+import React, { ReactNode } from "react";
 import "./globals.css";
 import NavBar from "./../components/navBar";
 import { Providers } from "@/GlobalRedux/provider";

@@ -40,10 +40,10 @@ export const otherOfficialDocumentsApi = createApi({
       },
     }),
     getStudentsWithMedicalStatus: builder.query({
-      query: () => '/api/v1/student/medical-record/students-with-status',
+      query: () => "/api/v1/student/medical-record/students-with-status",
       transformResponse: (response: any) => response.data.content,
     }),
-     createMedicalRecord: builder.mutation({
+    createMedicalRecord: builder.mutation({
       query: (formValues: {
         file: File;
         studentId: string;
@@ -65,8 +65,85 @@ export const otherOfficialDocumentsApi = createApi({
         };
       },
     }),
+    getFolderContents: builder.query({
+      query: (folderId?: string) => {
+        const url = folderId
+          ? `/api/v1/files/folder-contents?folder-id=${folderId}`
+          : "/api/v1/files/folder-contents";
+
+        return {
+          url,
+          method: "GET",
+        };
+      },
+      transformResponse: (response: any) => response.data,
+    }),
+    deleteFile: builder.mutation({
+      query: (fileId: string) => ({
+        url: `/api/v1/files/delete-file/${fileId}`,
+        method: "DELETE",
+      }),
+    }),
+    deleteFolder: builder.mutation({
+      query: (folderId: string) => ({
+        url: `/api/v1/files/delete-folder/${folderId}`,
+        method: "DELETE",
+      }),
+    }),
+
+    createFolder: builder.mutation({
+      query: (formValues: { name: string; parentFolderId?: string }) => {
+        const formData = new FormData();
+        formData.append("name", formValues.name);
+        if (formValues.parentFolderId) {
+          formData.append("parent-folder-id", formValues.parentFolderId);
+        }
+
+        return {
+          url: "/api/v1/files/new-folder",
+          method: "POST",
+          body: formData,
+        };
+      },
+    }),
+    uploadFile: builder.mutation({
+      query: (formValues: { file: File; folderId?: string }) => {
+        const formData = new FormData();
+        formData.append("file", formValues.file);
+        if (formValues.folderId) {
+          formData.append("folder-id", formValues.folderId);
+        }
+
+        return {
+          url: "/api/v1/files/upload-file",
+          method: "POST",
+          body: formData,
+        };
+      },
+    }),
+    updateFolderName: builder.mutation({
+      query: ({ folderId, newName }) => {
+        const formData = new FormData();
+        formData.append("name", newName);
+        return {
+          url: `/api/v1/files/update-folder-name/${folderId}`,
+          method: "PUT",
+          body: formData,
+        };
+      },
+    }),
 
   }),
 });
 
-export const { useGetAllIdCardsQuery, useGetStudentsWithMedicalStatusQuery, useCreateMedicalRecordMutation } = otherOfficialDocumentsApi;
+export const {
+  useGetAllIdCardsQuery,
+  useGetStudentsWithMedicalStatusQuery,
+  useCreateMedicalRecordMutation,
+  useGetFolderContentsQuery,
+  useDeleteFileMutation,
+  useCreateFolderMutation,
+  useUploadFileMutation,
+  useDeleteFolderMutation,
+  useUpdateFolderNameMutation,
+} = otherOfficialDocumentsApi;

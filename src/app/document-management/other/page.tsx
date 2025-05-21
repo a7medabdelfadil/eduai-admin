@@ -133,7 +133,13 @@ const Card = () => {
             : "lg:ml-[270px]"
           } relative mx-3 mt-10 h-screen bg-transparent sm:rounded-lg`}
       >
-        <Text font={"bold"} size={"3xl"}>Other Official Documents</Text>
+        <Text font={"bold"} size={"3xl"}>
+          {currentLanguage === "ar"
+            ? "وثائق رسمية أخرى"
+            : currentLanguage === "fr"
+              ? "Autres documents officiels"
+              : "Other Official Documents"}
+        </Text>
         <div className="justify-left ml-4 my-8 flex flex-wrap gap-5 text-[20px] font-semibold max-[725px]:text-[15px]">
           <Link
             href="/document-management/other"
