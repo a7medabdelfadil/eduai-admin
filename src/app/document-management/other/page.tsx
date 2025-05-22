@@ -7,34 +7,10 @@ import { useSelector } from "react-redux";
 import { RootState } from "@/GlobalRedux/store";
 import Spinner from "@/components/spinner";
 import { Text } from "@/components/Text";
-
-
-const cardData = [
-  {
-    name: 'Wade Warren',
-    id: '5412',
-    role: 'Teacher',
-    img: '/images/userr.png',
-    frontCard: '/images/card.png',
-    backCard: '/images/card.png',
-  },
-  {
-    name: 'Wade Warren',
-    id: '5412',
-    role: 'Teacher',
-    img: '/images/userr.png',
-    frontCard: '/images/card.png',
-    backCard: '/images/card.png',
-  },
-  {
-    name: 'Olivia Wilson',
-    id: '123456',
-    role: 'Student',
-    img: '/images/userr.png',
-    frontCard: '/images/card.png',
-    backCard: '/images/card.png',
-  },
-];
+import CardFrontComponent from "@/components/CardFrontComponent";
+import CardBackComponent from "@/components/CardBackComponent";
+import Container from "@/components/Container";
+import { useGetIdCardsQuery } from "@/features/Document-Management/otherOfficialDocumentsApi";
 
 const Card = () => {
   const breadcrumbs = [
@@ -63,51 +39,10 @@ const Card = () => {
       href: "/document-management/other",
     },
   ];
-  const booleanValue = useSelector((state: RootState) => state.boolean.value);
 
-  const [selectAll, setSelectAll] = useState(false);
+  const [selectedRole, setSelectedRole] = useState("TEACHER");
 
-  const handleSelectAll = () => {
-    setSelectAll(!selectAll);
-    const checkboxes = document.querySelectorAll<HTMLInputElement>(
-      'input[type="checkbox"]:not(#checkbox-all-search)',
-    );
-    checkboxes.forEach(checkbox => {
-      checkbox.checked = !selectAll;
-    });
-  };
-
-  useEffect(() => {
-    const handleOtherCheckboxes = () => {
-      const allCheckboxes = document.querySelectorAll<HTMLInputElement>(
-        'input[type="checkbox"]:not(#checkbox-all-search)',
-      );
-      const allChecked = Array.from(allCheckboxes).every(
-        checkbox => checkbox.checked,
-      );
-      const selectAllCheckbox = document.getElementById(
-        "checkbox-all-search",
-      ) as HTMLInputElement | null;
-      if (selectAllCheckbox) {
-        selectAllCheckbox.checked = allChecked;
-        setSelectAll(allChecked);
-      }
-    };
-
-    const otherCheckboxes = document.querySelectorAll<HTMLInputElement>(
-      'input[type="checkbox"]:not(#checkbox-all-search)',
-    );
-    otherCheckboxes.forEach(checkbox => {
-      checkbox.addEventListener("change", handleOtherCheckboxes);
-    });
-
-    return () => {
-      otherCheckboxes.forEach(checkbox => {
-        checkbox.removeEventListener("change", handleOtherCheckboxes);
-      });
-    };
-  }, []);
-
+const { data: idCards, isLoading, isFetching, error } = useGetIdCardsQuery(selectedRole);
   const { language: currentLanguage, loading } = useSelector(
     (state: RootState) => state.language,
   );
@@ -122,17 +57,7 @@ const Card = () => {
   return (
     <>
       <BreadCrumbs breadcrumbs={breadcrumbs} />
-      <div
-        dir={currentLanguage === "ar" ? "rtl" : "ltr"}
-        className={`${currentLanguage === "ar"
-          ? booleanValue
-            ? "lg:mr-[100px]"
-            : "lg:mr-[270px]"
-          : booleanValue
-            ? "lg:ml-[100px]"
-            : "lg:ml-[270px]"
-          } relative mx-3 mt-10 h-screen bg-transparent sm:rounded-lg`}
-      >
+      <Container>
         <Text font={"bold"} size={"3xl"}>
           {currentLanguage === "ar"
             ? "وثائق رسمية أخرى"
@@ -226,51 +151,79 @@ const Card = () => {
               />
             </div>
           </div>
-        </div>
-        <div className="relative bg-bgPrimary shadow-md sm:rounded-lg p-6">
-          <div className="space-y-6">
-            {cardData.map((card, index) => (
-              <div
-                key={index}
-                className="flex flex-col md:flex-row mt-4 items-center justify-between md:items-start gap-6 pb-6"
-              >
-                {/* Profile */}
-                <div className="flex items-center mx-4 mt-14 gap-4 min-w-[200px] h-full">
-                  <img
-                    src={card.img}
-                    alt={card.name}
-                    className="rounded-full w-[50px] object-cover"
-                  />
-                  <div>
-                    <h3 className="text-lg font-semibold">{card.name}</h3>
-                    <p className="text-sm text-gray-600">ID: {card.id}</p>
-                    <p className="text-sm font-medium">{card.role}</p>
-                  </div>
-                </div>
-                <div className="flex justify-evenly items-center gap-4 w-full">
-
-                  {/* Card Image front */}
-                  <div className="flex-1 max-w-[350px]">
-                    <img
-                      src={card.frontCard}
-                      alt="Front of ID Card"
-                      className="rounded w-full shadow-md"
-                    />
-                  </div>
-                  {/* Card Image back */}
-                  <div className="flex-1 max-w-[350px]">
-                    <img
-                      src={card.backCard}
-                      alt="Back of ID Card"
-                      className="rounded w-full shadow-md"
-                    />
-                  </div>
-                </div>
-              </div>
-            ))}
+          <div className="flex items-center gap-4">
+            <label htmlFor="roleSelect" className="font-medium text-sm">
+              Filter by Role:
+            </label>
+            <select
+              id="roleSelect"
+              className="border border-gray-300 rounded-md px-3 py-1 text-sm"
+              value={selectedRole}
+              onChange={(e) => setSelectedRole(e.target.value)}
+            >
+              <option value="TEACHER">Teacher</option>
+              <option value="STUDENT">Student</option>
+            </select>
           </div>
         </div>
-      </div>
+        <div className="relative bg-bgPrimary w-full overflow-x-auto shadow-md sm:rounded-lg p-6">
+          {isFetching ? (
+            <div className="flex w-full items-center justify-center py-10">
+              <Spinner />
+            </div>
+          ) : (
+            <div className="space-y-6">
+              {idCards.map((card: any, index: any) => (
+                <div
+                  key={index}
+                  className="flex flex-col md:flex-row mt-4 items-center justify-between md:items-start gap-6 pb-6"
+                >
+                  {/* Profile */}
+                  <div className="flex items-center mx-4 mt-14 gap-4 w-[250px] h-full">
+                    <img
+                      src={
+                        card.hasPicture && card.picture
+                          ? card.picture
+                          : "/images/userr.png"
+                      }
+                      alt={card.name}
+                      className="rounded-full h-[50px] w-[50px] object-cover"
+                    />
+                    <div>
+                      <h3 className="text-lg font-semibold">{card.name}</h3>
+                      <p className="text-sm text-gray-600">ID: {card.id}</p>
+                      <p className="text-sm font-medium">{card.role}</p>
+                    </div>
+                  </div>
+                  <div className="flex flex-col md:flex-row justify-center md:justify-around items-center gap-4 w-full">
+                    {/* Card Image back */}
+
+                    <div className="w-full mx-4 max-w-[400px] aspect-[7/4]">
+                      <CardBackComponent />
+                    </div>
+                    <div className="w-full  mx-4 max-w-[400px] aspect-[7/4]">
+                      <CardFrontComponent
+                        name={card.name}
+                        studentId={card.id.toString()}
+                        gradeYear={card.academicYear || "N/A"}
+                        issueDate={card.birthDate || "N/A"}
+                        imageSrc={
+                          card.hasPicture && card.picture
+                            ? card.picture
+                            : "/images/userr.png"
+                        }
+                        role={card.role}
+                      />
+                    </div>
+
+
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      </Container>
     </>
   );
 };

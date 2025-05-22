@@ -82,7 +82,6 @@ const NavBar = () => {
   }, []);
 
   useEffect(() => {
-    if (userData) console.log("Response Data:", userData);
     if (userError) {
       router.replace("/login");
       Cookie.remove("token");

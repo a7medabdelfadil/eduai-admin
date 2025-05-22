@@ -19,7 +19,7 @@ const Container = ({ children }: { children: ReactNode }) => {
             : booleanValue
               ? "lg:ml-[110px] mr-[15px]"
               : "lg:ml-[270px] mr-[15px]"
-        } grid py-4 `}
+        } grid p-4 `}
       >
         {children}
       </div>

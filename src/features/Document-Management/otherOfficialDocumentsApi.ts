@@ -25,20 +25,12 @@ export const otherOfficialDocumentsApi = createApi({
     },
   }),
   endpoints: builder => ({
-    getAllIdCards: builder.query({
-      query: () => "/api/v1/shared/user/id-cards",
-      transformResponse: (response: any) => {
-        return {
-          idCards: response.data.content,
-          pagination: {
-            totalElements: response.data.totalElementsCount,
-            totalPages: response.data.totalPagesCount,
-            currentPage: response.data.pageNumber,
-            pageSize: response.data.pageSize,
-          },
-        };
-      },
+    getIdCards: builder.query({
+      query: (role: string) => `/api/v1/shared/user/id-cards?role=${role}`,
+      transformResponse: (response: any) => response.data.content,
     }),
+
+
     getStudentsWithMedicalStatus: builder.query({
       query: () => "/api/v1/student/medical-record/students-with-status",
       transformResponse: (response: any) => response.data.content,
@@ -137,7 +129,7 @@ export const otherOfficialDocumentsApi = createApi({
 });
 
 export const {
-  useGetAllIdCardsQuery,
+  useGetIdCardsQuery,
   useGetStudentsWithMedicalStatusQuery,
   useCreateMedicalRecordMutation,
   useGetFolderContentsQuery,
