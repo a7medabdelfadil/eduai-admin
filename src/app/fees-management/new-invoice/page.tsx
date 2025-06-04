@@ -106,7 +106,7 @@ const NewInvoice = () => {
     try {
       await createInvoice({ formData: data, isForStudent }).unwrap();
       toast.success("Invoice created successfully");
-      router.back("/fees-management");
+      router.push("/fees-management");
     } catch (err: any) {
       toast.error(err?.data?.message || "Failed to create invoice");
     }
