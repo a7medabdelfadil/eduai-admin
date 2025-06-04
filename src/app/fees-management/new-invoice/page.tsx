@@ -15,6 +15,7 @@ import { useSelector } from "react-redux";
 import { useGetAllStudentsQuery } from "@/features/User-Management/studentApi";
 import { useGetAllTeachersQuery } from "@/features/User-Management/teacherApi";
 import { useRouter } from "next/navigation";
+import Container from "@/components/Container";
 
 // Define a Zod schema that matches your API's expected data structure
 const invoiceSchema = z.object({
@@ -127,17 +128,7 @@ const NewInvoice = () => {
   return (
     <>
       <BreadCrumbs breadcrumbs={breadcrumbs} />
-      <div
-        dir={currentLanguage === "ar" ? "rtl" : "ltr"}
-        className={`${currentLanguage === "ar"
-          ? booleanValue
-            ? "lg:mr-[100px]"
-            : "lg:mr-[270px]"
-          : booleanValue
-            ? "lg:ml-[100px]"
-            : "lg:ml-[270px]"
-          } mx-3 mt-[40px] grid items-center justify-center`}
-      >
+      <Container>
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="grid items-center justify-center gap-5 rounded-xl bg-bgPrimary p-10 sm:w-[500px] md:w-[600px] lg:w-[750px] xl:w-[1000px]">
             <div className="flex items-center justify-start gap-2">
@@ -367,7 +358,7 @@ const NewInvoice = () => {
             </div>
           </div>
         </form>
-      </div>
+      </Container>
     </>
   );
 };
