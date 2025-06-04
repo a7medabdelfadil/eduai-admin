@@ -53,7 +53,7 @@ const AddSemester = () => {
       router.push("/organization-setting/semester");
     } catch (err) {
       toast.error(
-        err.data?.message
+        (err as { data?: { message?: string } })?.data?.message || "An error occurred"
       );
     }
   };

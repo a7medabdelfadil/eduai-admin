@@ -95,6 +95,7 @@ const Bank = () => {
   };
   type Bank = Record<string, any>;
   const { data, error, isLoading, refetch } = useGetAllBankAcountsQuery(null);
+  console.log("🚀 ~ Bank ~ data:", data)
   const [deleteBankAcount] = useDeleteBankAcountsMutation();
   const handleDelete = async (id: string) => {
     try {
@@ -380,7 +381,7 @@ const Bank = () => {
                               : "Nom de la Banque"}
                         </h1>
                         <p className="ml-3 font-semibold">
-                          {bank.bankShortName}
+                          {bank.bankName}
                         </p>
                       </div>
                       <div>
