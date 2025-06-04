@@ -14,16 +14,16 @@ spec:
     spec:
       containers:
       - name: admin
-        image: expotechx/admin:1b409
+        image: expotechx/admin:67492
         ports:
         - containerPort: 3000
-        resources:
-          limits:
-            memory: "512Mi"
-            cpu: "500m"
-          requests:
-            memory: "256Mi"
-            cpu: "250m"
+        # resources:
+        #   limits:
+        #     memory: "512Mi"
+        #     cpu: "500m"
+        #   requests:
+        #     memory: "256Mi"
+        #     cpu: "250m"
 
         # Uncomment and configure environment variables if needed
         # env:

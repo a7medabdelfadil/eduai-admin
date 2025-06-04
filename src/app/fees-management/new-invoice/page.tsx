@@ -12,6 +12,9 @@ import {
 import BreadCrumbs from "@/components/BreadCrumbs";
 import { RootState } from "@/GlobalRedux/store";
 import { useSelector } from "react-redux";
+import { useGetAllStudentsQuery } from "@/features/User-Management/studentApi";
+import { useGetAllTeachersQuery } from "@/features/User-Management/teacherApi";
+import { useRouter } from "next/navigation";
 
 // Define a Zod schema that matches your API's expected data structure
 const invoiceSchema = z.object({
@@ -30,6 +33,7 @@ const invoiceSchema = z.object({
 });
 
 const NewInvoice = () => {
+  const router = useRouter();
   const breadcrumbs = [
     {
       nameEn: "Administration",
@@ -60,6 +64,21 @@ const NewInvoice = () => {
 
   const booleanValue = useSelector((state: RootState) => state.boolean.value);
 
+  const { data: studentsData, isLoading: isStudentsLoading } =
+    useGetAllStudentsQuery({
+      archived: "false",
+      page: 0,
+      size: 1000000,
+      graduated: "false",
+    });
+
+  const { data: teachersData, isLoading: isTeacher } = useGetAllTeachersQuery({
+    archived: "false",
+    page: 0,
+    size: 1000000,
+  });
+
+
   const {
     register,
     handleSubmit,
@@ -79,8 +98,6 @@ const NewInvoice = () => {
     },
   });
 
-
-
   const [createInvoice, { isLoading }] = useCreateInvoicesMutation();
   const { data: items, isLoading: isItemsLoading } =
     useGetAllInvoicesItemsQuery(null);
@@ -89,6 +106,7 @@ const NewInvoice = () => {
     try {
       await createInvoice({ formData: data, isForStudent }).unwrap();
       toast.success("Invoice created successfully");
+      router.back("/fees-management");
     } catch (err: any) {
       toast.error(err?.data?.message || "Failed to create invoice");
     }
@@ -177,29 +195,66 @@ const NewInvoice = () => {
                   </span>
                 )}
               </label>
+              {/* Item Type Field */}
+              <label htmlFor="userType" className="grid text-[18px] font-semibold">
+                {currentLanguage === "en"
+                  ? "User Type"
+                  : currentLanguage === "ar"
+                    ? "نوع المستخدم"
+                    : "Type d'utilisateur"}
+                <select
+                  id="userType"
+                  value={isForStudent}
+                  onChange={(e) => setIsForStudent(Number(e.target.value) as 1 | 0)}
+                  className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                >
+                  <option value={1}>
+                    {currentLanguage === "en"
+                      ? "Student"
+                      : currentLanguage === "ar"
+                        ? "طالب"
+                        : "Étudiant"}
+                  </option>
+                  <option value={0}>
+                    {currentLanguage === "en"
+                      ? "Teacher"
+                      : currentLanguage === "ar"
+                        ? "مدرس"
+                        : "Enseignant"}
+                  </option>
+                </select>
+              </label>
 
               {/* Billed To ID Field */}
-              <label
-                htmlFor="billedToId"
-                className="grid text-[18px] font-semibold"
-              >
+              <label htmlFor="billedToId" className="grid text-[18px] font-semibold">
                 {currentLanguage === "en"
-                  ? "Billed To ID"
+                  ? "Billed To"
                   : currentLanguage === "ar"
-                    ? "رقم الفاتورة إلى"
-                    : "ID facturé à"}
-                <input
+                    ? "موجه إلى"
+                    : "Facturé à"}
+                <select
                   id="billedToId"
                   {...register("billedToId", { valueAsNumber: true })}
-                  type="number"
                   className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
-                />
+                >
+                  <option value="">
+                    {currentLanguage === "en"
+                      ? "Select Person"
+                      : currentLanguage === "ar"
+                        ? "اختر الشخص"
+                        : "Sélectionner une personne"}
+                  </option>
+                  {(isForStudent ? studentsData : teachersData)?.data?.content?.map((person: any) => (
+                    <option key={person.id} value={person.id}>
+                      {person.name}
+                    </option>
+                  ))}
+                </select>
                 {errors.billedToId && (
-                  <span className="text-error">
-                    {errors.billedToId.message}
-                  </span>
+                  <span className="text-error">{errors.billedToId.message}</span>
                 )}
               </label>
+
 
               {/* Item Rate Field */}
               <label htmlFor="rate" className="grid text-[18px] font-semibold">
@@ -241,35 +296,8 @@ const NewInvoice = () => {
                 )}
               </label>
 
-              {/* Item Type Field */}
-              <label htmlFor="userType" className="grid text-[18px] font-semibold">
-                {currentLanguage === "en"
-                  ? "User Type"
-                  : currentLanguage === "ar"
-                    ? "نوع المستخدم"
-                    : "Type d'utilisateur"}
-                <select
-                  id="userType"
-                  value={isForStudent}
-                  onChange={(e) => setIsForStudent(Number(e.target.value) as 1 | 0)}
-                  className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
-                >
-                  <option value={1}>
-                    {currentLanguage === "en"
-                      ? "Student"
-                      : currentLanguage === "ar"
-                        ? "طالب"
-                        : "Étudiant"}
-                  </option>
-                  <option value={0}>
-                    {currentLanguage === "en"
-                      ? "Teacher"
-                      : currentLanguage === "ar"
-                        ? "مدرس"
-                        : "Enseignant"}
-                  </option>
-                </select>
-              </label>
+
+
               <label htmlFor="type" className="grid text-[18px] font-semibold">
                 {currentLanguage === "en"
                   ? "Item Type"

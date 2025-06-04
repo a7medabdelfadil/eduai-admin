@@ -1,0 +1,90 @@
+name: CI / CD for Admin App
+
+on:
+  push:
+    branches:
+      - main
+#   pull_request:
+#     branches:
+#       - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+     
+      - name: Cache Docker layers
+        uses: actions/cache@v3
+        with:
+          path: /tmp/.buildx-cache
+          key: ${{ runner.os }}-buildx-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-buildx-
+
+      - name: Extract Git commit hash
+        id: vars
+        run: echo "COMMIT_HASH=$(echo $GITHUB_SHA | cut -c1-5)" >> $GITHUB_ENV
+
+      - name: Build Docker image
+        run: |
+          docker build -t expotechx/admin:${{ env.COMMIT_HASH }} .
+
+      - name: Push to Docker Hub
+        env:
+          DOCKER_HUB_USERNAME: ${{ secrets.DOCKER_HUB_USERNAME }}
+          DOCKER_HUB_PASSWORD: ${{ secrets.DOCKER_HUB_PASSWORD }}
+        run: |
+          echo $DOCKER_HUB_PASSWORD | docker login -u $DOCKER_HUB_USERNAME --password-stdin
+          docker push expotechx/admin:${{ env.COMMIT_HASH }}
+      - name: Update Kubernetes deployment with new image tag
+        run: |
+          sed -i "s|image: expotechx/admin:.*|image: expotechx/admin:${{ env.COMMIT_HASH }}|" k8s/admin-app.yaml
+          
+
+      - name: Configure Git Credentials
+        run: |
+          git config --global user.name "${{ github.actor }}"
+          git config --global user.email "${{ github.actor }}@users.noreply.github.com"
+          
+
+      - name: Pull Latest Changes to Avoid Conflicts
+        run: |
+          git pull origin main --rebase || echo "No new changes to pull"
+
+      - name: Commit and Push Changes
+        run: |
+          git add k8s/admin-app.yaml
+          git commit -m "Update deployment file with new image tag" || echo "No changes to commit"
+          git push https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/Exp0TECH365/EduAI-website-employee-V1.git HEAD:main
+
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+          ref: main # Ensure the correct branch is checked out
+          fetch-depth: 0 # Fetch the full history to ensure all changes are pulled
+
+    - name: Configure Kubernetes
+      env:
+        KUBECONFIG_FILE: ${{ secrets.KUBECONFIG }}
+      run: |
+        mkdir -p ~/.kube
+        echo "$KUBECONFIG_FILE" > ~/.kube/config
+        chmod 600 ~/.kube/config
+
+    - name: Verify Kubernetes Connection
+      run: |
+        kubectl config view
+        kubectl -n admin apply -f k8s/admin-app.yaml
+        kubectl -n admin get pods
