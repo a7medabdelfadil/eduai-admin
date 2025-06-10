@@ -15,6 +15,7 @@ import BreadCrumbs from "@/components/BreadCrumbs";
 import SearchableSelect from "@/components/select";
 import PhoneNumberInput from "@/components/PhoneNumberInput";
 import { useRouter } from "next/navigation";
+import Container from "@/components/Container";
 
 const AddNewParent = () => {
   const [backendError, setBackendError] = useState<string | null>(null);
@@ -126,20 +127,21 @@ const AddNewParent = () => {
     <>
       <BreadCrumbs breadcrumbs={breadcrumbs} />
 
-      <div
-        dir={currentLanguage === "ar" ? "rtl" : "ltr"}
-        className={`${
-          currentLanguage === "ar"
-            ? booleanValue
-              ? "lg:mr-[100px]"
-              : "lg:mr-[270px]"
-            : booleanValue
-              ? "lg:ml-[100px]"
-              : "lg:ml-[270px]"
-        } mx-[5px] grid items-center justify-center`}
-      >
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <div className="my-10 grid items-center justify-center gap-5 rounded-xl bg-bgPrimary p-10 sm:w-[500px] md:w-[600px] lg:w-[750px] xl:w-[1000px]">
+      <Container>
+          <div className="mb-8 -mt-2 -ml-1 flex items-center justify-between">
+          <h1 className="text-2xl font-semibold">
+            {currentLanguage === "en"
+              ? "Add New Parent"
+              : currentLanguage === "ar"
+                ? "إضافة أب جديد"
+                : currentLanguage === "fr"
+                  ? "Ajouter un nouvel parent"
+                  : "Add New Parent"}{" "}
+            {/* default */}
+          </h1>
+        </div>
+        <form className="flex justify-center items-center w-full h-full" onSubmit={handleSubmit(onSubmit)}>
+          <div className="rounded-xl bg-bgPrimary p-10 w-[90] md:w-[80%]">
             {backendError && (
               <div className="text-center text-error">{backendError}</div>
             )}
@@ -175,7 +177,7 @@ const AddNewParent = () => {
                       : "Parent Information"}
               </h1>
             </div>
-            <div className="grid grid-cols-2 gap-4 max-[1278px]:grid-cols-1">
+            <div className="p-6 grid grid-cols-2 gap-4 max-[1278px]:grid-cols-1">
               {/* Input fields for parent information */}
               <label
                 htmlFor="username"
@@ -191,7 +193,7 @@ const AddNewParent = () => {
                 <input
                   id="username"
                   type="text"
-                  className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                   {...register("username", { required: true })}
                 />
                 {errors.username && (
@@ -217,7 +219,7 @@ const AddNewParent = () => {
                 <input
                   id="email"
                   type="email"
-                  className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                   {...register("email", { required: true })}
                 />
                 {errors.email && (
@@ -246,7 +248,7 @@ const AddNewParent = () => {
                 <input
                   id="password"
                   type="password"
-                  className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                   {...register("password", {
                     required: {
                       value: true,
@@ -289,7 +291,7 @@ const AddNewParent = () => {
                 <input
                   id="nid"
                   type="number"
-                  className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                   {...register("nid", { required: true })}
                 />
                 {errors.nid && (
@@ -317,7 +319,7 @@ const AddNewParent = () => {
                       : "Gender"}
                 <select
                   id="gender"
-                  className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                   {...register("gender", { required: true })}
                 >
                   <option value="">
@@ -374,7 +376,7 @@ const AddNewParent = () => {
                       : "Your Nationality"}
                 <select
                   id="nationality"
-                  className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                   {...register("nationality", { required: true })}
                 >
                   <option value="">
@@ -439,7 +441,7 @@ const AddNewParent = () => {
                 <input
                   id="name_en"
                   type="text"
-                  className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                   {...register("name_en", { required: true })}
                 />
                 {errors.name_en && (
@@ -468,7 +470,7 @@ const AddNewParent = () => {
                 <input
                   id="name_ar"
                   type="text"
-                  className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                   {...register("name_ar", { required: true })}
                 />
                 {errors.name_ar && (
@@ -497,7 +499,7 @@ const AddNewParent = () => {
                 <input
                   id="name_fr"
                   type="text"
-                  className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                   {...register("name_fr", { required: true })}
                 />
                 {errors.name_ar && (
@@ -526,7 +528,7 @@ const AddNewParent = () => {
                 <input
                   id="birthDate"
                   type="date"
-                  className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                   {...register("birthDate", {
                     required: true,
                     validate: value => {
@@ -578,7 +580,7 @@ const AddNewParent = () => {
                 <input
                   id="about"
                   type="text"
-                  className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                   {...register("about", { required: true })}
                 />
                 {errors.about && (
@@ -607,7 +609,7 @@ const AddNewParent = () => {
                 <input
                   id="occupation_en"
                   type="text"
-                  className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                   {...register("occupation_en", { required: true })}
                 />
                 {errors.occupation_en && (
@@ -637,7 +639,7 @@ const AddNewParent = () => {
                 <input
                   id="occupation_ar"
                   type="text"
-                  className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                   {...register("occupation_ar", { required: true })}
                 />
                 {errors.occupation_ar && (
@@ -666,7 +668,7 @@ const AddNewParent = () => {
                 <input
                   id="occupation_fr"
                   type="text"
-                  className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                   {...register("occupation_fr", { required: true })}
                 />
                 {errors.occupation_fr && (
@@ -715,7 +717,7 @@ const AddNewParent = () => {
             </div>
           </div>
         </form>
-      </div>
+      </Container>
     </>
   );
 };

@@ -7,6 +7,7 @@ import { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "@/GlobalRedux/store";
 import BreadCrumbs from "@/components/BreadCrumbs";
+import Container from "@/components/Container";
 
 const EmployeePermission = () => {
   const breadcrumbs = [
@@ -92,18 +93,7 @@ const EmployeePermission = () => {
   return (
     <>
       <BreadCrumbs breadcrumbs={breadcrumbs} />
-      <div
-        dir={currentLanguage === "ar" ? "rtl" : "ltr"}
-        className={`${
-          currentLanguage === "ar"
-            ? booleanValue
-              ? "lg:mr-[100px]"
-              : "lg:mr-[270px]"
-            : booleanValue
-              ? "lg:ml-[100px]"
-              : "lg:ml-[270px]"
-        } relative mx-3 mt-10 h-screen overflow-x-auto bg-transparent sm:rounded-lg`}
-      >
+      <Container>
         <div className="flex justify-between text-center max-[502px]:grid max-[502px]:justify-center">
           <div className="mb-3">
             <label htmlFor="icon" className="sr-only">
@@ -156,8 +146,8 @@ const EmployeePermission = () => {
             </Link>
           </div>
         </div>
-        <div className="relative overflow-auto shadow-md sm:rounded-lg">
-          <table className="w-full overflow-x-auto text-left text-sm text-textSecondary rtl:text-right">
+        <div className="relative shadow-md sm:rounded-lg">
+          <table className="w-full text-left text-sm text-textSecondary rtl:text-right">
             <thead className="bg-thead text-xs uppercase text-textPrimary">
               <tr>
                 <th scope="col" className="p-4">
@@ -296,7 +286,7 @@ const EmployeePermission = () => {
             </tbody>
           </table>
         </div>
-      </div>
+      </Container>
     </>
   );
 };

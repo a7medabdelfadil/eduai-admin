@@ -1,5 +1,6 @@
 "use client";
 import BreadCrumbs from "@/components/BreadCrumbs";
+import Container from "@/components/Container";
 import Spinner from "@/components/spinner";
 import { RootState } from "@/GlobalRedux/store";
 import { useSelector } from "react-redux";
@@ -19,10 +20,10 @@ const AddNewRoom = () => {
       href: "/infrastructure",
     },
     {
-      nameEn: "room",
-      nameAr: "الغرفة",
-      nameFr: "Chambre",
-      href: "/room",
+      nameEn: "Add New Room",
+      nameAr: "إضافة غرفة جديدة",
+      nameFr: "Ajouter une nouvelle salle",
+      href: "/add-new-room",
     },
   ];
 
@@ -42,20 +43,21 @@ const AddNewRoom = () => {
   return (
     <>
       <BreadCrumbs breadcrumbs={breadcrumbs} />
-      <div
-        dir={currentLanguage === "ar" ? "rtl" : "ltr"}
-        className={`${
-          currentLanguage === "ar"
-            ? booleanValue
-              ? "lg:mr-[100px]"
-              : "lg:mr-[270px]"
-            : booleanValue
-              ? "lg:ml-[100px]"
-              : "lg:ml-[270px]"
-        } mx-[10px] grid h-[850px] items-center justify-center`}
-      >
-        <form>
-          <div className="grid h-[900px] items-center justify-center gap-5 rounded-xl bg-bgPrimary p-10 sm:w-[500px] md:w-[600px] lg:w-[750px] xl:h-[800px] xl:w-[1000px]">
+      <Container>
+         <div className="mb-8 -mt-2 -ml-1 flex items-center justify-between">
+          <h1 className="text-2xl font-semibold">
+            {currentLanguage === "en"
+              ? "Add New Room"
+              : currentLanguage === "ar"
+                ? "إضافة غرفة جديدة"
+                : currentLanguage === "fr"
+                  ? "Ajouter une nouvelle salle"
+                  : "Add New Room"}{" "}
+            {/* default */}
+          </h1>
+        </div>
+        <form className="flex justify-center items-center w-full h-full" >
+          <div className="rounded-xl bg-bgPrimary p-10 w-[90] md:w-[80%]">
             <div className="flex items-center justify-start gap-2">
               <svg
                 className="h-6 w-6 font-bold text-secondary group-hover:text-hover"
@@ -89,7 +91,7 @@ const AddNewRoom = () => {
                       : "Room Information"}
               </h1>
             </div>
-            <div className="grid grid-cols-2 gap-4 max-[1278px]:grid-cols-1">
+            <div className="p-6 grid grid-cols-2 gap-4 max-[1278px]:grid-cols-1">
               <label htmlFor="name" className="grid text-[18px] font-semibold">
                 {currentLanguage === "en"
                   ? "Room Number"
@@ -101,7 +103,7 @@ const AddNewRoom = () => {
                 <input
                   id="name"
                   type="number"
-                  className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                 />
               </label>
 
@@ -116,7 +118,7 @@ const AddNewRoom = () => {
                 <input
                   id="code"
                   type="text"
-                  className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                 />
               </label>
 
@@ -131,7 +133,7 @@ const AddNewRoom = () => {
                 <input
                   id="about"
                   type="text"
-                  className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                 />
               </label>
 
@@ -149,7 +151,7 @@ const AddNewRoom = () => {
                 <input
                   id="Version"
                   type="text"
-                  className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                 />
               </label>
 
@@ -167,7 +169,7 @@ const AddNewRoom = () => {
                 <input
                   id="Version"
                   type="text"
-                  className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                 />
               </label>
 
@@ -185,7 +187,7 @@ const AddNewRoom = () => {
                 <input
                   id="Initial"
                   type="text"
-                  className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                 />
               </label>
             </div>
@@ -206,7 +208,7 @@ const AddNewRoom = () => {
             </div>
           </div>
         </form>
-      </div>
+      </Container>
     </>
   );
 };

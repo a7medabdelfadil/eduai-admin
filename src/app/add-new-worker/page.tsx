@@ -16,6 +16,7 @@ import { useGetAllPositionsQuery } from "@/features/User-Management/driverApi";
 import SearchableSelect from "@/components/select";
 import PhoneNumberInput from "@/components/PhoneNumberInput";
 import { useRouter } from "next/navigation";
+import Container from "@/components/Container";
 
 const AddNewWorker = () => {
   const [backendError, setBackendError] = useState<string | null>(null);
@@ -92,7 +93,6 @@ const AddNewWorker = () => {
     }
   };
 
-  const booleanValue = useSelector((state: RootState) => state.boolean.value);
 
   const { language: currentLanguage, loading } = useSelector(
     (state: RootState) => state.language,
@@ -115,20 +115,21 @@ const AddNewWorker = () => {
   return (
     <>
       <BreadCrumbs breadcrumbs={breadcrumbs} />
-      <div
-        dir={currentLanguage === "ar" ? "rtl" : "ltr"}
-        className={`${
-          currentLanguage === "ar"
-            ? booleanValue
-              ? "lg:mr-[100px]"
-              : "lg:mr-[270px]"
-            : booleanValue
-              ? "lg:ml-[100px]"
-              : "lg:ml-[270px]"
-        } mx-[10px] grid h-[850px] items-center justify-center`}
-      >
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <div className="my-10 grid items-center justify-center gap-5 rounded-xl bg-bgPrimary p-10 sm:w-[500px] md:w-[600px] lg:w-[750px] xl:w-[1000px]">
+      <Container>
+        <div className="mb-8 -mt-2 -ml-1 flex items-center justify-between">
+          <h1 className="text-2xl font-semibold">
+            {currentLanguage === "en"
+              ? "Add New Worker"
+              : currentLanguage === "ar"
+                ? "إضافة عامل جديد"
+                : currentLanguage === "fr"
+                  ? "Ajouter un nouvel Worker"
+                  : "Add New Worker"}{" "}
+            {/* default */}
+          </h1>
+        </div>
+        <form className="flex justify-center items-center w-full h-full" onSubmit={handleSubmit(onSubmit)}>
+          <div className="rounded-xl bg-bgPrimary p-10 w-[90] md:w-[80%]">
             {backendError && (
               <div className="text-center text-error">{backendError}</div>
             )}
@@ -162,7 +163,7 @@ const AddNewWorker = () => {
                     : "Informations sur le travailleur"}
               </h1>
             </div>
-            <div className="grid grid-cols-2 gap-4 max-[1278px]:grid-cols-1">
+            <div className="px-6 pt-6 grid grid-cols-2 gap-4 max-[1278px]:grid-cols-1">
               <label
                 htmlFor="username"
                 className="grid text-[18px] font-semibold"
@@ -178,7 +179,7 @@ const AddNewWorker = () => {
                 <input
                   id="username"
                   type="text"
-                  className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                   {...register("username", { required: true })}
                 />
                 {errors.username && (
@@ -206,7 +207,7 @@ const AddNewWorker = () => {
                 <input
                   id="email"
                   type="email"
-                  className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                   {...register("email", { required: true })}
                 />
                 {errors.email && (
@@ -237,7 +238,7 @@ const AddNewWorker = () => {
                 <input
                   id="password"
                   type="password"
-                  className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                   {...register("password", { required: true })}
                 />
                 {errors.password && (
@@ -265,7 +266,7 @@ const AddNewWorker = () => {
                 <input
                   id="nid"
                   type="number"
-                  className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                   {...register("nid", { required: true })}
                 />
                 {errors.nid && (
@@ -295,7 +296,7 @@ const AddNewWorker = () => {
                 {/* default */}
                 <select
                   id="gender"
-                  className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                   {...register("gender", { required: true })}
                 >
                   <option selected value="">
@@ -356,7 +357,7 @@ const AddNewWorker = () => {
                 {/* default */}
                 <select
                   id="nationality"
-                  className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                   {...register("nationality", { required: true })}
                 >
                   <option value="">
@@ -397,7 +398,7 @@ const AddNewWorker = () => {
                 )}
               </label>
             </div>
-            <div className="grid grid-cols-2 gap-4 max-[1278px]:grid-cols-1">
+            <div className="px-6 pt-6 grid grid-cols-2 gap-4 max-[1278px]:grid-cols-1">
               <label
                 htmlFor="regionId"
                 className="grid text-[18px] font-semibold"
@@ -435,7 +436,7 @@ const AddNewWorker = () => {
                 <input
                   id="name_en"
                   type="text"
-                  className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                   {...register("name_en", { required: true })}
                 />
                 {errors.name_en && (
@@ -466,7 +467,7 @@ const AddNewWorker = () => {
                 <input
                   id="name_ar"
                   type="text"
-                  className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                   {...register("name_ar", { required: true })}
                 />
                 {errors.name_ar && (
@@ -497,7 +498,7 @@ const AddNewWorker = () => {
                 <input
                   id="name_fr"
                   type="text"
-                  className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                   {...register("name_fr", { required: true })}
                 />
                 {errors.name_fr && (
@@ -526,7 +527,7 @@ const AddNewWorker = () => {
                 <input
                   id="about"
                   type="text"
-                  className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                   {...register("about", { required: true })}
                 />
                 {errors.about && (
@@ -556,7 +557,7 @@ const AddNewWorker = () => {
                 <input
                   id="birthDate"
                   type="date"
-                  className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                   {...register("birthDate", {
                     required: true,
                     validate: value => {
@@ -612,7 +613,7 @@ const AddNewWorker = () => {
                   defaultValue=""
                   id="qualification"
                   {...register("qualification", { required: true })}
-                  className="h-[55px] w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="h-[55px] w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                 >
                   <option value="">
                     {currentLanguage === "en"
@@ -693,7 +694,7 @@ const AddNewWorker = () => {
                 <input
                   id="hireDate"
                   type="date"
-                  className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                   {...register("hireDate", { required: true })}
                 />
                 {errors.hireDate && (
@@ -710,7 +711,7 @@ const AddNewWorker = () => {
                 )}
               </label>
             </div>
-            <div className="grid grid-cols-2 gap-4 max-[1278px]:grid-cols-1">
+            <div className="px-6 pt-6 grid grid-cols-2 gap-4 max-[1278px]:grid-cols-1">
               <PhoneNumberInput
                 countryCodeData={countryCode.data}
                 currentLanguage="en"
@@ -734,14 +735,14 @@ const AddNewWorker = () => {
                 {/* <input
                   id="positionId"
                   type="number"
-                  className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                   {...register("positionId", { required: true })}
                 /> */}
                 <select
                   defaultValue=""
                   id="positionId"
                   {...register("positionId", { required: true })}
-                  className={`border ${errors.positionId ? "border-borderPrimary" : "border-borderPrimary"} h-full w-[400px] rounded-xl px-4 py-3 text-[18px] text-blackOrWhite outline-none max-[458px]:w-[350px]`}
+                  className={`border ${errors.positionId ? "border-borderPrimary" : "border-borderPrimary"} bg-bgPrimary h-full w-full rounded-xl px-4 py-3 text-[18px] text-blackOrWhite outline-none max-[458px]:w-[350px]`}
                 >
                   <option value="">
                     {currentLanguage === "en"
@@ -760,18 +761,18 @@ const AddNewWorker = () => {
                           title: string;
                           id: string | number | readonly string[] | undefined;
                           name:
-                            | string
-                            | number
-                            | bigint
-                            | boolean
-                            | React.ReactElement<
-                                any,
-                                string | React.JSXElementConstructor<any>
-                              >
-                            | Iterable<React.ReactNode>
-                            | React.ReactPortal
-                            | null
-                            | undefined;
+                          | string
+                          | number
+                          | bigint
+                          | boolean
+                          | React.ReactElement<
+                            any,
+                            string | React.JSXElementConstructor<any>
+                          >
+                          | Iterable<React.ReactNode>
+                          | React.ReactPortal
+                          | null
+                          | undefined;
                         },
                         index: React.Key | null | undefined,
                       ) => (
@@ -809,7 +810,7 @@ const AddNewWorker = () => {
                 <input
                   id="salary"
                   type="number"
-                  className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                   {...register("salary", { required: true })}
                 />
                 {errors.salary && (
@@ -826,7 +827,7 @@ const AddNewWorker = () => {
                 )}
               </label>
             </div>
-            <div className="flex justify-center text-center">
+            <div className="flex justify-center text-center mt-6">
               <button
                 disabled={isLoading}
                 type="submit"
@@ -847,7 +848,7 @@ const AddNewWorker = () => {
             </div>
           </div>
         </form>
-      </div>
+      </Container>
     </>
   );
 };

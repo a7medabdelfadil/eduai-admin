@@ -23,6 +23,7 @@ import { FaCloudUploadAlt } from "react-icons/fa";
 import { useState } from "react";
 import PhoneNumberInput from "@/components/PhoneNumberInput";
 import SearchableSelect from "@/components/select";
+import Container from "@/components/Container";
 
 const AddNewStudent = () => {
   const [backendError, setBackendError] = useState<string | null>(null);
@@ -193,23 +194,58 @@ const AddNewStudent = () => {
   return (
     <>
       <BreadCrumbs breadcrumbs={breadcrumbs} />
-      <div
-        className={` ${
-          currentLanguage === "ar"
-            ? booleanValue
-              ? "lg:mr-[100px]"
-              : "lg:mr-[270px]"
-            : booleanValue
-              ? "lg:ml-[100px]"
-              : "lg:ml-[270px]"
-        } mx-[10px] grid items-center justify-center`}
-      >
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <div className="my-10 grid items-center justify-center gap-5 rounded-xl bg-bgPrimary p-10 sm:w-[500px] md:w-[600px] lg:w-[750px] xl:w-[1000px]">
+      <Container>
+        <div className="mb-8 -mt-2 -ml-1 flex items-center justify-between">
+          <h1 className="text-2xl font-semibold">
+            {currentLanguage === "en"
+              ? "Add New Student"
+              : currentLanguage === "ar"
+                ? "إضافة طالب جديد"
+                : currentLanguage === "fr"
+                  ? "Ajouter un nouvel étudiant"
+                  : "Add New Student"}{" "}
+            {/* default */}
+          </h1>
+        </div>
+        <form className="flex justify-center items-center w-full h-full" onSubmit={handleSubmit(onSubmit)}>
+          <div className="rounded-xl bg-bgPrimary p-10 w-[90] md:w-[80%]">
+            <div className="flex items-center justify-start gap-2">
+              <svg
+                className="h-6 w-6 font-bold text-secondary group-hover:text-hover"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                strokeWidth="2"
+                stroke="currentColor"
+                fill="none"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <path stroke="none" d="M0 0h24v24H0z" />
+                <line x1="3" y1="21" x2="21" y2="21" />
+                <line x1="3" y1="10" x2="21" y2="10" />
+                <polyline points="5 6 12 3 19 6" />
+                <line x1="4" y1="10" x2="4" y2="21" />
+                <line x1="20" y1="10" x2="20" y2="21" />
+                <line x1="8" y1="14" x2="8" y2="17" />
+                <line x1="12" y1="14" x2="12" y2="17" />
+                <line x1="16" y1="14" x2="16" y2="17" />
+              </svg>
+              <h1 className="text-[22px] font-semibold">
+                {currentLanguage === "en"
+                  ? "Student Information"
+                  : currentLanguage === "ar"
+                    ? "معلومات الطالب"
+                    : currentLanguage === "fr"
+                      ? "Informations sur l'étudiant"
+                      : "Student Information"}{" "}
+                {/* default */}
+              </h1>
+            </div>
             {backendError && (
               <div className="text-center text-error">{backendError}</div>
             )}
-            <div className="grid grid-cols-2 gap-4 max-[1278px]:grid-cols-1">
+            <div className="p-6 grid grid-cols-2 gap-4 max-[1278px]:grid-cols-1">
               {/* Parent ID dropdown */}
               <label
                 htmlFor="parentId"
@@ -250,7 +286,7 @@ const AddNewStudent = () => {
                 <input
                   id="username"
                   type="text"
-                  className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                   {...register("username", { required: true })}
                 />
                 {errors.username && (
@@ -272,7 +308,7 @@ const AddNewStudent = () => {
                 <input
                   id="email"
                   type="email"
-                  className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                   {...register("email", { required: true })}
                 />
                 {errors.email && (
@@ -297,7 +333,7 @@ const AddNewStudent = () => {
                 <input
                   id="password"
                   type="password"
-                  className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                   {...register("password", { required: true })}
                 />
                 {errors.password && (
@@ -319,7 +355,7 @@ const AddNewStudent = () => {
                 <input
                   id="nid"
                   type="number"
-                  className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                   {...register("nid", { required: true })}
                 />
                 {errors.nid && (
@@ -343,7 +379,7 @@ const AddNewStudent = () => {
                     : "Gender"}
                 <select
                   id="gender"
-                  className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                   {...register("gender", { required: true })}
                 >
                   <option value="">
@@ -383,7 +419,7 @@ const AddNewStudent = () => {
                     : "Your Nationality"}
                 <select
                   id="nationality"
-                  className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                   {...register("nationality", { required: true })}
                 >
                   <option value="">
@@ -445,7 +481,7 @@ const AddNewStudent = () => {
                 <input
                   id="name_en"
                   type="text"
-                  className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                   {...register("name_en", { required: true })}
                 />
                 {errors.name_en && (
@@ -470,7 +506,7 @@ const AddNewStudent = () => {
                 <input
                   id="name_ar"
                   type="text"
-                  className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                   {...register("name_ar", { required: true })}
                 />
                 {errors.name_ar && (
@@ -495,7 +531,7 @@ const AddNewStudent = () => {
                 <input
                   id="name_fr"
                   type="text"
-                  className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                   {...register("name_fr", { required: true })}
                 />
                 {errors.name_fr && (
@@ -514,9 +550,9 @@ const AddNewStudent = () => {
                   : currentLanguage === "ar"
                     ? "نبذة"
                     : "À propos"}
-                <textarea
+                <input
                   id="about"
-                  className="h-[100px] w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                   {...register("about")}
                 />
                 {errors.about && (
@@ -543,7 +579,7 @@ const AddNewStudent = () => {
                 <input
                   id="birthDate"
                   type="date"
-                  className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                   {...register("birthDate", {
                     required: true,
                     validate: value => {
@@ -595,7 +631,7 @@ const AddNewStudent = () => {
                   defaultValue=""
                   id="studyLevel"
                   {...register("studyLevel", { required: true })}
-                  className={`border ${errors.studyLevel ? "border-warning" : "border-borderPrimary"} h-full w-[400px] rounded-xl px-4 py-3 text-sm text-blackOrWhite outline-none max-[458px]:w-[350px]`}
+                  className={`border ${errors.studyLevel ? "border-warning" : "border-borderPrimary"} bg-bgPrimary h-full w-full rounded-xl px-4 py-3 text-sm text-blackOrWhite outline-none max-[458px]:w-[350px]`}
                 >
                   <option selected value="">
                     {currentLanguage === "ar"
@@ -635,7 +671,7 @@ const AddNewStudent = () => {
                   defaultValue=""
                   id="language"
                   {...register("language", { required: true })}
-                  className={`border ${errors.language ? "border-warning" : "border-borderPrimary"} h-full w-[400px] rounded-xl px-4 py-3 text-sm text-blackOrWhite outline-none max-[458px]:w-[350px]`}
+                  className={`border ${errors.language ? "border-warning" : "border-borderPrimary"} bg-bgPrimary h-full w-full rounded-xl px-4 py-3 text-sm text-blackOrWhite outline-none max-[458px]:w-[350px]`}
                 >
                   <option selected value="">
                     {currentLanguage === "ar"
@@ -683,7 +719,7 @@ const AddNewStudent = () => {
                     : "Système éducatif"}
                 <select
                   id="eduSystemId"
-                  className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                   {...register("eduSystemId", { required: true })}
                 >
                   <option value="">
@@ -729,7 +765,7 @@ const AddNewStudent = () => {
                   onChange={e => handleFileChange(e, setStudentIdPhoto)}
                 />
                 <span
-                  className={`-mt-8 w-[400px] cursor-pointer overflow-hidden text-ellipsis whitespace-nowrap rounded-xl border ${errors.studentIdPhoto ? "border-warning" : "border-borderPrimary"} px-4 py-3 outline-none max-[471px]:w-[350px]`}
+                  className={`-mt-8 w-full cursor-pointer overflow-hidden text-ellipsis whitespace-nowrap rounded-xl border ${errors.studentIdPhoto ? "border-warning" : "border-borderPrimary"} px-4 py-3 outline-none max-[471px]:w-[350px]`}
                 >
                   <div className="flex">
                     <FaCloudUploadAlt className="mx-2 mt-1" />
@@ -777,7 +813,7 @@ const AddNewStudent = () => {
                   onChange={e => handleFileChange(e, setStudentProfilePhoto)}
                 />
                 <span
-                  className={`-mt-8 w-[400px] cursor-pointer overflow-hidden text-ellipsis whitespace-nowrap rounded-xl border ${errors.studentProfilePhoto ? "border-warning" : "border-borderPrimary"} px-4 py-3 outline-none max-[471px]:w-[350px]`}
+                  className={`-mt-8 w-full cursor-pointer overflow-hidden text-ellipsis whitespace-nowrap rounded-xl border ${errors.studentProfilePhoto ? "border-warning" : "border-borderPrimary"} px-4 py-3 outline-none max-[471px]:w-[350px]`}
                 >
                   <div className="flex">
                     <FaCloudUploadAlt className="mx-2 mt-1" />
@@ -827,7 +863,7 @@ const AddNewStudent = () => {
                   }
                 />
                 <span
-                  className={`-mt-8 w-[400px] cursor-pointer overflow-hidden text-ellipsis whitespace-nowrap rounded-xl border ${errors.studentCertificatesOfAchievement ? "border-warning" : "border-borderPrimary"} px-4 py-3 outline-none max-[471px]:w-[350px]`}
+                  className={`-mt-8 w-full cursor-pointer overflow-hidden text-ellipsis whitespace-nowrap rounded-xl border ${errors.studentCertificatesOfAchievement ? "border-warning" : "border-borderPrimary"} px-4 py-3 outline-none max-[471px]:w-[350px]`}
                 >
                   <div className="flex">
                     <FaCloudUploadAlt className="mx-2 mt-1" />
@@ -877,7 +913,7 @@ const AddNewStudent = () => {
             </div>
           </div>
         </form>
-      </div>
+      </Container>
     </>
   );
 };

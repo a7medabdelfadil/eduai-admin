@@ -96,12 +96,12 @@ const Points = () => {
       <div
         dir={currentLanguage === "ar" ? "rtl" : "ltr"}
         className={`${currentLanguage === "ar"
-            ? booleanValue
-              ? "lg:mr-[100px]"
-              : "lg:mr-[270px]"
-            : booleanValue
-              ? "lg:ml-[100px]"
-              : "lg:ml-[270px]"
+          ? booleanValue
+            ? "lg:mr-[100px]"
+            : "lg:mr-[270px]"
+          : booleanValue
+            ? "lg:ml-[100px]"
+            : "lg:ml-[270px]"
           } justify-left mb-4 ml-4 mt-5 flex gap-5 text-[20px] font-medium`}
       >
         <Link
@@ -125,12 +125,12 @@ const Points = () => {
       <div
         dir={currentLanguage === "ar" ? "rtl" : "ltr"}
         className={`${currentLanguage === "ar"
-            ? booleanValue
-              ? "lg:mr-[100px]"
-              : "lg:mr-[270px]"
-            : booleanValue
-              ? "lg:ml-[100px]"
-              : "lg:ml-[270px]"
+          ? booleanValue
+            ? "lg:mr-[100px]"
+            : "lg:mr-[270px]"
+          : booleanValue
+            ? "lg:ml-[100px]"
+            : "lg:ml-[270px]"
           } relative mx-3 mt-10 overflow-x-auto bg-transparent sm:rounded-lg`}
       >
         <div className="flex justify-between text-center max-[502px]:grid max-[502px]:justify-center">
@@ -232,11 +232,12 @@ const Points = () => {
               </th>
               <th scope="col" className="whitespace-nowrap px-6 py-3">
                 {currentLanguage === "ar"
-                  ? "تعديل"
+                  ? "عرض"
                   : currentLanguage === "fr"
-                    ? "Modifier"
-                    : "Edit"}
+                    ? "Voir"
+                    : "View"}
               </th>
+
             </tr>
           </thead>
           <tbody>

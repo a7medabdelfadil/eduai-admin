@@ -381,7 +381,7 @@ const Bank = () => {
                               : "Nom de la Banque"}
                         </h1>
                         <p className="ml-3 font-semibold">
-                          {bank.bankName}
+                          {bank.bankShortName}
                         </p>
                       </div>
                       <div>

@@ -212,7 +212,7 @@ const MultiSelectComponent = ({
             ? "المواد"
             : "Matières"}
       </label>
-      <div className="relative max-w-[400px]" ref={dropdownRef}>
+      <div className="relative w-full" ref={dropdownRef}>
         <div
           className="mt-2 flex cursor-pointer justify-between overflow-hidden text-clip rounded-xl border border-borderPrimary p-4"
           onClick={toggleDropdown}

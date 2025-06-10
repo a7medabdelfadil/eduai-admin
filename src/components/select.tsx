@@ -70,9 +70,9 @@ const SearchableSelect: React.FC<SearchableSelectProps> = ({
                 setIsOpen(true); // Open dropdown
               }}
               onFocus={() => setIsOpen(true)}
-              className={`w-full rounded-xl border p-2 transition-all duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-primary ${
+              className={`w-full rounded-xl p-2 transition-all duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-primary ${
                 errors[name] ? "border-red-500" : "border-gray-300"
-              } bg-white text-gray-700 shadow-sm dark:border-gray-600 dark:bg-bgSecondary dark:text-gray-300`}
+              } text-textPrimary shadow-sm border border-border bg-bgPrimary`}
             />
 
             {/* Dropdown List */}

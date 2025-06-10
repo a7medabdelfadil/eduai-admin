@@ -198,25 +198,6 @@ const Permissions: React.FC<employeeIdProps> = ({ params }) => {
                         </svg>
                       )}
                     </button>
-                    <input
-                      id={`checkbox-all-${index}`}
-                      type="checkbox"
-                      disabled={!watch("selectedEmployeeId")}
-                      className="-gray-800 h-5 w-5 rounded border-borderPrimary bg-bgPrimary text-primary focus:ring-2 focus:ring-hover"
-                      {...register(`permissions.${categoryData.category}`, {
-                        onChange: e => {
-                          const isChecked = e.target.checked;
-                          categoryData.Permissions.forEach(
-                            (permission: string) => {
-                              setValue(`permissions.${permission}`, isChecked);
-                            },
-                          );
-                          setTimeout(() => {
-                            onSubmit();
-                          }, 0);
-                        },
-                      })}
-                    />
                     <label
                       htmlFor={`checkbox-all-${index}`}
                       className="cursor-pointer"

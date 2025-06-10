@@ -18,6 +18,7 @@ import BreadCrumbs from "@/components/BreadCrumbs";
 import SearchableSelect from "@/components/select";
 import PhoneNumberInput from "@/components/PhoneNumberInput";
 import { useRouter } from "next/navigation";
+import Container from "@/components/Container";
 
 const AddNewDriver = () => {
   const booleanValue = useSelector((state: RootState) => state.boolean.value);
@@ -88,8 +89,8 @@ const AddNewDriver = () => {
     },
     {
       nameEn: "New Driver",
-      nameAr: "سائق جديد",
-      nameFr: "Nouveau Chauffeur",
+      nameAr: "إضافة سائق جديد",
+      nameFr: "Ajouter un nouveau chauffeur",
       href: "/add-new-driver",
     },
   ];
@@ -108,20 +109,21 @@ const AddNewDriver = () => {
   return (
     <>
       <BreadCrumbs breadcrumbs={breadcrumbs} />
-      <div
-        dir={currentLanguage === "ar" ? "rtl" : "ltr"}
-        className={`${
-          currentLanguage === "ar"
-            ? booleanValue
-              ? "lg:mr-[100px]"
-              : "lg:mr-[270px]"
-            : booleanValue
-              ? "lg:ml-[100px]"
-              : "lg:ml-[270px]"
-        } mx-[5px] grid h-[850px] items-center justify-center`}
-      >
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <div className="my-10 grid items-center justify-center gap-5 rounded-xl bg-bgPrimary p-10 sm:w-[500px] md:w-[600px] lg:w-[750px] xl:w-[1000px]">
+      <Container>
+       <div className="mb-8 -mt-2 -ml-1 flex items-center justify-between">
+          <h1 className="text-2xl font-semibold">
+            {currentLanguage === "en"
+              ? "Add New Driver"
+              : currentLanguage === "ar"
+                ? "إضافة سائق جديد"
+                : currentLanguage === "fr"
+                  ? "Ajouter un nouveau bus"
+                  : "Ajouter un nouveau chauffeur"}{" "}
+            {/* default */}
+          </h1>
+          </div>
+        <form className="flex justify-center items-center w-full h-full" onSubmit={handleSubmit(onSubmit)}>
+          <div className="rounded-xl bg-bgPrimary p-10 w-[90] md:w-[80%]">
             {backendError && (
               <div className="text-center text-error">{backendError}</div>
             )}
@@ -158,7 +160,7 @@ const AddNewDriver = () => {
                 {/* default */}
               </h1>
             </div>
-            <div className="grid grid-cols-2 gap-4 max-[1278px]:grid-cols-1">
+            <div className="px-6 pt-6 grid grid-cols-2 gap-4 max-[1278px]:grid-cols-1">
               <label
                 htmlFor="username"
                 className="grid text-[18px] font-semibold"
@@ -174,7 +176,7 @@ const AddNewDriver = () => {
                 <input
                   id="username"
                   type="text"
-                  className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                   {...register("username", { required: true })}
                 />
                 {errors.username && (
@@ -202,7 +204,7 @@ const AddNewDriver = () => {
                 <input
                   id="email"
                   type="email"
-                  className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                   {...register("email", { required: true })}
                 />
                 {errors.email && (
@@ -233,7 +235,7 @@ const AddNewDriver = () => {
                 <input
                   id="password"
                   type="password"
-                  className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                   {...register("password", { required: true })}
                 />
                 {errors.password && (
@@ -261,7 +263,7 @@ const AddNewDriver = () => {
                 <input
                   id="nid"
                   type="number"
-                  className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                   {...register("nid", { required: true })}
                 />
                 {errors.nid && (
@@ -291,7 +293,7 @@ const AddNewDriver = () => {
                 {/* default */}
                 <select
                   id="gender"
-                  className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                   {...register("gender", { required: true })}
                 >
                   <option selected value="">
@@ -352,7 +354,7 @@ const AddNewDriver = () => {
                 {/* default */}
                 <select
                   id="nationality"
-                  className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                   {...register("nationality", { required: true })}
                 >
                   <option value="">
@@ -393,7 +395,7 @@ const AddNewDriver = () => {
                 )}
               </label>
             </div>
-            <div className="grid grid-cols-2 gap-4 max-[1278px]:grid-cols-1">
+            <div className="px-6 pt-6 grid grid-cols-2 gap-4 max-[1278px]:grid-cols-1">
               <label
                 htmlFor="regionId"
                 className="grid text-[18px] font-semibold"
@@ -415,7 +417,6 @@ const AddNewDriver = () => {
                   placeholder="Select Region"
                 />
               </label>
-
               <label
                 htmlFor="name_en"
                 className="grid text-[18px] font-semibold"
@@ -431,7 +432,7 @@ const AddNewDriver = () => {
                 <input
                   id="name_en"
                   type="text"
-                  className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                   {...register("name_en", { required: true })}
                 />
                 {errors.name_en && (
@@ -462,7 +463,7 @@ const AddNewDriver = () => {
                 <input
                   id="name_ar"
                   type="text"
-                  className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                   {...register("name_ar", { required: true })}
                 />
                 {errors.name_ar && (
@@ -493,7 +494,7 @@ const AddNewDriver = () => {
                 <input
                   id="name_fr"
                   type="text"
-                  className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                   {...register("name_fr", { required: true })}
                 />
                 {errors.name_fr && (
@@ -522,7 +523,7 @@ const AddNewDriver = () => {
                 <input
                   id="about"
                   type="text"
-                  className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                   {...register("about", { required: true })}
                 />
                 {errors.about && (
@@ -552,7 +553,7 @@ const AddNewDriver = () => {
                 <input
                   id="birthDate"
                   type="date"
-                  className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                   {...register("birthDate", {
                     required: true,
                     validate: value => {
@@ -608,7 +609,7 @@ const AddNewDriver = () => {
                   defaultValue=""
                   id="qualification"
                   {...register("qualification", { required: true })}
-                  className="h-[55px] w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="h-[55px] w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                 >
                   <option value="">
                     {currentLanguage === "en"
@@ -689,7 +690,7 @@ const AddNewDriver = () => {
                 <input
                   id="hireDate"
                   type="date"
-                  className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                   {...register("hireDate", { required: true })}
                 />
                 {errors.hireDate && (
@@ -706,7 +707,7 @@ const AddNewDriver = () => {
                 )}
               </label>
             </div>
-            <div className="grid grid-cols-2 gap-4 max-[1278px]:grid-cols-1">
+            <div className="px-6 pt-6 grid grid-cols-2 gap-4 max-[1278px]:grid-cols-1">
               <PhoneNumberInput
                 countryCodeData={countryCode.data}
                 currentLanguage="en"
@@ -730,14 +731,14 @@ const AddNewDriver = () => {
                 {/* <input
                   id="positionId"
                   type="number"
-                  className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                   {...register("positionId", { required: true })}
                 /> */}
                 <select
                   defaultValue=""
                   id="positionId"
                   {...register("positionId", { required: true })}
-                  className={`border ${errors.positionId ? "border-borderPrimary" : "border-borderPrimary"} h-full w-[400px] rounded-xl px-4 py-3 text-[18px] text-blackOrWhite outline-none max-[458px]:w-[350px]`}
+                  className={`border ${errors.positionId ? "border-borderPrimary" : "border-borderPrimary"} bg-bgPrimary h-full w-full rounded-xl px-4 py-3 text-[18px] text-blackOrWhite outline-none max-[458px]:w-[350px]`}
                 >
                   <option value="">
                     {currentLanguage === "en"
@@ -805,7 +806,7 @@ const AddNewDriver = () => {
                 <input
                   id="salary"
                   type="number"
-                  className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                   {...register("salary", { required: true })}
                 />
                 {errors.salary && (
@@ -826,7 +827,7 @@ const AddNewDriver = () => {
               <button
                 disabled={isLoading}
                 type="submit"
-                className="w-fit rounded-xl bg-primary px-4 py-2 text-[18px] text-white duration-300 ease-in hover:bg-hover hover:shadow-xl"
+                className="w-fit rounded-xl bg-primary px-4 py-2 text-[18px] text-white duration-300 ease-in hover:bg-hover hover:shadow-xl mt-6"
               >
                 {isLoading
                   ? currentLanguage === "en"
@@ -847,7 +848,7 @@ const AddNewDriver = () => {
             </div>
           </div>
         </form>
-      </div>
+      </Container>
     </>
   );
 };

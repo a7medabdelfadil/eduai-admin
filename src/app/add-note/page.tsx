@@ -7,6 +7,7 @@ import { toast } from "react-toastify";
 import { RootState } from "@/GlobalRedux/store";
 import { useSelector } from "react-redux";
 import BreadCrumbs from "@/components/BreadCrumbs";
+import Container from "@/components/Container";
 
 const AddNote = () => {
   const [title, setTitle] = useState("");
@@ -63,98 +64,89 @@ const AddNote = () => {
     <>
       <BreadCrumbs breadcrumbs={breadcrumbs} />
 
-      <div
-        dir={currentLanguage === "ar" ? "rtl" : "ltr"}
-        className={`${
-          currentLanguage === "ar"
-            ? booleanValue
-              ? "lg:mr-[100px]"
-              : "lg:mr-[270px]"
-            : booleanValue
-              ? "lg:ml-[100px]"
-              : "lg:ml-[270px]"
-        } mx-3 mt-5`}
-      >
-        <h1 className="text-3xl m-2 font-semibold">
+      <Container>
+        <h1 className="text-3xl font-semibold">
           {currentLanguage === "ar"
             ? "لوحة الإعلانات"
             : currentLanguage === "fr"
               ? "Tableau d'affichage"
               : "Notice Board"}
         </h1>
+        <div className="mb-10">
 
-        <div className="mx-6 md:mx-auto mt-6 grid h-full w-full xl:w-2/3 items-center gap-3 rounded-xl bg-bgPrimary p-5">
-          <h1 className="text-2xl font-semibold">
-            {currentLanguage === "ar"
-              ? "إضافة إعلان"
-              : currentLanguage === "fr"
-                ? "Ajouter une annonce"
-                : "Add Notice"}
-          </h1>
-          <div className="mb-5 flex w-full justify-start"></div>
-          <form onSubmit={handleSubmit}>
-            <div className="grid h-full w-full gap-6">
-              <label
-                className="grid gap-2 text-[18px] font-semibold"
-                htmlFor="title"
-              >
-                Title
-                <input
-                  className="mx-4 rounded-xl border border-borderPrimary px-4 py-2 pb-28 outline-none"
-                  placeholder={
-                    currentLanguage === "en"
-                      ? "Write title...."
-                      : currentLanguage === "ar"
-                        ? "اكتب العنوان...."
-                        : "Écrire le titre...."
-                  }
-                  name="title"
-                  id="title"
-                  value={title}
-                  onChange={e => setTitle(e.target.value)}
-                />
-              </label>
-              <label
-                className="grid gap-2 text-[18px] font-semibold"
-                htmlFor="description"
-              >
-                Description
-                <div className="mb-5 bg-bgPrimary">
-                  <TextEditor
-                    value={description}
-                    onChange={setDescription}
+          <div className="mx-6 md:mx-auto my-6 grid h-full w-[90] md:w-[80%] items-center gap-3 rounded-xl bg-bgPrimary p-6">
+            <h1 className="text-2xl font-semibold">
+              {currentLanguage === "ar"
+                ? "إضافة إعلان"
+                : currentLanguage === "fr"
+                  ? "Ajouter une annonce"
+                  : "Add Notice"}
+            </h1>
+            <form className="px-6 flex justify-center items-center w-full h-full" onSubmit={handleSubmit}>
+              <div className="grid h-full w-full gap-6">
+                <label
+                  className="grid gap-2 text-[18px] font-semibold"
+                  htmlFor="title"
+                >
+                  Title
+                  <input
+                    className="mx-4 rounded-xl bg-bgPrimary border border-borderPrimary px-4 py-2 pb-28 outline-none"
                     placeholder={
                       currentLanguage === "en"
-                        ? "Enter your content here..."
+                        ? "Write title...."
                         : currentLanguage === "ar"
-                          ? "أدخل محتواك هنا..."
-                          : "Entrez votre contenu ici..."
+                          ? "اكتب العنوان...."
+                          : "Écrire le titre...."
                     }
+                    name="title"
+                    id="title"
+                    value={title}
+                    onChange={e => setTitle(e.target.value)}
                   />
-                </div>
-              </label>
-              <div>
-                {isLoading ? (
-                  <Spinner />
-                ) : (
-                  <div className="flex w-full items-center justify-center">
-                    <button
-                      type="submit"
-                      className="mx-3 mb-5 flex items-center gap-2 whitespace-nowrap rounded-xl bg-primary py-4 px-6 text-[18px] font-semibold text-white duration-300 ease-in hover:bg-hover hover:shadow-xl"
-                    >
-                      {currentLanguage === "ar"
-                        ? "إضافة إعلان"
-                        : currentLanguage === "fr"
-                          ? "Ajouter une annonce"
-                          : "Add Notice"}
-                    </button>
+                </label>
+                <label
+                  className="grid gap-2 text-[18px] font-semibold"
+                  htmlFor="description"
+                >
+                  Description
+                  <div className="mb-5 bg-bgPrimary">
+                    <TextEditor
+                      value={description}
+                      onChange={setDescription}
+                      placeholder={
+                        currentLanguage === "en"
+                          ? "Enter your content here..."
+                          : currentLanguage === "ar"
+                            ? "أدخل محتواك هنا..."
+                            : "Entrez votre contenu ici..."
+                      }
+                    />
                   </div>
-                )}
+                </label>
+                <div>
+                  {isLoading ? (
+                    <Spinner />
+                  ) : (
+                    <div className="flex w-full items-center justify-center">
+                      <button
+                        type="submit"
+                        className="mx-3 flex items-center gap-2 whitespace-nowrap rounded-xl bg-primary py-4 px-6 text-[18px] font-semibold text-white duration-300 ease-in hover:bg-hover hover:shadow-xl"
+                      >
+                        {currentLanguage === "ar"
+                          ? "إضافة إعلان"
+                          : currentLanguage === "fr"
+                            ? "Ajouter une annonce"
+                            : "Add Notice"}
+                      </button>
+                    </div>
+                  )}
+                </div>
               </div>
-            </div>
-          </form>
+            </form>
+          </div>
         </div>
-      </div>
+
+      </Container>
     </>
   );
 };
