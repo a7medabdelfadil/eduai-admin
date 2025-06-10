@@ -27,6 +27,7 @@ body {
   --black-or-white: black;
   --chat: #ffead1;
   --bg-muted: #e4e4e7;
+  --attendance: #FAEFEF;
 }
 
 .dark {
@@ -46,6 +47,7 @@ body {
   --notification: #0f0f0f;
   --chat: #dfbd90;
   --bg-muted: #3f3f46; 
+  --attendance: #171717;
 }
 
 

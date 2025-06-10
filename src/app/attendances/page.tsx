@@ -1,7 +1,6 @@
 "use client";
 import AttendCard from "@/components/AttendCard";
 import { RootState } from "@/GlobalRedux/store";
-import Link from "next/link";
 import { useSelector } from "react-redux";
 import { FaUserTie } from "react-icons/fa"; // Driver Icon
 import { FaBriefcase } from "react-icons/fa"; // Employee Icon
@@ -24,6 +23,7 @@ import {
   useGetDriversCountQuery,
 } from "@/features/attendance/attendanceApi";
 import BreadCrumbs from "@/components/BreadCrumbs";
+import Container from "@/components/Container";
 
 const Attendance = () => {
   const breadcrumbs = [
@@ -67,34 +67,6 @@ const Attendance = () => {
 
   const UserManagments = [
     {
-      href: "/driver-attendance",
-      icon: <FaUserTie size={30} />,
-      title:
-        currentLanguage === "en"
-          ? "Drivers"
-          : currentLanguage === "ar"
-            ? "السائقون"
-            : currentLanguage === "fr"
-              ? "Chauffeurs"
-              : "Drivers", // Default to English
-      description: driverCount?.data,
-      number: driverAttend?.data,
-    },
-    {
-      href: "/employee-attendance",
-      icon: <FaBriefcase size={30} />,
-      title:
-        currentLanguage === "en"
-          ? "Employees"
-          : currentLanguage === "ar"
-            ? "الموظفون"
-            : currentLanguage === "fr"
-              ? "Employés"
-              : "Employees", // Default to English
-      description: employeeCount?.data, // Default to English
-      number: employeedata?.data,
-    },
-    {
       href: "/student-attendance",
       icon: <FaUserGraduate size={30} />,
       title:
@@ -123,6 +95,20 @@ const Attendance = () => {
       number: teacherdata?.data,
     },
     {
+      href: "/employee-attendance",
+      icon: <FaBriefcase size={30} />,
+      title:
+        currentLanguage === "en"
+          ? "Employees"
+          : currentLanguage === "ar"
+            ? "الموظفون"
+            : currentLanguage === "fr"
+              ? "Employés"
+              : "Employees", // Default to English
+      description: employeeCount?.data, // Default to English
+      number: employeedata?.data,
+    },
+    {
       href: "/worker-attendance",
       icon: <FaHardHat size={30} />,
       title:
@@ -135,6 +121,20 @@ const Attendance = () => {
               : "Worker", // Default to English
       description: workers?.data, // Default to English
       number: workerdata?.data,
+    },
+    {
+      href: "/driver-attendance",
+      icon: <FaUserTie size={30} />,
+      title:
+        currentLanguage === "en"
+          ? "Drivers"
+          : currentLanguage === "ar"
+            ? "السائقون"
+            : currentLanguage === "fr"
+              ? "Chauffeurs"
+              : "Drivers", // Default to English
+      description: driverCount?.data,
+      number: driverAttend?.data,
     },
   ];
 
@@ -159,19 +159,20 @@ const Attendance = () => {
   return (
     <>
       <BreadCrumbs breadcrumbs={breadcrumbs} />
-      <div
-        dir={currentLanguage === "ar" ? "rtl" : "ltr"}
-        className={`${
-          currentLanguage === "ar"
-            ? booleanValue
-              ? "lg:mr-[40px]"
-              : "lg:mr-[290px]"
-            : booleanValue
-              ? "lg:ml-[40px]"
-              : "lg:ml-[290px]"
-        } mt-12 grid justify-center`}
-      >
-        <div className="grid grid-cols-2 gap-5 max-[577px]:grid-cols-1 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">
+      <Container>
+         <div className="mb-8 -mt-2 -ml-1 flex items-center justify-between">
+          <h1 className="text-2xl text-textPrimary font-semibold">
+            {currentLanguage === "en"
+              ? "Attendance/Absence"
+              : currentLanguage === "ar"
+                ? "الحضور / الغياب"
+                : currentLanguage === "fr"
+                  ? "Présence / Absence"
+                  : "Attendance/Absence"}{" "}
+            {/* default */}
+          </h1>
+        </div>
+        <div className="grid w-full gap-5 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">
           {UserManagments.map((item, index) => (
             <AttendCard
               key={index}
@@ -183,7 +184,8 @@ const Attendance = () => {
             />
           ))}
         </div>
-      </div>
+
+      </Container>
     </>
   );
 };

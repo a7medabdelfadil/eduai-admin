@@ -73,7 +73,7 @@ const TableRow = React.forwardRef<
     <tr
       ref={ref}
       className={cn(
-        "border-b border-borderPrimary transition-colors rounded-xl overflow-hidden hover:bg-muted/50 data-[state=selected]:bg-muted",
+        "border-b border-borderPrimary transition-colors rounded-xl overflow-hidden data-[state=selected]:bg-muted",
         rowColor,
         roundClass,
         className

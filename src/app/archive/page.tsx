@@ -17,6 +17,7 @@ import { FaBoxOpen } from "react-icons/fa"; // Resource
 import { FaMoneyBillAlt } from "react-icons/fa"; // Fees
 import BreadCrumbs from "@/components/BreadCrumbs";
 import Spinner from "@/components/spinner";
+import Container from "@/components/Container";
 
 const Archive = () => {
   const breadcrumbs = [
@@ -196,41 +197,27 @@ const Archive = () => {
     <>
       <BreadCrumbs breadcrumbs={breadcrumbs} />
 
-      <div
-        dir={currentLanguage === "ar" ? "rtl" : "ltr"}
-        className={` ${
-          currentLanguage === "ar"
-            ? booleanValue
-              ? "lg:mr-[40px]"
-              : "lg:mr-[290px]"
-            : booleanValue
-              ? "lg:ml-[40px]"
-              : "lg:ml-[290px]"
-        } mt-12 grid justify-center`}
-      >
-        <div className="grid grid-cols-2 gap-5 max-[577px]:grid-cols-1 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-4">
-          {items.map((item, index) => (
-            <div
-              key={index}
-              className="grid h-[250px] w-[250px] items-center justify-center rounded-xl bg-bgPrimary shadow-lg"
-            >
-              <Link
-                href={item.href}
-                className="grid items-center justify-center text-center"
-              >
-                <div className="flex justify-center">
-                  <div className="grid h-[87px] w-[87px] items-center justify-center rounded-full bg-bgSecondary">
-                    {item.icon}
-                  </div>
-                </div>
-                <p className="mt-2 text-[22px] font-semibold">
-                  {getTranslatedText(item.key)}
-                </p>
-              </Link>
-            </div>
-          ))}
+      <Container>
+      <div className="mb-10 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+  {items.map((item, index) => (
+    <Link
+      key={index}
+      href={item.href}
+      className="flex h-[250px] w-full flex-col items-center justify-center rounded-xl bg-bgPrimary shadow-lg"
+    >
+      <div className="flex items-center justify-center">
+        <div className="flex h-[87px] w-[87px] items-center justify-center rounded-full bg-bgRowTable">
+          {item.icon}
         </div>
       </div>
+      <p className="mt-4 text-[20px] font-semibold text-secondary">
+        {getTranslatedText(item.key)}
+      </p>
+    </Link>
+  ))}
+</div>
+
+      </Container>
     </>
   );
 };

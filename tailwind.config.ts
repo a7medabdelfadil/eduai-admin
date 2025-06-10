@@ -23,6 +23,7 @@ const config: Config = {
         bgSecondary: "var(--bg-secondary)",
         bgRowTable: "var(--bg-row-table)",
         chat: "var(--chat)",
+        attendance: "var(--attendance)",
         textPrimary: "var(--text-primary)",
         textSecondary: "var(--text-secondary)",
         warning: "var(--warning)",

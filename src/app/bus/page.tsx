@@ -1,6 +1,5 @@
 "use client";
 /* eslint-disable @next/next/no-img-element */
-import Spinner from "@/components/spinner";
 import {
   useGetAllBussQuery,
   useDeleteBussMutation,
@@ -11,41 +10,48 @@ import { useSelector } from "react-redux";
 import { RootState } from "@/GlobalRedux/store";
 import { toast } from "react-toastify";
 import BreadCrumbs from "@/components/BreadCrumbs";
+import Container from "@/components/Container";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/Table";
+import { Skeleton } from "@/components/Skeleton";
+import { BiEditAlt, BiSearchAlt, BiTrash } from "react-icons/bi";
 
 const Bus = () => {
   const breadcrumbs = [
-    {
-      nameEn: "Administration",
-      nameAr: "الإدارة",
-      nameFr: "Administration",
-      href: "/",
-    },
-    {
-      nameEn: "Infrastructure",
-      nameAr: "الدورات والموارد",
-      nameFr: "Cours et Ressources",
-      href: "/infrastructure",
-    },
-    {
-      nameEn: "Bus",
-      nameAr: "المكتبة",
-      nameFr: "Autobus",
-      href: "/bus",
-    },
+    { nameEn: "Administration", nameAr: "الإدارة", nameFr: "Administration", href: "/" },
+    { nameEn: "Infrastructure", nameAr: "الدورات والموارد", nameFr: "Cours et Ressources", href: "/infrastructure" },
+    { nameEn: "Bus", nameAr: "المكتبة", nameFr: "Autobus", href: "/bus" },
   ];
 
+  const { language: currentLanguage, loading } = useSelector((state: RootState) => state.language);
   const { data, error, isLoading, refetch } = useGetAllBussQuery("1");
-  const booleanValue = useSelector((state: RootState) => state.boolean.value);
   const [search, setSearch] = useState("");
-
-
   const [deleteBuses] = useDeleteBussMutation();
   type Bus = Record<string, any>;
+
+  const t = (label: string) => {
+    const translations: Record<string, Record<string, string>> = {
+      "Bus Number": { ar: "رقم الحافلة", fr: "Numéro de bus" },
+      "Bus Capacity": { ar: "سعة الحافلة", fr: "Capacité du bus" },
+      "School Id": { ar: "معرف المدرسة", fr: "ID de l'école" },
+      "Created At": { ar: "تاريخ الإنشاء", fr: "Créé le" },
+      "Updated At": { ar: "تاريخ التعديل", fr: "Mis à jour le" },
+      "Action": { ar: "الإجراء", fr: "Action" },
+      "Edit": { ar: "تعديل", fr: "Modifier" },
+      "Delete": { ar: "حذف", fr: "Supprimer" },
+    };
+    return translations[label]?.[currentLanguage] || label;
+  };
 
   const handleDelete = async (id: number) => {
     try {
       await deleteBuses(id).unwrap();
-
       toast.success(`Bus with ID ${id} Deleted successfully`);
       void refetch();
     } catch {
@@ -65,272 +71,109 @@ const Bus = () => {
     return formatter.format(new Date(dateString));
   };
 
-  const [selectAll, setSelectAll] = useState(false);
-
-  const handleSelectAll = () => {
-    setSelectAll(!selectAll);
-    const checkboxes = document.querySelectorAll<HTMLInputElement>(
-      'input[type="checkbox"]:not(#checkbox-all-search)',
-    );
-    checkboxes.forEach(checkbox => {
-      checkbox.checked = !selectAll;
-    });
-  };
-
-  useEffect(() => {
-    const handleOtherCheckboxes = () => {
-      const allCheckboxes = document.querySelectorAll<HTMLInputElement>(
-        'input[type="checkbox"]:not(#checkbox-all-search)',
-      );
-      const allChecked = Array.from(allCheckboxes).every(
-        checkbox => checkbox.checked,
-      );
-      const selectAllCheckbox = document.getElementById(
-        "checkbox-all-search",
-      ) as HTMLInputElement | null;
-      if (selectAllCheckbox) {
-        selectAllCheckbox.checked = allChecked;
-        setSelectAll(allChecked);
-      }
-    };
-
-    const otherCheckboxes = document.querySelectorAll<HTMLInputElement>(
-      'input[type="checkbox"]:not(#checkbox-all-search)',
-    );
-    otherCheckboxes.forEach(checkbox => {
-      checkbox.addEventListener("change", handleOtherCheckboxes);
-    });
-
-    return () => {
-      otherCheckboxes.forEach(checkbox => {
-        checkbox.removeEventListener("change", handleOtherCheckboxes);
-      });
-    };
-  }, []);
-
-  const { language: currentLanguage, loading } = useSelector(
-    (state: RootState) => state.language,
+  const filtered = data?.data.content?.filter((bus: Bus) =>
+    search === "" ? true : bus.busNumber?.toString().toLowerCase().includes(search.toLowerCase())
   );
-
-  if (loading || isLoading)
-    return (
-      <div className="flex h-screen w-full items-center justify-center">
-        <Spinner />
-      </div>
-    );
 
   return (
     <>
       <BreadCrumbs breadcrumbs={breadcrumbs} />
-      <div
-        dir={currentLanguage === "ar" ? "rtl" : "ltr"}
-        className={` ${
-          currentLanguage === "ar"
-            ? booleanValue
-              ? "lg:mr-[100px]"
-              : "lg:mr-[270px]"
-            : booleanValue
-              ? "lg:ml-[100px]"
-              : "lg:ml-[270px]"
-        } relative mx-3 mt-10 h-screen overflow-x-auto bg-transparent sm:rounded-lg`}
-      >
-        <div className="flex justify-between text-center max-[502px]:grid max-[502px]:justify-center">
-          <div className="mb-3">
-            <label htmlFor="icon" className="sr-only">
-              Search
-            </label>
-            <div className="relative min-w-72 md:min-w-80">
+      <Container>
+        <div className="bg-bgPrimary rounded-xl">
+          <div className="flex flex-col md:flex-row justify-between items-center gap-4 px-4 py-4">
+            <div
+              dir={currentLanguage === "ar" ? "rtl" : "ltr"}
+              className="relative w-full max-w-md"
+            >
               <div className="pointer-events-none absolute inset-y-0 start-0 z-20 flex items-center ps-4">
-                <svg
-                  className="size-4 flex-shrink-0 text-gray-400"
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                >
-                  <circle cx="11" cy="11" r="8" />
-                  <path d="m21 21-4.3-4.3" />
-                </svg>
+                <BiSearchAlt className="text-secondary" size={18} />
               </div>
-              <input
-                onChange={e => setSearch(e.target.value)}
-                type="text"
-                id="icon"
-                name="icon"
-                className="block w-full rounded-lg border-2 border-borderPrimary px-4 py-2 ps-11 text-sm outline-none focus:border-blue-500 focus:ring-blue-500 disabled:pointer-events-none disabled:opacity-50"
-                placeholder={
-                  currentLanguage === "en"
-                    ? "Search"
-                    : currentLanguage === "ar"
-                      ? "بحث"
-                      : "Recherche"
-                }
-              />
+              <div className="flex items-center gap-2">
+                <input
+                  onChange={(e) => setSearch(e.target.value)}
+                  type="text"
+                  className="w-full border-borderSecondary rounded-lg border-2 px-4 py-2 ps-11 text-lg outline-none"
+                  placeholder={
+                    currentLanguage === "en"
+                      ? "Search"
+                      : currentLanguage === "ar"
+                        ? "بحث"
+                        : "Recherche"
+                  }
+                />
+                <span className="text-sm text-primary whitespace-nowrap">
+                  {filtered?.length ?? 0} {t("Results")}
+                </span>
+
+              </div>
             </div>
-          </div>
-          <div className="flex justify-center">
+
             <Link
               href="/add-new-bus"
-              className="mx-3 mb-5 w-fit whitespace-nowrap rounded-xl bg-primary px-4 py-2 text-[18px] font-semibold text-white duration-300 ease-in hover:bg-hover hover:shadow-xl"
+              className="mx-3 w-fit whitespace-nowrap rounded-xl bg-primary px-4 py-2 text-[18px] font-semibold text-white hover:bg-hover hover:shadow-xl"
             >
-              {currentLanguage === "ar"
-                ? "+ إضافة حافلة جديدة"
-                : currentLanguage === "fr"
-                  ? "+ Ajouter un nouveau bus"
-                  : "+ Add New Bus"}
+              {currentLanguage === "ar" ? "+ إضافة حافلة جديدة" : currentLanguage === "fr" ? "+ Ajouter un nouveau bus" : "+ Add New Bus"}
             </Link>
           </div>
-        </div>
-        <div className="relative overflow-auto shadow-md sm:rounded-lg">
-          <table className="w-full overflow-x-auto text-left text-sm text-gray-500 rtl:text-right">
-            <thead className="bg-thead text-xs uppercase text-textPrimary">
-              <tr>
-                <th scope="col" className="p-4">
-                  <div className="flex items-center">
-                    <input
-                      id="checkbox-all-search"
-                      type="checkbox"
-                      className="-gray-800 h-4 w-4 rounded border-gray-300 bg-gray-100 text-blue-600 focus:ring-2 focus:ring-blue-500"
-                      onChange={handleSelectAll}
-                    />
-                  </div>
-                </th>
-                <th scope="col" className="whitespace-nowrap px-6 py-3">
-                  {currentLanguage === "ar"
-                    ? "رقم الحافلة"
-                    : currentLanguage === "fr"
-                      ? "Numéro de bus"
-                      : "Bus Number"}
-                </th>
-                <th scope="col" className="whitespace-nowrap px-6 py-3">
-                  {currentLanguage === "ar"
-                    ? "سعة الحافلة"
-                    : currentLanguage === "fr"
-                      ? "Capacité du bus"
-                      : "Bus Capacity"}
-                </th>
-                <th scope="col" className="whitespace-nowrap px-6 py-3">
-                  {currentLanguage === "ar"
-                    ? "رقم المدرسة"
-                    : currentLanguage === "fr"
-                      ? "ID de l'école"
-                      : "School Id"}
-                </th>
-                <th scope="col" className="whitespace-nowrap px-6 py-3">
-                  {currentLanguage === "ar"
-                    ? "تاريخ الإنشاء"
-                    : currentLanguage === "fr"
-                      ? "Date de création"
-                      : "Created At"}
-                </th>
-                <th scope="col" className="whitespace-nowrap px-6 py-3">
-                  {currentLanguage === "ar"
-                    ? "تاريخ التحديث"
-                    : currentLanguage === "fr"
-                      ? "Date de mise à jour"
-                      : "Updated At"}
-                </th>
-                <th scope="col" className="whitespace-nowrap px-6 py-3">
-                  {currentLanguage === "ar"
-                    ? "الإجراء"
-                    : currentLanguage === "fr"
-                      ? "Action"
-                      : "Action"}
-                </th>
-                <th scope="col" className="whitespace-nowrap px-6 py-3">
-                  {currentLanguage === "ar"
-                    ? "تعديل"
-                    : currentLanguage === "fr"
-                      ? "Modifier"
-                      : "Edit"}
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              {data?.data.content
-                .filter((bus: Bus) => {
-                  return search.toLocaleLowerCase() === ""
-                    ? bus
-                    : bus.name.toLocaleLowerCase().includes(search);
-                })
-                .map((bus: Bus, index: number) => (
-                  <tr
-                    key={index}
-                    className="border-b border-borderPrimary bg-bgPrimary hover:bg-bgSecondary"
-                  >
-                    <td className="w-4 p-4">
-                      <div className="flex items-center">
-                        <input
-                          id="checkbox-table-search-1"
-                          type="checkbox"
-                          className="h-4 w-4 rounded border-borderPrimary bg-bgPrimary text-primary focus:ring-2 focus:ring-hover"
-                        />
-                      </div>
-                    </td>
-                    <th
-                      scope="row"
-                      className="flex items-center whitespace-nowrap px-6 py-4 font-medium text-secondary"
-                    >
-                      {bus.busNumber}
-                    </th>
-                    <td className="whitespace-nowrap px-6 py-4">
-                      {bus.busCapacity}
-                    </td>
-                    <td className="whitespace-nowrap px-6 py-4">
-                      {bus.schoolId}
-                    </td>
-                    <td className="whitespace-nowrap px-6 py-4">
-                      {formatTransactionDate(bus.createdAt)}
-                    </td>
-                    <td className="whitespace-nowrap px-6 py-4">
-                      {formatTransactionDate(bus.updatedAt)}
-                    </td>
-                    <td className="whitespace-nowrap px-6 py-4">
-                      <button
-                        onClick={() => handleDelete(bus.busId)}
-                        className="rounded-lg bg-error px-2 py-1 font-semibold text-white shadow-lg delay-150 duration-300 ease-in-out hover:-translate-y-1 hover:scale-110"
-                      >
-                        {currentLanguage === "ar"
-                          ? "حذف"
-                          : currentLanguage === "fr"
-                            ? "Supprimer"
-                            : "Delete"}
-                      </button>
-                    </td>
-                    <td className="whitespace-nowrap px-6 py-4">
-                      <Link
-                        href={`/edit-bus/${bus.busId}`}
-                        className="font-medium text-blue-600 hover:underline"
-                      >
-                        {currentLanguage === "ar"
-                          ? "تعديل"
-                          : currentLanguage === "fr"
-                            ? "Modifier"
-                            : "Edit"}
-                      </Link>
-                    </td>
-                  </tr>
-                ))}
-            </tbody>
-          </table>
-          {(data?.data.content.length == 0 || data == null) && (
-            <div className="flex w-full justify-center py-3 text-center text-[18px] font-semibold">
-              {currentLanguage === "en"
-                ? "There is No Data"
-                : currentLanguage === "ar"
-                  ? "لا توجد بيانات"
-                  : currentLanguage === "fr"
-                    ? "Il n'y a pas de données"
-                    : "There is No Data"}
-            </div>
-          )}
-        </div>
-      </div>
+          <div className="relative overflow-auto shadow-md sm:rounded-lg">
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>{t("Bus Number")}</TableHead>
+                  <TableHead>{t("Bus Capacity")}</TableHead>
+                  <TableHead>{t("School Id")}</TableHead>
+                  <TableHead>{t("Created At")}</TableHead>
+                  <TableHead>{t("Updated At")}</TableHead>
+                  <TableHead>{t("Action")}</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {(loading || isLoading) ? (
+                  [...Array(3)].map((_, i) => (
+                    <TableRow key={i}>
+                      {Array.from({ length: 6 }).map((_, j) => (
+                        <TableCell key={j}><Skeleton className="h-4 w-24" /></TableCell>
+                      ))}
+                    </TableRow>
+                  ))
+                ) : !filtered?.length ? (
+                  <TableRow>
+                    <TableCell colSpan={6} className="text-center font-medium">
+                      {currentLanguage === "ar" ? "لا توجد بيانات" : currentLanguage === "fr" ? "Aucune donnée disponible" : "No data available"}
+                    </TableCell>
+                  </TableRow>
+                ) : (
+                  filtered.map((bus: Bus, index: number) => (
+                    <TableRow key={index} data-index={index}>
+                      <TableCell>{bus.busNumber}</TableCell>
+                      <TableCell>{bus.busCapacity}</TableCell>
+                      <TableCell>{bus.schoolId}</TableCell>
+                      <TableCell>{formatTransactionDate(bus.createdAt)}</TableCell>
+                      <TableCell>{formatTransactionDate(bus.updatedAt)}</TableCell>
+                      <TableCell className="flex items-center gap-3">
+                        <Link
+                          href={`/edit-bus/${bus.busId}`}
+                          className="text-primary hover:text-primaryHover transition"
+                          title={t("Edit")}
+                        >
+                          <BiEditAlt size={20} />
+                        </Link>
+                        <button
+                          onClick={() => handleDelete(bus.busId)}
+                          className="text-error hover:text-red-800 transition"
+                          title={t("Delete")}
+                        >
+                          <BiTrash size={20} />
+                        </button>
+                      </TableCell>
+                    </TableRow>
+                  ))
+                )}
+              </TableBody>
+            </Table>
+          </div>
+        </div >
+      </Container>
     </>
   );
 };
