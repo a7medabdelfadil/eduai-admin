@@ -27,8 +27,6 @@ const AddNewRoom = () => {
     },
   ];
 
-  const booleanValue = useSelector((state: RootState) => state.boolean.value);
-
   const { language: currentLanguage, loading } = useSelector(
     (state: RootState) => state.language,
   );
@@ -56,7 +54,7 @@ const AddNewRoom = () => {
             {/* default */}
           </h1>
         </div>
-        <form className="flex justify-center items-center w-full h-full" >
+        <form className="flex justify-center items-center w-full h-full">
           <div className="rounded-xl bg-bgPrimary p-10 w-[90] md:w-[80%]">
             <div className="flex items-center justify-start gap-2">
               <svg

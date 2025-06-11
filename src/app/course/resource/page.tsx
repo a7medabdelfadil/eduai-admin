@@ -16,15 +16,15 @@ const Resource = () => {
       href: "/",
     },
     {
-      nameEn: "Course",
-      nameAr: "الدورة",
-      nameFr: "Cours",
+      nameEn: "Course and Resource  Management",
+      nameAr: "إدارة الدورات والموارد",
+      nameFr: "Gestion des cours et des ressources",
       href: "/course",
     },
     {
-      nameEn: "Resource",
-      nameAr: "المصدر",
-      nameFr: "Ressource",
+      nameEn: "Resource Management",
+      nameAr: "إدارة الموارد",
+      nameFr: "Gestion des ressources",
       href: "/course/resource",
     },
   ];
@@ -90,7 +90,6 @@ const Resource = () => {
 
   return (
     <>
-      {/* <Soon /> */}
       <BreadCrumbs breadcrumbs={breadcrumbs} />
       <div
         dir={currentLanguage === "ar" ? "rtl" : "ltr"}

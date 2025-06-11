@@ -13,6 +13,7 @@ import BreadCrumbs from "@/components/BreadCrumbs";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
+import Container from "@/components/Container";
 
 type Props = {
   params: {
@@ -151,20 +152,21 @@ const UpdateEvent = ({ params }: Props) => {
   return (
     <>
       <BreadCrumbs breadcrumbs={breadcrumbs} />
-      <div
-        dir={currentLanguage === "ar" ? "rtl" : "ltr"}
-        className={`${
-          currentLanguage === "ar"
-            ? booleanValue
-              ? "lg:mr-[100px]"
-              : "lg:mr-[270px]"
-            : booleanValue
-              ? "lg:ml-[100px]"
-              : "lg:ml-[270px]"
-        } mx-[5px] mt-[40px] grid h-[500px] items-center justify-center`}
-      >
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <div className="grid h-auto items-center justify-center gap-5 rounded-xl bg-bgPrimary p-10 sm:w-[500px] md:w-[600px] lg:w-[750px] xl:h-auto xl:w-[1000px]">
+      <Container>
+        <div className="mb-8 -mt-2 -ml-1 flex items-center justify-between">
+          <h1 className="text-2xl font-semibold">
+            {currentLanguage === "en"
+              ? "Update Event"
+              : currentLanguage === "ar"
+                ? "تعديل حدث"
+                : currentLanguage === "fr"
+                  ? "événement de mise à jour"
+                  : "Update Event"}{" "}
+            {/* default */}
+          </h1>
+        </div>
+        <form className="flex h-full w-full items-center justify-center" onSubmit={handleSubmit(onSubmit)}>
+          <div className="rounded-xl bg-bgPrimary p-10 w-[90] md:w-[80%]">
             <div className="flex items-center justify-start gap-2">
               <h1 className="text-[22px] font-semibold">
                 {currentLanguage === "en"
@@ -176,7 +178,7 @@ const UpdateEvent = ({ params }: Props) => {
                       : "Event Information"}
               </h1>
             </div>
-            <div className="grid grid-cols-2 gap-4 max-[1278px]:grid-cols-1">
+            <div className="p-6 grid grid-cols-2 gap-4 max-[1278px]:grid-cols-1">
               {/* Title English */}
               <label
                 htmlFor="title_en"
@@ -193,7 +195,7 @@ const UpdateEvent = ({ params }: Props) => {
                   id="title_en"
                   {...register("title_en")}
                   type="text"
-                  className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                 />
                 {errors.title_en && (
                   <span className="text-error">
@@ -217,7 +219,7 @@ const UpdateEvent = ({ params }: Props) => {
                   id="title_ar"
                   {...register("title_ar")}
                   type="text"
-                  className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                 />
                 {errors.title_ar && (
                   <span className="text-error">
@@ -241,7 +243,7 @@ const UpdateEvent = ({ params }: Props) => {
                   id="title_fr"
                   {...register("title_fr")}
                   type="text"
-                  className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                 />
                 {errors.title_fr && (
                   <span className="text-error">
@@ -265,7 +267,7 @@ const UpdateEvent = ({ params }: Props) => {
                   id="description_en"
                   {...register("description_en")}
                   type="text"
-                  className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                 />
                 {errors.description_en && (
                   <span className="text-error">
@@ -289,7 +291,7 @@ const UpdateEvent = ({ params }: Props) => {
                   id="description_ar"
                   {...register("description_ar")}
                   type="text"
-                  className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                 />
                 {errors.description_ar && (
                   <span className="text-error">
@@ -313,7 +315,7 @@ const UpdateEvent = ({ params }: Props) => {
                   id="description_fr"
                   {...register("description_fr")}
                   type="text"
-                  className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                 />
                 {errors.description_fr && (
                   <span className="text-error">
@@ -337,7 +339,7 @@ const UpdateEvent = ({ params }: Props) => {
                   id="startTime"
                   {...register("startTime")}
                   type="datetime-local"
-                  className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                 />
                 {errors.startTime && (
                   <span className="text-error">
@@ -361,7 +363,7 @@ const UpdateEvent = ({ params }: Props) => {
                   id="endTime"
                   {...register("endTime")}
                   type="datetime-local"
-                  className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                 />
                 {errors.endTime && (
                   <span className="text-error">
@@ -377,7 +379,7 @@ const UpdateEvent = ({ params }: Props) => {
               ) : (
                 <button
                   type="submit"
-                  className="w-[140px] rounded-xl bg-primary px-4 py-2 text-[18px] text-white duration-300 ease-in hover:bg-hover hover:shadow-xl"
+                  className="w-fit rounded-xl bg-primary px-4 py-2 text-[18px] text-white duration-300 ease-in hover:bg-hover hover:shadow-xl"
                 >
                   {currentLanguage === "en"
                     ? "Update Event"
@@ -391,7 +393,7 @@ const UpdateEvent = ({ params }: Props) => {
             </div>
           </div>
         </form>
-      </div>
+      </Container>
     </>
   );
 };

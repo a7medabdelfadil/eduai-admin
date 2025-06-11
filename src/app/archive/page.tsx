@@ -198,24 +198,24 @@ const Archive = () => {
       <BreadCrumbs breadcrumbs={breadcrumbs} />
 
       <Container>
-      <div className="mb-10 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-  {items.map((item, index) => (
-    <Link
-      key={index}
-      href={item.href}
-      className="flex h-[250px] w-full flex-col items-center justify-center rounded-xl bg-bgPrimary shadow-lg"
-    >
-      <div className="flex items-center justify-center">
-        <div className="flex h-[87px] w-[87px] items-center justify-center rounded-full bg-bgRowTable">
-          {item.icon}
+        <div className="mb-10 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+          {items.map((item, index) => (
+            <Link
+              key={index}
+              href={item.href}
+              className="flex h-[250px] w-full flex-col items-center justify-center rounded-xl bg-bgPrimary shadow-lg"
+            >
+              <div className="flex items-center justify-center">
+                <div className="flex h-[87px] w-[87px] items-center justify-center rounded-full bg-bgRowTable">
+                  {item.icon}
+                </div>
+              </div>
+              <p className="mt-4 text-[20px] font-semibold text-secondary">
+                {getTranslatedText(item.key)}
+              </p>
+            </Link>
+          ))}
         </div>
-      </div>
-      <p className="mt-4 text-[20px] font-semibold text-secondary">
-        {getTranslatedText(item.key)}
-      </p>
-    </Link>
-  ))}
-</div>
 
       </Container>
     </>

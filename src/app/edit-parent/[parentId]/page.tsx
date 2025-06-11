@@ -18,6 +18,7 @@ import { useSelector } from "react-redux";
 import BreadCrumbs from "@/components/BreadCrumbs";
 import PhoneNumberInput from "@/components/PhoneNumberInput";
 import SearchableSelect from "@/components/select";
+import Container from "@/components/Container";
 
 interface ViewParentProps {
   params: {
@@ -118,20 +119,21 @@ const EditParent: React.FC<ViewParentProps> = ({ params }) => {
     <>
       <BreadCrumbs breadcrumbs={breadcrumbs} />
 
-      <div
-        dir={currentLanguage === "ar" ? "rtl" : "ltr"}
-        className={`${
-          currentLanguage === "ar"
-            ? booleanValue
-              ? "lg:mr-[100px]"
-              : "lg:mr-[270px]"
-            : booleanValue
-              ? "lg:ml-[100px]"
-              : "lg:ml-[270px]"
-        } mx-[5px] grid items-center justify-center`}
-      >
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <div className="my-10 grid items-center justify-center gap-5 rounded-xl bg-bgPrimary p-10 sm:w-[500px] md:w-[600px] lg:w-[750px] xl:w-[1000px]">
+      <Container>
+         <div className="mb-8 -mt-2 -ml-1 flex items-center justify-between">
+          <h1 className="text-2xl font-semibold">
+            {currentLanguage === "en"
+              ? "Edit Parent"
+              : currentLanguage === "ar"
+                ? "تعديل ولي الأمر"
+                : currentLanguage === "fr"
+                  ? "Modifier le parent"
+                  :"Edit Parent"}{" "}
+            {/* default */}
+          </h1>
+        </div>
+        <form className="flex h-full w-full items-center justify-center" onSubmit={handleSubmit(onSubmit)}>
+          <div className="rounded-xl bg-bgPrimary p-10 w-[90] md:w-[80%]">
             <div className="flex items-center justify-start gap-2">
               <svg
                 className="h-6 w-6 font-bold text-secondary group-hover:text-hover"
@@ -164,7 +166,7 @@ const EditParent: React.FC<ViewParentProps> = ({ params }) => {
                       : "Parent Information"}
               </h1>
             </div>
-            <div className="grid grid-cols-2 gap-4 max-[1278px]:grid-cols-1">
+            <div className="p-6 grid grid-cols-2 gap-4 max-[1278px]:grid-cols-1">
               {/* Input fields for parent information */}
               <label htmlFor="email" className="grid text-[18px] font-semibold">
                 {currentLanguage === "en"
@@ -177,7 +179,7 @@ const EditParent: React.FC<ViewParentProps> = ({ params }) => {
                 <input
                   id="email"
                   type="email"
-                  className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                   {...register("email", { required: true })}
                 />
                 {errors.email && (
@@ -203,7 +205,7 @@ const EditParent: React.FC<ViewParentProps> = ({ params }) => {
                 <input
                   id="nid"
                   type="number"
-                  className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                   {...register("nid", { required: true })}
                 />
                 {errors.nid && (
@@ -231,7 +233,7 @@ const EditParent: React.FC<ViewParentProps> = ({ params }) => {
                       : "Gender"}
                 <select
                   id="gender"
-                  className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                   {...register("gender", { required: true })}
                 >
                   <option value="">
@@ -288,7 +290,7 @@ const EditParent: React.FC<ViewParentProps> = ({ params }) => {
                       : "Your Nationality"}
                 <select
                   id="nationality"
-                  className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                   {...register("nationality", { required: true })}
                 >
                   <option value="">
@@ -355,7 +357,7 @@ const EditParent: React.FC<ViewParentProps> = ({ params }) => {
                 <input
                   id="name_en"
                   type="text"
-                  className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                   {...register("name_en", { required: true })}
                 />
                 {errors.name_en && (
@@ -384,7 +386,7 @@ const EditParent: React.FC<ViewParentProps> = ({ params }) => {
                 <input
                   id="name_ar"
                   type="text"
-                  className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                   {...register("name_ar", { required: true })}
                 />
                 {errors.name_ar && (
@@ -413,7 +415,7 @@ const EditParent: React.FC<ViewParentProps> = ({ params }) => {
                 <input
                   id="name_fr"
                   type="text"
-                  className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                   {...register("name_fr", { required: true })}
                 />
                 {errors.name_ar && (
@@ -442,7 +444,7 @@ const EditParent: React.FC<ViewParentProps> = ({ params }) => {
                 <input
                   id="birthDate"
                   type="date"
-                  className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                   {...register("birthDate", {
                     required: true,
                     validate: value => {
@@ -494,7 +496,7 @@ const EditParent: React.FC<ViewParentProps> = ({ params }) => {
                 <input
                   id="about"
                   type="text"
-                  className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                   {...register("about", { required: true })}
                 />
                 {errors.about && (
@@ -523,7 +525,7 @@ const EditParent: React.FC<ViewParentProps> = ({ params }) => {
                 <input
                   id="occupation_en"
                   type="text"
-                  className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                   {...register("occupation_en", { required: true })}
                 />
                 {errors.occupation_en && (
@@ -553,7 +555,7 @@ const EditParent: React.FC<ViewParentProps> = ({ params }) => {
                 <input
                   id="occupation_ar"
                   type="text"
-                  className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                   {...register("occupation_ar", { required: true })}
                 />
                 {errors.occupation_ar && (
@@ -582,7 +584,7 @@ const EditParent: React.FC<ViewParentProps> = ({ params }) => {
                 <input
                   id="occupation_fr"
                   type="text"
-                  className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                   {...register("occupation_fr", { required: true })}
                 />
                 {errors.occupation_fr && (
@@ -633,7 +635,7 @@ const EditParent: React.FC<ViewParentProps> = ({ params }) => {
             </div>
           </div>
         </form>
-      </div>
+      </Container>
     </>
   );
 };

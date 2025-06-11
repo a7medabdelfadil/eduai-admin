@@ -17,6 +17,7 @@ import { toast } from "react-toastify";
 import Modal from "@/components/model";
 import { useUploadEventMutation } from "@/features/events/eventsApi";
 import { Trash2 } from 'lucide-react';
+import Container from "@/components/Container";
 
 const Schedule = () => {
   const breadcrumbs = [
@@ -163,23 +164,34 @@ const Schedule = () => {
   return (
     <>
       <BreadCrumbs breadcrumbs={breadcrumbs} />
-      <div
-        dir={currentLanguage === "ar" ? "rtl" : "ltr"}
-        className={`${
-          currentLanguage === "ar"
-            ? booleanValue
-              ? "lg:mr-[100px]"
-              : "lg:mr-[270px]"
-            : booleanValue
-              ? "lg:ml-[100px]"
-              : "lg:ml-[270px]"
-        } mt-7`}
-      >
+      <Container>
         <div className="mb-6 mr-5 flex justify-between max-[540px]:my-1 max-[540px]:mr-0 max-[540px]:grid max-[540px]:justify-center">
           <div className="ml-2 flex items-center justify-start gap-3 text-xl font-semibold max-[540px]:mb-2 max-[540px]:ml-0 max-[540px]:justify-center">
-            <button
+           
+            <Link
+              className="text-primary underline"
+              href="/educational-affairs/schedule"
+              >
+              {currentLanguage === "ar"
+                ? "معلم"
+                : currentLanguage === "fr"
+                ? "Enseignant"
+                : "Teacher"}
+            </Link>
+            <Link 
+                className="hover:text-primary hover:underline transition"
+            href="/educational-affairs/schedule/class">
+              {currentLanguage === "ar"
+                ? "الصف"
+                : currentLanguage === "fr"
+                  ? "Classe"
+                  : "Class"}
+            </Link>
+          </div>
+          <div className="flex justify-center gap-3 flex-col md:flex-row">
+             <button
               onClick={handleOpenModal}
-              className="mx-3 flex items-center gap-2 border border-primary whitespace-nowrap rounded-xl bg-bgPrimary px-4 py-2 text-[18px] font-semibold text-primary duration-300 ease-in  hover:shadow-xl"
+              className="flex items-center gap-2 border border-primary whitespace-nowrap rounded-xl bg-bgPrimary px-4 py-2 text-[18px] font-semibold text-primary duration-300 ease-in  hover:shadow-xl"
             >
               {currentLanguage === "ar"
                 ? "إضافة جدول"
@@ -189,7 +201,7 @@ const Schedule = () => {
                   <svg className="h-5 w-5"  width="24" height="24" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" fill="none" strokeLinecap="round" strokeLinejoin="round">  <path stroke="none" d="M0 0h24v24H0z"/>  <line x1="12" y1="5" x2="12" y2="19" />  <line x1="16" y1="9" x2="12" y2="5" />  <line x1="8" y1="9" x2="12" y2="5" /></svg>
             </button>
             <Link href="/educational-affairs/schedule/add-schedule"
-              className="mx-3 whitespace-nowrap rounded-xl bg-primary px-4 py-2 text-[18px] font-semibold text-white duration-300 ease-in hover:bg-hover flex items-center gap-2 hover:shadow-xl"
+              className="whitespace-nowrap rounded-xl bg-primary px-4 py-2 text-[18px] font-semibold text-white duration-300 ease-in hover:bg-hover flex items-center gap-2 hover:shadow-xl"
             >
               {currentLanguage === "ar"
                 ? "إضافة جدول"
@@ -197,28 +209,9 @@ const Schedule = () => {
                   ? "ajouter un horaire"
                   : "Add schedule"}
             </Link>
-            <Link
-              className="text-primary underline"
-              href="/educational-affairs/schedule"
-            >
-              {currentLanguage === "ar"
-                ? "معلم"
-                : currentLanguage === "fr"
-                  ? "Enseignant"
-                  : "Teacher"}
-            </Link>
-            <Link href="/educational-affairs/schedule/class">
-              {currentLanguage === "ar"
-                ? "الصف"
-                : currentLanguage === "fr"
-                  ? "Classe"
-                  : "Class"}
-            </Link>
-          </div>
-          <div className="justify-center gap-3 max-[540px]:grid">
             <select
               id="teacherCourseRegistrationId"
-              className="mx-3 rounded-lg border border-borderPrimary bg-bgPrimary px-4 py-2 shadow-sm outline-none"
+              className="rounded-lg border border-borderPrimary bg-bgPrimary px-4 py-2 shadow-sm outline-none"
               {...register("teacherId", { required: true })}
             >
               <option value="">Select Teacher</option>
@@ -235,7 +228,7 @@ const Schedule = () => {
           handleDelete={handleDelete}
           scheduleData={data?.data?.content ? data?.data?.content : []}
         />
-      </div>
+      </Container>
       <Modal isOpen={isModalOpen} onClose={handleCloseModal}>
         <h1 className="font-semibold text-lg">Upload File</h1>
         <p className="font-light text-secondary mb-4">Please upload files in Excel format and make sure the file size is under 25 MB.</p>

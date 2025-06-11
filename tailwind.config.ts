@@ -28,6 +28,7 @@ const config: Config = {
         textSecondary: "var(--text-secondary)",
         warning: "var(--warning)",
         error: "var(--error)",
+        danger: "var(--danger)",
         success: "var(--success)",
         info: "var(--info)",
         borderPrimary: "var(--border-primary)",

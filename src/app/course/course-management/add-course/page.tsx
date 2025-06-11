@@ -13,6 +13,7 @@ import { useSelector } from "react-redux";
 import { RootState } from "@/GlobalRedux/store";
 import { useGetAllCountrysQuery } from "@/features/dashboard/dashboardApi";
 import BreadCrumbs from "@/components/BreadCrumbs";
+import Container from "@/components/Container";
 
 const AddCourse = () => {
   const breadcrumbs = [
@@ -21,12 +22,6 @@ const AddCourse = () => {
       nameAr: "أكاديمي",
       nameFr: "Académique",
       href: "/",
-    },
-    {
-      nameEn: "Course",
-      nameAr: "الدورة",
-      nameFr: "Cours",
-      href: "/course",
     },
     {
       nameEn: "Course Management",
@@ -81,20 +76,21 @@ const AddCourse = () => {
   return (
     <>
       <BreadCrumbs breadcrumbs={breadcrumbs} />
-      <div
-        dir={currentLanguage === "ar" ? "rtl" : "ltr"}
-        className={`${
-          currentLanguage === "ar"
-            ? booleanValue
-              ? "lg:mr-[100px]"
-              : "lg:mr-[270px]"
-            : booleanValue
-              ? "lg:ml-[100px]"
-              : "lg:ml-[270px]"
-        } mx-3 mt-[40px] grid h-[850px] items-center justify-center`}
-      >
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <div className="grid items-center justify-center gap-5 rounded-xl bg-bgPrimary p-10 sm:w-[500px] md:w-[600px] lg:w-[750px] xl:w-[1000px]">
+      <Container>
+         <div className="mb-8 -mt-2 -ml-1 flex items-center justify-between">
+          <h1 className="text-2xl font-semibold">
+            {currentLanguage === "en"
+              ? "Add Course"
+              : currentLanguage === "ar"
+                ? "إضافة دورة"
+                : currentLanguage === "fr"
+                  ? "Ajouter un cours"
+                  : "Add Course"}{" "}
+            {/* default */}
+          </h1>
+        </div>
+        <form className="flex justify-center items-center w-full h-full" onSubmit={handleSubmit(onSubmit)}>
+          <div className="rounded-xl bg-bgPrimary p-10 w-[90] md:w-[80%]">
             <div className="flex items-center justify-start gap-2">
               <svg
                 className="h-6 w-6 font-bold text-secondary group-hover:text-primary"
@@ -126,7 +122,7 @@ const AddCourse = () => {
                     : "Course Information"}
               </h1>
             </div>
-            <div className="grid grid-cols-2 gap-4 max-[1278px]:grid-cols-1">
+            <div className="p-6 grid grid-cols-2 gap-4 max-[1278px]:grid-cols-1">
               <label htmlFor="name" className="grid text-[18px] font-semibold">
                 {currentLanguage === "ar"
                   ? "(en) الاسم"
@@ -137,7 +133,7 @@ const AddCourse = () => {
                   id="name"
                   {...register("name_en", { required: true })}
                   type="text"
-                  className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                 />
                 {errors.name_en && (
                   <span className="text-error">
@@ -159,7 +155,7 @@ const AddCourse = () => {
                   id="name"
                   {...register("name_ar", { required: true })}
                   type="text"
-                  className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                 />
                 {errors.name_ar && (
                   <span className="text-error">
@@ -181,7 +177,7 @@ const AddCourse = () => {
                   id="name"
                   {...register("name_fr", { required: true })}
                   type="text"
-                  className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                 />
                 {errors.name_fr && (
                   <span className="text-error">
@@ -203,7 +199,7 @@ const AddCourse = () => {
                   id="name"
                   {...register("description_en", { required: true })}
                   type="text"
-                  className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                 />
                 {errors.description_en && (
                   <span className="text-error">
@@ -225,7 +221,7 @@ const AddCourse = () => {
                   id="name"
                   {...register("description_ar", { required: true })}
                   type="text"
-                  className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                 />
                 {errors.description_ar && (
                   <span className="text-error">
@@ -247,7 +243,7 @@ const AddCourse = () => {
                   id="name"
                   {...register("description_fr", { required: true })}
                   type="text"
-                  className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                 />
                 {errors.description_fr && (
                   <span className="text-error">
@@ -272,7 +268,7 @@ const AddCourse = () => {
                   defaultValue=""
                   id="countryId"
                   {...register("countryId")}
-                  className={`border ${errors.countryId ? "border-warning" : "border-borderPrimary"} h-full w-[400px] rounded-xl px-4 py-3 text-sm text-blackOrWhite outline-none max-[458px]:w-[350px]`}
+                  className={`border ${errors.countryId ? "border-warning" : "border-borderPrimary"} h-full w-full rounded-xl px-4 py-3 text-sm text-blackOrWhite outline-none max-[458px]:w-[350px]`}
                 >
                   <option selected value="">
                     {currentLanguage === "ar"
@@ -311,7 +307,7 @@ const AddCourse = () => {
                   defaultValue=""
                   id="level"
                   {...register("level", { required: true })}
-                  className={`border ${errors.level ? "border-warning" : "border-borderPrimary"} h-full w-[400px] rounded-xl px-4 py-3 text-sm text-blackOrWhite outline-none max-[458px]:w-[350px]`}
+                  className={`border ${errors.level ? "border-warning" : "border-borderPrimary"} h-full w-full rounded-xl px-4 py-3 text-sm text-blackOrWhite outline-none max-[458px]:w-[350px]`}
                 >
                   <option selected value="">
                     {currentLanguage === "ar"
@@ -350,7 +346,7 @@ const AddCourse = () => {
                   defaultValue=""
                   id="registrationType"
                   {...register("registrationType", { required: true })}
-                  className={`border ${errors.registrationType ? "border-warning" : "border-borderPrimary"} h-full w-[400px] rounded-xl px-4 py-3 text-sm text-blackOrWhite outline-none max-[458px]:w-[350px]`}
+                  className={`border ${errors.registrationType ? "border-warning" : "border-borderPrimary"} h-full w-full rounded-xl px-4 py-3 text-sm text-blackOrWhite outline-none max-[458px]:w-[350px]`}
                 >
                   <option selected value="">
                     {currentLanguage === "ar"
@@ -389,7 +385,7 @@ const AddCourse = () => {
                   defaultValue=""
                   id="language"
                   {...register("language", { required: true })}
-                  className={`border ${errors.language ? "border-warning" : "border-borderPrimary"} h-full w-[400px] rounded-xl px-4 py-3 text-sm text-blackOrWhite outline-none max-[458px]:w-[350px]`}
+                  className={`border ${errors.language ? "border-warning" : "border-borderPrimary"} h-full w-full rounded-xl px-4 py-3 text-sm text-blackOrWhite outline-none max-[458px]:w-[350px]`}
                 >
                   <option selected value="">
                     {currentLanguage === "ar"
@@ -425,7 +421,7 @@ const AddCourse = () => {
                   id="code"
                   {...register("code", { required: true })}
                   type="number"
-                  className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                 />
                 {errors.code && (
                   <span className="text-error">
@@ -447,7 +443,7 @@ const AddCourse = () => {
                   id="eduSystemId"
                   {...register("eduSystemId", { required: true })}
                   type="number"
-                  className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                 />
                 {errors.eduSystemId && (
                   <span className="text-error">
@@ -479,7 +475,7 @@ const AddCourse = () => {
             </div>
           </div>
         </form>
-      </div>
+      </Container>
     </>
   );
 };

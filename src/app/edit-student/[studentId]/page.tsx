@@ -16,6 +16,7 @@ import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import Container from "@/components/Container";
 
 interface Params {
   studentId: string;
@@ -37,7 +38,7 @@ const EditStudent = ({ params }: { params: Params }) => {
     },
     {
       nameEn: "Edit Student",
-      nameAr: "تعديل الغرفة",
+      nameAr: "تعديل الطالب",
       nameFr: "Modifier l'élève",
       href: `/edit-student/${params.studentId}`,
     },
@@ -144,20 +145,22 @@ const EditStudent = ({ params }: { params: Params }) => {
   return (
     <>
       <BreadCrumbs breadcrumbs={breadcrumbs} />
-      <div
-        dir={currentLanguage === "ar" ? "rtl" : "ltr"}
-        className={`${currentLanguage === "ar"
-            ? booleanValue
-              ? "lg:mr-[100px]"
-              : "lg:mr-[270px]"
-            : booleanValue
-              ? "lg:ml-[100px]"
-              : "lg:ml-[270px]"
-          } mx-3 mt-5 grid h-[850px] items-center justify-center`}
-      >
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <div className="my-10 grid items-center justify-center gap-5 rounded-xl bg-bgPrimary p-10 sm:w-[500px] md:w-[600px] lg:w-[750px] xl:w-[1000px]">
-            <div className="grid grid-cols-2 gap-4 max-[1278px]:grid-cols-1">
+      <Container>
+         <div className="mb-8 -mt-2 -ml-1 flex items-center justify-between">
+          <h1 className="text-2xl font-semibold">
+            {currentLanguage === "en"
+              ? "Edit Student"
+              : currentLanguage === "ar"
+                ?"تعديل الطالب"
+                : currentLanguage === "fr"
+                  ? "Modifier l'élève"
+                  : "Edit Student"}{" "}
+            {/* default */}
+          </h1>
+        </div>
+        <form className="flex h-full w-full items-center justify-center" onSubmit={handleSubmit(onSubmit)}>
+          <div className="rounded-xl bg-bgPrimary p-10 w-[90] md:w-[80%]">
+            <div className="p-6 grid grid-cols-2 gap-4 max-[1278px]:grid-cols-1">
               {/* Email */}
               <label htmlFor="email" className="grid text-[18px] font-semibold">
                 {currentLanguage === "ar"
@@ -168,7 +171,7 @@ const EditStudent = ({ params }: { params: Params }) => {
                 <input
                   id="email"
                   type="email"
-                  className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                   value={email || ""}
                   onChange={e => setEmail(e.target.value)}
                 />
@@ -185,7 +188,7 @@ const EditStudent = ({ params }: { params: Params }) => {
                 <input
                   id="nid"
                   type="number"
-                  className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                   value={nid}
                   onChange={e => setNid(e.target.value)}
                 />
@@ -204,7 +207,7 @@ const EditStudent = ({ params }: { params: Params }) => {
                     : "Gender"}
                 <select
                   id="gender"
-                  className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                   value={gender}
                   onChange={e => setGender(e.target.value)}
                 >
@@ -237,7 +240,7 @@ const EditStudent = ({ params }: { params: Params }) => {
                     : "Your Nationality"}
                 <select
                   id="nationality"
-                  className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                   value={nationality}
                   onChange={e => setNationality(e.target.value)}
                 >
@@ -270,7 +273,7 @@ const EditStudent = ({ params }: { params: Params }) => {
                     : "Region"}
                 <select
                   id="regionId"
-                  className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                   value={regionId}
                   onChange={e => setRegionId(e.target.value)}
                 >
@@ -301,7 +304,7 @@ const EditStudent = ({ params }: { params: Params }) => {
                     : "Graduated"}
                 <select
                   id="graduated"
-                  className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                   value={graduated}
                   onChange={e => setGraduated(e.target.value)}
                 >
@@ -327,7 +330,7 @@ const EditStudent = ({ params }: { params: Params }) => {
                 <input
                   id="name_en"
                   type="text"
-                  className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                   value={name_en}
                   onChange={e => setNameEn(e.target.value)}
                 />
@@ -347,7 +350,7 @@ const EditStudent = ({ params }: { params: Params }) => {
                 <input
                   id="name_ar"
                   type="text"
-                  className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                   value={name_ar}
                   onChange={e => setNameAr(e.target.value)}
                 />
@@ -367,7 +370,7 @@ const EditStudent = ({ params }: { params: Params }) => {
                 <input
                   id="name_fr"
                   type="text"
-                  className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                   value={name_fr}
                   onChange={e => setNameFr(e.target.value)}
                 />
@@ -381,9 +384,9 @@ const EditStudent = ({ params }: { params: Params }) => {
                   : currentLanguage === "fr"
                     ? "À propos"
                     : "About"}
-                <textarea
+                <input
                   id="about"
-                  className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                   value={about}
                   onChange={e => setAbout(e.target.value)}
                 />
@@ -402,22 +405,25 @@ const EditStudent = ({ params }: { params: Params }) => {
                 <input
                   id="birthDate"
                   type="date"
-                  className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                   value={birthDate}
                   onChange={e => setBirthDate(e.target.value)}
                 />
               </label>
             </div>
-            <button
-              type="submit"
-              className="mt-5 w-full rounded-lg bg-primary py-3 text-[18px] font-semibold text-white transition-all duration-200 hover:bg-blue-700"
-              disabled={isLoading}
-            >
-              {isLoading ? "Updating..." : "Update Student"}
-            </button>
+            <div className="flex justify-center text-center">
+
+              <button
+                type="submit"
+                className="mt-5 w-fit px-4 rounded-lg bg-primary py-3 text-[18px] font-semibold text-white transition-all duration-200 hover:bg-blue-700"
+                disabled={isLoading}
+              >
+                {isLoading ? "Updating..." : "Update Student"}
+              </button>
+            </div>
           </div>
         </form>
-      </div>
+      </Container>
     </>
   );
 };

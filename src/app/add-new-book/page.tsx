@@ -32,7 +32,6 @@ const AddNewBook = () => {
       href: "/add-new-book",
     },
   ];
-  const booleanValue = useSelector((state: RootState) => state.boolean.value);
   const { language: currentLanguage, loading } = useSelector(
     (state: RootState) => state.language,
   );

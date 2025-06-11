@@ -1,6 +1,7 @@
 "use client";
 import { RootState } from "@/GlobalRedux/store";
 import BreadCrumbs from "@/components/BreadCrumbs";
+import Container from "@/components/Container";
 
 interface ChatData {
   chatId: string;
@@ -27,6 +28,7 @@ import { useChatListSocket } from "@/hooks/useRealTimeAllChats";
 import dynamic from "next/dynamic";
 import { useCallback, useEffect, useState, useRef } from "react";
 import { useForm } from "react-hook-form";
+import { BiSearchAlt } from "react-icons/bi";
 import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
 
@@ -213,7 +215,7 @@ const Chat = () => {
 
 
   const onSubmit = async (formData: any) => {
-    setCreating(true); 
+    setCreating(true);
     try {
       const existingChat = localChats.find(
         chat => chat.targetUser.id === formData.targetUserId,
@@ -264,7 +266,7 @@ const Chat = () => {
         "Échec de la création de la discussion"
       ));
     } finally {
-      setCreating(false); 
+      setCreating(false);
     }
   };
 
@@ -336,31 +338,52 @@ const Chat = () => {
     <>
       <BreadCrumbs breadcrumbs={breadcrumbs} />
 
-      <div
-        dir={currentLanguage === "ar" ? "rtl" : "ltr"}
-        className={` ${currentLanguage === "ar"
-            ? booleanValue
-              ? "lg:mr-[100px]"
-              : "lg:mr-[270px]"
-            : booleanValue
-              ? "lg:ml-[100px]"
-              : "lg:ml-[270px]"
-          } mt-10`}
-      >
+      <Container>
+        <div className="mb-4 -mt-2 -ml-1 flex items-center justify-between">
+          <h1 className="text-2xl font-semibold">
+            {currentLanguage === "en"
+              ? "Reported Chat"
+              : currentLanguage === "ar"
+                ? "الدردشة المُبلَّغ عنها"
+                : currentLanguage === "fr"
+                  ? "Discussion signalée"
+                  : "Reported Chat"}{" "}
+            {/* default */}
+          </h1>
+        </div>
         <div
           dir={currentLanguage === "ar" ? "rtl" : "ltr"}
-          className="flex w-full justify-between gap-10 rounded-lg p-4 max-[1180px]:grid max-[1180px]:justify-center"
+          className="min-[1180px]:flex w-full bg-bgPrimary justify-between gap-10 rounded-xl p-6"
         >
-          <div className="h-[700px] w-full overflow-y-auto rounded-xl bg-bgPrimary p-5">
+          <div className="max-[1180px]:h-fit h-[700px] max-[1180px]:w-full w-[40%] mb-6 overflow-y-auto rounded-xl bg-bgPrimary">
             <div className="flex-1 overflow-y-auto">
               {isLoading ? (
                 <Spinner />
               ) : (
                 <>
-                  <div className="flex justify-between text-start text-[22px] font-semibold">
-                    <h1>
-                      {getTranslation("Contacts", "جهات الاتصال", "Contacts")}
-                    </h1>
+                  <div className="mt-6 flex justify-between items-center">
+                    {/* Search Input */}
+                    <div
+                      dir={currentLanguage === "ar" ? "rtl" : "ltr"}
+                      className="relative w-full max-w-md"
+                    >
+                      <div className="pointer-events-none absolute inset-y-0 start-0 z-20 flex items-center ps-4">
+                        <BiSearchAlt className="text-secondary" size={18} />
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <input
+                          onChange={e => setSearch(e.target.value)}
+                          type="text"
+                          className={`w-full bg-bgPrimary border-borderPrimary ${currentLanguage == "ar" ? "ml-4" : "mr-4"} rounded-xl border-2 px-4 py-2 ps-11 text-lg outline-none`}
+                          placeholder={getTranslation(
+                            "Search",
+                            "بحث",
+                            "Recherche",
+                          )} />
+
+                      </div>
+                    </div>
+
                     <div className="flex items-center">
                       {!isConnected && (
                         <span className="mr-2 flex items-center text-sm text-error">
@@ -393,44 +416,6 @@ const Chat = () => {
                       </button>
                     </div>
                   </div>
-                  <div className="mt-6 grid items-start">
-                    <div>
-                      <label htmlFor="icon" className="sr-only">
-                        Search
-                      </label>
-                      <div className="relative min-w-48 md:min-w-80">
-                        <div className="pointer-events-none absolute inset-y-0 start-0 z-20 flex items-center ps-4">
-                          <svg
-                            className="size-4 flex-shrink-0 text-textSecondary"
-                            xmlns="http://www.w3.org/2000/svg"
-                            width="24"
-                            height="24"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                            strokeWidth="2"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                          >
-                            <circle cx="11" cy="11" r="8" />
-                            <path d="m21 21-4.3-4.3" />
-                          </svg>
-                        </div>
-                        <input
-                          onChange={e => setSearch(e.target.value)}
-                          type="text"
-                          id="icon"
-                          name="icon"
-                          className="block w-full rounded-lg border-2 border-borderPrimary px-4 py-2 ps-11 text-sm outline-none focus:border-primary focus:ring-primary disabled:pointer-events-none disabled:opacity-50"
-                          placeholder={getTranslation(
-                            "Search",
-                            "بحث",
-                            "Recherche",
-                          )}
-                        />
-                      </div>
-                    </div>
-                  </div>
                   <div className="mt-2 grid gap-2">
                     {localChats
                       .filter((chat: ChatData) => {
@@ -444,62 +429,60 @@ const Chat = () => {
                         <div
                           key={chat.chatId}
                           onClick={() => handleChatClick(chat)}
-                          className={`flex w-full cursor-pointer items-center border-b border-borderPrimary px-2 py-1 hover:bg-bgSecondary ${userId === chat.chatId ? "bg-bgSecondary" : ""}`}
+                          className={`flex w-full cursor-pointer items-center border-b border-borderPrimary px-2 py-2 hover:bg-bgSecondary ${userId === chat.chatId ? "bg-bgSecondary" : ""
+                            }`}
                         >
-                          <div
-                            className={`${chat.numberOfNewMessages > 0 ? "w-[150px]" : "w-[200px]"}`}
-                          >
-                            {!chat.targetUser.hasPhoto ? (
-                              <img
-                                src="/images/userr.png"
-                                className="mx-2 h-[40px] w-[40px] rounded-lg"
-                                alt="User avatar"
-                              />
-                            ) : (
-                              <img
-                                src={chat.targetUser.photoLink}
-                                className="mx-2 h-[40px] w-[40px] rounded-lg"
-                                alt="User avatar"
-                              />
-                            )}
+                          <div className="flex-shrink-0">
+                            <img
+                              src={
+                                chat.targetUser.hasPhoto
+                                  ? chat.targetUser.photoLink
+                                  : "/images/userr.png"
+                              }
+                              alt="User avatar"
+                              className="h-10 w-10 rounded-full object-cover"
+                            />
                           </div>
-                          <div className="grid w-full gap-2 break-words">
-                            <p className="font-semibold">
-                              {chat.targetUser.name}
 
-                              <span className="ml-1 text-[15px] text-secondary">
-                                ({chat.targetUser.Role})
-                              </span>
-                            </p>
-                            <p className="mt-2 w-[400px] break-words font-semibold text-secondary">
+                          <div className="ml-4 flex-1 min-w-0">
+                            <div className="flex items-center justify-between">
+                              <p className="truncate font-semibold">
+                                {chat.targetUser.name}
+                                <span className="ml-1 text-[15px] text-secondary">
+                                  ({chat.targetUser.Role})
+                                </span>
+                              </p>
+                              {chat.numberOfNewMessages > 0 && (
+                                <span className="ml-2 rounded-full bg-primary px-2 text-white text-sm">
+                                  {chat.numberOfNewMessages}
+                                </span>
+                              )}
+                            </div>
+                            <p className="mt-1 text-sm text-secondary line-clamp-2">
                               {chat.lastMessage}
                             </p>
                           </div>
-                          <div className="grid w-full items-center justify-end gap-4 text-center text-end text-white">
-                            <button
-                              onClick={e => handleOpenModal2(chat.chatId, e)}
+
+                          <button
+                            onClick={e => handleOpenModal2(chat.chatId, e)}
+                            className="ml-4 text-error"
+                          >
+                            <svg
+                              className="h-6 w-6"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              stroke="currentColor"
                             >
-                              <svg
-                                className="h-6 w-6 text-error"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                stroke="currentColor"
-                              >
-                                <path
-                                  strokeLinecap="round"
-                                  strokeLinejoin="round"
-                                  strokeWidth="2"
-                                  d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-                                />
-                              </svg>
-                            </button>
-                            {chat.numberOfNewMessages > 0 && (
-                              <p className="rounded-full bg-primary px-2">
-                                {chat.numberOfNewMessages}
-                              </p>
-                            )}
-                          </div>
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth="2"
+                                d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                              />
+                            </svg>
+                          </button>
                         </div>
+
                       ))}
                     {localChats.length === 0 && !isLoading && (
                       <div className="mt-10 text-center text-textSecondary">
@@ -512,7 +495,7 @@ const Chat = () => {
                         </p>
                         <button
                           onClick={handleOpenModal}
-                          className="mt-2 rounded-lg bg-primary px-4 py-2 text-white hover:bg-hover"
+                          className="mt-2 rounded-xl bg-primary px-4 py-2 text-white hover:bg-hover"
                         >
                           {getTranslation(
                             "Start a new chat",
@@ -527,10 +510,21 @@ const Chat = () => {
               )}
             </div>
           </div>
-          <div className="flex w-full rounded-xl bg-bgPrimary">
+          <div className="flex max-[1180px]:w-full h-[700px] w-[60%] rounded-xl bg-bgSecondary">
             {userId == "" ? (
               <div className="flex h-full w-full items-center justify-center">
-                <img src="/images/emptyState.png" alt="Select a chat" />
+                <div>
+                  <img
+                    src="/images/chat.png"
+                    alt="Select a chat"
+                    className="block dark:hidden"
+                  />
+                  <img
+                    src="/images/chat-dark.png"
+                    alt="Select a chat (dark)"
+                    className="hidden dark:block"
+                  />
+                </div>
               </div>
             ) : (
               <ChatPage
@@ -591,7 +585,7 @@ const Chat = () => {
 
         {/* Delete Chat Modal */}
         <Modal isOpen={isModalOpen2} onClose={handleCloseModal2}>
-          <div className="rounded-lg p-6 text-center">
+          <div className="rounded-xl p-6 text-center">
             <h2 className="mb-4 text-xl font-bold text-gray-800">
               {getTranslation(
                 "Are you sure you want to delete this chat?",
@@ -622,7 +616,7 @@ const Chat = () => {
             </div>
           </div>
         </Modal>
-      </div>
+      </Container>
     </>
   );
 };

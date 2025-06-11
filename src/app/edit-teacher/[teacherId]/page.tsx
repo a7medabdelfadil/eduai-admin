@@ -18,6 +18,7 @@ import {
 import SearchableSelect from "@/components/select";
 import MultiSelectComponent from "@/components/multiSelect";
 import PhoneNumberInput from "@/components/PhoneNumberInput";
+import Container from "@/components/Container";
 
 interface ViewTeacherProps {
   params: {
@@ -151,21 +152,22 @@ const EditTeacher: React.FC<ViewTeacherProps> = ({ params }) => {
     <>
       <BreadCrumbs breadcrumbs={breadcrumbs} />
 
-      <div
-        dir={currentLanguage === "ar" ? "rtl" : "ltr"}
-        className={`${
-          currentLanguage === "ar"
-            ? booleanValue
-              ? "lg:mr-[100px]"
-              : "lg:mr-[270px]"
-            : booleanValue
-              ? "lg:ml-[100px]"
-              : "lg:ml-[270px]"
-        } mx-3 mt-5 grid h-[850px] items-center justify-center`}
-      >
+      <Container>
+         <div className="mb-8 -mt-2 -ml-1 flex items-center justify-between">
+          <h1 className="text-2xl font-semibold">
+            {currentLanguage === "en"
+              ? "Edit Teacher"
+              : currentLanguage === "ar"
+                ? "تعديل المعلم"
+                : currentLanguage === "fr"
+                  ? "Modifier l'enseignant"
+                  : "Edit Teacher"}{" "}
+            {/* default */}
+          </h1>
+        </div>
         <FormProvider {...formMethods}>
-          <form onSubmit={handleSubmit(onSubmit)}>
-            <div className="my-10 grid items-center justify-center gap-5 rounded-xl bg-bgPrimary p-10 sm:w-[500px] md:w-[600px] lg:w-[750px] xl:w-[1000px]">
+          <form className="flex h-full w-full items-center justify-center" onSubmit={handleSubmit(onSubmit)}>
+            <div className="rounded-xl bg-bgPrimary p-10 w-[90] md:w-[80%]">
               <div className="flex items-center justify-start gap-2">
                 <svg
                   className="h-6 w-6 font-bold text-secondary group-hover:text-hover"
@@ -198,7 +200,7 @@ const EditTeacher: React.FC<ViewTeacherProps> = ({ params }) => {
                         : "Teacher Information"}
                 </h1>
               </div>
-              <div className="grid grid-cols-2 gap-4 max-[1278px]:grid-cols-1">
+              <div className="px-6 pt-6 grid grid-cols-2 gap-4 max-[1278px]:grid-cols-1">
                 <label
                   htmlFor="email"
                   className="grid text-[18px] font-semibold"
@@ -211,7 +213,7 @@ const EditTeacher: React.FC<ViewTeacherProps> = ({ params }) => {
                   <input
                     id="email"
                     type="email"
-                    className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                    className="w-full rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                     {...register("email", { required: true })}
                   />
                   {errors.email && (
@@ -233,7 +235,7 @@ const EditTeacher: React.FC<ViewTeacherProps> = ({ params }) => {
                   <input
                     id="nid"
                     type="number"
-                    className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                    className="w-full rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                     {...register("nid", { required: true })}
                   />
                   {errors.nid && (
@@ -252,7 +254,7 @@ const EditTeacher: React.FC<ViewTeacherProps> = ({ params }) => {
                       : "Genre"}
                   <select
                     id="gender"
-                    className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                    className="w-full rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                     {...register("gender", { required: true })}
                   >
                     <option value="">
@@ -301,7 +303,7 @@ const EditTeacher: React.FC<ViewTeacherProps> = ({ params }) => {
                   <input
                     id="about"
                     type="text"
-                    className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                    className="w-full rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                     {...register("about", { required: true })}
                   />
                   {errors.about && (
@@ -315,7 +317,7 @@ const EditTeacher: React.FC<ViewTeacherProps> = ({ params }) => {
                   )}
                 </label>
               </div>
-              <div className="grid grid-cols-2 gap-4 max-[1278px]:grid-cols-1">
+              <div className="px-6 pt-6 grid grid-cols-2 gap-4 max-[1278px]:grid-cols-1">
                 <label
                   htmlFor="nationality"
                   className="grid text-[18px] font-semibold"
@@ -327,7 +329,7 @@ const EditTeacher: React.FC<ViewTeacherProps> = ({ params }) => {
                       : "Votre Nationalité"}
                   <select
                     id="nationality"
-                    className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                    className="w-full rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                     {...register("nationality", { required: true })}
                   >
                     <option value="">
@@ -388,7 +390,7 @@ const EditTeacher: React.FC<ViewTeacherProps> = ({ params }) => {
                   <input
                     id="name_en"
                     type="text"
-                    className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                    className="w-full rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                     {...register("name_en", { required: true })}
                   />
                   {errors.name_en && (
@@ -414,7 +416,7 @@ const EditTeacher: React.FC<ViewTeacherProps> = ({ params }) => {
                   <input
                     id="name_ar"
                     type="text"
-                    className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                    className="w-full rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                     {...register("name_ar", { required: true })}
                   />
                   {errors.name_ar && (
@@ -440,7 +442,7 @@ const EditTeacher: React.FC<ViewTeacherProps> = ({ params }) => {
                   <input
                     id="name_fr"
                     type="text"
-                    className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                    className="w-full rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                     {...register("name_fr", { required: true })}
                   />
                   {errors.name_fr && (
@@ -468,7 +470,7 @@ const EditTeacher: React.FC<ViewTeacherProps> = ({ params }) => {
                   <input
                     id="birthDate"
                     type="date"
-                    className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                    className="w-full rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                     {...register("birthDate", {
                       required: true,
                       validate: value => {
@@ -519,7 +521,7 @@ const EditTeacher: React.FC<ViewTeacherProps> = ({ params }) => {
                     defaultValue=""
                     id="qualification"
                     {...register("qualification", { required: true })}
-                    className="h-[55px] w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                    className="h-[55px] w-full rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                   >
                     <option value="">
                       {currentLanguage === "en"
@@ -568,7 +570,7 @@ const EditTeacher: React.FC<ViewTeacherProps> = ({ params }) => {
                   )}
                 </label>
               </div>
-              <div className="flex justify-center text-center">
+              <div className="pt-6 flex justify-center text-center">
                 {isUpdating ? (
                   <Spinner />
                 ) : (
@@ -588,7 +590,7 @@ const EditTeacher: React.FC<ViewTeacherProps> = ({ params }) => {
             </div>
           </form>
         </FormProvider>
-      </div>
+      </Container>
     </>
   );
 };

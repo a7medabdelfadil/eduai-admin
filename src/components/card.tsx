@@ -27,25 +27,23 @@ const Card: React.FC<CardProps> = ({
   return (
     <div
       dir={currentLanguage === "ar" ? "rtl" : "ltr"}
-      className="grid h-[250px] w-[250px] items-end justify-center rounded-xl bg-bgPrimary shadow-lg hover:scale-105 ease-in duration-200"
+      className="h-[250px] w-[300px] rounded-xl overflow-hidden bg-white shadow-md hover:scale-105 transition-transform duration-200 ease-in"
     >
-      <Link
-        href={href}
-        className="grid items-center justify-center text-center"
-      >
-        <div className="flex justify-center">
-          <div className="grid h-[87px] w-[87px] items-center justify-center rounded-full bg-bgSecondary">
-            {imgSrc ? <img src={imgSrc} alt={title} /> : icon}
+      <Link href={href} className="flex h-full flex-col justify-between">
+        <div className="flex mt-6 flex-col items-center justify-center pt-6">
+          <div className="flex h-[60px] w-[60px] items-center justify-center rounded-full bg-bgRowTable">
+            {imgSrc ? <img src={imgSrc} alt={title} className="h-[30px] w-[30px]" /> : icon}
           </div>
+          <p className="mt-3 text-center text-[22px] font-semibold text-textPrimary">{title}</p>
         </div>
-        <p className="mt-2 text-[22px] font-semibold">{title}</p>
-        <div className="mt-4 flex items-end rounded-xl">
-          <div className="flex h-[80px] w-[250px] items-center rounded-b-xl bg-bgPrimary px-2.5 text-start text-[13px] font-semibold text-secondary">
-            <p>{description}</p>
-          </div>
+
+        <div className="flex h-[60px] items-center justify-between bg-bgRowTable px-4 text-[13px] text-secondary font-medium">
+          <p>{description}</p>
+          <span className="text-xl">&rsaquo;</span>
         </div>
       </Link>
     </div>
+
   );
 };
 

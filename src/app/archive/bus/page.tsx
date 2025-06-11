@@ -65,9 +65,7 @@ const Bus = () => {
         : currentLanguage === "fr"
           ? "résultat(s)"
           : "Result(s)",
-
   };
-
 
   const { data, error, isLoading, refetch } = useGetAllBussQuery("0");
   const [search, setSearch] = useState("");

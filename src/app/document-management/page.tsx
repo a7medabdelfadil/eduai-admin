@@ -6,7 +6,6 @@ import { useSelector } from "react-redux";
 import { HiAcademicCap } from "react-icons/hi"; // Certificate
 import { FaFileAlt } from "react-icons/fa"; // Transcripts
 import { BsPersonLinesFill } from "react-icons/bs"; // Enrollment
-import { FaRegCalendarCheck } from "react-icons/fa"; // Attendance
 import { MdDescription } from "react-icons/md"; // Other official documents
 import BreadCrumbs from "@/components/BreadCrumbs";
 import Spinner from "@/components/spinner";

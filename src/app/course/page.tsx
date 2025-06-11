@@ -6,6 +6,7 @@ import { FiBook } from "react-icons/fi";
 import { AiOutlineFileText } from "react-icons/ai";
 import BreadCrumbs from "@/components/BreadCrumbs";
 import Spinner from "@/components/spinner";
+import Container from "@/components/Container";
 
 const Course = () => {
   const breadcrumbs = [
@@ -16,9 +17,9 @@ const Course = () => {
       href: "/",
     },
     {
-      nameEn: "Course",
-      nameAr: "الدورة",
-      nameFr: "Cours",
+      nameEn: "Course and Resource  Management",
+      nameAr: "إدارة الدورات والموارد",
+      nameFr: "Gestion des cours et des ressources",
       href: "/course",
     },
   ];
@@ -33,11 +34,11 @@ const Course = () => {
       icon: <FiBook size={40} />,
       title:
         currentLanguage === "en"
-          ? "Course"
+          ? "Course Scheduling"
           : currentLanguage === "ar"
-            ? "الدورة"
+            ? "جدولة الدورات"
             : currentLanguage === "fr"
-              ? "Cours"
+              ? "Planification des cours"
               : "Course", // Default to English
       description:
         currentLanguage === "en"
@@ -53,11 +54,11 @@ const Course = () => {
       icon: <AiOutlineFileText size={40} />,
       title:
         currentLanguage === "en"
-          ? "Resource"
+          ? "Resource Management"
           : currentLanguage === "ar"
-            ? "المصدر"
+            ? "إدارة الموارد"
             : currentLanguage === "fr"
-              ? "Ressources"
+              ? "Gestion des ressources"
               : "Resource", // Default to English
       description:
         currentLanguage === "en"
@@ -79,19 +80,8 @@ const Course = () => {
     <>
       <BreadCrumbs breadcrumbs={breadcrumbs} />
 
-      <div
-        dir={currentLanguage === "ar" ? "rtl" : "ltr"}
-        className={`${
-          currentLanguage === "ar"
-            ? booleanValue
-              ? "lg:mr-[40px]"
-              : "lg:mr-[290px]"
-            : booleanValue
-              ? "lg:ml-[40px]"
-              : "lg:ml-[290px]"
-        } mt-12 grid justify-center`}
-      >
-        <div className="md:grid-cols2 grid grid-cols-2 gap-5 max-[577px]:grid-cols-1 lg:grid-cols-2 xl:grid-cols-2 2xl:grid-cols-2">
+      <Container>
+        <div className="flex h-full w-full flex-wrap items-center justify-center gap-6">
           {Courses.map((item, index) => (
             <Card
               key={index}
@@ -102,7 +92,7 @@ const Course = () => {
             />
           ))}
         </div>
-      </div>
+      </Container>
     </>
   );
 };

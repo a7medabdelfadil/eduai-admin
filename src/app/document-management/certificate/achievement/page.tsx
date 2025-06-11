@@ -1,16 +1,27 @@
 /* eslint-disable @next/next/no-img-element */
 "use client";
-import Spinner from "@/components/spinner";
 import {
   useGetAllAchievementsQuery,
   useDeleteAchievementsMutation,
 } from "@/features/Document-Management/achievementApi";
 import Link from "next/link";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "@/GlobalRedux/store";
 import { toast } from "react-toastify";
 import BreadCrumbs from "@/components/BreadCrumbs";
+import Container from "@/components/Container";
+import { BiSearchAlt } from "react-icons/bi";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/Table";
+import { Skeleton } from "@/components/Skeleton";
+import { MdDelete } from "react-icons/md";
 
 const Achievement = () => {
   const breadcrumbs = [
@@ -34,168 +45,132 @@ const Achievement = () => {
     },
   ];
 
-  const booleanValue = useSelector((state: RootState) => state.boolean.value);
   type Achievement = Record<string, any>;
   const [search, setSearch] = useState("");
-  const { data, error, isLoading, refetch } = useGetAllAchievementsQuery(null);
-  const [selectAll, setSelectAll] = useState(false);
+  const { data, isLoading, refetch } = useGetAllAchievementsQuery(null);
+  const [deleteAchievement] = useDeleteAchievementsMutation();
 
+  const { language: currentLanguage } = useSelector(
+    (state: RootState) => state.language
+  );
 
-  const handleSelectAll = () => {
-    setSelectAll(!selectAll);
-    const checkboxes = document.querySelectorAll<HTMLInputElement>(
-      'input[type="checkbox"]:not(#checkbox-all-search)',
-    );
-    checkboxes.forEach(checkbox => {
-      checkbox.checked = !selectAll;
-    });
+  const translate = {
+    searchPlaceholder:
+      currentLanguage === "ar"
+        ? "ابحث عن شهادة"
+        : currentLanguage === "fr"
+          ? "Rechercher un certificat"
+          : "Search certificate",
+    result:
+      currentLanguage === "ar"
+        ? "نتيجة"
+        : currentLanguage === "fr"
+          ? "résultat(s)"
+          : "Result(s)",
+    noData:
+      currentLanguage === "ar"
+        ? "لا توجد بيانات"
+        : currentLanguage === "fr"
+          ? "Aucune donnée"
+          : "No data available",
+    stage:
+      currentLanguage === "ar"
+        ? "المرحلة"
+        : currentLanguage === "fr"
+          ? "Étape"
+          : "Stage",
+    studentName:
+      currentLanguage === "ar"
+        ? "اسم الطالب"
+        : currentLanguage === "fr"
+          ? "Nom de l'Étudiant"
+          : "Student Name",
+    studentId:
+      currentLanguage === "ar"
+        ? "رقم الطالب"
+        : currentLanguage === "fr"
+          ? "ID de l'Étudiant"
+          : "Student Id",
+    issueDate:
+      currentLanguage === "ar"
+        ? "تاريخ الإصدار"
+        : currentLanguage === "fr"
+          ? "Date d'Émission"
+          : "Issue Date",
+    action:
+      currentLanguage === "ar"
+        ? "إجراء"
+        : currentLanguage === "fr"
+          ? "Action"
+          : "Action",
+    delete:
+      currentLanguage === "ar"
+        ? "حذف"
+        : currentLanguage === "fr"
+          ? "Supprimer"
+          : "Delete",
   };
 
-  const [deleteCeftificates] = useDeleteAchievementsMutation();
+  const filteredData = data?.data?.content?.filter((achievement: Achievement) =>
+    search.trim() === ""
+      ? true
+      : achievement.studentName?.toLowerCase()?.includes(search.trim().toLowerCase())
+  );
+
 
   const handleDelete = async (id: string) => {
     try {
-      await deleteCeftificates(id).unwrap();
-      toast.success(`Certificate with ID ${id} Deleted successfully`);
+      await deleteAchievement(id).unwrap();
+      toast.success(`Achievement with ID ${id} Deleted successfully`);
       void refetch();
-    } catch (err) {
-      toast.error("Failed to Delete the Certificate");
+    } catch {
+      toast.error("Failed to Delete the Achievement");
     }
   };
-
-  useEffect(() => {
-    const handleOtherCheckboxes = () => {
-      const allCheckboxes = document.querySelectorAll<HTMLInputElement>(
-        'input[type="checkbox"]:not(#checkbox-all-search)',
-      );
-      const allChecked = Array.from(allCheckboxes).every(
-        checkbox => checkbox.checked,
-      );
-      const selectAllCheckbox = document.getElementById(
-        "checkbox-all-search",
-      ) as HTMLInputElement | null;
-      if (selectAllCheckbox) {
-        selectAllCheckbox.checked = allChecked;
-        setSelectAll(allChecked);
-      }
-    };
-
-    const otherCheckboxes = document.querySelectorAll<HTMLInputElement>(
-      'input[type="checkbox"]:not(#checkbox-all-search)',
-    );
-    otherCheckboxes.forEach(checkbox => {
-      checkbox.addEventListener("change", handleOtherCheckboxes);
-    });
-
-    return () => {
-      otherCheckboxes.forEach(checkbox => {
-        checkbox.removeEventListener("change", handleOtherCheckboxes);
-      });
-    };
-  }, []);
-
-  const { language: currentLanguage, loading } = useSelector(
-    (state: RootState) => state.language,
-  );
-
-  if (loading || isLoading)
-    return (
-      <div className="flex h-screen w-full items-center justify-center">
-        <Spinner />
-      </div>
-    );
 
   return (
     <>
       <BreadCrumbs breadcrumbs={breadcrumbs} />
-      <div
-        dir={currentLanguage === "ar" ? "rtl" : "ltr"}
-        className={` ${
-          currentLanguage === "ar"
-            ? booleanValue
-              ? "lg:mr-[100px]"
-              : "lg:mr-[270px]"
-            : booleanValue
-              ? "lg:ml-[100px]"
-              : "lg:ml-[270px]"
-        } relative mx-3 mt-10 h-screen overflow-x-auto bg-transparent sm:rounded-lg`}
-      >
-        <div className="justify-left mb-[80px] ml-4 mt-[50px] flex flex-wrap gap-5 text-[20px] font-semibold max-[725px]:text-[15px]">
-          <Link href="/document-management/certificate">
-            {currentLanguage === "ar"
-              ? "إكمال"
-              : currentLanguage === "fr"
-                ? "Achèvement"
-                : "Completion"}
+      <Container>
+        <div className="justify-left mb-6 ml-4 flex flex-wrap gap-5 text-[20px] font-semibold max-[725px]:text-[15px]">
+          <Link href="/document-management/certificate"
+            className="hover:text-blue-500 hover:underline">
+            {currentLanguage === "ar" ? "إكمال" : currentLanguage === "fr" ? "Achèvement" : "Completion"}
           </Link>
-          <Link
-            href="/document-management/certificate/achievement"
-            className="text-blue-500 underline"
-          >
-            {currentLanguage === "ar"
-              ? "إنجاز"
-              : currentLanguage === "fr"
-                ? "Réussite"
-                : "Achievement"}
+          <Link href="/document-management/certificate/achievement"
+            className="text-blue-500 underline">
+            {currentLanguage === "ar" ? "إنجاز" : currentLanguage === "fr" ? "Réussite" : "Achievement"}
           </Link>
-          <Link href="/document-management/certificate/participation">
-            {currentLanguage === "ar"
-              ? "المشاركة"
-              : currentLanguage === "fr"
-                ? "Participation"
-                : "Participation"}
+          <Link href="/document-management/certificate/participation" className="hover:text-blue-500 hover:underline">
+            {currentLanguage === "ar" ? "مشاركة" : currentLanguage === "fr" ? "Participation" : "Participation"}
           </Link>
-          <Link href="/document-management/certificate/professional-development">
-            {currentLanguage === "ar"
-              ? "التطوير المهني"
-              : currentLanguage === "fr"
-                ? "Développement Professionnel"
-                : "Professional Development"}
+          <Link href="/document-management/certificate/professional-development" className="hover:text-blue-500 hover:underline">
+            {currentLanguage === "ar" ? "تطوير مهني" : currentLanguage === "fr" ? "Développement Professionnel" : "Professional Development"}
           </Link>
         </div>
-        <div className="flex justify-between text-center max-[502px]:grid max-[502px]:justify-center">
-          <div className="mb-3">
-            <label htmlFor="icon" className="sr-only">
-              Search
-            </label>
-            <div className="relative min-w-72 md:min-w-80">
+        <div className="bg-bgPrimary rounded-xl mb-6">
+
+          <div className="flex flex-col md:flex-row justify-between items-center gap-4 px-4 py-4 rounded-lg">
+            <div dir={currentLanguage === "ar" ? "rtl" : "ltr"} className="relative w-full max-w-md">
               <div className="pointer-events-none absolute inset-y-0 start-0 z-20 flex items-center ps-4">
-                <svg
-                  className="size-4 flex-shrink-0 text-gray-400"
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                >
-                  <circle cx="11" cy="11" r="8" />
-                  <path d="m21 21-4.3-4.3" />
-                </svg>
+                <BiSearchAlt className="text-secondary" size={18} />
               </div>
-              <input
-                onChange={e => setSearch(e.target.value)}
-                type="text"
-                id="icon"
-                name="icon"
-                className="block w-full rounded-lg border-2 border-borderPrimary px-4 py-2 ps-11 text-sm outline-none focus:border-blue-500 focus:ring-blue-500 disabled:pointer-events-none disabled:opacity-50"
-                placeholder={
-                  currentLanguage === "en"
-                    ? "Search"
-                    : currentLanguage === "ar"
-                      ? "بحث"
-                      : "Recherche"
-                }
-              />
+              <div className="flex items-center gap-2">
+                <input
+                  onChange={(e) => setSearch(e.target.value)}
+                  type="text"
+                  className="w-full border-borderSecondary rounded-lg border-2 px-4 py-2 ps-11 text-lg outline-none"
+                  placeholder={translate.searchPlaceholder}
+                />
+                <span className="min-w-[120px] text-primary">
+                  {filteredData?.length ?? 0} {translate.result}
+                </span>
+              </div>
             </div>
-          </div>
-          <div className="flex justify-center">
+
             <Link
               href="/document-management/certificate/add-new-achievement"
-              className="mx-3 mb-5 whitespace-nowrap rounded-xl bg-primary px-4 py-2 text-[18px] font-semibold text-white duration-300 ease-in hover:bg-[#4a5cc5] hover:shadow-xl"
+              className="mx-3 whitespace-nowrap rounded-xl bg-primary px-4 py-2 text-[18px] font-semibold text-white duration-300 ease-in hover:bg-[#4a5cc5] hover:shadow-xl"
             >
               {currentLanguage === "ar"
                 ? "+ إضافة إنجازات التخرج"
@@ -204,134 +179,64 @@ const Achievement = () => {
                   : "+ Add Completion Achievements"}
             </Link>
           </div>
-        </div>
-        <div className="relative overflow-auto shadow-md sm:rounded-lg">
-          <table className="w-full overflow-x-auto text-left text-sm text-textSecondary rtl:text-right">
-            <thead className="bg-thead text-xs uppercase text-textPrimary">
-              <tr>
-                <th scope="col" className="p-4">
-                  <div className="flex items-center">
-                    {/* Add event listener for select all checkbox */}
-                    <input
-                      id="checkbox-all-search"
-                      type="checkbox"
-                      className="-gray-800 h-4 w-4 rounded border-borderPrimary bg-bgPrimary text-primary focus:ring-2 focus:ring-blue-500"
-                      onChange={handleSelectAll}
-                    />
-                  </div>
-                </th>
-                <th scope="col" className="whitespace-nowrap px-6 py-3">
-                  {currentLanguage === "ar"
-                    ? "المرحلة"
-                    : currentLanguage === "fr"
-                      ? "Stage"
-                      : "Stage"}
-                </th>
-                <th scope="col" className="whitespace-nowrap px-6 py-3">
-                  {currentLanguage === "ar"
-                    ? "اسم الطالب"
-                    : currentLanguage === "fr"
-                      ? "Nom de l'Étudiant"
-                      : "Student Name"}
-                </th>
-                <th scope="col" className="whitespace-nowrap px-6 py-3">
-                  {currentLanguage === "ar"
-                    ? "رقم الطالب"
-                    : currentLanguage === "fr"
-                      ? "ID de l'Étudiant"
-                      : "Student Id"}
-                </th>
-                <th scope="col" className="whitespace-nowrap px-6 py-3">
-                  {currentLanguage === "ar"
-                    ? "تاريخ الإصدار"
-                    : currentLanguage === "fr"
-                      ? "Date d'Émission"
-                      : "Issue Date"}
-                </th>
-                <th scope="col" className="whitespace-nowrap px-6 py-3">
-                  {currentLanguage === "ar"
-                    ? "عرض"
-                    : currentLanguage === "fr"
-                      ? "Voir"
-                      : "View"}
-                </th>
-                <th scope="col" className="whitespace-nowrap px-6 py-3">
-                  {currentLanguage === "ar"
-                    ? "إجراء"
-                    : currentLanguage === "fr"
-                      ? "Action"
-                      : "Action"}
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              {data?.data.content
-                .filter((achievement: Achievement) => {
-                  return search.toLocaleLowerCase() === ""
-                    ? achievement
-                    : achievement.title.toLocaleLowerCase().includes(search);
-                })
-                .map((achievement: Achievement) => (
-                  <tr
-                    key={achievement.id}
-                    className="border-b border-borderPrimary bg-bgPrimary hover:bg-bgSecondary"
-                  >
-                    <td className="w-4 p-4">
-                      <div className="flex items-center">
-                        <input
-                          id="checkbox-table-search-1"
-                          type="checkbox"
-                          className="h-4 w-4 rounded border-gray-300 bg-gray-100 text-blue-600 focus:ring-2 focus:ring-blue-500"
+
+          <div className="relative overflow-auto shadow-md sm:rounded-lg">
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>{translate.studentName}</TableHead>
+                  <TableHead>{translate.stage}</TableHead>
+                  <TableHead>{translate.studentId}</TableHead>
+                  <TableHead>{translate.issueDate}</TableHead>
+                  <TableHead>{translate.action}</TableHead>
+                </TableRow>
+              </TableHeader>
+
+              <TableBody>
+                {isLoading ? (
+                  [...Array(3)].map((_, i) => (
+                    <TableRow key={i}>
+                      {Array.from({ length: 5 }).map((_, j) => (
+                        <TableCell key={j}>
+                          <Skeleton className="h-4 w-24" />
+                        </TableCell>
+                      ))}
+                    </TableRow>
+                  ))
+                ) : !filteredData || filteredData.length === 0 ? (
+                  <TableRow>
+                    <TableCell colSpan={5} className="text-center font-medium">
+                      {translate.noData}
+                    </TableCell>
+                  </TableRow>
+                ) : (
+                  filteredData.map((achievement: Achievement, index: number) => (
+                    <TableRow key={achievement.id} data-index={index}>
+                      <TableCell>{achievement.studentName}</TableCell>
+                      <TableCell>{achievement.stage}</TableCell>
+                      <TableCell>{achievement.studentId}</TableCell>
+                      <TableCell>{achievement.issueDate}</TableCell>
+                      <TableCell className="flex items-center gap-2">
+                        <Link
+                          href={`/document-management/certificate/achievement/${achievement.id}`}
+                          className="font-medium text-blue-600 hover:underline"
+                          title="View"
+                        >
+                          <img src="/images/print.png" alt="#" />
+                        </Link>
+                        <MdDelete
+                          className="text-2xl text-red-600 cursor-pointer hover:text-red-800"
+                          onClick={() => handleDelete(achievement.id)}
                         />
-                      </div>
-                    </td>
-                    <th scope="row" className="whitespace-nowrap px-6 py-4">
-                      <p> {achievement.stage} </p>
-                    </th>
-                    <td className="whitespace-nowrap px-6 py-4">
-                      {achievement.studentName}
-                    </td>
-                    <td className="whitespace-nowrap px-6 py-4">
-                      {achievement.studentId}
-                    </td>
-                    <td className="flex gap-2 whitespace-nowrap px-6 py-4">
-                      {achievement.issueDate}
-                    </td>
-                    <td className="whitespace-nowrap px-6 py-4">
-                      <Link
-                        href={`/document-management/certificate/achievement/${achievement.id}`}
-                        className="font-medium text-blue-600 hover:underline"
-                      >
-                        <img src="/images/print.png" alt="#" />
-                      </Link>
-                    </td>
-                    <td className="whitespace-nowrap px-6 py-4">
-                      <button
-                        onClick={() => handleDelete(achievement.id)}
-                        className="rounded-lg bg-error px-2 py-1 font-semibold text-white shadow-lg delay-150 duration-300 ease-in-out hover:-translate-y-1 hover:scale-110"
-                      >
-                        {currentLanguage === "ar"
-                          ? "حذف"
-                          : currentLanguage === "fr"
-                            ? "Supprimer"
-                            : "Delete"}
-                      </button>
-                    </td>
-                  </tr>
-                ))}
-            </tbody>
-          </table>
-          {(data?.data.content.length == 0 || data == null) && (
-            <div className="flex w-full justify-center py-3 text-center text-[18px] font-semibold">
-              {currentLanguage === "ar"
-                ? "لا توجد بيانات"
-                : currentLanguage === "fr"
-                  ? "Aucune donnée"
-                  : "There is No Data"}
-            </div>
-          )}
+                      </TableCell>
+                    </TableRow>
+                  ))
+                )}
+              </TableBody>
+            </Table>
+          </div>
         </div>
-      </div>
+      </Container>
     </>
   );
 };

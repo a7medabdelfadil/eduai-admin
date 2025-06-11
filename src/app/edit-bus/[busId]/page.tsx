@@ -10,6 +10,7 @@ import { toast } from "react-toastify";
 import { useSelector } from "react-redux";
 import { RootState } from "@/GlobalRedux/store";
 import BreadCrumbs from "@/components/BreadCrumbs";
+import Container from "@/components/Container";
 
 interface ViewBusProps {
   params: {
@@ -92,20 +93,21 @@ const EditBus: React.FC<ViewBusProps> = ({ params }) => {
     <>
       <BreadCrumbs breadcrumbs={breadcrumbs} />
 
-      <div
-        dir={currentLanguage === "ar" ? "rtl" : "ltr"}
-        className={`${
-          currentLanguage === "ar"
-            ? booleanValue
-              ? "lg:mr-[100px]"
-              : "lg:mr-[270px]"
-            : booleanValue
-              ? "lg:ml-[100px]"
-              : "lg:ml-[270px]"
-        } mx-3 mt-[40px] grid h-[500px] items-center justify-center`}
-      >
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <div className="grid h-[400px] items-center justify-center gap-5 rounded-xl bg-bgPrimary p-10 sm:w-[500px] md:w-[600px] lg:w-[750px] xl:h-[500px] xl:w-[1000px]">
+      <Container>
+         <div className="mb-8 -mt-2 -ml-1 flex items-center justify-between">
+          <h1 className="text-2xl font-semibold">
+            {currentLanguage === "en"
+              ? "Edit Bus"
+              : currentLanguage === "ar"
+                ? "تعديل الحافلة"
+                : currentLanguage === "fr"
+                  ? "Modifier le bus"
+                  : "Edit Bus"}{" "}
+            {/* default */}
+          </h1>
+        </div>
+        <form className="flex h-full w-full items-center justify-center" onSubmit={handleSubmit(onSubmit)}>
+          <div className="rounded-xl bg-bgPrimary p-10 w-[90] md:w-[80%]">
             <div className="flex items-center justify-start gap-2">
               <svg
                 className="h-6 w-6 font-bold text-secondary group-hover:text-hover"
@@ -137,7 +139,7 @@ const EditBus: React.FC<ViewBusProps> = ({ params }) => {
                     : "Bus Information"}
               </h1>
             </div>
-            <div className="grid grid-cols-2 gap-4 max-[1278px]:grid-cols-1">
+            <div className="p-6 grid grid-cols-2 gap-4 max-[1278px]:grid-cols-1">
               <label htmlFor="name" className="grid text-[18px] font-semibold">
                 {currentLanguage === "ar"
                   ? "رقم الحافلة"
@@ -148,7 +150,7 @@ const EditBus: React.FC<ViewBusProps> = ({ params }) => {
                   id="name"
                   {...register("busNumber", { required: true })}
                   type="text"
-                  className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                 />
                 {errors.busNumber && (
                   <span className="text-error">
@@ -170,7 +172,7 @@ const EditBus: React.FC<ViewBusProps> = ({ params }) => {
                   id="code"
                   {...register("busCapacity", { required: true })}
                   type="number"
-                  className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                 />
                 {errors.busCapacity && (
                   <span className="text-error">
@@ -202,7 +204,7 @@ const EditBus: React.FC<ViewBusProps> = ({ params }) => {
             </div>
           </div>
         </form>
-      </div>
+      </Container>
     </>
   );
 };

@@ -10,6 +10,7 @@ import BreadCrumbs from "@/components/BreadCrumbs";
 import { useGetAllClasssQuery } from "@/features/Infrastructure/classApi";
 import { useGetAllCoursesQuery } from "@/features/Acadimic/courseApi";
 import { useGetAllTeachersQuery } from "@/features/User-Management/teacherApi";
+import Container from "@/components/Container";
 
 interface ParamsType {
   params: {
@@ -85,21 +86,55 @@ const EditExam = ({ params }: ParamsType) => {
   return (
     <>
       <BreadCrumbs breadcrumbs={breadcrumbs} />
-      <div
-        dir={currentLanguage === "ar" ? "rtl" : "ltr"}
-        className={`${
-          currentLanguage === "ar"
-            ? booleanValue
-              ? "lg:mr-[100px]"
-              : "lg:mr-[270px]"
-            : booleanValue
-              ? "lg:ml-[100px]"
-              : "lg:ml-[270px]"
-        } mx-3 mt-[40px] grid h-[850px] items-center justify-center`}
-      >
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <div className="grid items-center justify-center gap-5 rounded-xl bg-bgPrimary p-10 sm:w-[500px] md:w-[600px] lg:w-[750px] xl:h-[800px] xl:w-[1000px]">
-            <div className="grid grid-cols-2 gap-4 max-[1278px]:grid-cols-1">
+      <Container>
+         <div className="mb-8 -mt-2 -ml-1 flex items-center justify-between">
+          <h1 className="text-2xl font-semibold">
+            {currentLanguage === "en"
+              ? "Edit Exam"
+              : currentLanguage === "ar"
+                ? "إضافة امتحان جديد"
+                : currentLanguage === "fr"
+                  ? "Ajouter un nouvel examen"
+                  : "Edit Exam"}{" "}
+            {/* default */}
+          </h1>
+        </div>
+        <form className="flex h-full w-full items-center justify-center" onSubmit={handleSubmit(onSubmit)}>
+          <div className="rounded-xl bg-bgPrimary p-10 w-[90] md:w-[80%]">
+            <div className="flex items-center justify-start gap-2 mb-8">
+              <svg
+                className="h-6 w-6 font-bold text-secondary group-hover:text-hover"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                strokeWidth="2"
+                stroke="currentColor"
+                fill="none"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <path stroke="none" d="M0 0h24v24H0z" />
+                <line x1="3" y1="21" x2="21" y2="21" />
+                <line x1="3" y1="10" x2="21" y2="10" />
+                <polyline points="5 6 12 3 19 6" />
+                <line x1="4" y1="10" x2="4" y2="21" />
+                <line x1="20" y1="10" x2="20" y2="21" />
+                <line x1="8" y1="14" x2="8" y2="17" />
+                <line x1="12" y1="14" x2="12" y2="17" />
+                <line x1="16" y1="14" x2="16" y2="17" />
+              </svg>
+              <h1 className="text-[22px] font-semibold">
+                {currentLanguage === "en"
+                  ? "Exam Information"
+                  : currentLanguage === "ar"
+                    ? "معلومات الامتحان"
+                    : currentLanguage === "fr"
+                      ? "Informations sur l'examen"
+                      : "Exam Information"}{" "}
+                {/* default */}
+              </h1>
+            </div>
+            <div className="p-6 grid grid-cols-2 gap-4 max-[1278px]:grid-cols-1">
               <label
                 htmlFor="examDate"
                 className="grid text-[18px] font-semibold"
@@ -115,7 +150,7 @@ const EditExam = ({ params }: ParamsType) => {
                   id="examDate"
                   {...register("examDate", { required: true })}
                   type="date"
-                  className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                 />
                 {errors.examDate && (
                   <span className="text-error">
@@ -144,7 +179,7 @@ const EditExam = ({ params }: ParamsType) => {
                   id="examBeginning"
                   {...register("examBeginning", { required: true })}
                   type="time"
-                  className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                 />
                 {errors.examBeginning && (
                   <span className="text-error">
@@ -170,7 +205,7 @@ const EditExam = ({ params }: ParamsType) => {
                   id="name"
                   {...register("name", { required: true })}
                   type="text"
-                  className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                 />
                 {errors.name && (
                   <span className="text-error">
@@ -199,7 +234,7 @@ const EditExam = ({ params }: ParamsType) => {
                   id="examEnding"
                   {...register("examEnding", { required: true })}
                   type="time"
-                  className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                 />
                 {errors.examEnding && (
                   <span className="text-error">
@@ -226,7 +261,7 @@ const EditExam = ({ params }: ParamsType) => {
                       : "Teacher Course Registration ID"}{" "}
                 <select
                   id="teacherCourseRegistrationId"
-                  className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                   {...register("teacherId", {
                     required: true,
                   })}
@@ -265,7 +300,7 @@ const EditExam = ({ params }: ParamsType) => {
                       : "Teacher Course Registration ID"}{" "}
                 <select
                   id="courseId"
-                  className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                   {...register("courseId", {
                     required: true,
                   })}
@@ -304,7 +339,7 @@ const EditExam = ({ params }: ParamsType) => {
                       : "Teacher Course Registration ID"}{" "}
                 <select
                   id="teacherCourseRegistrationId"
-                  className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                   {...register("classroomId", {
                     required: true,
                   })}
@@ -345,7 +380,7 @@ const EditExam = ({ params }: ParamsType) => {
                   id="examTypeId"
                   {...register("examTypeId", { required: true })}
                   type="number"
-                  className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                 />
                 {errors.examTypeId && (
                   <span className="text-error">
@@ -381,7 +416,7 @@ const EditExam = ({ params }: ParamsType) => {
             </div>
           </div>
         </form>
-      </div>
+      </Container>
     </>
   );
 };

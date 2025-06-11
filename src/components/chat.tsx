@@ -401,7 +401,7 @@ const ChatPage = ({ userId, regetusers, userName, userRole, realuserId }: ChatPa
   };
 
   return (
-    <div className="mx-auto flex h-[700px] w-full flex-col rounded-xl bg-bgPrimary shadow-lg">
+    <div className="mx-auto flex h-[700px] w-full flex-col rounded-xl bg-bgSecondary shadow-lg">
       <div dir={currentLanguage === "ar" ? "rtl" : "ltr"} className="relative inline-block p-4 border-b border-borderPrimary">
         <div className="flex items-center gap-2 font-medium">
           <img src="/images/userr.png" alt="User avatar" className="w-[50px] h-[50px] rounded-full object-cover" />
@@ -422,7 +422,7 @@ const ChatPage = ({ userId, regetusers, userName, userRole, realuserId }: ChatPa
       
       <div 
         ref={chatContainerRef}
-        className="flex-1 overflow-y-auto break-words rounded-xl bg-bgPrimary p-4"
+        className="flex-1 overflow-y-auto break-words rounded-xl  p-4"
         onScroll={handleScroll}
       >
         {isLoading && (
@@ -496,7 +496,7 @@ const ChatPage = ({ userId, regetusers, userName, userRole, realuserId }: ChatPa
           </div>
         )}
         
-        <div className="flex items-center justify-between gap-5 rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-2">
+        <div className="flex items-center justify-between gap-5 rounded-xl border border-borderPrimary bg-bgSecondary px-4 py-2">
           <div className="grid items-center justify-center">
             <label className="relative inline-flex cursor-pointer items-center" aria-label="Upload image">
               <input
@@ -559,7 +559,7 @@ const ChatPage = ({ userId, regetusers, userName, userRole, realuserId }: ChatPa
             disabled={isSending}
           />
           <button
-            className="ml-4 flex items-center gap-3 rounded-lg bg-[#ffead1] dark:bg-blue-900 hover:bg-[#dfbd90] hover:dark:bg-blue-700 px-3 py-2 font-semibold text-black dark:text-white transition-colors disabled:opacity-60 disabled:cursor-not-allowed"
+            className="ml-4 flex items-center gap-3 rounded-lg bg-[#1565C0] dark:bg-blue-900 hover:bg-[#1565CC] hover:dark:bg-blue-700 px-3 py-2 font-semibold text-white transition-colors disabled:cursor-not-allowed"
             onClick={handleSendMessage}
             disabled={isSending || (!input.trim() && !imageFile)}
             aria-label="Send message"
@@ -573,7 +573,7 @@ const ChatPage = ({ userId, regetusers, userName, userRole, realuserId }: ChatPa
               <>
                 <span>Send</span>
                 <svg
-                  className="h-5 w-5 text-black dark:text-white"
+                  className="h-5 w-5 text-white"
                   viewBox="0 0 24 24"
                   strokeWidth="2"
                   stroke="currentColor"

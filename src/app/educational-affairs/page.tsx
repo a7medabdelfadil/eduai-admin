@@ -32,7 +32,7 @@ const EducationalAffairs = () => {
   const Educations = [
     {
       href: "/educational-affairs/events",
-      icon: <AiOutlineCalendar size={40} />,
+      icon: <AiOutlineCalendar size={30} />,
       title:
         currentLanguage === "en"
           ? "Events"
@@ -52,7 +52,7 @@ const EducationalAffairs = () => {
     },
     {
       href: "/educational-affairs/exams",
-      icon: <FaClipboardList size={40} />,
+      icon: <FaClipboardList size={30} />,
       title:
         currentLanguage === "en"
           ? "Exams"
@@ -72,7 +72,7 @@ const EducationalAffairs = () => {
     },
     {
       href: "/educational-affairs/grads",
-      icon: <FaRegChartBar size={40} />,
+      icon: <FaRegChartBar size={30} />,
       title:
         currentLanguage === "en"
           ? "Grades"
@@ -92,7 +92,7 @@ const EducationalAffairs = () => {
     },
     {
       href: "/educational-affairs/schedule",
-      icon: <BsCalendar size={40} />,
+      icon: <BsCalendar size={30} />,
       title:
         currentLanguage === "en"
           ? "Schedule"

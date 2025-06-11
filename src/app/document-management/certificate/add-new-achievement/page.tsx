@@ -12,6 +12,7 @@ import { useState } from "react";
 import { FaCloudUploadAlt } from "react-icons/fa";
 import { useGetAllStudentsQuery } from "@/features/User-Management/studentApi";
 import { useGetAllsubjectsQuery } from "@/features/signupApi";
+import Container from "@/components/Container";
 
 const AddNewAchievement = () => {
   const breadcrumbs = [
@@ -100,19 +101,21 @@ const AddNewAchievement = () => {
   return (
     <>
       <BreadCrumbs breadcrumbs={breadcrumbs} />
-      <div
-        dir={currentLanguage === "ar" ? "rtl" : "ltr"}
-        className={` ${currentLanguage === "ar"
-          ? booleanValue
-            ? "lg:mr-[100px]"
-            : "lg:mr-[270px]"
-          : booleanValue
-            ? "lg:ml-[100px]"
-            : "lg:ml-[270px]"
-          } mx-3 mt-[40px] grid h-[850px] items-center justify-center`}
-      >
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <div className="grid h-[900px] items-center justify-center gap-5 rounded-xl bg-bgPrimary p-10 sm:w-[500px] md:w-[600px] lg:w-[750px] xl:h-[800px] xl:w-[1000px]">
+      <Container>
+         <div className="mb-8 -mt-2 -ml-1 flex items-center justify-between">
+          <h1 className="text-2xl font-semibold">
+            {currentLanguage === "en"
+              ? "Add Achievement"
+              : currentLanguage === "ar"
+                ? "إضافة إنجاز"
+                : currentLanguage === "fr"
+                  ? "Ajouter une réalisation"
+                  : "Add Achievement"}{" "}
+            {/* default */}
+          </h1>
+        </div>
+        <form className="flex justify-center items-center w-full h-full" onSubmit={handleSubmit(onSubmit)}>
+          <div className="rounded-xl bg-bgPrimary p-10 w-[90] md:w-[80%]">
             <div className="flex items-center justify-start gap-2">
               <svg
                 className="h-6 w-6 font-bold text-secondary group-hover:text-primary"
@@ -143,7 +146,7 @@ const AddNewAchievement = () => {
                     : "Achievement Certificates"}
               </h1>
             </div>
-            <div className="grid grid-cols-2 gap-4 max-[1278px]:grid-cols-1">
+            <div className="p-6 grid grid-cols-2 gap-4 max-[1278px]:grid-cols-1">
               <label
                 htmlFor="studentId"
                 className="grid text-[18px] font-semibold"
@@ -157,7 +160,7 @@ const AddNewAchievement = () => {
                 <select
                   id="studentId"
                   {...register("studentId")}
-                  className="h-full w-[400px] rounded-xl border px-4 py-3 text-[18px] text-black outline-none max-[458px]:w-[350px]"
+                  className="h-full w-full rounded-xl border px-4 py-3 text-[18px] text-black outline-none max-[458px]:w-[350px]"
                 >
                   <option value="">
                     {currentLanguage === "en"
@@ -201,7 +204,7 @@ const AddNewAchievement = () => {
                     : "Educational Stage"}
                 <select
                   id="stage"
-                  className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                   {...register("stage", { required: true })}
                 >
                   <option value="">
@@ -263,7 +266,7 @@ const AddNewAchievement = () => {
                   <select
                     id="subject"
                     {...register("subject", { required: true })}
-                    className="h-full w-[400px] rounded-xl border px-4 py-3 text-[18px] outline-none max-[458px]:w-[350px]"
+                    className="h-full w-full rounded-xl border px-4 py-3 text-[18px] outline-none max-[458px]:w-[350px]"
                   >
                     <option value="">
                       {currentLanguage === "en"
@@ -304,7 +307,7 @@ const AddNewAchievement = () => {
                 <input
                   id="issueDate"
                   type="date"
-                  className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                   {...register("issueDate", { required: true })}
                 />
                 {errors.issueDate && (
@@ -329,7 +332,7 @@ const AddNewAchievement = () => {
                 <input
                   id="endDate"
                   type="file"
-                  className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                   {...register("endDate", { required: true })}
                 /> */}
               <label
@@ -348,7 +351,7 @@ const AddNewAchievement = () => {
                   {...register("endDate", { required: true })}
                   onChange={handleFileChange}
                 />
-                <span className="-mt-8 w-[400px] cursor-pointer overflow-hidden text-ellipsis whitespace-nowrap rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]">
+                <span className="-mt-8 w-full cursor-pointer overflow-hidden text-ellipsis whitespace-nowrap rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]">
                   <div className="flex">
                     <FaCloudUploadAlt className="mx-2 mt-1" />
                     {fileName
@@ -392,7 +395,7 @@ const AddNewAchievement = () => {
             </div>
           </div>
         </form>
-      </div>
+      </Container>
     </>
   );
 };

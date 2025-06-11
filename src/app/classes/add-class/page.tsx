@@ -8,6 +8,7 @@ import { RootState } from "@/GlobalRedux/store";
 import { useSelector } from "react-redux";
 import Spinner from "@/components/spinner";
 import { useRouter } from "next/navigation";
+import Container from "@/components/Container";
 
 const AddClass = () => {
   const router = useRouter();
@@ -179,20 +180,21 @@ const AddClass = () => {
   return (
     <>
       <BreadCrumbs breadcrumbs={breadcrumbs} />
-      <div
-        dir={currentLanguage === "ar" ? "rtl" : "ltr"}
-        className={`${
-          currentLanguage === "ar"
-            ? booleanValue
-              ? "lg:mr-[100px]"
-              : "lg:mr-[270px]"
-            : booleanValue
-              ? "lg:ml-[100px]"
-              : "lg:ml-[270px]"
-        } mx-3 grid h-[850px] items-center justify-center`}
-      >
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <div className="my-10 grid items-center justify-center gap-5 rounded-xl bg-bgPrimary p-10 sm:w-[500px] md:w-[600px] lg:w-[750px] xl:w-[1000px]">
+      <Container>
+        <div className="mb-8 -mt-2 -ml-1 flex items-center justify-between">
+          <h1 className="text-2xl font-semibold">
+            {currentLanguage === "en"
+              ? "Add Class"
+              : currentLanguage === "ar"
+                ? "إضافة فصل"
+                : currentLanguage === "fr"
+                  ? "Ajouter une classe"
+                  : "Add Class"}{" "}
+            {/* default */}
+          </h1>
+        </div>
+        <form className="flex h-full w-full items-center justify-center" onSubmit={handleSubmit(onSubmit)}>
+          <div className="rounded-xl bg-bgPrimary p-10 w-[90] md:w-[80%]">
             <div className="flex items-center justify-start gap-2">
               <svg
                 className="h-6 w-6 font-bold text-secondary group-hover:text-primary"
@@ -223,7 +225,7 @@ const AddClass = () => {
                     : "Class Information"}
               </h1>
             </div>
-            <div className="grid grid-cols-2 gap-4 max-[1278px]:grid-cols-1">
+            <div className="p-6 grid grid-cols-2 gap-4 max-[1278px]:grid-cols-1">
               <label
                 htmlFor="buildingNumber"
                 className="grid text-[18px] font-semibold"
@@ -236,7 +238,7 @@ const AddClass = () => {
                 <input
                   id="buildingNumber"
                   type="text"
-                  className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                   {...register("buildingNumber", { required: true })}
                 />
                 {errors.buildingNumber && (
@@ -261,7 +263,7 @@ const AddClass = () => {
                 <input
                   id="roomNumber"
                   type="text"
-                  className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                   {...register("roomNumber", { required: true })}
                 />
                 {errors.roomNumber && (
@@ -286,7 +288,7 @@ const AddClass = () => {
                 <input
                   id="floorNumber"
                   type="number"
-                  className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                   {...register("floorNumber", { required: true })}
                 />
                 {errors.floorNumber && (
@@ -307,7 +309,7 @@ const AddClass = () => {
                     : "Type"}
                 <select
                   id="type"
-                  className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                   {...register("type", { required: true })}
                 >
                   <option selected value="">
@@ -348,7 +350,7 @@ const AddClass = () => {
                 <input
                   id="maxCapacity"
                   type="number"
-                  className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                   {...register("maxCapacity", { required: true })}
                 />
                 {errors.maxCapacity && (
@@ -373,7 +375,7 @@ const AddClass = () => {
                 <input
                   id="classroomName"
                   type="text"
-                  className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                   {...register("classroomName", { required: true })}
                 />
                 {errors.classroomName && (
@@ -398,7 +400,7 @@ const AddClass = () => {
                 <input
                   id="classroomNumber"
                   type="number"
-                  className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                   {...register("classroomNumber", { required: true })}
                 />
                 {errors.classroomNumber && (
@@ -422,7 +424,7 @@ const AddClass = () => {
                     : "Classroom Study Level"}
                 <select
                   id="classroomStudyLevel"
-                  className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                   {...register("classroomStudyLevel", { required: true })}
                 >
                   <option selected value="">
@@ -462,7 +464,7 @@ const AddClass = () => {
                     : "Classroom Study Stage"}
                 <select
                   id="classroomStudyStage"
-                  className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                   {...register("classroomStudyStage", { required: true })}
                 >
                   <option selected value="">
@@ -514,7 +516,7 @@ const AddClass = () => {
             </div>
           </div>
         </form>
-      </div>
+      </Container>
     </>
   );
 };

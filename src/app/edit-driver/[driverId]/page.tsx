@@ -18,6 +18,7 @@ import { RootState } from "@/GlobalRedux/store";
 import { useSelector } from "react-redux";
 import PhoneNumberInput from "@/components/PhoneNumberInput";
 import SearchableSelect from "@/components/select";
+import Container from "@/components/Container";
 
 interface ViewDriverProps {
   params: {
@@ -142,20 +143,21 @@ const EditDriver: React.FC<ViewDriverProps> = ({ params }) => {
   return (
     <>
       <BreadCrumbs breadcrumbs={breadcrumbs} />
-      <div
-        dir={currentLanguage === "ar" ? "rtl" : "ltr"}
-        className={`${
-          currentLanguage === "ar"
-            ? booleanValue
-              ? "lg:mr-[100px]"
-              : "lg:mr-[270px]"
-            : booleanValue
-              ? "lg:ml-[100px]"
-              : "lg:ml-[270px]"
-        } mx-3 grid h-[850px] items-center justify-center`}
-      >
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <div className="my-10 grid items-center justify-center gap-5 rounded-xl bg-bgPrimary p-10 sm:w-[500px] md:w-[600px] lg:w-[750px] xl:w-[1000px]">
+      <Container>
+        <div className="mb-8 -mt-2 -ml-1 flex items-center justify-between">
+          <h1 className="text-2xl font-semibold">
+            {currentLanguage === "en"
+              ? "Edit Driver"
+              : currentLanguage === "ar"
+                ? "تعديل السائق"
+                : currentLanguage === "fr"
+                  ? "Modifier le conducteur"
+                  : "Edit Driver"}{" "}
+            {/* default */}
+          </h1>
+        </div>
+        <form className="flex h-full w-full items-center justify-center" onSubmit={handleSubmit(onSubmit)}>
+          <div className="rounded-xl bg-bgPrimary p-10 w-[90] md:w-[80%]">
             <div className="flex items-center justify-start gap-2">
               <svg
                 className="h-6 w-6 font-bold text-secondary group-hover:text-hover"
@@ -186,7 +188,7 @@ const EditDriver: React.FC<ViewDriverProps> = ({ params }) => {
                     : "Driver Information"}
               </h1>
             </div>
-            <div className="grid grid-cols-2 gap-4 max-[1278px]:grid-cols-1">
+            <div className="px-6 pt-6 grid grid-cols-2 gap-4 max-[1278px]:grid-cols-1">
               <label htmlFor="email" className="grid text-[18px] font-semibold">
                 {currentLanguage === "ar"
                   ? "البريد الإلكتروني"
@@ -196,7 +198,7 @@ const EditDriver: React.FC<ViewDriverProps> = ({ params }) => {
                 <input
                   id="email"
                   type="email"
-                  className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                   {...register("email", { required: true })}
                 />
                 {errors.email && (
@@ -218,7 +220,7 @@ const EditDriver: React.FC<ViewDriverProps> = ({ params }) => {
                 <input
                   id="nid"
                   type="text"
-                  className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                   {...register("nid", { required: true })}
                 />
                 {errors.nid && (
@@ -231,6 +233,9 @@ const EditDriver: React.FC<ViewDriverProps> = ({ params }) => {
                   </span>
                 )}
               </label>
+
+            </div>
+            <div className="px-6 pt-6 grid grid-cols-2 gap-4 max-[1278px]:grid-cols-1">
               <label
                 htmlFor="gender"
                 className="grid text-[18px] font-semibold"
@@ -242,7 +247,7 @@ const EditDriver: React.FC<ViewDriverProps> = ({ params }) => {
                     : "Gender"}
                 <select
                   id="gender"
-                  className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                   {...register("gender", { required: true })}
                 >
                   <option selected value="">
@@ -277,8 +282,6 @@ const EditDriver: React.FC<ViewDriverProps> = ({ params }) => {
                   </span>
                 )}
               </label>
-            </div>
-            <div className="grid grid-cols-2 gap-4 max-[1278px]:grid-cols-1">
               <label
                 htmlFor="name_en"
                 className="grid text-[18px] font-semibold"
@@ -292,7 +295,7 @@ const EditDriver: React.FC<ViewDriverProps> = ({ params }) => {
                 <input
                   id="name_en"
                   type="text"
-                  className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                   {...register("name_en", { required: true })}
                 />
                 {errors.name_en && (
@@ -317,7 +320,7 @@ const EditDriver: React.FC<ViewDriverProps> = ({ params }) => {
                 <input
                   id="name_ar"
                   type="text"
-                  className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                   {...register("name_ar", { required: true })}
                 />
                 {errors.name_ar && (
@@ -342,7 +345,7 @@ const EditDriver: React.FC<ViewDriverProps> = ({ params }) => {
                 <input
                   id="name_fr"
                   type="text"
-                  className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                   {...register("name_fr", { required: true })}
                 />
                 {errors.name_fr && (
@@ -387,7 +390,7 @@ const EditDriver: React.FC<ViewDriverProps> = ({ params }) => {
                     : "Your Nationality"}
                 <select
                   id="nationality"
-                  className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                   {...register("nationality", { required: true })}
                 >
                   <option value="">
@@ -423,7 +426,7 @@ const EditDriver: React.FC<ViewDriverProps> = ({ params }) => {
                 <input
                   id="about"
                   type="text"
-                  className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                   {...register("about", { required: true })}
                 />
                 {errors.about && (
@@ -450,7 +453,7 @@ const EditDriver: React.FC<ViewDriverProps> = ({ params }) => {
                 <input
                   id="birthDate"
                   type="date"
-                  className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                   {...register("birthDate", {
                     required: true,
                     validate: value => {
@@ -490,7 +493,10 @@ const EditDriver: React.FC<ViewDriverProps> = ({ params }) => {
                   </span>
                 )}
               </label>
-              <label
+            
+            </div>
+            <div className="px-6 pt-6 grid grid-cols-2 gap-4 max-[1278px]:grid-cols-1">
+               <label
                 htmlFor="qualification"
                 className="grid items-center text-[18px] font-semibold"
               >
@@ -503,7 +509,7 @@ const EditDriver: React.FC<ViewDriverProps> = ({ params }) => {
                   defaultValue=""
                   id="qualification"
                   {...register("qualification", { required: true })}
-                  className="h-[55px] w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="h-[55px] w-full rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                 >
                   <option selected value="">
                     {currentLanguage === "ar"
@@ -551,8 +557,6 @@ const EditDriver: React.FC<ViewDriverProps> = ({ params }) => {
                   </span>
                 )}
               </label>
-            </div>
-            <div className="grid grid-cols-2 gap-4 max-[1278px]:grid-cols-1">
               <label
                 htmlFor="hireDate"
                 className="grid text-[18px] font-semibold"
@@ -565,7 +569,7 @@ const EditDriver: React.FC<ViewDriverProps> = ({ params }) => {
                 <input
                   id="hireDate"
                   type="date"
-                  className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                   {...register("hireDate", { required: true })}
                 />
                 {errors.hireDate && (
@@ -598,7 +602,7 @@ const EditDriver: React.FC<ViewDriverProps> = ({ params }) => {
                 <input
                   id="positionId"
                   type="number"
-                  className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                   {...register("positionId", { required: true })}
                 />
                 {errors.positionId && (
@@ -622,7 +626,7 @@ const EditDriver: React.FC<ViewDriverProps> = ({ params }) => {
                     : "Employee Status"}
                 <select
                   id="employeeStatus"
-                  className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                   {...register("employeeStatus", { required: true })}
                 >
                   <option selected value="">
@@ -675,7 +679,7 @@ const EditDriver: React.FC<ViewDriverProps> = ({ params }) => {
                     : "Employee Type"}
                 <select
                   id="employeeType"
-                  className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                   {...register("employeeType", { required: true })}
                 >
                   <option selected value="">
@@ -729,7 +733,7 @@ const EditDriver: React.FC<ViewDriverProps> = ({ params }) => {
                 <input
                   id="salary"
                   type="number"
-                  className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                   {...register("salary", { required: true })}
                 />
                 {errors.salary && (
@@ -743,7 +747,7 @@ const EditDriver: React.FC<ViewDriverProps> = ({ params }) => {
                 )}
               </label>
             </div>
-            <div className="flex justify-center text-center">
+            <div className="pt-6 flex justify-center text-center">
               {isUpdating ? (
                 <Spinner />
               ) : (
@@ -762,7 +766,7 @@ const EditDriver: React.FC<ViewDriverProps> = ({ params }) => {
             </div>
           </div>
         </form>
-      </div>
+      </Container>
     </>
   );
 };

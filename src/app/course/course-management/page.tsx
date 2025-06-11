@@ -6,11 +6,18 @@ import {
   useDeleteCoursesMutation,
 } from "@/features/Acadimic/courseApi";
 import Link from "next/link";
-import { toast } from "react-toastify";
 import { useState } from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "@/GlobalRedux/store";
 import BreadCrumbs from "@/components/BreadCrumbs";
+import Container from "@/components/Container";
+import { BiSearchAlt } from "react-icons/bi";
+import { MdDelete } from "react-icons/md";
+import { FaEdit } from "react-icons/fa";
+import { TbDotsVertical } from "react-icons/tb";
+import { useRef, useEffect } from "react";
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/Dialog";
+import { toast } from "react-toastify";
 
 const CourseManagement = () => {
   const breadcrumbs = [
@@ -21,9 +28,9 @@ const CourseManagement = () => {
       href: "/",
     },
     {
-      nameEn: "Course",
-      nameAr: "الدورة",
-      nameFr: "Cours",
+      nameEn: "Course and Resource  Management",
+      nameAr: "إدارة الدورات والموارد",
+      nameFr: "Gestion des cours et des ressources",
       href: "/course",
     },
     {
@@ -33,6 +40,7 @@ const CourseManagement = () => {
       href: "/course/course-management",
     },
   ];
+  const dropdownRef = useRef<HTMLDivElement | null>(null);
 
   const booleanValue = useSelector((state: RootState) => state.boolean.value);
   const [search, setSearch] = useState("");
@@ -47,6 +55,21 @@ const CourseManagement = () => {
   const { language: currentLanguage, loading } = useSelector(
     (state: RootState) => state.language,
   );
+  const [selectedCourseId, setSelectedCourseId] = useState<string | null>(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setOpen(null);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
 
   if (loading || isLoading)
     return (
@@ -58,70 +81,45 @@ const CourseManagement = () => {
   return (
     <>
       <BreadCrumbs breadcrumbs={breadcrumbs} />
-      <div
-        dir={currentLanguage === "ar" ? "rtl" : "ltr"}
-        className={`${
-          currentLanguage === "ar"
-            ? booleanValue
-              ? "lg:mr-[40px]"
-              : "lg:mr-[290px]"
-            : booleanValue
-              ? "lg:ml-[40px]"
-              : "lg:ml-[290px]"
-        } mt-12`}
-      >
-        <div className="flex w-full justify-between px-8 text-center max-[502px]:grid max-[502px]:justify-center">
-          <div className="mb-3">
-            <label htmlFor="icon" className="sr-only">
-              Search
-            </label>
-            <div className="relative min-w-72 md:min-w-80">
-              <div className="pointer-events-none absolute inset-y-0 start-0 z-20 flex items-center ps-4">
-                <svg
-                  className="size-4 flex-shrink-0 text-gray-400"
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                >
-                  <circle cx="11" cy="11" r="8" />
-                  <path d="m21 21-4.3-4.3" />
-                </svg>
-              </div>
+      <Container>
+        <div className="flex flex-col md:flex-row justify-between items-center gap-4 px-4 py-4 rounded-lg">
+          {/* Search Input */}
+          <div
+            dir={currentLanguage === "ar" ? "rtl" : "ltr"}
+            className="relative w-full max-w-md"
+          >
+            <div className="pointer-events-none absolute inset-y-0 start-0 z-20 flex items-center ps-4">
+              <BiSearchAlt className="text-secondary" size={18} />
+            </div>
+            <div className="flex items-center gap-2">
               <input
                 onChange={e => setSearch(e.target.value)}
                 type="text"
-                id="icon"
-                name="icon"
-                className="block w-full rounded-lg border-2 border-borderPrimary px-4 py-2 ps-11 text-sm outline-none focus:border-blue-500 focus:ring-blue-500 disabled:pointer-events-none disabled:opacity-50"
+                className="w-full border-borderSecondary rounded-lg border-2 px-4 py-2 ps-11 text-lg outline-none"
                 placeholder={
                   currentLanguage === "en"
                     ? "Search"
                     : currentLanguage === "ar"
                       ? "بحث"
                       : "Recherche"
-                }
-              />
+                } />
             </div>
           </div>
-          <div className="flex justify-center">
-            <Link
-              href="/course/course-management/add-course"
-              className="mx-3 mb-5 whitespace-nowrap rounded-xl bg-primary px-4 py-2 text-[18px] font-semibold text-white duration-300 ease-in hover:bg-hover hover:shadow-xl"
-            >
-              {currentLanguage === "ar"
-                ? "+ إضافة دورة جديدة"
-                : currentLanguage === "fr"
-                  ? "+ Ajouter un nouveau cours"
-                  : "+ Add New Course"}
-            </Link>
-          </div>
+
+          {/* Add New Bus Button */}
+          <Link
+            href="/course/course-management/add-course"
+            className="mx-3 mb-5 whitespace-nowrap rounded-xl bg-primary px-4 py-2 text-[18px] font-semibold text-white duration-300 ease-in hover:bg-hover hover:shadow-xl"
+          >
+            {currentLanguage === "ar"
+              ? "+ إضافة دورة جديدة"
+              : currentLanguage === "fr"
+                ? "+ Ajouter un nouveau cours"
+                : "+ Add New Course"}
+          </Link>
         </div>
+
+
         <div className="grid gap-3 p-3 sm:grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
           {data?.data.content
             .filter((course: Course) => {
@@ -139,9 +137,34 @@ const CourseManagement = () => {
                 key={course.id}
                 className="grid gap-2 rounded-lg bg-bgPrimary p-2"
               >
-                <div className="grid h-[220px] rounded-xl bg-[#f4bd0e] p-2 text-[25px] font-bold text-textPrimary">
+                <div className={`grid h-[220px] rounded-xl ${index % 4 === 0 ? "bg-warning" : index % 4 === 1 ? "bg-info" : index % 4 === 2 ? "bg-success" : "bg-danger"} p-2 text-[25px] font-bold text-textPrimary`}>
+                  <div className="relative flex justify-end">
+                    <TbDotsVertical onClick={() => toggleNavbar(index)} className="text-white mt-1 cursor-pointer" />
+
+                    {open === index && (
+                      <div ref={dropdownRef}
+                        className="absolute right-0 top-8 z-30 flex flex-col gap-1 rounded-md bg-bgPrimary p-2 shadow-md">
+                        <Link
+                          href={`/course/course-management/${course.id}`}
+                          className="flex items-center gap-1 px-2 py-1 text-sm hover:text-primary"
+                        >
+                          <FaEdit />
+                          {currentLanguage === "ar" ? "تعديل" : currentLanguage === "fr" ? "Modifier" : "Edit"}
+                        </Link>
+                        <button
+                          onClick={() => setSelectedCourseId(course.id)}
+                          className="flex items-center gap-1 px-2 py-1 text-sm text-red-600 hover:text-red-800"
+                        >
+                          <MdDelete />
+                          {currentLanguage === "ar" ? "حذف" : currentLanguage === "fr" ? "Supprimer" : "Delete"}
+                        </button>
+                      </div>
+                    )}
+                  </div>
+
+
                   <div className="flex justify-end text-end"></div>
-                  <div className="items-staet mb-6 flex justify-center text-center">
+                  <div className="items-start mb-6 flex justify-center text-center">
                     <h1>{course.name}</h1>
                   </div>
                 </div>
@@ -163,7 +186,66 @@ const CourseManagement = () => {
               </div>
             ))}
         </div>
-      </div>
+      </Container>
+      <Dialog open={!!selectedCourseId} onOpenChange={() => setSelectedCourseId(null)}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>
+              {currentLanguage === "ar"
+                ? "تأكيد الحذف"
+                : currentLanguage === "fr"
+                  ? "Confirmer la suppression"
+                  : "Confirm Delete"}
+            </DialogTitle>
+            <DialogDescription>
+              {currentLanguage === "ar"
+                ? "هل أنت متأكد أنك تريد حذف هذه الدورة؟"
+                : currentLanguage === "fr"
+                  ? "Êtes-vous sûr de vouloir supprimer ce cours ?"
+                  : "Are you sure you want to delete this course?"}
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter>
+            <button
+              onClick={() => setSelectedCourseId(null)}
+              className="rounded-md border px-4 py-2 text-sm"
+            >
+              {currentLanguage === "ar" ? "إلغاء" : currentLanguage === "fr" ? "Annuler" : "Cancel"}
+            </button>
+            <button
+              onClick={async () => {
+                if (selectedCourseId) {
+                  try {
+                    await deleteCourse(selectedCourseId).unwrap();
+                    refetch();
+                    setSelectedCourseId(null);
+                    toast(
+                      currentLanguage === "ar"
+                        ? "تم الحذف بنجاح"
+                        : currentLanguage === "fr"
+                          ? "Supprimé avec succès"
+                          : "Deleted successfully"
+                    );
+                  } catch (err) {
+                    toast(
+                      currentLanguage === "ar"
+                        ? "فشل في الحذف"
+                        : currentLanguage === "fr"
+                          ? "Échec de la suppression"
+                          : "Failed to delete",
+                      { type: "error" }
+                    );
+                  }
+                }
+              }}
+              className="rounded-md bg-red-600 px-4 py-2 text-sm text-white hover:bg-red-700"
+            >
+              {currentLanguage === "ar" ? "حذف" : currentLanguage === "fr" ? "Supprimer" : "Delete"}
+            </button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
     </>
   );
 };
