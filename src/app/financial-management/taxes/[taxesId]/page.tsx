@@ -11,6 +11,7 @@ import {
 } from "@/features/Financial/taxesApi";
 import React from "react";
 import Spinner from "@/components/spinner";
+import Container from "@/components/Container";
 
 interface TaxesId {
   params: {
@@ -174,18 +175,19 @@ const EditTaxes = ({ params }: TaxesId) => {
   return (
     <>
       <BreadCrumbs breadcrumbs={breadcrumbs} />
-      <div
-        dir={currentLanguage === "ar" ? "rtl" : "ltr"}
-        className={`${
-          currentLanguage === "ar"
-            ? booleanValue
-              ? "lg:mr-[100px]"
-              : "lg:mr-[270px]"
-            : booleanValue
-              ? "lg:ml-[100px]"
-              : "lg:ml-[270px]"
-        } mt-20`}
-      >
+      <Container>
+         <div className="mb-8 -mt-2 -ml-1 flex items-center justify-between">
+          <h1 className="text-3xl font-semibold">
+            {currentLanguage === "en"
+              ? "Edit Taxes"
+              : currentLanguage === "ar"
+                ? "تعديل الضريبة"
+                : currentLanguage === "fr"
+                  ? "Modifier la taxe"
+                  : "Edit Taxes"}{" "}
+            {/* default */}
+          </h1>
+        </div>
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="grid gap-3 rounded-xl bg-bgSecondary p-10">
             <div className="rounded-xl border border-borderPrimary bg-bgPrimary p-10">
@@ -470,7 +472,7 @@ const EditTaxes = ({ params }: TaxesId) => {
             {/* Removed file upload section as image is not handled in the update */}
           </div>
         </form>
-      </div>
+      </Container>
     </>
   );
 };

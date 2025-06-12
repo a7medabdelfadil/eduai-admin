@@ -153,8 +153,8 @@ const EditTeacher: React.FC<ViewTeacherProps> = ({ params }) => {
       <BreadCrumbs breadcrumbs={breadcrumbs} />
 
       <Container>
-         <div className="mb-8 -mt-2 -ml-1 flex items-center justify-between">
-          <h1 className="text-2xl font-semibold">
+        <div className="mb-8 -mt-2 -ml-1 flex items-center justify-between">
+          <h1 className="text-3xl font-semibold">
             {currentLanguage === "en"
               ? "Edit Teacher"
               : currentLanguage === "ar"
@@ -213,7 +213,7 @@ const EditTeacher: React.FC<ViewTeacherProps> = ({ params }) => {
                   <input
                     id="email"
                     type="email"
-                    className="w-full rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                    className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                     {...register("email", { required: true })}
                   />
                   {errors.email && (
@@ -235,7 +235,7 @@ const EditTeacher: React.FC<ViewTeacherProps> = ({ params }) => {
                   <input
                     id="nid"
                     type="number"
-                    className="w-full rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                    className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                     {...register("nid", { required: true })}
                   />
                   {errors.nid && (
@@ -254,7 +254,7 @@ const EditTeacher: React.FC<ViewTeacherProps> = ({ params }) => {
                       : "Genre"}
                   <select
                     id="gender"
-                    className="w-full rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                    className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                     {...register("gender", { required: true })}
                   >
                     <option value="">
@@ -303,7 +303,7 @@ const EditTeacher: React.FC<ViewTeacherProps> = ({ params }) => {
                   <input
                     id="about"
                     type="text"
-                    className="w-full rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                    className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                     {...register("about", { required: true })}
                   />
                   {errors.about && (
@@ -329,7 +329,7 @@ const EditTeacher: React.FC<ViewTeacherProps> = ({ params }) => {
                       : "Votre Nationalité"}
                   <select
                     id="nationality"
-                    className="w-full rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                    className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                     {...register("nationality", { required: true })}
                   >
                     <option value="">
@@ -390,7 +390,7 @@ const EditTeacher: React.FC<ViewTeacherProps> = ({ params }) => {
                   <input
                     id="name_en"
                     type="text"
-                    className="w-full rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                    className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                     {...register("name_en", { required: true })}
                   />
                   {errors.name_en && (
@@ -416,7 +416,7 @@ const EditTeacher: React.FC<ViewTeacherProps> = ({ params }) => {
                   <input
                     id="name_ar"
                     type="text"
-                    className="w-full rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                    className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                     {...register("name_ar", { required: true })}
                   />
                   {errors.name_ar && (
@@ -442,7 +442,7 @@ const EditTeacher: React.FC<ViewTeacherProps> = ({ params }) => {
                   <input
                     id="name_fr"
                     type="text"
-                    className="w-full rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                    className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                     {...register("name_fr", { required: true })}
                   />
                   {errors.name_fr && (
@@ -470,7 +470,7 @@ const EditTeacher: React.FC<ViewTeacherProps> = ({ params }) => {
                   <input
                     id="birthDate"
                     type="date"
-                    className="w-full rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                    className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                     {...register("birthDate", {
                       required: true,
                       validate: value => {

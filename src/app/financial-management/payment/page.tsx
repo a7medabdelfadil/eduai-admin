@@ -11,6 +11,17 @@ import { RootState } from "@/GlobalRedux/store";
 import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import BreadCrumbs from "@/components/BreadCrumbs";
+import Container from "@/components/Container";
+import {
+  Table,
+  TableHeader,
+  TableBody,
+  TableRow,
+  TableHead,
+  TableCell,
+} from "@/components/Table";
+import { Skeleton } from "@/components/Skeleton";
+
 const Payment = () => {
   const breadcrumbs = [
     {
@@ -33,51 +44,10 @@ const Payment = () => {
     },
   ];
 
-  const [selectAll, setSelectAll] = useState(false);
   const { data, error, isLoading, refetch } = useGetAllInvoicesQuery(null);
   const booleanValue = useSelector((state: RootState) => state.boolean.value);
   type Invoice = Record<string, any>;
   const [search, setSearch] = useState("");
-  const handleSelectAll = () => {
-    setSelectAll(!selectAll);
-    const checkboxes = document.querySelectorAll<HTMLInputElement>(
-      'input[type="checkbox"]:not(#checkbox-all-search)',
-    );
-    checkboxes.forEach(checkbox => {
-      checkbox.checked = !selectAll;
-    });
-  };
-
-  useEffect(() => {
-    const handleOtherCheckboxes = () => {
-      const allCheckboxes = document.querySelectorAll<HTMLInputElement>(
-        'input[type="checkbox"]:not(#checkbox-all-search)',
-      );
-      const allChecked = Array.from(allCheckboxes).every(
-        checkbox => checkbox.checked,
-      );
-      const selectAllCheckbox = document.getElementById(
-        "checkbox-all-search",
-      ) as HTMLInputElement | null;
-      if (selectAllCheckbox) {
-        selectAllCheckbox.checked = allChecked;
-        setSelectAll(allChecked);
-      }
-    };
-
-    const otherCheckboxes = document.querySelectorAll<HTMLInputElement>(
-      'input[type="checkbox"]:not(#checkbox-all-search)',
-    );
-    otherCheckboxes.forEach(checkbox => {
-      checkbox.addEventListener("change", handleOtherCheckboxes);
-    });
-
-    return () => {
-      otherCheckboxes.forEach(checkbox => {
-        checkbox.removeEventListener("change", handleOtherCheckboxes);
-      });
-    };
-  }, []);
 
   const [deleteInvoice] = useDeleteInvoicesMutation();
 
@@ -107,29 +77,34 @@ const Payment = () => {
     (state: RootState) => state.language,
   );
 
-  if (loading || isLoading)
-    return (
-      <div className="flex h-screen w-full items-center justify-center">
-        <Spinner />
-      </div>
-    );
+  const translations = [
+    { key: "Name", en: "Name", ar: "الاسم", fr: "Nom" },
+    { key: "Paid Amount", en: "Paid Amount", ar: "المبلغ المدفوع", fr: "Montant Payé" },
+    { key: "Total Fees Amount", en: "Total Fees Amount", ar: "إجمالي مبلغ الرسوم", fr: "Montant Total des Frais" },
+    { key: "Invoice Date", en: "Invoice Date", ar: "تاريخ الفاتورة", fr: "Date de la Facture" },
+    { key: "Status", en: "Status", ar: "الحالة", fr: "Statut" },
+    { key: "Discount", en: "Discount", ar: "الخصم", fr: "Réduction" },
+    { key: "Action", en: "Action", ar: "الإجراء", fr: "Action" },
+    { key: "Search anything", en: "Search anything", ar: "ابحث عن أي شيء", fr: "Rechercher n'importe quoi" },
+    { key: "Result(s)", en: "Result(s)", ar: "نتيجة", fr: "résultat(s)" },
+    { key: "No data available", en: "No data available", ar: "لا توجد بيانات", fr: "Aucune donnée disponible" },
+  ];
+
+  const translate = (key: string, language: string) => {
+    const entry = translations.find(item => item.key === key);
+    if (!entry) return key;
+
+    return language === "ar"
+      ? entry.ar
+      : language === "fr"
+        ? entry.fr
+        : entry.en;
+  };
 
   return (
     <>
-      {/* <Soon /> */}
       <BreadCrumbs breadcrumbs={breadcrumbs} />
-      <div
-        dir={currentLanguage === "ar" ? "rtl" : "ltr"}
-        className={`${
-          currentLanguage === "ar"
-            ? booleanValue
-              ? "lg:mr-[100px]"
-              : "lg:mr-[270px]"
-            : booleanValue
-              ? "lg:ml-[100px]"
-              : "lg:ml-[270px]"
-        } relative mx-3 mt-10 h-screen overflow-x-auto bg-transparent sm:rounded-lg`}
-      >
+      <Container>
         <div className="flex justify-between text-center max-[502px]:grid max-[502px]:justify-center">
           <div className="mb-3">
             <label htmlFor="icon" className="sr-only">
@@ -179,7 +154,7 @@ const Payment = () => {
             </Link>
           </div>
         </div>
-        <div className="justify-left mb-5 ml-4 flex gap-5 text-[23px] font-semibold">
+        <div className="justify-left mb-5 ml-4 flex gap-5 text-[20px] font-semibold">
           <Link
             href="/financial-management"
             className="text-blue-500 underline"
@@ -193,7 +168,9 @@ const Payment = () => {
                   : "Tuition"}{" "}
             {/* Default to English */}
           </Link>
-          <Link href="/financial-management/activity">
+          <Link
+            className="text-secondary hover:text-blue-500 hover:underline"
+            href="/financial-management/activity">
             {currentLanguage === "en"
               ? "Activity"
               : currentLanguage === "ar"
@@ -203,7 +180,9 @@ const Payment = () => {
                   : "Activity"}{" "}
             {/* Default to English */}
           </Link>
-          <Link href="/financial-management/transport">
+          <Link
+            className="text-secondary hover:text-blue-500 hover:underline"
+            href="/financial-management/transport">
             {currentLanguage === "en"
               ? "Transport"
               : currentLanguage === "ar"
@@ -213,7 +192,9 @@ const Payment = () => {
                   : "Transport"}{" "}
             {/* Default to English */}
           </Link>
-          <Link href="/financial-management/uniform">
+          <Link
+            className="text-secondary hover:text-blue-500 hover:underline"
+            href="/financial-management/uniform">
             {currentLanguage === "en"
               ? "Uniform"
               : currentLanguage === "ar"
@@ -223,7 +204,9 @@ const Payment = () => {
                   : "Uniform"}{" "}
             {/* Default to English */}
           </Link>
-          <Link href="/financial-management/material">
+          <Link
+            className="text-secondary hover:text-blue-500 hover:underline"
+            href="/financial-management/material">
             {currentLanguage === "en"
               ? "Material"
               : currentLanguage === "ar"
@@ -234,208 +217,84 @@ const Payment = () => {
             {/* Default to English */}
           </Link>
         </div>
-        <div className="relative overflow-auto shadow-md sm:rounded-lg">
-          <table className="w-full overflow-x-auto text-left text-sm text-textSecondary rtl:text-right">
-            <thead className="bg-thead text-xs uppercase text-textPrimary">
-              <tr>
-                <th scope="col" className="p-4">
-                  <div className="flex items-center">
-                    <input
-                      id="checkbox-all-search"
-                      type="checkbox"
-                      className="-gray-800 h-4 w-4 rounded border-borderPrimary bg-gray-100 text-blue-600 focus:ring-2 focus:ring-blue-500"
-                      onChange={handleSelectAll}
-                    />
-                  </div>
-                </th>
-                <th scope="col" className="whitespace-nowrap px-6 py-3">
-                  {currentLanguage === "en"
-                    ? "Name"
-                    : currentLanguage === "ar"
-                      ? "الاسم"
-                      : currentLanguage === "fr"
-                        ? "Nom"
-                        : "Name"}{" "}
-                  {/* Default to English */}
-                </th>
-                <th scope="col" className="whitespace-nowrap px-6 py-3">
-                  {currentLanguage === "en"
-                    ? "Paid Amount"
-                    : currentLanguage === "ar"
-                      ? "المبلغ المدفوع"
-                      : currentLanguage === "fr"
-                        ? "Montant Payé"
-                        : "Paid Amount"}{" "}
-                  {/* Default to English */}
-                </th>
-                <th scope="col" className="whitespace-nowrap px-6 py-3">
-                  {currentLanguage === "en"
-                    ? "Total Fees Amount"
-                    : currentLanguage === "ar"
-                      ? "إجمالي مبلغ الرسوم"
-                      : currentLanguage === "fr"
-                        ? "Montant Total des Frais"
-                        : "Total Fees Amount"}{" "}
-                  {/* Default to English */}
-                </th>
-                <th scope="col" className="whitespace-nowrap px-6 py-3">
-                  {currentLanguage === "en"
-                    ? "Invoice Date"
-                    : currentLanguage === "ar"
-                      ? "تاريخ الفاتورة"
-                      : currentLanguage === "fr"
-                        ? "Date de la Facture"
-                        : "Invoice Date"}{" "}
-                  {/* Default to English */}
-                </th>
-                <th scope="col" className="whitespace-nowrap px-6 py-3">
-                  {currentLanguage === "en"
-                    ? "Status"
-                    : currentLanguage === "ar"
-                      ? "الحالة"
-                      : currentLanguage === "fr"
-                        ? "Statut"
-                        : "Status"}{" "}
-                  {/* Default to English */}
-                </th>
-                <th scope="col" className="whitespace-nowrap px-6 py-3">
-                  {currentLanguage === "en"
-                    ? "Discount"
-                    : currentLanguage === "ar"
-                      ? "الخصم"
-                      : currentLanguage === "fr"
-                        ? "Réduction"
-                        : "Discount"}{" "}
-                  {/* Default to English */}
-                </th>
-                <th scope="col" className="whitespace-nowrap px-6 py-3">
-                  {currentLanguage === "en"
-                    ? "Action"
-                    : currentLanguage === "ar"
-                      ? "الإجراء"
-                      : currentLanguage === "fr"
-                        ? "Action"
-                        : "Action"}{" "}
-                  {/* Default to English */}
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              {data?.data.content
-                .filter((invoice: Invoice) => {
-                  return search.toLocaleLowerCase() === ""
-                    ? invoice
-                    : invoice.billedToName.toLocaleLowerCase().includes(search);
-                })
-                .map((invoice: Invoice, index: number) => (
-                  <tr
-                    className="border-b border-borderPrimary bg-bgPrimary hover:bg-bgSecondary"
-                    key={index}
-                  >
-                    <td className="w-4 p-4">
-                      <div className="flex items-center">
-                        <input
-                          id="checkbox-table-search-1"
-                          type="checkbox"
-                          className="h-4 w-4 rounded border-borderPrimary bg-bgPrimary text-primary focus:ring-2 focus:ring-hover"
-                        />
-                      </div>
-                    </td>
-                    <th
-                      scope="row"
-                      className="text-text-textSeceondary flex items-center whitespace-nowrap px-6 py-4 font-medium"
-                    >
-                      {invoice.billedToName}
-                    </th>
-                    <td className="whitespace-nowrap px-6 py-4">
-                      {invoice.paidAmount}
-                    </td>
-                    <td className="whitespace-nowrap px-6 py-4">
-                      {invoice.totalFeesAmount}
-                    </td>
-                    <td className="whitespace-nowrap px-6 py-4">
-                      {formatTransactionDate(invoice.creationDate)}
-                    </td>
-                    <td className="whitespace-nowrap px-6 py-4">
-                      {invoice.paymentStatus == "NOT_FULLY_PAID" ? (
-                        <div className="flex items-center gap-2 font-semibold text-error">
-                          {" "}
-                          <div className="h-2.5 w-2.5 rounded-full bg-error"></div>{" "}
-                          Unpaid{" "}
-                        </div>
-                      ) : (
-                        <div className="flex items-center gap-2 font-semibold text-primary">
-                          {" "}
-                          <div className="h-2.5 w-2.5 rounded-full bg-primary"></div>{" "}
-                          Unpaid{" "}
-                        </div>
-                      )}
-                    </td>
-                    <td className="whitespace-nowrap px-6 py-4">
-                      {invoice.discountAmount}
-                    </td>
-                    <td className="whitespace-nowrap px-6 py-4">
-                      <div className="flex items-center gap-3">
-                        <button
-                          onClick={() => handleDelete(invoice.billedToId)}
-                        >
-                          <svg
-                            className="h-6 w-6 text-red-500"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            stroke="currentColor"
+        <div className="relative overflow-auto shadow-md sm:rounded-lg bg-bgPrimary">
+
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>{translate("Name", currentLanguage)}</TableHead>
+                <TableHead>{translate("Paid Amount", currentLanguage)}</TableHead>
+                <TableHead>{translate("Total Fees Amount", currentLanguage)}</TableHead>
+                <TableHead>{translate("Invoice Date", currentLanguage)}</TableHead>
+                <TableHead>{translate("Status", currentLanguage)}</TableHead>
+                <TableHead>{translate("Discount", currentLanguage)}</TableHead>
+                <TableHead>{translate("Action", currentLanguage)}</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {isLoading ? (
+                [...Array(3)].map((_, i) => (
+                  <TableRow key={i}>
+                    {Array.from({ length: 7 }).map((_, j) => (
+                      <TableCell key={j}>
+                        <Skeleton className="h-4 w-24" />
+                      </TableCell>
+                    ))}
+                  </TableRow>
+                ))
+              ) : !data?.data?.content?.length ? (
+                <TableRow>
+                  <TableCell colSpan={7} className="text-center font-medium">
+                    {translate("No data available", currentLanguage)}
+                  </TableCell>
+                </TableRow>
+              ) : (
+                data.data.content
+                  .filter((invoice: Invoice) =>
+                    search.trim() === ""
+                      ? true
+                      : invoice.billedToName.toLowerCase().includes(search)
+                  )
+                  .map((invoice: Invoice, index: number) => (
+                    <TableRow key={index}>
+                      <TableCell className="font-medium">{invoice.billedToName}</TableCell>
+                      <TableCell>{invoice.paidAmount}</TableCell>
+                      <TableCell>{invoice.totalFeesAmount}</TableCell>
+                      <TableCell>{formatTransactionDate(invoice.creationDate)}</TableCell>
+                      <TableCell>
+                        {invoice.paymentStatus === "NOT_FULLY_PAID" ? (
+                          <div className="flex items-center gap-2 font-semibold text-error">
+                            <div className="h-2.5 w-2.5 rounded-full bg-error" />
+                            Unpaid
+                          </div>
+                        ) : (
+                          <div className="flex items-center gap-2 font-semibold text-primary">
+                            <div className="h-2.5 w-2.5 rounded-full bg-primary" />
+                            Paid
+                          </div>
+                        )}
+                      </TableCell>
+                      <TableCell>{invoice.discountAmount}</TableCell>
+                      <TableCell>
+                        <div className="flex items-center gap-3">
+                          <button onClick={() => handleDelete(invoice.billedToId)}>
+                            <svg className="h-6 w-6 text-red-500" /* ... */ />
+                          </button>
+                          <Link
+                            href={`/fees-management/${invoice.billedToId}`}
+                            className="font-medium text-blue-600 hover:underline"
                           >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth="2"
-                              d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-                            />
-                          </svg>
-                        </button>
-                        <Link
-                          href={`/fees-management/${invoice.billedToId}`}
-                          className="font-medium text-blue-600 hover:underline"
-                        >
-                          <svg
-                            className="h-6 w-6 text-blue-500"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            stroke="currentColor"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth="2"
-                              d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
-                            />
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth="2"
-                              d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
-                            />
-                          </svg>
-                        </Link>
-                      </div>
-                    </td>
-                  </tr>
-                ))}
-            </tbody>
-          </table>
-          {(data?.data.content.length == 0 || data == null) && (
-            <div className="flex w-full justify-center py-3 text-center text-[18px] font-semibold">
-              {currentLanguage === "en"
-                ? "There is No Data"
-                : currentLanguage === "ar"
-                  ? "لا توجد بيانات"
-                  : currentLanguage === "fr"
-                    ? "Il n'y a pas de données"
-                    : "There is No Data"}
-            </div>
-          )}
+                            <svg className="h-6 w-6 text-blue-500" /* ... */ />
+                          </Link>
+                        </div>
+                      </TableCell>
+                    </TableRow>
+                  ))
+              )}
+            </TableBody>
+          </Table>
         </div>
-      </div>
+      </Container>
     </>
   );
 };

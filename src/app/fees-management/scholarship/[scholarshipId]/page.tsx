@@ -14,6 +14,7 @@ import { RootState } from "@/GlobalRedux/store";
 import { useSelector } from "react-redux";
 import { useGetAllStudentsQuery } from "@/features/User-Management/studentApi";
 import { useRouter } from "next/navigation";
+import Container from "@/components/Container";
 
 // Define a Zod schema that matches your API's expected data structure
 const scholarshipSchema = z
@@ -133,20 +134,21 @@ const EditScholarship = ({ params }: { params: { scholarshipId: number } }) => {
   return (
     <>
       <BreadCrumbs breadcrumbs={breadcrumbs} />
-      <div
-        dir={currentLanguage === "ar" ? "rtl" : "ltr"}
-        className={`${
-          currentLanguage === "ar"
-            ? booleanValue
-              ? "lg:mr-[100px]"
-              : "lg:mr-[270px]"
-            : booleanValue
-              ? "lg:ml-[100px]"
-              : "lg:ml-[270px]"
-        } mx-3 mt-[40px] grid h-[850px] items-center justify-center`}
-      >
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <div className="grid items-center justify-center gap-5 rounded-xl bg-bgPrimary p-10 sm:w-[500px] md:w-[600px] lg:w-[750px] xl:w-[1000px]">
+      <Container>
+        <div className="mb-8 -mt-2 -ml-1 flex items-center justify-between">
+          <h1 className="text-3xl font-semibold">
+            {currentLanguage === "en"
+              ? "Edit scholarship"
+              : currentLanguage === "ar"
+                ? "تعديل منحة دراسية"
+                : currentLanguage === "fr"
+                  ? "Ajouter des Bourse d'étude"
+                  : "Edit scholarship"}{" "}
+            {/* default */}
+          </h1>
+        </div>
+        <form className="flex h-full w-full items-center justify-center" onSubmit={handleSubmit(onSubmit)}>
+          <div className="rounded-xl bg-bgPrimary p-10 w-[90] md:w-[80%]">
             <div className="flex items-center justify-start gap-2">
               <h1 className="text-[22px] font-semibold">
                 {currentLanguage === "en"
@@ -156,7 +158,7 @@ const EditScholarship = ({ params }: { params: { scholarshipId: number } }) => {
                     : "Informations sur la bourse"}
               </h1>
             </div>
-            <div className="grid grid-cols-2 gap-4 max-[1278px]:grid-cols-1">
+            <div className="p-6 grid grid-cols-2 gap-4 max-[1278px]:grid-cols-1">
               {/* Student ID Field */}
               <label
                 htmlFor="studentId"
@@ -171,7 +173,7 @@ const EditScholarship = ({ params }: { params: { scholarshipId: number } }) => {
                 <select
                   id="studentId"
                   {...register("studentId")}
-                  className="h-full w-[400px] rounded-xl border px-4 py-3 text-[18px] text-black outline-none max-[458px]:w-[350px]"
+                  className="h-full w-full rounded-xl border px-4 py-3 text-[18px] text-black outline-none max-[458px]:w-[350px]"
                 >
                   <option value="">
                     {currentLanguage === "en"
@@ -184,12 +186,12 @@ const EditScholarship = ({ params }: { params: { scholarshipId: number } }) => {
                     (student: {
                       id: string | null | undefined;
                       name:
-                        | string
-                        | number
-                        | bigint
-                        | boolean
-                        | null
-                        | undefined;
+                      | string
+                      | number
+                      | bigint
+                      | boolean
+                      | null
+                      | undefined;
                     }) => (
                       <option key={student.id} value={student.id ?? ""}>
                         {String(student.name)}
@@ -216,7 +218,7 @@ const EditScholarship = ({ params }: { params: { scholarshipId: number } }) => {
                   id="scholarshipName"
                   {...register("scholarshipName")}
                   type="text"
-                  className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                 />
                 {errors.scholarshipName && (
                   <span className="text-error">
@@ -238,7 +240,7 @@ const EditScholarship = ({ params }: { params: { scholarshipId: number } }) => {
 
                 <select
                   id="scholarshipType"
-                  className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                   {...register("scholarshipType", { required: true })}
                 >
                   <option value="">
@@ -276,7 +278,7 @@ const EditScholarship = ({ params }: { params: { scholarshipId: number } }) => {
                   id="startDate"
                   {...register("startDate")}
                   type="date"
-                  className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                 />
                 {errors.startDate && (
                   <span className="text-error">{errors.startDate.message}</span>
@@ -297,7 +299,7 @@ const EditScholarship = ({ params }: { params: { scholarshipId: number } }) => {
                   id="expirationDate"
                   {...register("expirationDate")}
                   type="date"
-                  className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                 />
                 {errors.expirationDate && (
                   <span className="text-error">
@@ -395,7 +397,7 @@ const EditScholarship = ({ params }: { params: { scholarshipId: number } }) => {
             </div>
           </div>
         </form>
-      </div>
+      </Container>
     </>
   );
 };

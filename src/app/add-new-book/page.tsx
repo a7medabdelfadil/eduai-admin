@@ -48,7 +48,7 @@ const AddNewBook = () => {
       <BreadCrumbs breadcrumbs={breadcrumbs} />
       <Container>
         <div className="mb-8 -mt-2 -ml-1 flex items-center justify-between">
-          <h1 className="text-2xl font-semibold">
+          <h1 className="text-3xl font-semibold">
             {currentLanguage === "en"
               ? "Add New Book"
               : currentLanguage === "ar"

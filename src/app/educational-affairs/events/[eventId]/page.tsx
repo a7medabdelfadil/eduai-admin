@@ -154,7 +154,7 @@ const UpdateEvent = ({ params }: Props) => {
       <BreadCrumbs breadcrumbs={breadcrumbs} />
       <Container>
         <div className="mb-8 -mt-2 -ml-1 flex items-center justify-between">
-          <h1 className="text-2xl font-semibold">
+          <h1 className="text-3xl font-semibold">
             {currentLanguage === "en"
               ? "Update Event"
               : currentLanguage === "ar"
@@ -195,7 +195,7 @@ const UpdateEvent = ({ params }: Props) => {
                   id="title_en"
                   {...register("title_en")}
                   type="text"
-                  className="w-full rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                 />
                 {errors.title_en && (
                   <span className="text-error">
@@ -219,7 +219,7 @@ const UpdateEvent = ({ params }: Props) => {
                   id="title_ar"
                   {...register("title_ar")}
                   type="text"
-                  className="w-full rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                 />
                 {errors.title_ar && (
                   <span className="text-error">
@@ -243,7 +243,7 @@ const UpdateEvent = ({ params }: Props) => {
                   id="title_fr"
                   {...register("title_fr")}
                   type="text"
-                  className="w-full rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                 />
                 {errors.title_fr && (
                   <span className="text-error">
@@ -267,7 +267,7 @@ const UpdateEvent = ({ params }: Props) => {
                   id="description_en"
                   {...register("description_en")}
                   type="text"
-                  className="w-full rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                 />
                 {errors.description_en && (
                   <span className="text-error">
@@ -291,7 +291,7 @@ const UpdateEvent = ({ params }: Props) => {
                   id="description_ar"
                   {...register("description_ar")}
                   type="text"
-                  className="w-full rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                 />
                 {errors.description_ar && (
                   <span className="text-error">
@@ -315,7 +315,7 @@ const UpdateEvent = ({ params }: Props) => {
                   id="description_fr"
                   {...register("description_fr")}
                   type="text"
-                  className="w-full rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                 />
                 {errors.description_fr && (
                   <span className="text-error">
@@ -339,7 +339,7 @@ const UpdateEvent = ({ params }: Props) => {
                   id="startTime"
                   {...register("startTime")}
                   type="datetime-local"
-                  className="w-full rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                 />
                 {errors.startTime && (
                   <span className="text-error">
@@ -363,7 +363,7 @@ const UpdateEvent = ({ params }: Props) => {
                   id="endTime"
                   {...register("endTime")}
                   type="datetime-local"
-                  className="w-full rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                 />
                 {errors.endTime && (
                   <span className="text-error">

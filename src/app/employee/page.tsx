@@ -403,7 +403,8 @@ const Employee = () => {
                       className="cursor-pointer"
                       data-index={index}
                       key={employee.id}
-                      onClick={() => {
+                      onClick={(e) => {
+                        if ((e.target as HTMLElement).closest("a")) return;
                         setSelectedEmployee(employee);
                         setShowModal(true);
                       }}
@@ -424,7 +425,7 @@ const Employee = () => {
                       <TableCell>{employee.gender}</TableCell>
                       <TableCell>{employee.nationality}</TableCell>
                       <TableCell>{employee.email}</TableCell>
-                      <TableCell>{employee.number}</TableCell>
+                      <TableCell>{employee.number || "-"} </TableCell>
                       <TableCell>
                         <Link
                           href={`/employee/view-employee/${employee.id}`}

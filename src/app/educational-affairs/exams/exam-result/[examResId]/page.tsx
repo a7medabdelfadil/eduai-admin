@@ -21,6 +21,7 @@ import {
   TableRow,
 } from "@/components/Table";
 import { Skeleton } from "@/components/Skeleton";
+import SeeMoreButton from "@/components/SeeMoreButton";
 
 interface ParamsType {
   params: {
@@ -64,7 +65,6 @@ const ExamRes = ({ params }: ParamsType) => {
   const { data, error, isLoading, refetch } = useGetExamResByIdQuery(
     params.examResId,
   );
-  const booleanValue = useSelector((state: RootState) => state.boolean.value);
   const [search, setSearch] = useState("");
 
 
@@ -113,13 +113,15 @@ const ExamRes = ({ params }: ParamsType) => {
       ? true
       : exam.studentName?.toLowerCase()?.includes(search.trim().toLowerCase())
   );
+  const [visibleCount, setVisibleCount] = useState(20);
+  const visibleData = filteredData?.slice(0, visibleCount);
 
   return (
     <>
       <BreadCrumbs breadcrumbs={breadcrumbs} />
       <Container>
         <div className="mb-6 -mt-2 -ml-1 flex items-center justify-between">
-          <h1 className="text-2xl font-semibold">
+          <h1 className="text-3xl font-semibold">
             {currentLanguage === "en"
               ? "Exam Result"
               : currentLanguage === "ar"
@@ -130,84 +132,86 @@ const ExamRes = ({ params }: ParamsType) => {
             {/* default */}
           </h1>
         </div>
-      
+
         <div className="bg-bgPrimary rounded-xl">
-      
-        {/* Search Input */}
-       <div className="p-4">
-         <div
-          dir={currentLanguage === "ar" ? "rtl" : "ltr"}
-          className="relative w-full max-w-md"
-        >
-          <div className="pointer-events-none absolute inset-y-0 start-0 z-20 flex items-center ps-4">
-            <BiSearchAlt className="text-secondary" size={18} />
+
+          {/* Search Input */}
+          <div className="p-4">
+            <div
+              dir={currentLanguage === "ar" ? "rtl" : "ltr"}
+              className="relative w-full max-w-md"
+            >
+              <div className="pointer-events-none absolute inset-y-0 start-0 z-20 flex items-center ps-4">
+                <BiSearchAlt className="text-secondary" size={18} />
+              </div>
+              <div className="flex items-center gap-2">
+                <input
+                  onChange={(e) => setSearch(e.target.value)}
+                  type="text"
+                  className="w-full border-borderPrimary bg-bgPrimary rounded-lg border-2 px-4 py-2 ps-11 text-lg outline-none"
+                  placeholder={translate.searchPlaceholder}
+                />
+                <span className="min-w-[120px] text-primary">
+                  {filteredData?.length ?? 0} {translate.result}
+                </span>
+              </div>
+            </div>
           </div>
-          <div className="flex items-center gap-2">
-            <input
-              onChange={(e) => setSearch(e.target.value)}
-              type="text"
-              className="w-full border-borderSecondary rounded-lg border-2 px-4 py-2 ps-11 text-lg outline-none"
-              placeholder={translate.searchPlaceholder}
-            />
-            <span className="min-w-[120px] text-primary">
-              {filteredData?.length ?? 0} {translate.result}
-            </span>
-          </div>
-        </div>
-       </div>
-        <div className="relative overflow-auto shadow-md sm:rounded-lg">
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>{translate.name}</TableHead>
-                <TableHead>{translate.id}</TableHead>
-                <TableHead>{translate.status}</TableHead>
-                <TableHead>{translate.score}</TableHead>
-                <TableHead>{translate.scoreDate}</TableHead>
-                <TableHead>{translate.action}</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {isLoading ? (
-                [...Array(3)].map((_, i) => (
-                  <TableRow key={i}>
-                    {Array.from({ length: 6 }).map((_, j) => (
-                      <TableCell key={j}>
-                        <Skeleton className="h-4 w-24" />
-                      </TableCell>
-                    ))}
-                  </TableRow>
-                ))
-              ) : !filteredData || filteredData.length === 0 ? (
+          <div className="relative overflow-auto shadow-md sm:rounded-lg bg-bgPrimary">
+            <Table>
+              <TableHeader>
                 <TableRow>
-                  <TableCell colSpan={6} className="text-center font-medium">
-                    {translate.noData}
-                  </TableCell>
+                  <TableHead>{translate.name}</TableHead>
+                  <TableHead>{translate.id}</TableHead>
+                  <TableHead>{translate.status}</TableHead>
+                  <TableHead>{translate.score}</TableHead>
+                  <TableHead>{translate.scoreDate}</TableHead>
+                  <TableHead>{translate.action}</TableHead>
                 </TableRow>
-              ) : (
-                filteredData.map((exam: Exam, index: number) => (
-                  <TableRow key={index} data-index={index}> 
-                    <TableCell>{exam.studentName}</TableCell>
-                    <TableCell>{exam.studentId}</TableCell>
-                    <TableCell>{exam.status}</TableCell>
-                    <TableCell>{exam.score}</TableCell>
-                    <TableCell>{formatTransactionDate(exam.scoreDate)}</TableCell>
-                    <TableCell>
-                      <button
-                        onClick={() => handleDelete(exam.id)}
-                        className="text-error hover:text-red-800 font-semibold"
-                      >
-                        {translate.delete}
-                      </button>
+              </TableHeader>
+              <TableBody>
+                {isLoading ? (
+                  [...Array(3)].map((_, i) => (
+                    <TableRow key={i}>
+                      {Array.from({ length: 6 }).map((_, j) => (
+                        <TableCell key={j}>
+                          <Skeleton className="h-4 w-24" />
+                        </TableCell>
+                      ))}
+                    </TableRow>
+                  ))
+                ) : !filteredData || filteredData.length === 0 ? (
+                  <TableRow>
+                    <TableCell colSpan={6} className="text-center font-medium">
+                      {translate.noData}
                     </TableCell>
                   </TableRow>
-                ))
-              )}
-            </TableBody>
-          </Table>
+                ) : (
+                  visibleData.map((exam: Exam, index: number) => (
+                    <TableRow key={index} data-index={index}>
+                      <TableCell>{exam.studentName}</TableCell>
+                      <TableCell>{exam.studentId}</TableCell>
+                      <TableCell>{exam.status}</TableCell>
+                      <TableCell>{exam.score}</TableCell>
+                      <TableCell>{formatTransactionDate(exam.scoreDate)}</TableCell>
+                      <TableCell>
+                        <button
+                          onClick={() => handleDelete(exam.id)}
+                          className="text-error hover:text-red-800 font-semibold"
+                        >
+                          {translate.delete}
+                        </button>
+                      </TableCell>
+                    </TableRow>
+                  ))
+                )}
+              </TableBody>
+            </Table>
 
-
-        </div>
+            {visibleCount < (filteredData?.length || 0) && (
+              <SeeMoreButton onClick={() => setVisibleCount(prev => prev + 20)} />
+            )}
+          </div>
         </div>
       </Container>
     </>

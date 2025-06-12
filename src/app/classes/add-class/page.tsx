@@ -182,7 +182,7 @@ const AddClass = () => {
       <BreadCrumbs breadcrumbs={breadcrumbs} />
       <Container>
         <div className="mb-8 -mt-2 -ml-1 flex items-center justify-between">
-          <h1 className="text-2xl font-semibold">
+          <h1 className="text-3xl font-semibold">
             {currentLanguage === "en"
               ? "Add Class"
               : currentLanguage === "ar"
@@ -238,7 +238,7 @@ const AddClass = () => {
                 <input
                   id="buildingNumber"
                   type="text"
-                  className="w-full rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                   {...register("buildingNumber", { required: true })}
                 />
                 {errors.buildingNumber && (
@@ -263,7 +263,7 @@ const AddClass = () => {
                 <input
                   id="roomNumber"
                   type="text"
-                  className="w-full rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                   {...register("roomNumber", { required: true })}
                 />
                 {errors.roomNumber && (
@@ -288,7 +288,7 @@ const AddClass = () => {
                 <input
                   id="floorNumber"
                   type="number"
-                  className="w-full rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                   {...register("floorNumber", { required: true })}
                 />
                 {errors.floorNumber && (
@@ -309,7 +309,7 @@ const AddClass = () => {
                     : "Type"}
                 <select
                   id="type"
-                  className="w-full rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                   {...register("type", { required: true })}
                 >
                   <option selected value="">
@@ -350,7 +350,7 @@ const AddClass = () => {
                 <input
                   id="maxCapacity"
                   type="number"
-                  className="w-full rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                   {...register("maxCapacity", { required: true })}
                 />
                 {errors.maxCapacity && (
@@ -375,7 +375,7 @@ const AddClass = () => {
                 <input
                   id="classroomName"
                   type="text"
-                  className="w-full rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                   {...register("classroomName", { required: true })}
                 />
                 {errors.classroomName && (
@@ -400,7 +400,7 @@ const AddClass = () => {
                 <input
                   id="classroomNumber"
                   type="number"
-                  className="w-full rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                   {...register("classroomNumber", { required: true })}
                 />
                 {errors.classroomNumber && (
@@ -424,7 +424,7 @@ const AddClass = () => {
                     : "Classroom Study Level"}
                 <select
                   id="classroomStudyLevel"
-                  className="w-full rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                   {...register("classroomStudyLevel", { required: true })}
                 >
                   <option selected value="">
@@ -464,7 +464,7 @@ const AddClass = () => {
                     : "Classroom Study Stage"}
                 <select
                   id="classroomStudyStage"
-                  className="w-full rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                   {...register("classroomStudyStage", { required: true })}
                 >
                   <option selected value="">

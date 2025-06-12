@@ -146,12 +146,12 @@ const EditStudent = ({ params }: { params: Params }) => {
     <>
       <BreadCrumbs breadcrumbs={breadcrumbs} />
       <Container>
-         <div className="mb-8 -mt-2 -ml-1 flex items-center justify-between">
-          <h1 className="text-2xl font-semibold">
+        <div className="mb-8 -mt-2 -ml-1 flex items-center justify-between">
+          <h1 className="text-3xl font-semibold">
             {currentLanguage === "en"
               ? "Edit Student"
               : currentLanguage === "ar"
-                ?"تعديل الطالب"
+                ? "تعديل الطالب"
                 : currentLanguage === "fr"
                   ? "Modifier l'élève"
                   : "Edit Student"}{" "}
@@ -171,7 +171,7 @@ const EditStudent = ({ params }: { params: Params }) => {
                 <input
                   id="email"
                   type="email"
-                  className="w-full rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                   value={email || ""}
                   onChange={e => setEmail(e.target.value)}
                 />
@@ -188,7 +188,7 @@ const EditStudent = ({ params }: { params: Params }) => {
                 <input
                   id="nid"
                   type="number"
-                  className="w-full rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                   value={nid}
                   onChange={e => setNid(e.target.value)}
                 />
@@ -207,7 +207,7 @@ const EditStudent = ({ params }: { params: Params }) => {
                     : "Gender"}
                 <select
                   id="gender"
-                  className="w-full rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                   value={gender}
                   onChange={e => setGender(e.target.value)}
                 >
@@ -240,7 +240,7 @@ const EditStudent = ({ params }: { params: Params }) => {
                     : "Your Nationality"}
                 <select
                   id="nationality"
-                  className="w-full rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                   value={nationality}
                   onChange={e => setNationality(e.target.value)}
                 >
@@ -273,7 +273,7 @@ const EditStudent = ({ params }: { params: Params }) => {
                     : "Region"}
                 <select
                   id="regionId"
-                  className="w-full rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                   value={regionId}
                   onChange={e => setRegionId(e.target.value)}
                 >
@@ -304,7 +304,7 @@ const EditStudent = ({ params }: { params: Params }) => {
                     : "Graduated"}
                 <select
                   id="graduated"
-                  className="w-full rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                   value={graduated}
                   onChange={e => setGraduated(e.target.value)}
                 >
@@ -330,7 +330,7 @@ const EditStudent = ({ params }: { params: Params }) => {
                 <input
                   id="name_en"
                   type="text"
-                  className="w-full rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                   value={name_en}
                   onChange={e => setNameEn(e.target.value)}
                 />
@@ -350,7 +350,7 @@ const EditStudent = ({ params }: { params: Params }) => {
                 <input
                   id="name_ar"
                   type="text"
-                  className="w-full rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                   value={name_ar}
                   onChange={e => setNameAr(e.target.value)}
                 />
@@ -370,7 +370,7 @@ const EditStudent = ({ params }: { params: Params }) => {
                 <input
                   id="name_fr"
                   type="text"
-                  className="w-full rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                   value={name_fr}
                   onChange={e => setNameFr(e.target.value)}
                 />
@@ -386,7 +386,7 @@ const EditStudent = ({ params }: { params: Params }) => {
                     : "About"}
                 <input
                   id="about"
-                  className="w-full rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                   value={about}
                   onChange={e => setAbout(e.target.value)}
                 />
@@ -405,7 +405,7 @@ const EditStudent = ({ params }: { params: Params }) => {
                 <input
                   id="birthDate"
                   type="date"
-                  className="w-full rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                   value={birthDate}
                   onChange={e => setBirthDate(e.target.value)}
                 />

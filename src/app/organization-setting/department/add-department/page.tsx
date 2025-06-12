@@ -11,6 +11,7 @@ import { useGetAllRolesQuery } from "@/features/signupApi";
 import BreadCrumbs from "@/components/BreadCrumbs";
 import { useRouter } from "next/navigation";
 import { useGetAllEmployeesQuery } from "@/features/User-Management/employeeApi";
+import Container from "@/components/Container";
 
 const AddDepartment = () => {
   const breadcrumbs = [
@@ -87,20 +88,21 @@ const AddDepartment = () => {
   return (
     <>
       <BreadCrumbs breadcrumbs={breadcrumbs} />
-      <div
-        dir={currentLanguage === "ar" ? "rtl" : "ltr"}
-        className={` ${
-          currentLanguage === "ar"
-            ? booleanValue
-              ? "lg:mr-[100px]"
-              : "lg:mr-[270px]"
-            : booleanValue
-              ? "lg:ml-[100px]"
-              : "lg:ml-[270px]"
-        } mx-3 mt-10 grid items-center justify-center`}
-      >
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <div className="grid items-center justify-center gap-5 rounded-xl bg-bgPrimary p-10 sm:w-[500px] md:w-[600px] lg:w-[750px] xl:w-[1000px]">
+      <Container>
+        <div className="mb-8 -mt-2 -ml-1 flex items-center justify-between">
+          <h1 className="text-3xl font-semibold">
+            {currentLanguage === "en"
+              ? "Add Department"
+              : currentLanguage === "ar"
+                ? "إضافة قسم"
+                : currentLanguage === "fr"
+                  ? "Ajouter un département"
+                  : "Add Department"}{" "}
+            {/* default */}
+          </h1>
+        </div>
+        <form className="flex h-full w-full items-center justify-center" onSubmit={handleSubmit(onSubmit)}>
+          <div className="rounded-xl bg-bgPrimary p-10 w-[90] md:w-[80%]">
             <div className="flex items-center justify-start gap-2">
               <svg
                 className="h-6 w-6 font-bold text-secondary group-hover:text-primary"
@@ -132,7 +134,7 @@ const AddDepartment = () => {
                     : "Department Information"}
               </h1>
             </div>
-            <div className="grid grid-cols-2 gap-4 max-[1278px]:grid-cols-1">
+            <div className="p-6 grid grid-cols-2 gap-4 max-[1278px]:grid-cols-1">
               <label
                 htmlFor="name_en"
                 className="grid text-[18px] font-semibold"
@@ -145,7 +147,7 @@ const AddDepartment = () => {
                 <input
                   id="name_en"
                   type="text"
-                  className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                   {...register("name_en", { required: true })}
                 />
                 {errors.name_en && (
@@ -170,7 +172,7 @@ const AddDepartment = () => {
                 <input
                   id="name_fr"
                   type="text"
-                  className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                   {...register("name_fr", { required: true })}
                 />
                 {errors.name_fr && (
@@ -195,7 +197,7 @@ const AddDepartment = () => {
                 <input
                   id="name_ar"
                   type="text"
-                  className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                   {...register("name_ar", { required: true })}
                 />
                 {errors.name_ar && (
@@ -220,7 +222,7 @@ const AddDepartment = () => {
                 <input
                   id="description_en"
                   type="text"
-                  className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                   {...register("description_en", { required: true })}
                 />
                 {errors.description_en && (
@@ -246,7 +248,7 @@ const AddDepartment = () => {
                 <input
                   id="description_fr"
                   type="text"
-                  className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                   {...register("description_fr", { required: true })}
                 />
                 {errors.description_fr && (
@@ -271,7 +273,7 @@ const AddDepartment = () => {
                 <input
                   id="description_en"
                   type="text"
-                  className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                   {...register("description_ar", { required: true })}
                 />
                 {errors.description_ar && (
@@ -296,7 +298,7 @@ const AddDepartment = () => {
                 <input
                   id="abbreviation_en"
                   type="text"
-                  className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                   {...register("abbreviation_en", { required: true })}
                 />
                 {errors.abbreviation_en && (
@@ -322,7 +324,7 @@ const AddDepartment = () => {
                 <input
                   id="abbreviation_fr"
                   type="text"
-                  className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                   {...register("abbreviation_fr", { required: true })}
                 />
                 {errors.abbreviation_fr && (
@@ -347,7 +349,7 @@ const AddDepartment = () => {
                 <input
                   id="abbreviation_ar"
                   type="text"
-                  className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                   {...register("abbreviation_ar", { required: true })}
                 />
                 {errors.abbreviation_ar && (
@@ -372,7 +374,7 @@ const AddDepartment = () => {
 
                 <select
                   id="headId"
-                  className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                   {...register("headId", { required: true })}
                 >
                   <option value="">
@@ -409,7 +411,7 @@ const AddDepartment = () => {
                   defaultValue=""
                   id="roles"
                   {...register("roles", { required: true })}
-                  className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                 >
                   <option selected value="">
                     {currentLanguage === "ar"
@@ -454,7 +456,7 @@ const AddDepartment = () => {
             </div>
           </div>
         </form>
-      </div>
+      </Container>
     </>
   );
 };

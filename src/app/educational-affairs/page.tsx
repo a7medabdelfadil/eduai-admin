@@ -71,7 +71,7 @@ const EducationalAffairs = () => {
               : "All exams in all subjects", // Default to English
     },
     {
-      href: "/educational-affairs/grads",
+      href: "/educational-affairs/grades",
       icon: <FaRegChartBar size={30} />,
       title:
         currentLanguage === "en"

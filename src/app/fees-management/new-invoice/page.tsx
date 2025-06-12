@@ -129,8 +129,20 @@ const NewInvoice = () => {
     <>
       <BreadCrumbs breadcrumbs={breadcrumbs} />
       <Container>
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <div className="grid items-center justify-center gap-5 rounded-xl bg-bgPrimary p-10 sm:w-[500px] md:w-[600px] lg:w-[750px] xl:w-[1000px]">
+        <div className="mb-8 -mt-2 -ml-1 flex items-center justify-between">
+          <h1 className="text-3xl font-semibold">
+            {currentLanguage === "en"
+              ? "Add Invoices"
+              : currentLanguage === "ar"
+                ? "إضافة الفواتير"
+                : currentLanguage === "fr"
+                  ? "Ajouter des factures"
+                  : "Add Invoices"}{" "}
+            {/* default */}
+          </h1>
+        </div>
+        <form className="flex h-full w-full items-center justify-center" onSubmit={handleSubmit(onSubmit)}>
+          <div className="rounded-xl bg-bgPrimary p-10 w-[90] md:w-[80%]">
             <div className="flex items-center justify-start gap-2">
               <h1 className="text-[22px] font-semibold">
                 {currentLanguage === "en"
@@ -140,7 +152,7 @@ const NewInvoice = () => {
                     : "Informations sur la facture"}
               </h1>
             </div>
-            <div className="grid grid-cols-2 gap-4 max-[1278px]:grid-cols-1">
+            <div className="p-6 grid grid-cols-2 gap-4 max-[1278px]:grid-cols-1">
               {/* Paid Amount Field */}
               <label
                 htmlFor="paidAmount"
@@ -155,7 +167,7 @@ const NewInvoice = () => {
                   id="paidAmount"
                   {...register("paidAmount")}
                   type="text"
-                  className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                 />
                 {errors.paidAmount && (
                   <span className="text-error">
@@ -178,7 +190,7 @@ const NewInvoice = () => {
                   id="discountAmount"
                   {...register("discountAmount")}
                   type="text"
-                  className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                 />
                 {errors.discountAmount && (
                   <span className="text-error">
@@ -197,7 +209,7 @@ const NewInvoice = () => {
                   id="userType"
                   value={isForStudent}
                   onChange={(e) => setIsForStudent(Number(e.target.value) as 1 | 0)}
-                  className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                 >
                   <option value={1}>
                     {currentLanguage === "en"
@@ -226,7 +238,7 @@ const NewInvoice = () => {
                 <select
                   id="billedToId"
                   {...register("billedToId", { valueAsNumber: true })}
-                  className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                 >
                   <option value="">
                     {currentLanguage === "en"
@@ -258,7 +270,7 @@ const NewInvoice = () => {
                   id="rate"
                   {...register("invoiceItem.rate", { valueAsNumber: true })}
                   type="number"
-                  className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                 />
                 {errors.invoiceItem?.rate && (
                   <span className="text-error">
@@ -278,7 +290,7 @@ const NewInvoice = () => {
                   id="qty"
                   {...register("invoiceItem.qty", { valueAsNumber: true })}
                   type="number"
-                  className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                 />
                 {errors.invoiceItem?.qty && (
                   <span className="text-error">
@@ -298,7 +310,7 @@ const NewInvoice = () => {
                 <select
                   id="type"
                   {...register("invoiceItem.type")}
-                  className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                 >
                   <option value="">
                     {currentLanguage === "en"
@@ -330,7 +342,7 @@ const NewInvoice = () => {
                   id="about"
                   {...register("invoiceItem.about")}
                   type="text"
-                  className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                   placeholder={currentLanguage === "en"
                     ? "Optional description"
                     : currentLanguage === "ar"

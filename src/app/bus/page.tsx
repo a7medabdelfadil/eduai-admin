@@ -21,12 +21,13 @@ import {
 } from "@/components/Table";
 import { Skeleton } from "@/components/Skeleton";
 import { BiEditAlt, BiSearchAlt, BiTrash } from "react-icons/bi";
+import SeeMoreButton from "@/components/SeeMoreButton";
 
 const Bus = () => {
   const breadcrumbs = [
     { nameEn: "Administration", nameAr: "الإدارة", nameFr: "Administration", href: "/" },
     { nameEn: "Infrastructure", nameAr: "الدورات والموارد", nameFr: "Cours et Ressources", href: "/infrastructure" },
-    { nameEn: "Bus", nameAr: "المكتبة", nameFr: "Autobus", href: "/bus" },
+    { nameEn: "Bus", nameAr: "الأتوبيس", nameFr: "Autobus", href: "/bus" },
   ];
 
   const { language: currentLanguage, loading } = useSelector((state: RootState) => state.language);
@@ -75,10 +76,26 @@ const Bus = () => {
     search === "" ? true : bus.busNumber?.toString().toLowerCase().includes(search.toLowerCase())
   );
 
+  const [visibleCount, setVisibleCount] = useState(20);
+  const visible = filtered?.slice(0, visibleCount);
+
+
   return (
     <>
       <BreadCrumbs breadcrumbs={breadcrumbs} />
       <Container>
+        <div className="mb-6 -mt-2 -ml-1 flex items-center justify-between">
+          <h1 className="text-3xl font-semibold">
+            {currentLanguage === "en"
+              ? "Bus"
+              : currentLanguage === "ar"
+                ? "الأتوبيس"
+                : currentLanguage === "fr"
+                  ? "Autobus"
+                  : "Bus"}{" "}
+            {/* default */}
+          </h1>
+        </div>
         <div className="bg-bgPrimary rounded-xl">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4 px-4 py-4">
             <div
@@ -92,7 +109,7 @@ const Bus = () => {
                 <input
                   onChange={(e) => setSearch(e.target.value)}
                   type="text"
-                  className="w-full border-borderSecondary rounded-lg border-2 px-4 py-2 ps-11 text-lg outline-none"
+                  className="w-full border-borderPrimary bg-bgPrimary rounded-lg border-2 px-4 py-2 ps-11 text-lg outline-none"
                   placeholder={
                     currentLanguage === "en"
                       ? "Search"
@@ -115,7 +132,7 @@ const Bus = () => {
               {currentLanguage === "ar" ? "+ إضافة حافلة جديدة" : currentLanguage === "fr" ? "+ Ajouter un nouveau bus" : "+ Add New Bus"}
             </Link>
           </div>
-          <div className="relative overflow-auto shadow-md sm:rounded-lg">
+          <div className="relative overflow-auto shadow-md sm:rounded-lg bg-bgPrimary">
             <Table>
               <TableHeader>
                 <TableRow>
@@ -143,7 +160,7 @@ const Bus = () => {
                     </TableCell>
                   </TableRow>
                 ) : (
-                  filtered.map((bus: Bus, index: number) => (
+                  visible.map((bus: Bus, index: number) => (
                     <TableRow key={index} data-index={index}>
                       <TableCell>{bus.busNumber}</TableCell>
                       <TableCell>{bus.busCapacity}</TableCell>
@@ -172,6 +189,10 @@ const Bus = () => {
               </TableBody>
             </Table>
           </div>
+          {visibleCount < (filtered?.length || 0) && (
+            <SeeMoreButton onClick={() => setVisibleCount(prev => prev + 20)} />
+          )}
+
         </div >
       </Container>
     </>

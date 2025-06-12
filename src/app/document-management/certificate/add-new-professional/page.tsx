@@ -99,8 +99,8 @@ const AddNewProfessional = () => {
     <>
       <BreadCrumbs breadcrumbs={breadcrumbs} />
       <Container>
-         <div className="mb-8 -mt-2 -ml-1 flex items-center justify-between">
-          <h1 className="text-2xl font-semibold">
+        <div className="mb-8 -mt-2 -ml-1 flex items-center justify-between">
+          <h1 className="text-3xl font-semibold">
             {currentLanguage === "en"
               ? "Add Achievement Certificates"
               : currentLanguage === "ar"
@@ -169,12 +169,12 @@ const AddNewProfessional = () => {
                     (student: {
                       id: string | null | undefined;
                       name:
-                        | string
-                        | number
-                        | bigint
-                        | boolean
-                        | null
-                        | undefined;
+                      | string
+                      | number
+                      | bigint
+                      | boolean
+                      | null
+                      | undefined;
                     }) => (
                       <option key={student.id} value={student.id ?? ""}>
                         {String(student.name)}
@@ -201,7 +201,7 @@ const AddNewProfessional = () => {
                 <input
                   id="type"
                   type="text"
-                  className="w-full rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                   {...register("type", { required: true })}
                 />
                 {errors.type && (
@@ -226,7 +226,7 @@ const AddNewProfessional = () => {
                 <input
                   id="issueDate"
                   type="date"
-                  className="w-full rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                   {...register("issueDate", { required: true })}
                 />
                 {errors.issueDate && (

@@ -15,6 +15,7 @@ import Container from "@/components/Container";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/Table";
 import { Skeleton } from "@/components/Skeleton";
 import { BiSearchAlt, BiTrash } from "react-icons/bi";
+import SeeMoreButton from "@/components/SeeMoreButton";
 
 const Parent = () => {
   const breadcrumbs = [
@@ -80,13 +81,16 @@ const Parent = () => {
     }
   };
 
+  const [visibleCount, setVisibleCount] = useState(20);
+  const visibleData = filteredData?.slice(0, visibleCount);
+
   return (
     <>
       <BreadCrumbs breadcrumbs={breadcrumbs} />
 
       <Container>
         <div className="mb-6 -mt-2 -ml-1 flex items-center justify-between">
-          <h1 className="text-2xl font-semibold">
+          <h1 className="text-3xl font-semibold">
             {currentLanguage === "en"
               ? "All Parents"
               : currentLanguage === "ar"
@@ -110,7 +114,7 @@ const Parent = () => {
                 <input
                   onChange={(e) => setSearch(e.target.value)}
                   type="text"
-                  className="w-full border-borderSecondary rounded-lg border-2 px-4 py-2 ps-11 text-lg outline-none"
+                  className="w-full border-borderPrimary bg-bgPrimary rounded-lg border-2 px-4 py-2 ps-11 text-lg outline-none"
                   placeholder={
                     currentLanguage === "en"
                       ? "Search"
@@ -137,7 +141,7 @@ const Parent = () => {
                   : "+ Add New Parent"}
             </Link>
           </div>
-          <div className="relative overflow-auto shadow-md sm:rounded-lg">
+          <div className="relative overflow-auto shadow-md sm:rounded-lg bg-bgPrimary">
             <Table>
               <TableHeader>
                 <TableRow>
@@ -169,7 +173,7 @@ const Parent = () => {
                     </TableCell>
                   </TableRow>
                 ) : (
-                  filteredData.map((parent: Parent, index: number) => (
+                  visibleData.map((parent: Parent, index: number) => (
                     <TableRow key={parent.id} data-index={index}>
                       <TableCell>
                         <div className="flex items-center gap-2">
@@ -208,6 +212,10 @@ const Parent = () => {
                 )}
               </TableBody>
             </Table>
+            {visibleCount < (filteredData?.length || 0) && (
+              <SeeMoreButton onClick={() => setVisibleCount(prev => prev + 20)} />
+            )}
+
           </div>
         </div>
       </Container>

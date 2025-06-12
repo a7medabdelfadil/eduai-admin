@@ -16,6 +16,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Skeleton } from "@/components/Skeleton";
 import { BiSearchAlt, BiTrash } from "react-icons/bi";
 import { GrView } from "react-icons/gr";
+import SeeMoreButton from "@/components/SeeMoreButton";
 
 const Student = () => {
   const breadcrumbs = [
@@ -64,19 +65,16 @@ const Student = () => {
     student.name?.toLowerCase().includes(search.trim().toLowerCase())
   );
 
-  if (loading || isLoading)
-    return (
-      <div className="flex h-screen w-full items-center justify-center">
-        <Spinner />
-      </div>
-    );
+  const [visibleCount, setVisibleCount] = useState(20);
+  const visibleData = filteredData?.slice(0, visibleCount);
+
 
   return (
     <>
       <BreadCrumbs breadcrumbs={breadcrumbs} />
       <Container>
         <div className="mb-6 -mt-2 -ml-1 flex items-center justify-between">
-          <h1 className="text-2xl font-semibold">
+          <h1 className="text-3xl font-semibold">
             {currentLanguage === "en"
               ? "All Students"
               : currentLanguage === "ar"
@@ -100,7 +98,7 @@ const Student = () => {
                 <input
                   onChange={(e) => setSearch(e.target.value)}
                   type="text"
-                  className="w-full border-borderSecondary rounded-lg border-2 px-4 py-2 ps-11 text-lg outline-none"
+                  className="w-full border-borderPrimary bg-bgPrimary rounded-lg border-2 px-4 py-2 ps-11 text-lg outline-none"
                   placeholder={
                     currentLanguage === "en"
                       ? "Search"
@@ -123,7 +121,7 @@ const Student = () => {
               {currentLanguage === "ar" ? "+ طالب جديد" : currentLanguage === "fr" ? "+ Nouvel étudiant" : "+ New Student"}
             </Link>
           </div>
-          <div className="relative overflow-auto shadow-md sm:rounded-lg">
+          <div className="relative overflow-auto shadow-md sm:rounded-lg bg-bgPrimary">
             <Table>
               <TableHeader>
                 <TableRow>
@@ -153,7 +151,7 @@ const Student = () => {
                     </TableCell>
                   </TableRow>
                 ) : (
-                  filteredData.map((student: Student, index: number) => (
+                  visibleData.map((student: Student, index: number) => (
                     <TableRow key={student.id} data-index={index}>
                       <TableCell>
                         <div className="flex items-center gap-2">
@@ -190,6 +188,10 @@ const Student = () => {
                 )}
               </TableBody>
             </Table>
+            {visibleCount < (filteredData?.length || 0) && (
+              <SeeMoreButton onClick={() => setVisibleCount(prev => prev + 20)} />
+            )}
+
           </div>
         </div>
       </Container>

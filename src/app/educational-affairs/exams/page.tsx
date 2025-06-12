@@ -23,6 +23,7 @@ import {
 } from "@/components/Table";
 import { Skeleton } from "@/components/Skeleton";
 import { MdVisibility, MdEdit, MdDelete } from "react-icons/md";
+import SeeMoreButton from "@/components/SeeMoreButton";
 
 const Exams = () => {
   const breadcrumbs = [
@@ -72,6 +73,9 @@ const Exams = () => {
       ? true
       : exam.teacherName?.toLowerCase()?.includes(search.trim().toLowerCase())
   );
+  const [visibleCount, setVisibleCount] = useState(20);
+  const visibleData = filteredData?.slice(0, visibleCount);
+
   const translate = {
     examDate: currentLanguage === "ar" ? "تاريخ الامتحان" : currentLanguage === "fr" ? "Date de l'examen" : "Exam Date",
     beginning: currentLanguage === "ar" ? "البدء" : currentLanguage === "fr" ? "Début" : "Beginning",
@@ -100,7 +104,7 @@ const Exams = () => {
           : "Result(s)",
   };
 
-  if (loading || isLoading)
+  if (isLoading)
     return (
       <div className="flex h-screen w-full items-center justify-center">
         <Spinner />
@@ -111,7 +115,7 @@ const Exams = () => {
       <BreadCrumbs breadcrumbs={breadcrumbs} />
       <Container>
         <div className="mb-6 -mt-2 -ml-1 flex items-center justify-between">
-          <h1 className="text-2xl font-semibold">
+          <h1 className="text-3xl font-semibold">
             {currentLanguage === "en"
               ? "Exams"
               : currentLanguage === "ar"
@@ -138,7 +142,7 @@ const Exams = () => {
                 <input
                   onChange={(e) => setSearch(e.target.value)}
                   type="text"
-                  className="w-full border-borderSecondary rounded-lg border-2 px-4 py-2 ps-11 text-lg outline-none"
+                  className="w-full border-borderPrimary bg-bgPrimary rounded-lg border-2 px-4 py-2 ps-11 text-lg outline-none"
                   placeholder={translate.searchPlaceholder}
                 />
                 <span className="min-w-[120px] text-primary">
@@ -159,7 +163,7 @@ const Exams = () => {
                   : "+ Add New Exam"}
             </Link>
           </div>
-          <div className="relative overflow-auto shadow-md sm:rounded-lg">
+          <div className="relative overflow-auto shadow-md sm:rounded-lg bg-bgPrimary">
             <Table>
               <TableHeader>
                 <TableRow>
@@ -193,7 +197,7 @@ const Exams = () => {
                     </TableCell>
                   </TableRow>
                 ) : (
-                  filteredData.map((exam: Exam) => (
+                  visibleData.map((exam: Exam) => (
                     <TableRow key={exam.id}>
                       <TableCell>{exam.examDate}</TableCell>
                       <TableCell>{exam.examBeginning}</TableCell>
@@ -232,6 +236,9 @@ const Exams = () => {
                 )}
               </TableBody>
             </Table>
+            {visibleCount < (filteredData?.length || 0) && (
+              <SeeMoreButton onClick={() => setVisibleCount(prev => prev + 20)} />
+            )}
           </div>
         </div>
       </Container>

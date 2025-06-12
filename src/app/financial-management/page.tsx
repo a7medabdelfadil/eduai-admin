@@ -38,7 +38,7 @@ const FinancialManagement = () => {
   const financials = [
     {
       href: "/fees-management",
-      icon: <FaDollarSign size={40} />,
+      icon: <FaDollarSign size={30} />,
       title:
         currentLanguage === "en"
           ? "Invoices"
@@ -58,7 +58,7 @@ const FinancialManagement = () => {
     },
     {
       href: "/fees-management/scholarship",
-      icon: <FaSchool size={40} />,
+      icon: <FaSchool size={30} />,
       title:
         currentLanguage === "en"
           ? "Scholarship"
@@ -78,7 +78,7 @@ const FinancialManagement = () => {
     },
     {
       href: "/financial-management/budget",
-      icon: <FaWallet size={40} />,
+      icon: <FaWallet size={30} />,
       title:
         currentLanguage === "en"
           ? "Budget"
@@ -98,7 +98,7 @@ const FinancialManagement = () => {
     },
     {
       href: "/financial-management/bank",
-      icon: <FaBuilding size={40} />,
+      icon: <FaBuilding size={30} />,
       title:
         currentLanguage === "en"
           ? "Bank"
@@ -118,7 +118,7 @@ const FinancialManagement = () => {
     },
     {
       href: "/financial-management/payment",
-      icon: <FaMoneyBill size={40} />,
+      icon: <FaMoneyBill size={30} />,
       title:
         currentLanguage === "en"
           ? "Payment"
@@ -138,7 +138,7 @@ const FinancialManagement = () => {
     },
     {
       href: "/financial-management/taxes",
-      icon: <FaCalculator size={40} />,
+      icon: <FaCalculator size={30} />,
       title:
         currentLanguage === "en"
           ? "Taxes"

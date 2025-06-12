@@ -99,8 +99,8 @@ const AddNewParticipation = () => {
     <>
       <BreadCrumbs breadcrumbs={breadcrumbs} />
       <Container>
-         <div className="mb-8 -mt-2 -ml-1 flex items-center justify-between">
-          <h1 className="text-2xl font-semibold">
+        <div className="mb-8 -mt-2 -ml-1 flex items-center justify-between">
+          <h1 className="text-3xl font-semibold">
             {currentLanguage === "en"
               ? "Add Participation Certificates"
               : currentLanguage === "ar"
@@ -170,12 +170,12 @@ const AddNewParticipation = () => {
                     (student: {
                       id: string | null | undefined;
                       name:
-                        | string
-                        | number
-                        | bigint
-                        | boolean
-                        | null
-                        | undefined;
+                      | string
+                      | number
+                      | bigint
+                      | boolean
+                      | null
+                      | undefined;
                     }) => (
                       <option key={student.id} value={student.id ?? ""}>
                         {String(student.name)}
@@ -206,7 +206,7 @@ const AddNewParticipation = () => {
                 <input
                   id="title_en"
                   type="text"
-                  className="w-full rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                   {...register("title_en", { required: true })}
                 />
                 {errors.title_en && (
@@ -231,7 +231,7 @@ const AddNewParticipation = () => {
                 <input
                   id="title_ar"
                   type="text"
-                  className="w-full rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                   {...register("title_ar", { required: true })}
                 />
                 {errors.title_ar && (
@@ -257,7 +257,7 @@ const AddNewParticipation = () => {
                 <input
                   id="title_fr"
                   type="text"
-                  className="w-full rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                   {...register("title_fr", { required: true })}
                 />
                 {errors.title_fr && (
@@ -282,7 +282,7 @@ const AddNewParticipation = () => {
                 <input
                   id="issueDate"
                   type="date"
-                  className="w-full rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                   {...register("issueDate", { required: true })}
                 />
                 {errors.issueDate && (

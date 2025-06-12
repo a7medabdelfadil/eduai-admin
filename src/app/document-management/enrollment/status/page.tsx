@@ -23,6 +23,7 @@ import { usePathname } from "next/navigation";
 import Link from "next/link";
 import { useDeleteStudentsMutation } from "@/features/User-Management/studentApi";
 import { toast } from "react-toastify";
+import SeeMoreButton from "@/components/SeeMoreButton";
 
 const EnrollmentStatus = () => {
   const breadcrumbs = [
@@ -45,6 +46,9 @@ const EnrollmentStatus = () => {
   const filteredData = data?.data?.content?.filter((student: any) =>
     student.name?.toLowerCase().includes(search.trim().toLowerCase())
   );
+  const [visibleCount, setVisibleCount] = useState(20);
+  const visibleData = filteredData?.slice(0, visibleCount);
+
 
   const getStatusStyle = (status: string) => {
     switch (status.toLowerCase()) {
@@ -62,8 +66,8 @@ const EnrollmentStatus = () => {
         currentLanguage === "ar"
           ? "تم قفل حساب الطالب بنجاح."
           : currentLanguage === "fr"
-          ? "Compte de l'élève verrouillé avec succès."
-          : "Student account locked successfully."
+            ? "Compte de l'élève verrouillé avec succès."
+            : "Student account locked successfully."
       );
       refetch();
     } catch {
@@ -71,8 +75,8 @@ const EnrollmentStatus = () => {
         currentLanguage === "ar"
           ? "فشل في قفل الحساب."
           : currentLanguage === "fr"
-          ? "Échec du verrouillage du compte."
-          : "Failed to lock student account."
+            ? "Échec du verrouillage du compte."
+            : "Failed to lock student account."
       );
     }
   };
@@ -104,8 +108,6 @@ const EnrollmentStatus = () => {
     result: currentLanguage === "ar" ? "نتيجة" : currentLanguage === "fr" ? "résultat(s)" : "Result(s)",
     searchPlaceholder: currentLanguage === "ar" ? "ابحث عن طالب" : currentLanguage === "fr" ? "Rechercher un étudiant" : "Search student",
   };
-
-  if (loading) return <div className="flex h-screen w-full items-center justify-center"><Spinner /></div>;
 
   return (
     <>
@@ -151,71 +153,77 @@ const EnrollmentStatus = () => {
               </div>
             </div>
           </div>
+          <div className="relative overflow-auto shadow-md sm:rounded-lg bg-bgPrimary">
 
-          {/* Table */}
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>{translate.fullName}</TableHead>
-                <TableHead>{translate.id}</TableHead>
-                <TableHead>{translate.gender}</TableHead>
-                <TableHead>{translate.age}</TableHead>
-                <TableHead>{translate.stage}</TableHead>
-                <TableHead>{translate.status}</TableHead>
-                <TableHead>{translate.mobile}</TableHead>
-                <TableHead>{translate.action}</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {isLoading ? [...Array(3)].map((_, i) => (
-                <TableRow key={i}>
-                  {Array.from({ length: 8 }).map((_, j) => (
-                    <TableCell key={j}><Skeleton className="h-4 w-24" /></TableCell>
-                  ))}
-                </TableRow>
-              )) : !filteredData?.length ? (
+            {/* Table */}
+            <Table>
+              <TableHeader>
                 <TableRow>
-                  <TableCell colSpan={8} className="text-center">
-                    {translate.noData}
-                  </TableCell>
+                  <TableHead>{translate.fullName}</TableHead>
+                  <TableHead>{translate.id}</TableHead>
+                  <TableHead>{translate.gender}</TableHead>
+                  <TableHead>{translate.age}</TableHead>
+                  <TableHead>{translate.stage}</TableHead>
+                  <TableHead>{translate.status}</TableHead>
+                  <TableHead>{translate.mobile}</TableHead>
+                  <TableHead>{translate.action}</TableHead>
                 </TableRow>
-              ) : (
-                filteredData.map((student: any, index: number) => (
-                  <TableRow key={index} data-index={index}>
-                    <TableCell>
-                      <div className="flex items-center gap-3">
-                        {student.hasPicture
-                          ? <img src={student.picture} alt={student.name} className="h-6 w-6 rounded-full object-cover" />
-                          : <div className="h-6 w-6 rounded-full bg-muted flex items-center justify-center text-xs text-gray-500">N/A</div>
-                        }
-                        <span>{student.name}</span>
-                      </div>
-                    </TableCell>
-                    <TableCell>{student.id}</TableCell>
-                    <TableCell>{student.gender}</TableCell>
-                    <TableCell>{student.age ?? "-"}</TableCell>
-                    <TableCell>{student.studyStage}</TableCell>
-                    <TableCell>
-                      <span className={`px-3 py-1 rounded-full min-w-[350px] text-sm font-medium ${getStatusStyle(student.status)}`}>
-                        {student.status}
-                      </span>
-                    </TableCell>
-                    <TableCell>{student.ParentMobile ?? "-"}</TableCell>
-                    <TableCell>
-                      <button
-                        onClick={() => handleDelete(student.id)}
-                        title="Delete"
-                        className="text-red-500 hover:text-red-700"
-                        disabled={isDeleting}
-                      >
-                        <IoTrashOutline size={20} />
-                      </button>
+              </TableHeader>
+              <TableBody>
+                {isLoading ? [...Array(3)].map((_, i) => (
+                  <TableRow key={i}>
+                    {Array.from({ length: 8 }).map((_, j) => (
+                      <TableCell key={j}><Skeleton className="h-4 w-24" /></TableCell>
+                    ))}
+                  </TableRow>
+                )) : !filteredData?.length ? (
+                  <TableRow>
+                    <TableCell colSpan={8} className="text-center">
+                      {translate.noData}
                     </TableCell>
                   </TableRow>
-                ))
-              )}
-            </TableBody>
-          </Table>
+                ) : (
+                  visibleData.map((student: any, index: number) => (
+                    <TableRow key={index} data-index={index}>
+                      <TableCell>
+                        <div className="flex items-center gap-3">
+                          {student.hasPicture
+                            ? <img src={student.picture} alt={student.name} className="h-6 w-6 rounded-full object-cover" />
+                            : <div className="h-6 w-6 rounded-full bg-muted flex items-center justify-center text-xs text-gray-500">N/A</div>
+                          }
+                          <span>{student.name}</span>
+                        </div>
+                      </TableCell>
+                      <TableCell>{student.id}</TableCell>
+                      <TableCell>{student.gender}</TableCell>
+                      <TableCell>{student.age ?? "-"}</TableCell>
+                      <TableCell>{student.studyStage}</TableCell>
+                      <TableCell>
+                        <span className={`px-3 py-1 rounded-full min-w-[350px] text-sm font-medium ${getStatusStyle(student.status)}`}>
+                          {student.status}
+                        </span>
+                      </TableCell>
+                      <TableCell>{student.ParentMobile ?? "-"}</TableCell>
+                      <TableCell>
+                        <button
+                          onClick={() => handleDelete(student.id)}
+                          title="Delete"
+                          className="text-red-500 hover:text-red-700"
+                          disabled={isDeleting}
+                        >
+                          <IoTrashOutline size={20} />
+                        </button>
+                      </TableCell>
+                    </TableRow>
+                  ))
+                )}
+              </TableBody>
+            </Table>
+            {visibleCount < (filteredData?.length || 0) && (
+              <SeeMoreButton onClick={() => setVisibleCount(prev => prev + 20)} />
+            )}
+
+          </div>
         </div>
       </Container>
     </>

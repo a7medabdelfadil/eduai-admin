@@ -77,8 +77,8 @@ const AddCourse = () => {
     <>
       <BreadCrumbs breadcrumbs={breadcrumbs} />
       <Container>
-         <div className="mb-8 -mt-2 -ml-1 flex items-center justify-between">
-          <h1 className="text-2xl font-semibold">
+        <div className="mb-8 -mt-2 -ml-1 flex items-center justify-between">
+          <h1 className="text-3xl font-semibold">
             {currentLanguage === "en"
               ? "Add Course"
               : currentLanguage === "ar"
@@ -133,7 +133,7 @@ const AddCourse = () => {
                   id="name"
                   {...register("name_en", { required: true })}
                   type="text"
-                  className="w-full rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                 />
                 {errors.name_en && (
                   <span className="text-error">
@@ -155,7 +155,7 @@ const AddCourse = () => {
                   id="name"
                   {...register("name_ar", { required: true })}
                   type="text"
-                  className="w-full rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                 />
                 {errors.name_ar && (
                   <span className="text-error">
@@ -177,7 +177,7 @@ const AddCourse = () => {
                   id="name"
                   {...register("name_fr", { required: true })}
                   type="text"
-                  className="w-full rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                 />
                 {errors.name_fr && (
                   <span className="text-error">
@@ -199,7 +199,7 @@ const AddCourse = () => {
                   id="name"
                   {...register("description_en", { required: true })}
                   type="text"
-                  className="w-full rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                 />
                 {errors.description_en && (
                   <span className="text-error">
@@ -221,7 +221,7 @@ const AddCourse = () => {
                   id="name"
                   {...register("description_ar", { required: true })}
                   type="text"
-                  className="w-full rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                 />
                 {errors.description_ar && (
                   <span className="text-error">
@@ -243,7 +243,7 @@ const AddCourse = () => {
                   id="name"
                   {...register("description_fr", { required: true })}
                   type="text"
-                  className="w-full rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                 />
                 {errors.description_fr && (
                   <span className="text-error">
@@ -421,7 +421,7 @@ const AddCourse = () => {
                   id="code"
                   {...register("code", { required: true })}
                   type="number"
-                  className="w-full rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                 />
                 {errors.code && (
                   <span className="text-error">
@@ -443,7 +443,7 @@ const AddCourse = () => {
                   id="eduSystemId"
                   {...register("eduSystemId", { required: true })}
                   type="number"
-                  className="w-full rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                 />
                 {errors.eduSystemId && (
                   <span className="text-error">

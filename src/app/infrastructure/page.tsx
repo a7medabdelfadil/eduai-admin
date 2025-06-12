@@ -38,7 +38,7 @@ const Infrastructure = () => {
   const infrastructureItems = [
     {
       href: "/bus",
-      icon: <FaBus size={40} />,
+      icon: <FaBus size={30} />,
       title:
         currentLanguage === "en"
           ? "Bus"
@@ -58,7 +58,7 @@ const Infrastructure = () => {
     },
     {
       href: "/classes",
-      icon: <FaChalkboardTeacher size={40} />,
+      icon: <FaChalkboardTeacher size={30} />,
       title:
         currentLanguage === "en"
           ? "Class"
@@ -78,7 +78,7 @@ const Infrastructure = () => {
     },
     {
       href: "/book",
-      icon: <FaBookOpen size={40} />,
+      icon: <FaBookOpen size={30} />,
       title:
         currentLanguage === "en"
           ? "Library"
@@ -98,7 +98,7 @@ const Infrastructure = () => {
     },
     {
       href: "/rooms",
-      icon: <FaDoorOpen size={40} />,
+      icon: <FaDoorOpen size={30} />,
       title:
         currentLanguage === "en"
           ? "Room"
@@ -118,7 +118,7 @@ const Infrastructure = () => {
     },
     {
       href: "/camera",
-      icon: <FaVideo size={40} />,
+      icon: <FaVideo size={30} />,
       title:
         currentLanguage === "en"
           ? "Cameras"
@@ -138,7 +138,7 @@ const Infrastructure = () => {
     },
     {
       href: "/infrastructure/store",
-      icon: <FaStore size={40} />,
+      icon: <FaStore size={30} />,
       title:
         currentLanguage === "en"
           ? "Store"
@@ -158,7 +158,7 @@ const Infrastructure = () => {
     },
     {
       href: "/infrastructure/office",
-      icon: <FaBuilding size={40} />,
+      icon: <FaBuilding size={30} />,
       title:
         currentLanguage === "en"
           ? "Office"
@@ -178,7 +178,7 @@ const Infrastructure = () => {
     },
     {
       href: "/infrastructure/lab",
-      icon: <GiChemicalDrop size={40} />,
+      icon: <GiChemicalDrop size={30} />,
       title:
         currentLanguage === "en"
           ? "Lab"

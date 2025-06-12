@@ -87,8 +87,8 @@ const EditExam = ({ params }: ParamsType) => {
     <>
       <BreadCrumbs breadcrumbs={breadcrumbs} />
       <Container>
-         <div className="mb-8 -mt-2 -ml-1 flex items-center justify-between">
-          <h1 className="text-2xl font-semibold">
+        <div className="mb-8 -mt-2 -ml-1 flex items-center justify-between">
+          <h1 className="text-3xl font-semibold">
             {currentLanguage === "en"
               ? "Edit Exam"
               : currentLanguage === "ar"
@@ -150,7 +150,7 @@ const EditExam = ({ params }: ParamsType) => {
                   id="examDate"
                   {...register("examDate", { required: true })}
                   type="date"
-                  className="w-full rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                 />
                 {errors.examDate && (
                   <span className="text-error">
@@ -179,7 +179,7 @@ const EditExam = ({ params }: ParamsType) => {
                   id="examBeginning"
                   {...register("examBeginning", { required: true })}
                   type="time"
-                  className="w-full rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                 />
                 {errors.examBeginning && (
                   <span className="text-error">
@@ -205,7 +205,7 @@ const EditExam = ({ params }: ParamsType) => {
                   id="name"
                   {...register("name", { required: true })}
                   type="text"
-                  className="w-full rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                 />
                 {errors.name && (
                   <span className="text-error">
@@ -234,7 +234,7 @@ const EditExam = ({ params }: ParamsType) => {
                   id="examEnding"
                   {...register("examEnding", { required: true })}
                   type="time"
-                  className="w-full rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                 />
                 {errors.examEnding && (
                   <span className="text-error">
@@ -261,7 +261,7 @@ const EditExam = ({ params }: ParamsType) => {
                       : "Teacher Course Registration ID"}{" "}
                 <select
                   id="teacherCourseRegistrationId"
-                  className="w-full rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                   {...register("teacherId", {
                     required: true,
                   })}
@@ -300,7 +300,7 @@ const EditExam = ({ params }: ParamsType) => {
                       : "Teacher Course Registration ID"}{" "}
                 <select
                   id="courseId"
-                  className="w-full rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                   {...register("courseId", {
                     required: true,
                   })}
@@ -339,7 +339,7 @@ const EditExam = ({ params }: ParamsType) => {
                       : "Teacher Course Registration ID"}{" "}
                 <select
                   id="teacherCourseRegistrationId"
-                  className="w-full rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                   {...register("classroomId", {
                     required: true,
                   })}
@@ -380,7 +380,7 @@ const EditExam = ({ params }: ParamsType) => {
                   id="examTypeId"
                   {...register("examTypeId", { required: true })}
                   type="number"
-                  className="w-full rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                 />
                 {errors.examTypeId && (
                   <span className="text-error">

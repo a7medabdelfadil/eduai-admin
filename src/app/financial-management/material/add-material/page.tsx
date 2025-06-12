@@ -4,6 +4,7 @@ import { RootState } from "@/GlobalRedux/store";
 import { useSelector } from "react-redux";
 import { useForm } from "react-hook-form";
 import Spinner from "@/components/spinner";
+import Container from "@/components/Container";
 
 const AddMaterial = () => {
   const breadcrumbs = [
@@ -52,20 +53,21 @@ const AddMaterial = () => {
   return (
     <>
       <BreadCrumbs breadcrumbs={breadcrumbs} />
-      <div
-        dir={currentLanguage === "ar" ? "rtl" : "ltr"}
-        className={`${
-          currentLanguage === "ar"
-            ? booleanValue
-              ? "lg:mr-[100px]"
-              : "lg:mr-[270px]"
-            : booleanValue
-              ? "lg:ml-[100px]"
-              : "lg:ml-[270px]"
-        } mx-3 mt-[40px] grid h-[500px] items-center justify-center`}
-      >
-        <form>
-          <div className="grid h-[400px] items-center justify-center gap-5 rounded-xl bg-bgPrimary p-10 sm:w-[500px] md:w-[600px] lg:w-[750px] xl:h-[500px] xl:w-[1000px]">
+      <Container>
+        <div className="mb-8 -mt-2 -ml-1 flex items-center justify-between">
+          <h1 className="text-3xl font-semibold">
+            {currentLanguage === "en"
+              ? "Add Material"
+              : currentLanguage === "ar"
+                ? "إضافة مادة"
+                : currentLanguage === "fr"
+                  ? "Ajouter un matériel"
+                  : "Add Material"}{" "}
+            {/* default */}
+          </h1>
+        </div>
+        <form className="flex h-full w-full items-center justify-center">
+          <div className="rounded-xl bg-bgPrimary p-10 w-[90] md:w-[80%]">
             <div className="flex items-center justify-start gap-2">
               <svg
                 className="h-6 w-6 font-bold text-secondary group-hover:text-hover"
@@ -97,7 +99,7 @@ const AddMaterial = () => {
                 {/* default */}
               </h1>
             </div>
-            <div className="grid grid-cols-2 gap-4 max-[1278px]:grid-cols-1">
+            <div className="p-6 grid grid-cols-2 gap-4 max-[1278px]:grid-cols-1">
               <label htmlFor="grade" className="grid text-[18px] font-semibold">
                 {currentLanguage === "ar"
                   ? "الدرجة"
@@ -106,7 +108,7 @@ const AddMaterial = () => {
                     : "Grade"}
                 <select
                   id="grade"
-                  className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                   {...register("grade", { required: true })}
                 >
                   <option value="">
@@ -163,7 +165,7 @@ const AddMaterial = () => {
                 <input
                   id="cost"
                   type="number"
-                  className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                   placeholder={
                     currentLanguage === "ar"
                       ? "أدخل التكلفة"
@@ -183,7 +185,7 @@ const AddMaterial = () => {
                 <input
                   id="about"
                   type="text"
-                  className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                   placeholder={
                     currentLanguage === "ar"
                       ? "اكتب شيئًا"
@@ -211,7 +213,7 @@ const AddMaterial = () => {
             </div>
           </div>
         </form>
-      </div>
+      </Container>
     </>
   );
 };

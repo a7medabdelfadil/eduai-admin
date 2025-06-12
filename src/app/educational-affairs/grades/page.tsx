@@ -12,6 +12,15 @@ import { useGetAllStudentsQuery } from "@/features/User-Management/studentApi";
 import { useState } from "react";
 import { useSelector } from "react-redux";
 import { skipToken } from "@reduxjs/toolkit/query";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/Table";
+import { Skeleton } from "@/components/Skeleton";
 
 const Grads = () => {
   const breadcrumbs = [
@@ -70,15 +79,14 @@ const Grads = () => {
       <BreadCrumbs breadcrumbs={breadcrumbs} />
       <div
         dir={currentLanguage === "ar" ? "rtl" : "ltr"}
-        className={`${
-          currentLanguage === "ar"
-            ? booleanValue
-              ? "lg:mr-[100px]"
-              : "lg:mr-[270px]"
-            : booleanValue
-              ? "lg:ml-[100px]"
-              : "lg:ml-[270px]"
-        } relative mx-3 mt-10 h-screen overflow-x-auto bg-transparent sm:rounded-lg`}
+        className={`${currentLanguage === "ar"
+          ? booleanValue
+            ? "lg:mr-[100px]"
+            : "lg:mr-[270px]"
+          : booleanValue
+            ? "lg:ml-[100px]"
+            : "lg:ml-[270px]"
+          } relative mx-3 mt-10 h-screen overflow-x-auto bg-transparent sm:rounded-lg`}
       >
         <div className="mb-5 flex justify-between gap-5 max-[1150px]:grid max-[1150px]:justify-center">
           {/* Student Select */}
@@ -165,129 +173,138 @@ const Grads = () => {
 
         {grades && (
           <div className="relative overflow-auto shadow-md sm:rounded-lg">
-            <table className="w-full overflow-x-auto text-left text-sm text-textSecondary rtl:text-right">
-              <thead className="bg-thead text-xs uppercase text-textPrimary">
-                <tr>
-                  <th className="px-6 py-3">
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>
                     {currentLanguage === "en"
                       ? "Subject"
                       : currentLanguage === "ar"
                         ? "المادة"
                         : "Sujet"}
-                  </th>
-                  <th className="px-6 py-3">
+                  </TableHead>
+                  <TableHead>
                     {currentLanguage === "en"
                       ? "First Assignment"
                       : currentLanguage === "ar"
                         ? "التكليف الأول"
                         : "Première évaluation"}
-                  </th>
-                  <th className="px-6 py-3">
+                  </TableHead>
+                  <TableHead>
                     {currentLanguage === "en"
                       ? "Second Assignment"
                       : currentLanguage === "ar"
                         ? "التكليف الثاني"
                         : "Deuxième évaluation"}
-                  </th>
-                  <th className="px-6 py-3">
+                  </TableHead>
+                  <TableHead>
                     {currentLanguage === "en"
                       ? "Third Assignment"
                       : currentLanguage === "ar"
                         ? "التكليف الثالث"
                         : "Troisième évaluation"}
-                  </th>
-                  <th className="px-6 py-3">
+                  </TableHead>
+                  <TableHead>
                     {currentLanguage === "en"
                       ? "Fourth Assignment"
                       : currentLanguage === "ar"
                         ? "التكليف الرابع"
                         : "Quatrième évaluation"}
-                  </th>
-                  <th className="px-6 py-3">
+                  </TableHead>
+                  <TableHead>
                     {currentLanguage === "en"
                       ? "Integrated Activities"
                       : currentLanguage === "ar"
                         ? "الأنشطة المندمجة"
                         : "Activités Intégrées"}
-                  </th>
-                  <th className="px-6 py-3">
+                  </TableHead>
+                  <TableHead>
                     {currentLanguage === "en"
                       ? "Points"
                       : currentLanguage === "ar"
                         ? "النقاط"
                         : "Points"}
-                  </th>
-                  <th className="px-6 py-3">
+                  </TableHead>
+                  <TableHead>
                     {currentLanguage === "en"
                       ? "Coefficients"
                       : currentLanguage === "ar"
                         ? "معاملات"
                         : "Coefficients"}
-                  </th>
-                  <th className="px-6 py-3">
+                  </TableHead>
+                  <TableHead>
                     {currentLanguage === "en"
                       ? "GPA"
                       : currentLanguage === "ar"
                         ? "المعدل"
                         : "Moyenne"}
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                {grades.courses.map((course: any, index: any) => (
-                  <tr
-                    key={index}
-                    className="border-b border-borderPrimary bg-bgPrimary hover:bg-bgSecondary"
-                  >
-                    <td className="px-6 py-4">{course.courseName}</td>
-                    <td className="px-6 py-4">
-                      {course.firstExamScore ?? "-"}
-                    </td>
-                    <td className="px-6 py-4">
-                      {course.secondExamScore ?? "-"}
-                    </td>
-                    <td className="px-6 py-4">
-                      {course.thirdExamScore ?? "-"}
-                    </td>
-                    <td className="px-6 py-4">
-                      {course.fourthExamScore ?? "-"}
-                    </td>
-                    <td className="px-6 py-4">
-                      {course.integratedActivitiesScore ?? "-"}
-                    </td>
-                    <td className="px-6 py-4">{course.points}</td>
-                    <td className="px-6 py-4">{course.coefficient}</td>
-                    <td className="px-6 py-4">{course.gpa}</td>
-                  </tr>
-                ))}
-              </tbody>
-              <tfoot>
-                <tr className="font-semibold">
-                  <td colSpan={6} className="px-6 py-4">
+                  </TableHead>
+                </TableRow>
+              </TableHeader>
+
+              <TableBody>
+                {isGrades ? (
+                  [...Array(3)].map((_, i) => (
+                    <TableRow key={i}>
+                      {Array.from({ length: 9 }).map((_, j) => (
+                        <TableCell key={j}>
+                          <Skeleton className="h-4 w-24" />
+                        </TableCell>
+                      ))}
+                    </TableRow>
+                  ))
+                ) : !grades?.courses?.length ? (
+                  <TableRow>
+                    <TableCell colSpan={9} className="text-center font-medium">
+                      {currentLanguage === "ar"
+                        ? "لا توجد بيانات"
+                        : currentLanguage === "fr"
+                          ? "Aucune donnée disponible"
+                          : "No data available"}
+                    </TableCell>
+                  </TableRow>
+                ) : (
+                  grades.courses.map((course: any, index: number) => (
+                    <TableRow key={index} data-index={index}>
+                      <TableCell>{course.courseName}</TableCell>
+                      <TableCell>{course.firstExamScore ?? "-"}</TableCell>
+                      <TableCell>{course.secondExamScore ?? "-"}</TableCell>
+                      <TableCell>{course.thirdExamScore ?? "-"}</TableCell>
+                      <TableCell>{course.fourthExamScore ?? "-"}</TableCell>
+                      <TableCell>{course.integratedActivitiesScore ?? "-"}</TableCell>
+                      <TableCell>{course.points}</TableCell>
+                      <TableCell>{course.coefficient}</TableCell>
+                      <TableCell>{course.gpa}</TableCell>
+                    </TableRow>
+                  ))
+                )}
+              </TableBody>
+
+
+              <tfoot className="text-sm font-semibold">
+                <TableRow>
+                  <TableCell colSpan={6}>
                     {currentLanguage === "en"
                       ? "Total Coefficient"
                       : currentLanguage === "ar"
                         ? "إجمالي المعامل"
                         : "Total des Coefficients"}
-                  </td>
-                  <td colSpan={2} className="px-6 py-4">
-                    {grades.totalCoefficient}
-                  </td>
-                </tr>
-                <tr className="font-semibold">
-                  <td colSpan={6} className="px-6 py-4">
+                  </TableCell>
+                  <TableCell colSpan={3}>{grades.totalCoefficient}</TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableCell colSpan={6}>
                     {currentLanguage === "en"
                       ? "Semester Average"
                       : currentLanguage === "ar"
                         ? "معدل الفصل"
                         : "Moyenne du Semestre"}
-                  </td>
-                  <td colSpan={2} className="px-6 py-4">
-                    {grades.averageOfThisSemester ?? "-"}
-                  </td>
-                </tr>
+                  </TableCell>
+                  <TableCell colSpan={3}>{grades.averageOfThisSemester ?? "-"}</TableCell>
+                </TableRow>
               </tfoot>
-            </table>
+            </Table>
+
           </div>
         )}
       </div>

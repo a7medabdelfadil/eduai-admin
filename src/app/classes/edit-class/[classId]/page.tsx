@@ -92,7 +92,7 @@ const EditClass: React.FC<ViewDriverProps> = ({ params }) => {
       <BreadCrumbs breadcrumbs={breadcrumbs} />
       <Container>
         <div className="mb-8 -mt-2 -ml-1 flex items-center justify-between">
-          <h1 className="text-2xl font-semibold">
+          <h1 className="text-3xl font-semibold">
             {currentLanguage === "en"
               ? "Edit Class"
               : currentLanguage === "ar"
@@ -148,7 +148,7 @@ const EditClass: React.FC<ViewDriverProps> = ({ params }) => {
                 <input
                   id="buildingNumber"
                   type="text"
-                  className="w-full rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                   {...register("buildingNumber", { required: true })}
                 />
                 {errors.buildingNumber && (
@@ -173,7 +173,7 @@ const EditClass: React.FC<ViewDriverProps> = ({ params }) => {
                 <input
                   id="roomNumber"
                   type="text"
-                  className="w-full rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                   {...register("roomNumber", { required: true })}
                 />
                 {errors.roomNumber && (
@@ -198,7 +198,7 @@ const EditClass: React.FC<ViewDriverProps> = ({ params }) => {
                 <input
                   id="floorNumber"
                   type="number"
-                  className="w-full rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                   {...register("floorNumber", { required: true })}
                 />
                 {errors.floorNumber && (
@@ -220,7 +220,7 @@ const EditClass: React.FC<ViewDriverProps> = ({ params }) => {
                 <input
                   id="type"
                   type="text"
-                  className="w-full rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                   {...register("type", { required: true })}
                 />
                 {errors.type && (
@@ -245,7 +245,7 @@ const EditClass: React.FC<ViewDriverProps> = ({ params }) => {
                 <input
                   id="maxCapacity"
                   type="number"
-                  className="w-full rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                   {...register("maxCapacity", { required: true })}
                 />
                 {errors.maxCapacity && (
@@ -270,7 +270,7 @@ const EditClass: React.FC<ViewDriverProps> = ({ params }) => {
                 <input
                   id="schoolId"
                   type="number"
-                  className="w-full rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                   {...register("schoolId", { required: true })}
                 />
                 {errors.schoolId && (
@@ -295,7 +295,7 @@ const EditClass: React.FC<ViewDriverProps> = ({ params }) => {
                 <input
                   id="classroomName"
                   type="text"
-                  className="w-full rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                   {...register("classroomName", { required: true })}
                 />
                 {errors.classroomName && (
@@ -320,7 +320,7 @@ const EditClass: React.FC<ViewDriverProps> = ({ params }) => {
                 <input
                   id="classroomNumber"
                   type="number"
-                  className="w-full rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                   {...register("classroomNumber", { required: true })}
                 />
                 {errors.classroomNumber && (
@@ -345,7 +345,7 @@ const EditClass: React.FC<ViewDriverProps> = ({ params }) => {
                 <input
                   id="classroomStudyLevel"
                   type="text"
-                  className="w-full rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                   {...register("classroomStudyLevel", { required: true })}
                 />
                 {errors.classroomStudyLevel && (
@@ -370,7 +370,7 @@ const EditClass: React.FC<ViewDriverProps> = ({ params }) => {
                 <input
                   id="classroomStudyStage"
                   type="text"
-                  className="w-full rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                   {...register("classroomStudyStage", { required: true })}
                 />
                 {errors.classroomStudyStage && (

@@ -97,8 +97,8 @@ const EditCourse = ({ params }: EditCourseProps) => {
       <BreadCrumbs breadcrumbs={breadcrumbs} />
 
       <Container>
-         <div className="mb-8 -mt-2 -ml-1 flex items-center justify-between">
-          <h1 className="text-2xl font-semibold">
+        <div className="mb-8 -mt-2 -ml-1 flex items-center justify-between">
+          <h1 className="text-3xl font-semibold">
             {currentLanguage === "en"
               ? "Edit Course"
               : currentLanguage === "ar"
@@ -156,7 +156,7 @@ const EditCourse = ({ params }: EditCourseProps) => {
                   id="courseCode"
                   {...register("courseCode", { required: true })}
                   type="text"
-                  className="w-full rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                 />
                 {errors.courseCode && (
                   <span className="text-error">
@@ -181,7 +181,7 @@ const EditCourse = ({ params }: EditCourseProps) => {
                   id="code_en"
                   {...register("code_en", { required: true })}
                   type="text"
-                  className="w-full rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                 />
                 {errors.code_en && (
                   <span className="text-error">
@@ -206,7 +206,7 @@ const EditCourse = ({ params }: EditCourseProps) => {
                   id="code_fr"
                   {...register("code_fr", { required: true })}
                   type="text"
-                  className="w-full rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                 />
                 {errors.code_fr && (
                   <span className="text-error">
@@ -231,7 +231,7 @@ const EditCourse = ({ params }: EditCourseProps) => {
                   id="code_ar"
                   {...register("code_ar", { required: true })}
                   type="text"
-                  className="w-full rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                 />
                 {errors.code_ar && (
                   <span className="text-error">
@@ -256,7 +256,7 @@ const EditCourse = ({ params }: EditCourseProps) => {
                   id="desc_en"
                   {...register("desc_en", { required: true })}
                   type="text"
-                  className="w-full rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                 />
                 {errors.desc_en && (
                   <span className="text-error">
@@ -281,7 +281,7 @@ const EditCourse = ({ params }: EditCourseProps) => {
                   id="desc_fr"
                   {...register("desc_fr", { required: true })}
                   type="text"
-                  className="w-full rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                 />
                 {errors.desc_fr && (
                   <span className="text-error">
@@ -306,7 +306,7 @@ const EditCourse = ({ params }: EditCourseProps) => {
                   id="desc_ar"
                   {...register("desc_ar", { required: true })}
                   type="text"
-                  className="w-full rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                 />
                 {errors.desc_ar && (
                   <span className="text-error">

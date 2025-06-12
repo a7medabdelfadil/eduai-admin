@@ -8,6 +8,7 @@ import { useState } from "react"; // Added import for useState
 import BreadCrumbs from "@/components/BreadCrumbs";
 import { useCreateTaxesMutation } from "@/features/Financial/taxesApi";
 import Spinner from "@/components/spinner";
+import Container from "@/components/Container";
 
 const AddTaxes = () => {
   // Added state for file preview
@@ -105,7 +106,7 @@ const AddTaxes = () => {
     const file = e.target.files[0];
     if (file) {
       setSelectedFile(file);
-      
+
       // Create file preview
       if (file.type.startsWith('image/')) {
         const reader = new FileReader();
@@ -125,7 +126,7 @@ const AddTaxes = () => {
   const onSubmit = async (data: any) => {
     // Create FormData object
     const formData = new FormData();
-  
+
     // Append JSON stringified tax data
     const taxData = {
       taxType: data.taxType,
@@ -138,7 +139,7 @@ const AddTaxes = () => {
       about: data.about,
     };
     formData.append("request", JSON.stringify(taxData));
-  
+
     // Append file data - ensure a file is always present
     if (selectedFile) {
       formData.append("file", selectedFile);
@@ -148,7 +149,7 @@ const AddTaxes = () => {
       const emptyFile = new File([emptyBlob], "empty.txt", { type: "application/octet-stream" });
       formData.append("file", emptyFile);
     }
-  
+
     try {
       await createTax(formData).unwrap();
       toast.success(
@@ -179,18 +180,19 @@ const AddTaxes = () => {
   return (
     <>
       <BreadCrumbs breadcrumbs={breadcrumbs} />
-      <div
-        dir={currentLanguage === "ar" ? "rtl" : "ltr"}
-        className={`${
-          currentLanguage === "ar"
-            ? booleanValue
-              ? "lg:mr-[100px]"
-              : "lg:mr-[270px]"
-            : booleanValue
-              ? "lg:ml-[100px]"
-              : "lg:ml-[270px]"
-        } mt-20`}
-      >
+      <Container>
+        <div className="mb-8 -mt-2 -ml-1 flex items-center justify-between">
+          <h1 className="text-3xl font-semibold">
+            {currentLanguage === "en"
+              ? "Add Taxes"
+              : currentLanguage === "ar"
+                ? "إضافة ضريبة"
+                : currentLanguage === "fr"
+                  ? "Ajouter une taxe"
+                  : "Add Taxes"}{" "}
+            {/* default */}
+          </h1>
+        </div>
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="grid gap-3 rounded-xl bg-bgSecondary p-10">
             <div className="rounded-xl border border-borderPrimary bg-bgPrimary p-10">
@@ -488,22 +490,22 @@ const AddTaxes = () => {
                     <div className="flex h-64 w-full flex-col items-center justify-center rounded-lg border-2 border-borderPrimary bg-bgPrimary">
                       <div className="flex flex-col items-center justify-center p-5 text-center">
                         {filePreview ? (
-                          <img 
-                            src={filePreview} 
-                            alt="File preview" 
+                          <img
+                            src={filePreview}
+                            alt="File preview"
                             className="mb-3 max-h-40 max-w-full object-contain"
                           />
                         ) : (
                           <div className="mb-3 flex h-16 w-16 items-center justify-center rounded-full bg-gray-100">
-                            <svg 
-                              className="h-8 w-8 text-textSecondary" 
-                              fill="currentColor" 
+                            <svg
+                              className="h-8 w-8 text-textSecondary"
+                              fill="currentColor"
                               viewBox="0 0 20 20"
                             >
-                              <path 
-                                fillRule="evenodd" 
-                                d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4z" 
-                                clipRule="evenodd" 
+                              <path
+                                fillRule="evenodd"
+                                d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4z"
+                                clipRule="evenodd"
                               />
                             </svg>
                           </div>
@@ -580,7 +582,7 @@ const AddTaxes = () => {
             </div>
           </div>
         </form>
-      </div>
+      </Container>
     </>
   );
 };

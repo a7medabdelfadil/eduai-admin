@@ -31,6 +31,7 @@ import { RiDeleteBin6Fill } from "react-icons/ri";
 import Container from "@/components/Container";
 import { Text } from "@/components/Text";
 import { BiSearchAlt } from "react-icons/bi";
+import SeeMoreButton from "@/components/SeeMoreButton";
 
 const Disciplinary = () => {
   const breadcrumbs = [
@@ -59,7 +60,6 @@ const Disciplinary = () => {
       href: "/document-management/other/disciplinary",
     },
   ];
-  const booleanValue = useSelector((state: RootState) => state.boolean.value);
   const [openDialogId, setOpenDialogId] = useState<number | null>(null);
   const [searchTerm, setSearchTerm] = useState("");
 
@@ -79,12 +79,10 @@ const Disciplinary = () => {
     return fullText.includes(searchTerm);
   });
 
-  if (loading)
-    return (
-      <div className="flex h-screen w-full items-center justify-center">
-        <Spinner />
-      </div>
-    );
+  const [visibleCount, setVisibleCount] = useState(20);
+  const visibleData = filteredRecords?.slice(0, visibleCount);
+
+
   return (
     <>
       <BreadCrumbs breadcrumbs={breadcrumbs} />
@@ -195,7 +193,7 @@ const Disciplinary = () => {
             </Link>
           </div>
         </div>
-        <div className="relative overflow-auto shadow-md sm:rounded-lg">
+        <div className="relative overflow-auto shadow-md sm:rounded-lg bg-bgPrimary">
           <Table>
             <TableHeader>
               <TableRow className="text-textPrimary">
@@ -235,7 +233,7 @@ const Disciplinary = () => {
                   </TableCell>
                 </TableRow>
               ) : (
-                filteredRecords.map((record: any, index: number) => (
+                visibleData.map((record: any, index: number) => (
                   <TableRow key={index} data-index={index}>
                     <TableCell className="flex items-center gap-2">
                       <img src={record.picture || "/images/userr.png"} className="h-[24px] w-[24px] rounded-full" alt="profile" />
@@ -332,7 +330,9 @@ const Disciplinary = () => {
               )}
             </TableBody>
           </Table>
-
+          {visibleCount < (filteredRecords?.length || 0) && (
+            <SeeMoreButton onClick={() => setVisibleCount(prev => prev + 20)} />
+          )}
         </div>
       </Container>
     </>

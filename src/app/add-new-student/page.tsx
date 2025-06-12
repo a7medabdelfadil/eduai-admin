@@ -196,7 +196,7 @@ const AddNewStudent = () => {
       <BreadCrumbs breadcrumbs={breadcrumbs} />
       <Container>
         <div className="mb-8 -mt-2 -ml-1 flex items-center justify-between">
-          <h1 className="text-2xl font-semibold">
+          <h1 className="text-3xl font-semibold">
             {currentLanguage === "en"
               ? "Add New Student"
               : currentLanguage === "ar"
@@ -590,9 +590,9 @@ const AddNewStudent = () => {
                         age > 6 ||
                         (age === 6 &&
                           today >=
-                            new Date(
-                              birthDate.setFullYear(today.getFullYear()),
-                            ));
+                          new Date(
+                            birthDate.setFullYear(today.getFullYear()),
+                          ));
                       return isOlderThanSix;
                     },
                   })}

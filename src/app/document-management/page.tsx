@@ -33,7 +33,7 @@ const DocumentManagement = () => {
   const documents = [
     {
       href: "/document-management/certificate",
-      icon: <HiAcademicCap size={40} />,
+      icon: <HiAcademicCap size={30} />,
       title:
         currentLanguage === "en"
           ? "Certificate"
@@ -53,7 +53,7 @@ const DocumentManagement = () => {
     },
     {
       href: "/document-management/transcript",
-      icon: <FaFileAlt size={40} />,
+      icon: <FaFileAlt size={30} />,
       title:
         currentLanguage === "en"
           ? "Transcripts"
@@ -73,7 +73,7 @@ const DocumentManagement = () => {
     },
     {
       href: "/document-management/enrollment/status",
-      icon: <BsPersonLinesFill size={40} />,
+      icon: <BsPersonLinesFill size={30} />,
       title:
         currentLanguage === "en"
           ? "Enrollment"
@@ -93,7 +93,7 @@ const DocumentManagement = () => {
     },
     // {
     //   href: "/document-management/attendance",
-    //   icon: <FaRegCalendarCheck size={40} />,
+    //   icon: <FaRegCalendarCheck size={30} />,
     //   title:
     //     currentLanguage === "en"
     //       ? "Attendance"
@@ -113,7 +113,7 @@ const DocumentManagement = () => {
     // },
     {
       href: "/document-management/other",
-      icon: <MdDescription size={40} />,
+      icon: <MdDescription size={30} />,
       title:
         currentLanguage === "en"
           ? "Official Documents"

@@ -42,8 +42,8 @@ const EditBook = () => {
       <BreadCrumbs breadcrumbs={breadcrumbs} />
 
       <Container>
-         <div className="mb-8 -mt-2 -ml-1 flex items-center justify-between">
-          <h1 className="text-2xl font-semibold">
+        <div className="mb-8 -mt-2 -ml-1 flex items-center justify-between">
+          <h1 className="text-3xl font-semibold">
             {currentLanguage === "en"
               ? "Edit book"
               : currentLanguage === "ar"
@@ -97,7 +97,7 @@ const EditBook = () => {
                 <input
                   id="name"
                   type="number"
-                  className="w-full rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                 />
               </label>
               <label htmlFor="code" className="grid text-[18px] font-semibold">
@@ -110,7 +110,7 @@ const EditBook = () => {
                 <input
                   id="code"
                   type="text"
-                  className="w-full rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                 />
               </label>
               <label htmlFor="about" className="grid text-[18px] font-semibold">
@@ -122,7 +122,7 @@ const EditBook = () => {
                 <input
                   id="about"
                   type="text"
-                  className="w-full rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                 />
               </label>
 
@@ -138,7 +138,7 @@ const EditBook = () => {
                 <input
                   id="Version"
                   type="text"
-                  className="w-full rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                 />
               </label>
               <label
@@ -153,7 +153,7 @@ const EditBook = () => {
                 <input
                   id="Version"
                   type="text"
-                  className="w-full rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                 />
               </label>
             </div>

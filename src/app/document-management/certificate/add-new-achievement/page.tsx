@@ -102,8 +102,8 @@ const AddNewAchievement = () => {
     <>
       <BreadCrumbs breadcrumbs={breadcrumbs} />
       <Container>
-         <div className="mb-8 -mt-2 -ml-1 flex items-center justify-between">
-          <h1 className="text-2xl font-semibold">
+        <div className="mb-8 -mt-2 -ml-1 flex items-center justify-between">
+          <h1 className="text-3xl font-semibold">
             {currentLanguage === "en"
               ? "Add Achievement"
               : currentLanguage === "ar"
@@ -204,7 +204,7 @@ const AddNewAchievement = () => {
                     : "Educational Stage"}
                 <select
                   id="stage"
-                  className="w-full rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                   {...register("stage", { required: true })}
                 >
                   <option value="">
@@ -307,7 +307,7 @@ const AddNewAchievement = () => {
                 <input
                   id="issueDate"
                   type="date"
-                  className="w-full rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                   {...register("issueDate", { required: true })}
                 />
                 {errors.issueDate && (
@@ -332,7 +332,7 @@ const AddNewAchievement = () => {
                 <input
                   id="endDate"
                   type="file"
-                  className="w-full rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                   {...register("endDate", { required: true })}
                 /> */}
               <label

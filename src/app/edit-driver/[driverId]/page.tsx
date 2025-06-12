@@ -145,7 +145,7 @@ const EditDriver: React.FC<ViewDriverProps> = ({ params }) => {
       <BreadCrumbs breadcrumbs={breadcrumbs} />
       <Container>
         <div className="mb-8 -mt-2 -ml-1 flex items-center justify-between">
-          <h1 className="text-2xl font-semibold">
+          <h1 className="text-3xl font-semibold">
             {currentLanguage === "en"
               ? "Edit Driver"
               : currentLanguage === "ar"
@@ -198,7 +198,7 @@ const EditDriver: React.FC<ViewDriverProps> = ({ params }) => {
                 <input
                   id="email"
                   type="email"
-                  className="w-full rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                   {...register("email", { required: true })}
                 />
                 {errors.email && (
@@ -220,7 +220,7 @@ const EditDriver: React.FC<ViewDriverProps> = ({ params }) => {
                 <input
                   id="nid"
                   type="text"
-                  className="w-full rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                   {...register("nid", { required: true })}
                 />
                 {errors.nid && (
@@ -247,7 +247,7 @@ const EditDriver: React.FC<ViewDriverProps> = ({ params }) => {
                     : "Gender"}
                 <select
                   id="gender"
-                  className="w-full rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                   {...register("gender", { required: true })}
                 >
                   <option selected value="">
@@ -295,7 +295,7 @@ const EditDriver: React.FC<ViewDriverProps> = ({ params }) => {
                 <input
                   id="name_en"
                   type="text"
-                  className="w-full rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                   {...register("name_en", { required: true })}
                 />
                 {errors.name_en && (
@@ -320,7 +320,7 @@ const EditDriver: React.FC<ViewDriverProps> = ({ params }) => {
                 <input
                   id="name_ar"
                   type="text"
-                  className="w-full rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                   {...register("name_ar", { required: true })}
                 />
                 {errors.name_ar && (
@@ -345,7 +345,7 @@ const EditDriver: React.FC<ViewDriverProps> = ({ params }) => {
                 <input
                   id="name_fr"
                   type="text"
-                  className="w-full rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                   {...register("name_fr", { required: true })}
                 />
                 {errors.name_fr && (
@@ -390,7 +390,7 @@ const EditDriver: React.FC<ViewDriverProps> = ({ params }) => {
                     : "Your Nationality"}
                 <select
                   id="nationality"
-                  className="w-full rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                   {...register("nationality", { required: true })}
                 >
                   <option value="">
@@ -426,7 +426,7 @@ const EditDriver: React.FC<ViewDriverProps> = ({ params }) => {
                 <input
                   id="about"
                   type="text"
-                  className="w-full rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                   {...register("about", { required: true })}
                 />
                 {errors.about && (
@@ -453,7 +453,7 @@ const EditDriver: React.FC<ViewDriverProps> = ({ params }) => {
                 <input
                   id="birthDate"
                   type="date"
-                  className="w-full rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                   {...register("birthDate", {
                     required: true,
                     validate: value => {
@@ -493,10 +493,10 @@ const EditDriver: React.FC<ViewDriverProps> = ({ params }) => {
                   </span>
                 )}
               </label>
-            
+
             </div>
             <div className="px-6 pt-6 grid grid-cols-2 gap-4 max-[1278px]:grid-cols-1">
-               <label
+              <label
                 htmlFor="qualification"
                 className="grid items-center text-[18px] font-semibold"
               >
@@ -569,7 +569,7 @@ const EditDriver: React.FC<ViewDriverProps> = ({ params }) => {
                 <input
                   id="hireDate"
                   type="date"
-                  className="w-full rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                   {...register("hireDate", { required: true })}
                 />
                 {errors.hireDate && (
@@ -602,7 +602,7 @@ const EditDriver: React.FC<ViewDriverProps> = ({ params }) => {
                 <input
                   id="positionId"
                   type="number"
-                  className="w-full rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                   {...register("positionId", { required: true })}
                 />
                 {errors.positionId && (
@@ -626,7 +626,7 @@ const EditDriver: React.FC<ViewDriverProps> = ({ params }) => {
                     : "Employee Status"}
                 <select
                   id="employeeStatus"
-                  className="w-full rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                   {...register("employeeStatus", { required: true })}
                 >
                   <option selected value="">
@@ -679,7 +679,7 @@ const EditDriver: React.FC<ViewDriverProps> = ({ params }) => {
                     : "Employee Type"}
                 <select
                   id="employeeType"
-                  className="w-full rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                   {...register("employeeType", { required: true })}
                 >
                   <option selected value="">
@@ -733,7 +733,7 @@ const EditDriver: React.FC<ViewDriverProps> = ({ params }) => {
                 <input
                   id="salary"
                   type="number"
-                  className="w-full rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                   {...register("salary", { required: true })}
                 />
                 {errors.salary && (

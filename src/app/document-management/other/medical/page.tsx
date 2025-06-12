@@ -18,6 +18,7 @@ import {
 import { useState } from "react";
 import Container from "@/components/Container";
 import { BiSearchAlt } from "react-icons/bi";
+import SeeMoreButton from "@/components/SeeMoreButton";
 
 const Medical = () => {
   const breadcrumbs = [
@@ -51,21 +52,12 @@ const Medical = () => {
   const filteredStudents = students?.filter((student: any) =>
     student.name.toLowerCase().includes(searchValue.toLowerCase())
   );
-
-  const booleanValue = useSelector((state: RootState) => state.boolean.value);
+    const [visibleCount, setVisibleCount] = useState(20);
+  const visibleData = filteredStudents?.slice(0, visibleCount);
 
   const { language: currentLanguage, loading } = useSelector(
     (state: RootState) => state.language,
   );
-
-
-
-  if (loading)
-    return (
-      <div className="flex h-screen w-full items-center justify-center">
-        <Spinner />
-      </div>
-    );
 
   return (
     <>
@@ -178,7 +170,7 @@ const Medical = () => {
               </Link>
             </div>
           </div>
-          <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
+          <div className="relative overflow-x-auto shadow-md sm:rounded-lg bg-bgPrimary">
             <Table>
               <TableHeader>
                 <TableRow className="text-textPrimary">
@@ -264,7 +256,9 @@ const Medical = () => {
                 )}
               </TableBody>
             </Table>
-
+  {visibleCount < (filteredStudents?.length || 0) && (
+              <SeeMoreButton onClick={() => setVisibleCount(prev => prev + 20)} />
+            )}
           </div>
         </div>
 

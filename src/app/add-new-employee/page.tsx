@@ -106,8 +106,8 @@ const AddNewEmployee = () => {
     <>
       <BreadCrumbs breadcrumbs={breadcrumbs} />
       <Container>
-         <div className="mb-8 -mt-2 -ml-1 flex items-center justify-between">
-          <h1 className="text-2xl font-semibold">
+        <div className="mb-8 -mt-2 -ml-1 flex items-center justify-between">
+          <h1 className="text-3xl font-semibold">
             {currentLanguage === "en"
               ? "Add New Employee"
               : currentLanguage === "ar"
@@ -118,7 +118,7 @@ const AddNewEmployee = () => {
             {/* default */}
           </h1>
         </div>
-       
+
         <form className="flex justify-center items-center w-full h-full" onSubmit={handleSubmit(onSubmit)}>
           <div className="rounded-xl bg-bgPrimary p-10 w-[90] md:w-[80%]">
             {backendError && (
@@ -635,18 +635,18 @@ const AddNewEmployee = () => {
                           title: string;
                           id: string | number | readonly string[] | undefined;
                           name:
-                            | string
-                            | number
-                            | bigint
-                            | boolean
-                            | React.ReactElement<
-                                any,
-                                string | React.JSXElementConstructor<any>
-                              >
-                            | Iterable<React.ReactNode>
-                            | React.ReactPortal
-                            | null
-                            | undefined;
+                          | string
+                          | number
+                          | bigint
+                          | boolean
+                          | React.ReactElement<
+                            any,
+                            string | React.JSXElementConstructor<any>
+                          >
+                          | Iterable<React.ReactNode>
+                          | React.ReactPortal
+                          | null
+                          | undefined;
                         },
                         index: React.Key | null | undefined,
                       ) => (

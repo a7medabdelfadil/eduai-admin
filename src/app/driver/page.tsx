@@ -288,9 +288,11 @@ const Driver = () => {
               ) : (
                 visibleDrivers?.map((driver: Driver, index: number) => (
                   <TableRow
+                    className="cursor-pointer"
                     data-index={index}
                     key={driver.id}
-                    onClick={() => {
+                    onClick={(e) => {
+                      if ((e.target as HTMLElement).closest("a")) return;
                       setSelectedDriver(driver);
                       setShowModal(true);
                     }}
@@ -309,7 +311,7 @@ const Driver = () => {
                     <TableCell>{driver.gender}</TableCell>
                     <TableCell>{driver.nationality}</TableCell>
                     <TableCell>{driver.email}</TableCell>
-                    <TableCell>{driver.number}</TableCell>
+                    <TableCell>{driver.number || "-"}</TableCell>
                     <TableCell>
                       <Link
                         href={`/driver/view-driver/${driver.id}`}

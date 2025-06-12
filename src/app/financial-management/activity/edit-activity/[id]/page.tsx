@@ -12,6 +12,7 @@ import {
   useUpdateActivityMutation,
 } from "@/features/Financial/activityApi";
 import { useEffect } from "react";
+import Container from "@/components/Container";
 
 const EditActivity = () => {
   const router = useRouter();
@@ -79,19 +80,21 @@ const EditActivity = () => {
   return (
     <>
       <BreadCrumbs breadcrumbs={breadcrumbs} />
-      <div
-        dir={currentLanguage === "ar" ? "rtl" : "ltr"}
-        className={`mx-3 mt-[40px] grid h-[500px] items-center justify-center ${currentLanguage === "ar"
-          ? sidebarOpen
-            ? "lg:mr-[100px]"
-            : "lg:mr-[270px]"
-          : sidebarOpen
-            ? "lg:ml-[100px]"
-            : "lg:ml-[270px]"
-          }`}
-      >
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <div className="grid items-center justify-center gap-5 rounded-xl bg-bgPrimary p-10 sm:w-[500px] md:w-[600px] lg:w-[750px] xl:h-[500px] xl:w-[1000px]">
+      <Container>
+        <div className="mb-8 -mt-2 -ml-1 flex items-center justify-between">
+          <h1 className="text-3xl font-semibold">
+            {currentLanguage === "en"
+              ? "Edit Activity"
+              : currentLanguage === "ar"
+                ? "تعديل النشاط"
+                : currentLanguage === "fr"
+                  ? "Modifier l'activité"
+                  : "Edit Activity"}{" "}
+            {/* default */}
+          </h1>
+        </div>
+        <form className="flex h-full w-full items-center justify-center" onSubmit={handleSubmit(onSubmit)}>
+          <div className="rounded-xl bg-bgPrimary p-10 w-[90] md:w-[80%]">
             <div className="flex items-center justify-start gap-2">
               <svg
                 className="h-6 w-6 font-bold text-secondary group-hover:text-hover"
@@ -122,7 +125,7 @@ const EditActivity = () => {
                     : "Edit Activity"}
               </h1>
             </div>
-            <div className="grid grid-cols-2 gap-4 max-[1278px]:grid-cols-1">
+            <div className="p-6 grid grid-cols-2 gap-4 max-[1278px]:grid-cols-1">
               <label htmlFor="activityType" className="grid text-[18px] font-semibold">
                 {currentLanguage === "ar"
                   ? "نوع النشاط"
@@ -133,7 +136,7 @@ const EditActivity = () => {
                   id="activityType"
                   {...register("activityType")}
                   defaultValue={activityData?.data?.activityType ?? ""}
-                  className="w-[400px] rounded-xl bg-bgPrimary text-textPrimary border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl bg-bgPrimary text-textPrimary border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                 >
                   <option value="">
                     {currentLanguage === "ar"
@@ -160,7 +163,7 @@ const EditActivity = () => {
                   id="cost"
                   type="number"
                   {...register("cost")}
-                  className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                   placeholder={
                     currentLanguage === "ar"
                       ? "أدخل التكلفة"
@@ -179,7 +182,7 @@ const EditActivity = () => {
                   id="about"
                   type="text"
                   {...register("about")}
-                  className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                   placeholder={
                     currentLanguage === "ar"
                       ? "اكتب شيئًا"
@@ -212,7 +215,7 @@ const EditActivity = () => {
             </div>
           </div>
         </form>
-      </div>
+      </Container>
     </>
   );
 };

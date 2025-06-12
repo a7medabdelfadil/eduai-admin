@@ -340,7 +340,7 @@ const Chat = () => {
 
       <Container>
         <div className="mb-4 -mt-2 -ml-1 flex items-center justify-between">
-          <h1 className="text-2xl font-semibold">
+          <h1 className="text-3xl font-semibold">
             {currentLanguage === "en"
               ? "Reported Chat"
               : currentLanguage === "ar"

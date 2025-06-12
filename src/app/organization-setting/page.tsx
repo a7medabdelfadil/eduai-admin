@@ -41,7 +41,7 @@ const OrganizationSettings = () => {
   const settings = [
     {
       href: "/organization-setting/reports",
-      icon: <RiFileList2Line size={40} />,
+      icon: <RiFileList2Line size={30} />,
       title:
         currentLanguage === "en"
           ? "Reports"
@@ -61,7 +61,7 @@ const OrganizationSettings = () => {
     },
     {
       href: "/organization-setting/permissions/employee-permission",
-      icon: <AiOutlineSafetyCertificate size={40} />,
+      icon: <AiOutlineSafetyCertificate size={30} />,
       title:
         currentLanguage === "en"
           ? "Permission"
@@ -81,7 +81,7 @@ const OrganizationSettings = () => {
     },
     {
       href: "/organization-setting/semester",
-      icon: <FaCalendarAlt size={40} />,
+      icon: <FaCalendarAlt size={30} />,
       title:
         currentLanguage === "en"
           ? "Semester"
@@ -101,7 +101,7 @@ const OrganizationSettings = () => {
     },
     {
       href: "/organization-setting/department",
-      icon: <MdBusiness size={40} />,
+      icon: <MdBusiness size={30} />,
       title:
         currentLanguage === "en"
           ? "Department"
@@ -121,7 +121,7 @@ const OrganizationSettings = () => {
     },
     {
       href: "/organization-setting/position",
-      icon: <MdWorkOutline size={40} />,
+      icon: <MdWorkOutline size={30} />,
       title:
         currentLanguage === "en"
           ? "Position"
@@ -141,7 +141,7 @@ const OrganizationSettings = () => {
     },
     {
       href: "/organization-setting/annual",
-      icon: <FaUmbrellaBeach size={40} />,
+      icon: <FaUmbrellaBeach size={30} />,
       title:
         currentLanguage === "en"
           ? "Annual Leave"
@@ -161,7 +161,7 @@ const OrganizationSettings = () => {
     },
     {
       href: "/organization-setting/complaint",
-      icon: <FaExclamationTriangle size={40} />,
+      icon: <FaExclamationTriangle size={30} />,
       title:
         currentLanguage === "en"
           ? "Complaint"
@@ -181,7 +181,7 @@ const OrganizationSettings = () => {
     },
     {
       href: "/organization-setting/payment",
-      icon: <FaClock size={40} />,
+      icon: <FaClock size={30} />,
       title:
         currentLanguage === "en"
           ? "Payment  Due Date"
@@ -201,7 +201,7 @@ const OrganizationSettings = () => {
     },
     {
       href: "/organization-setting/exams",
-      icon: <FaTasks size={40} />,
+      icon: <FaTasks size={30} />,
       title:
         currentLanguage === "en"
           ? "Exam Type"
@@ -221,7 +221,7 @@ const OrganizationSettings = () => {
     },
     {
       href: "/organization-setting/edit-school-logo",
-      icon: <LuSchool size={40} />,
+      icon: <LuSchool size={30} />,
       title:
         currentLanguage === "en"
           ? "School Logo"
@@ -260,7 +260,7 @@ const OrganizationSettings = () => {
             : booleanValue
               ? "lg:ml-[40px]"
               : "lg:ml-[290px]"
-        } mt-12 grid justify-center`}
+        } my-12 grid justify-center`}
       >
         <div className="grid grid-cols-2 gap-5 max-[577px]:grid-cols-1 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-4">
           {settings.map((item, index) => (

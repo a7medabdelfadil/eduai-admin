@@ -81,7 +81,7 @@ const AddExam = () => {
       <BreadCrumbs breadcrumbs={breadcrumbs} />
       <Container>
         <div className="mb-8 -mt-2 -ml-1 flex items-center justify-between">
-          <h1 className="text-2xl font-semibold">
+          <h1 className="text-3xl font-semibold">
             {currentLanguage === "en"
               ? "Add New Exam"
               : currentLanguage === "ar"
@@ -94,7 +94,7 @@ const AddExam = () => {
         </div>
         <form className="flex h-full w-full items-center justify-center" onSubmit={handleSubmit(onSubmit)}>
           <div className="rounded-xl bg-bgPrimary p-10 w-[90] md:w-[80%]">
-             <div className="flex items-center justify-start gap-2 mb-8">
+            <div className="flex items-center justify-start gap-2 mb-8">
               <svg
                 className="h-6 w-6 font-bold text-secondary group-hover:text-hover"
                 width="24"
@@ -143,7 +143,7 @@ const AddExam = () => {
                   id="examDate"
                   {...register("examDate", { required: true })}
                   type="date"
-                  className="w-full rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                 />
                 {errors.examDate && (
                   <span className="text-error">
@@ -172,7 +172,7 @@ const AddExam = () => {
                   id="examBeginning"
                   {...register("examBeginning", { required: true })}
                   type="time"
-                  className="w-full rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                 />
                 {errors.examBeginning && (
                   <span className="text-error">
@@ -198,7 +198,7 @@ const AddExam = () => {
                   id="name"
                   {...register("name", { required: true })}
                   type="text"
-                  className="w-full rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                 />
                 {errors.name && (
                   <span className="text-error">
@@ -227,7 +227,7 @@ const AddExam = () => {
                   id="examEnding"
                   {...register("examEnding", { required: true })}
                   type="time"
-                  className="w-full rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                 />
                 {errors.examEnding && (
                   <span className="text-error">
@@ -254,7 +254,7 @@ const AddExam = () => {
                       : "Teacher Course Registration ID"}{" "}
                 <select
                   id="teacherCourseRegistrationId"
-                  className="w-full rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                   {...register("teacherId", {
                     required: true,
                   })}
@@ -293,7 +293,7 @@ const AddExam = () => {
                       : "Teacher Course Registration ID"}{" "}
                 <select
                   id="courseId"
-                  className="w-full rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                   {...register("courseId", {
                     required: true,
                   })}
@@ -332,7 +332,7 @@ const AddExam = () => {
                       : "Teacher Course Registration ID"}{" "}
                 <select
                   id="teacherCourseRegistrationId"
-                  className="w-full rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                   {...register("classroomId", {
                     required: true,
                   })}
@@ -373,7 +373,7 @@ const AddExam = () => {
                   id="examTypeId"
                   {...register("examTypeId", { required: true })}
                   type="number"
-                  className="w-full rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                 />
                 {errors.examTypeId && (
                   <span className="text-error">

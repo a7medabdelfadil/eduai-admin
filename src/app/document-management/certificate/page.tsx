@@ -22,6 +22,8 @@ import {
 import { MdDelete } from "react-icons/md";
 import { Skeleton } from "@/components/Skeleton";
 import { BiSearchAlt } from "react-icons/bi";
+import { RiDeleteBin6Fill } from "react-icons/ri";
+import SeeMoreButton from "@/components/SeeMoreButton";
 
 const Certificate = () => {
   const breadcrumbs = [
@@ -66,6 +68,8 @@ const Certificate = () => {
       ? true
       : certificate.studentName?.toLowerCase()?.includes(search.trim().toLowerCase())
   );
+  const [visibleCount, setVisibleCount] = useState(20);
+  const visibleData = filteredData?.slice(0, visibleCount);
 
 
   const { language: currentLanguage, loading } = useSelector(
@@ -78,7 +82,7 @@ const Certificate = () => {
       <BreadCrumbs breadcrumbs={breadcrumbs} />
       <Container>
         <div className="mb-6 -mt-2 -ml-1 flex items-center justify-between">
-          <h1 className="text-2xl font-semibold">
+          <h1 className="text-3xl font-semibold">
             {currentLanguage === "en"
               ? "Certificates"
               : currentLanguage === "ar"
@@ -143,7 +147,7 @@ const Certificate = () => {
                 <input
                   onChange={(e) => setSearch(e.target.value)}
                   type="text"
-                  className="w-full border-borderSecondary rounded-lg border-2 px-4 py-2 ps-11 text-lg outline-none"
+                  className="w-full border-borderPrimary bg-bgPrimary rounded-lg border-2 px-4 py-2 ps-11 text-lg outline-none"
                   placeholder={currentLanguage === "ar"
                     ? "ابحث عن شهادة"
                     : currentLanguage === "fr"
@@ -173,7 +177,7 @@ const Certificate = () => {
             </Link>
           </div>
 
-          <div className="relative overflow-auto shadow-md sm:rounded-lg">
+          <div className="relative overflow-auto shadow-md sm:rounded-lg bg-bgPrimary">
             <Table>
               <TableHeader>
                 <TableRow>
@@ -237,7 +241,7 @@ const Certificate = () => {
                     </TableCell>
                   </TableRow>
                 ) : (
-                  filteredData.map((certificate: Certificate, index: number) => (
+                  visibleData.map((certificate: Certificate, index: number) => (
                     <TableRow key={certificate.id} data-index={index}>
                       <TableCell>{certificate.studentName}</TableCell>
                       <TableCell>{certificate.stage}</TableCell>
@@ -251,7 +255,7 @@ const Certificate = () => {
                         >
                           <img src="/images/print.png" alt="#" />
                         </Link>
-                        <MdDelete
+                        <RiDeleteBin6Fill
                           className="text-2xl text-red-600 cursor-pointer hover:text-red-800"
                           onClick={() => handleDelete(certificate.id)}
                         />
@@ -263,6 +267,9 @@ const Certificate = () => {
               </TableBody>
 
             </Table>
+            {visibleCount < (filteredData?.length || 0) && (
+              <SeeMoreButton onClick={() => setVisibleCount(prev => prev + 20)} />
+            )}
 
           </div>
         </div>

@@ -1,13 +1,12 @@
 /* eslint-disable @next/next/no-img-element */
 "use client";
 import React, { useState } from "react";
-import Link from "next/link";
 import dynamic from "next/dynamic";
 import { useSelector } from "react-redux";
 import { RootState } from "@/GlobalRedux/store";
-import { useTheme } from "next-themes";
 import BreadCrumbs from "@/components/BreadCrumbs";
 import Spinner from "@/components/spinner";
+import Container from "@/components/Container";
 
 const ReactApexChart = dynamic(() => import("react-apexcharts"), {
   ssr: false,
@@ -128,18 +127,19 @@ const Budget = () => {
     <>
       <BreadCrumbs breadcrumbs={breadcrumbs} />
 
-      <div
-        dir={currentLanguage === "ar" ? "rtl" : "ltr"}
-        className={`${
-          currentLanguage === "ar"
-            ? booleanValue
-              ? "lg:mr-[120px]"
-              : "lg:mr-[290px]"
-            : booleanValue
-              ? "lg:ml-[120px]"
-              : "lg:ml-[290px]"
-        } mt-12 grid justify-center`}
-      >
+      <Container>
+        <div className="mb-6 -mt-2 -ml-1 flex items-center justify-between">
+          <h1 className="text-3xl font-semibold">
+            {currentLanguage === "en"
+              ? "Budget"
+              : currentLanguage === "ar"
+                ? "الميزانية"
+                : currentLanguage === "fr"
+                  ? "Budget"
+                  : "Budget"}{" "}
+            {/* default */}
+          </h1>
+        </div>
         <div className="mb-5 flex justify-center gap-2 max-[840px]:grid">
           <div className="grid gap-16 max-[840px]:flex max-[840px]:gap-2">
             <div className="flex h-[80px] w-[201px] items-center justify-between gap-2 rounded-xl bg-bgPrimary p-2 shadow-xl max-[840px]:w-[170px] max-[576px]:h-[100px]">
@@ -404,7 +404,7 @@ const Budget = () => {
             </table>
           </div>
         </div>
-      </div>
+      </Container>
     </>
   );
 };

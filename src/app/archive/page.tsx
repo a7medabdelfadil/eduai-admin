@@ -63,7 +63,7 @@ const Archive = () => {
     { href: "/book", icon: <FaBook size={40} />, key: "Library" },
     { href: "/rooms", icon: <FaDoorClosed size={40} />, key: "Room" },
     {
-      href: "/educational-affairs/grads",
+      href: "/educational-affairs/grades",
       icon: <FaClipboardList size={40} />,
       key: "Grades",
     },

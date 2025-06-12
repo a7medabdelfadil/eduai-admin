@@ -14,6 +14,7 @@ import Container from "@/components/Container";
 import { BiSearchAlt, BiTrash } from "react-icons/bi";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/Table";
 import { Skeleton } from "@/components/Skeleton";
+import SeeMoreButton from "@/components/SeeMoreButton";
 
 const ArchiveDriver = () => {
   const breadcrumbs = [
@@ -81,13 +82,17 @@ const ArchiveDriver = () => {
     driver.name.toLowerCase().includes(search.trim().toLowerCase())
   );
 
+  const [visibleCount, setVisibleCount] = useState(20);
+  const visibleData = filteredData?.slice(0, visibleCount);
+
+
   return (
     <>
       <BreadCrumbs breadcrumbs={breadcrumbs} />
 
       <Container>
-         <div className="mb-6 -mt-2 -ml-1 flex items-center justify-between">
-          <h1 className="text-2xl font-semibold">
+        <div className="mb-6 -mt-2 -ml-1 flex items-center justify-between">
+          <h1 className="text-3xl font-semibold">
             {currentLanguage === "en"
               ? "All Drivers"
               : currentLanguage === "ar"
@@ -111,7 +116,7 @@ const ArchiveDriver = () => {
                 <input
                   onChange={(e) => setSearch(e.target.value)}
                   type="text"
-                  className="w-full border-borderSecondary rounded-lg border-2 px-4 py-2 ps-11 text-lg outline-none"
+                  className="w-full border-borderPrimary bg-bgPrimary rounded-lg border-2 px-4 py-2 ps-11 text-lg outline-none"
                   placeholder={
                     currentLanguage === "en"
                       ? "Search"
@@ -139,7 +144,7 @@ const ArchiveDriver = () => {
             </Link>
           </div>
 
-          <div className="relative overflow-auto shadow-md sm:rounded-lg">
+          <div className="relative overflow-auto shadow-md sm:rounded-l bg-bgPrimary">
             <Table>
               <TableHeader>
                 <TableRow>
@@ -170,7 +175,7 @@ const ArchiveDriver = () => {
                     </TableCell>
                   </TableRow>
                 ) : (
-                  filteredData.map((driver: Driver, index: number) => (
+                  visibleData.map((driver: Driver, index: number) => (
                     <TableRow key={driver.id} data-index={index}>
                       <TableCell>
                         <input type="checkbox" className="h-4 w-4" />
@@ -214,6 +219,10 @@ const ArchiveDriver = () => {
                 )}
               </TableBody>
             </Table>
+            {visibleCount < (filteredData?.length || 0) && (
+              <SeeMoreButton onClick={() => setVisibleCount(prev => prev + 20)} />
+            )}
+
           </div>
         </div>
 

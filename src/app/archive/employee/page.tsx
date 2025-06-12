@@ -15,6 +15,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import BreadCrumbs from "@/components/BreadCrumbs";
 import Container from "@/components/Container";
 import { Skeleton } from "@/components/Skeleton";
+import SeeMoreButton from "@/components/SeeMoreButton";
 
 const ArchiveEmployee = () => {
   const breadcrumbs = [
@@ -59,12 +60,16 @@ const ArchiveEmployee = () => {
     }
   };
 
+  const [visibleCount, setVisibleCount] = useState(20);
+  const visibleData = filteredData?.slice(0, visibleCount);
+
+
   return (
     <>
       <BreadCrumbs breadcrumbs={breadcrumbs} />
       <Container>
-         <div className="mb-6 -mt-2 -ml-1 flex items-center justify-between">
-          <h1 className="text-2xl font-semibold">
+        <div className="mb-6 -mt-2 -ml-1 flex items-center justify-between">
+          <h1 className="text-3xl font-semibold">
             {currentLanguage === "en"
               ? "All Employees"
               : currentLanguage === "ar"
@@ -86,7 +91,7 @@ const ArchiveEmployee = () => {
                 <input
                   onChange={e => setSearch(e.target.value)}
                   type="text"
-                  className="w-full border-borderSecondary rounded-lg border-2 px-4 py-2 ps-11 text-lg outline-none"
+                  className="w-full border-borderPrimary bg-bgPrimary rounded-lg border-2 px-4 py-2 ps-11 text-lg outline-none"
                   placeholder={
                     currentLanguage === "en" ? "Search" :
                       currentLanguage === "ar" ? "بحث" : "Recherche"
@@ -110,7 +115,7 @@ const ArchiveEmployee = () => {
             </Link>
           </div>
 
-          <div className="relative overflow-auto shadow-md sm:rounded-lg">
+          <div className="relative overflow-auto shadow-md sm:rounded-lg bg-bgPrimary">
             <Table>
               <TableHeader>
                 <TableRow>
@@ -142,7 +147,7 @@ const ArchiveEmployee = () => {
                     </TableCell>
                   </TableRow>
                 ) : (
-                  filteredData.map((emp: any, index: number) => (
+                  visibleData.map((emp: any, index: number) => (
                     <TableRow key={emp.id} data-index={index}>
                       <TableCell>
                         <div className="flex items-center gap-2">
@@ -184,6 +189,9 @@ const ArchiveEmployee = () => {
             </Table>
           </div>
         </div>
+        {visibleCount < (filteredData?.length || 0) && (
+          <SeeMoreButton onClick={() => setVisibleCount(prev => prev + 20)} />
+        )}
 
       </Container>
     </>
