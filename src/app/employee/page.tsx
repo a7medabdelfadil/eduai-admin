@@ -6,20 +6,28 @@ import {
   useDeleteEmployeesMutation,
   useGetAllEmployeesQuery,
 } from "@/features/User-Management/employeeApi";
-import Spinner from "@/components/spinner";
 import { useSelector } from "react-redux";
 import { RootState } from "@/GlobalRedux/store";
 import { toast } from "react-toastify";
-import Pagination from "@/components/pagination";
 import BreadCrumbs from "@/components/BreadCrumbs";
 import { baseUrl } from "@/components/BaseURL";
 import { useUploadEmployeeMutation } from "@/features/events/eventsApi";
 import { Trash2 } from "lucide-react";
 import Modal from "@/components/model";
-import { Text } from "@/components/Text";
 import { HiDownload, HiUpload } from "react-icons/hi";
 import { BiSearchAlt } from "react-icons/bi";
 import { MdEdit } from "react-icons/md";
+import Container from "@/components/Container";
+import {
+  Table,
+  TableHeader,
+  TableBody,
+  TableRow,
+  TableHead,
+  TableCell,
+} from "@/components/Table";
+import SeeMoreButton from "@/components/SeeMoreButton";
+import { Skeleton } from "@/components/Skeleton";
 
 const Employee = () => {
   const breadcrumbs = [
@@ -46,7 +54,6 @@ const Employee = () => {
   const [selectedEmployee, setSelectedEmployee] = useState<Employee | null>(
     null,
   );
-  console.log("👾 ~ Employee ~ selectedEmployee:", selectedEmployee);
   const [showModal, setShowModal] = useState(false);
 
   const booleanValue = useSelector((state: RootState) => state.boolean.value);
@@ -57,18 +64,9 @@ const Employee = () => {
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const { data, error, isLoading, refetch } = useGetAllEmployeesQuery({
     archived: "false",
-    page: currentPage,
-    size: rowsPerPage,
+    page: 0,
+    size: 1000000,
   });
-  const [selectAll, setSelectAll] = useState(false);
-
-  const onPageChange = (page: SetStateAction<number>) => {
-    setCurrentPage(page);
-  };
-  const onElementChange = (ele: SetStateAction<number>) => {
-    setRowsPerPage(ele);
-    setCurrentPage(0);
-  };
 
   const [deleteEmployees] = useDeleteEmployeesMutation();
 
@@ -143,47 +141,6 @@ const Employee = () => {
       setIsLoadingDownload(false); // End loading regardless of success or failure
     }
   };
-
-  const handleSelectAll = () => {
-    setSelectAll(!selectAll);
-    const checkboxes = document.querySelectorAll<HTMLInputElement>(
-      'input[type="checkbox"]:not(#checkbox-all-search)',
-    );
-    checkboxes.forEach(checkbox => {
-      checkbox.checked = !selectAll;
-    });
-  };
-
-  useEffect(() => {
-    const handleOtherCheckboxes = () => {
-      const allCheckboxes = document.querySelectorAll<HTMLInputElement>(
-        'input[type="checkbox"]:not(#checkbox-all-search)',
-      );
-      const allChecked = Array.from(allCheckboxes).every(
-        checkbox => checkbox.checked,
-      );
-      const selectAllCheckbox = document.getElementById(
-        "checkbox-all-search",
-      ) as HTMLInputElement | null;
-      if (selectAllCheckbox) {
-        selectAllCheckbox.checked = allChecked;
-        setSelectAll(allChecked);
-      }
-    };
-
-    const otherCheckboxes = document.querySelectorAll<HTMLInputElement>(
-      'input[type="checkbox"]:not(#checkbox-all-search)',
-    );
-    otherCheckboxes.forEach(checkbox => {
-      checkbox.addEventListener("change", handleOtherCheckboxes);
-    });
-
-    return () => {
-      otherCheckboxes.forEach(checkbox => {
-        checkbox.removeEventListener("change", handleOtherCheckboxes);
-      });
-    };
-  }, []);
 
   const { language: currentLanguage, loading } = useSelector(
     (state: RootState) => state.language,
@@ -279,35 +236,29 @@ const Employee = () => {
     return new Date(date).toLocaleDateString("en-GB");
   };
 
-  if (loading || isLoading)
-    return (
-      <div className="flex h-screen w-full items-center justify-center">
-        <Spinner />
-      </div>
-    );
+  const [visibleCount, setVisibleCount] = useState(20);
+  const filteredData = data?.data?.content?.filter((employee: Employee) =>
+    search.trim() === "" ? true : employee.name?.toLowerCase().includes(search.trim().toLowerCase())
+  ) || [];
+  const visibleData = filteredData.slice(0, visibleCount);
+
+
   return (
     <>
       <BreadCrumbs breadcrumbs={breadcrumbs} />
-      <div
-        dir={currentLanguage === "ar" ? "rtl" : "ltr"}
-        className={`${
-          currentLanguage === "ar"
-            ? booleanValue
-              ? "lg:mr-[100px]"
-              : "lg:mr-[270px]"
-            : booleanValue
-              ? "lg:ml-[100px]"
-              : "lg:ml-[270px]"
-        } justify-left mb-4 ml-4 mt-5 flex flex-col text-[20px] font-medium`}
-      >
-        <div className="flex items-center justify-between">
-          <Text font="bold" size="3xl">
+      <Container>
+       <div className="flex flex-col md:flex-row justify-start md:justify-between items-between md:items-center">
+         <div className="mb-8 -mt-2 -ml-1 flex items-center justify-between">
+          <h1 className="text-2xl font-semibold">
             {currentLanguage === "ar"
               ? "جميع الموظفين"
               : currentLanguage === "fr"
                 ? "Tous les employés"
                 : "All Employees"}
-          </Text>
+            {/* default */}
+          </h1>
+        </div>
+        <div className="flex self-end items-center justify-between">
           <div className="flex gap-4">
             <button
               onClick={handleOpenModal}
@@ -351,6 +302,7 @@ const Employee = () => {
             </button>
           </div>
         </div>
+       </div>
         <div className="flex justify-between rounded-t-xl bg-bgPrimary p-4 text-center max-[502px]:grid max-[502px]:justify-center">
           <div className="mb-3">
             <label htmlFor="icon" className="sr-only">
@@ -402,187 +354,108 @@ const Employee = () => {
             </Link>
           </div>
         </div>
-        <div className="relative overflow-auto shadow-md sm:rounded-lg">
-          <table className="w-full overflow-x-auto text-left text-sm text-textSecondary rtl:text-right">
-            <thead className="bg-thead text-xs uppercase text-textPrimary">
-              <tr>
-                <th scope="col" className="p-4">
-                  <div className="flex items-center">
-                    <input
-                      id="checkbox-all-search"
-                      type="checkbox"
-                      className="-gray-800 h-4 w-4 rounded border-borderPrimary bg-bgPrimary text-primary focus:ring-2 focus:ring-hover"
-                      onChange={handleSelectAll}
-                    />
-                  </div>
-                </th>
-                <th scope="col" className="whitespace-nowrap px-6 py-1">
-                  {currentLanguage === "ar"
-                    ? "الاسم الكامل"
-                    : currentLanguage === "fr"
-                      ? "Nom complet"
-                      : "Full Name"}
-                </th>
-                <th scope="col" className="whitespace-nowrap px-6 py-1">
-                  {currentLanguage === "en"
-                    ? "ID"
-                    : currentLanguage === "ar"
-                      ? "الرقم"
-                      : "ID"}
-                </th>
-                <th scope="col" className="whitespace-nowrap px-6 py-1">
-                  {currentLanguage === "en"
-                    ? "Gender"
-                    : currentLanguage === "ar"
-                      ? "الجنس"
-                      : "Genre"}
-                </th>
-                <th scope="col" className="whitespace-nowrap px-6 py-1">
-                  {currentLanguage === "en"
-                    ? "Nationality"
-                    : currentLanguage === "ar"
-                      ? "الجنسية"
-                      : "Nationalité"}
-                </th>
-                <th scope="col" className="whitespace-nowrap px-6 py-1">
-                  {currentLanguage === "en"
-                    ? "Email"
-                    : currentLanguage === "ar"
-                      ? "البريد الإلكتروني"
-                      : "Email"}
-                </th>
-                <th scope="col" className="whitespace-nowrap px-6 py-1">
-                  {currentLanguage === "en"
-                    ? "Mobile"
-                    : currentLanguage === "ar"
-                      ? "الهاتف المحمول"
-                      : "Téléphone"}
-                </th>
-                <th scope="col" className="whitespace-nowrap px-6 py-1">
-                  {currentLanguage === "en"
-                    ? "View"
-                    : currentLanguage === "ar"
-                      ? "عرض"
-                      : "Voir"}
-                </th>
-                <th scope="col" className="whitespace-nowrap px-6 py-1">
-                  {currentLanguage === "en"
-                    ? "Action"
-                    : currentLanguage === "ar"
-                      ? "الإجراء"
-                      : "Action"}
-                </th>
-              </tr>
-            </thead>
+        <div className="-mt-4 relative overflow-auto shadow-md sm:rounded-lg bg-bgPrimary">
 
-            <tbody>
-              {data?.data.content
-                .filter((employee: Employee) => {
-                  return search.toLocaleLowerCase() === ""
-                    ? employee
-                    : employee.name.toLocaleLowerCase().includes(search);
-                })
-                .map((employee: Employee, index: number) => (
-                  <tr
-                    key={employee.id}
-                    onClick={() => {
-                      setSelectedEmployee(employee);
-                      setShowModal(true);
-                    }}
-                    className={`cursor-pointer border-b border-borderPrimary text-textPrimary ${
-                      index % 2 === 0 ? "bg-bgRowTable" : "bg-bgPrimary"
-                    }`}
-                  >
-                    <td className="w-4 p-4">
-                      <div className="flex items-center">
-                        <input
-                          id="checkbox-table-search-1"
-                          type="checkbox"
-                          className="h-4 w-4 rounded border-borderPrimary bg-bgSecondary text-primary focus:ring-2 focus:ring-hover"
-                        />
-                      </div>
-                    </td>
-                    <th
-                      scope="row"
-                      className="whitespace-nowrap px-6 py-1 align-middle font-medium"
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>{currentLanguage === "ar" ? "الاسم الكامل" : currentLanguage === "fr" ? "Nom complet" : "Full Name"}</TableHead>
+                <TableHead>{currentLanguage === "ar" ? "الرقم" : "ID"}</TableHead>
+                <TableHead>{currentLanguage === "ar" ? "الجنس" : currentLanguage === "fr" ? "Genre" : "Gender"}</TableHead>
+                <TableHead>{currentLanguage === "ar" ? "الجنسية" : currentLanguage === "fr" ? "Nationalité" : "Nationality"}</TableHead>
+                <TableHead>{currentLanguage === "ar" ? "البريد الإلكتروني" : currentLanguage === "fr" ? "Courriel" : "Email"}</TableHead>
+                <TableHead>{currentLanguage === "ar" ? "الهاتف المحمول" : currentLanguage === "fr" ? "Téléphone" : "Mobile"}</TableHead>
+                <TableHead>{currentLanguage === "ar" ? "عرض" : currentLanguage === "fr" ? "Voir" : "View"}</TableHead>
+                <TableHead>{currentLanguage === "ar" ? "الإجراء" : currentLanguage === "fr" ? "Action" : "Action"}</TableHead>
+              </TableRow>
+            </TableHeader>
+
+            <TableBody>
+              {isLoading ? (
+                [...Array(3)].map((_, i) => (
+                  <TableRow key={i}>
+                    {Array.from({ length: 8 }).map((_, j) => (
+                      <TableCell key={j}>
+                        <Skeleton className="h-4 w-24" />
+                      </TableCell>
+                    ))}
+                  </TableRow>
+                ))
+              ) : !visibleData || visibleData.length === 0 ? (
+                <TableRow>
+                  <TableCell colSpan={8} className="text-center font-medium py-6">
+                    {currentLanguage === "ar"
+                      ? "لا توجد بيانات"
+                      : currentLanguage === "fr"
+                        ? "Aucune donnée disponible"
+                        : "No data available"}
+                  </TableCell>
+                </TableRow>
+              ) : (
+                visibleData
+                  .filter((employee: Employee) =>
+                    search.trim() === ""
+                      ? true
+                      : employee.name?.toLowerCase().includes(search.trim().toLowerCase())
+                  )
+                  .map((employee: Employee, index: number) => (
+                    <TableRow
+                      data-index={index}
+                      key={employee.id}
+                      onClick={() => {
+                        setSelectedEmployee(employee);
+                        setShowModal(true);
+                      }}
                     >
-                      <div className="flex items-center gap-2">
-                        <div className="w-[50px]">
-                          <img
-                            src={employee.picture ?? "/images/userr.png"}
-                            className="mx-2 h-[25px] w-[25px] rounded-full"
-                            alt="#"
-                          />
+                      <TableCell>
+                        <div className="flex items-center gap-2">
+                          <div className="w-[50px]">
+                            <img
+                              src={employee.picture ?? "/images/userr.png"}
+                              className="mx-2 h-[25px] w-[25px] rounded-full"
+                              alt="#"
+                            />
+                          </div>
+                          <p className="text-textPrimary">{String(employee.name)}</p>
                         </div>
-                        <p className="text-textPrimary">
-                          {String(employee.name)}
-                        </p>
-                      </div>
-                    </th>
-                    <td className="whitespace-nowrap px-6 py-1">
-                      {employee.id}
-                    </td>
-                    <td className="whitespace-nowrap px-6 py-1">
-                      {employee.gender}
-                    </td>
-                    <td className="whitespace-nowrap px-6 py-1">
-                      {employee.nationality}
-                    </td>
-                    <td className="whitespace-nowrap px-6 py-1">
-                      {employee.email}
-                    </td>
-                    <td className="whitespace-nowrap px-6 py-1">
-                      {employee.number}
-                    </td>
-                    <td className="whitespace-nowrap px-6 py-1">
-                      <Link
-                        href={`/employee/view-employee/${employee.id}`}
-                        className="font-medium text-blue-600 hover:underline"
-                      >
-                        {currentLanguage === "en"
-                          ? "View"
-                          : currentLanguage === "ar"
-                            ? "عرض"
-                            : "Voir"}
-                      </Link>
-                    </td>
-                    <td className="whitespace-nowrap px-6 py-1">
-                      <button
-                        onClick={() => handleDelete(employee.id)}
-                        disabled={employee.role === "Admin"}
-                        className={`rounded-lg px-2 py-1 font-semibold text-white shadow-lg delay-150 duration-300 ease-in-out ${employee.role === "Admin" ? "cursor-not-allowed bg-red-800" : "bg-error hover:-translate-y-1 hover:scale-110"}`}
-                      >
-                        {currentLanguage === "en"
-                          ? "Lock"
-                          : currentLanguage === "ar"
-                            ? "قفل"
-                            : "Verrouiller"}
-                      </button>
-                    </td>
-                  </tr>
-                ))}
-            </tbody>
-          </table>
-          {(data?.data.content.length == 0 || data == null) && (
-            <div className="flex w-full justify-center py-3 text-center text-[18px] font-semibold">
-              {currentLanguage === "en"
-                ? "There is No Data"
-                : currentLanguage === "ar"
-                  ? "لا توجد بيانات"
-                  : "Aucune donnée"}
-            </div>
+                      </TableCell>
+                      <TableCell>{employee.id}</TableCell>
+                      <TableCell>{employee.gender}</TableCell>
+                      <TableCell>{employee.nationality}</TableCell>
+                      <TableCell>{employee.email}</TableCell>
+                      <TableCell>{employee.number}</TableCell>
+                      <TableCell>
+                        <Link
+                          href={`/employee/view-employee/${employee.id}`}
+                          className="font-medium text-blue-600 hover:underline"
+                        >
+                          {currentLanguage === "en" ? "View" : currentLanguage === "ar" ? "عرض" : "Voir"}
+                        </Link>
+                      </TableCell>
+                      <TableCell>
+                        <button
+                          onClick={() => handleDelete(employee.id)}
+                          disabled={employee.role === "Admin"}
+                          className={`rounded-lg px-2 py-1 font-semibold text-white shadow-lg delay-150 duration-300 ease-in-out ${employee.role === "Admin"
+                              ? "cursor-not-allowed bg-red-800"
+                              : "bg-error hover:-translate-y-1 hover:scale-110"
+                            }`}
+                        >
+                          {currentLanguage === "en" ? "Lock" : currentLanguage === "ar" ? "قفل" : "Verrouiller"}
+                        </button>
+                      </TableCell>
+                    </TableRow>
+                  ))
+              )}
+            </TableBody>
+          </Table>
+          {visibleCount < filteredData.length && (
+            <SeeMoreButton onClick={() => setVisibleCount(prev => prev + 20)} />
           )}
+
         </div>
-        <div className="relative overflow-auto">
-          <Pagination
-            totalPages={data?.data.totalPages}
-            elementsPerPage={rowsPerPage}
-            onChangeElementsPerPage={onElementChange}
-            currentPage={currentPage}
-            onChangePage={onPageChange}
-          />
-        </div>
-      </div>
+
+      </Container>
       <Modal isOpen={isModalOpen} onClose={handleCloseModal}>
         <h1 className="text-lg font-semibold">Upload File</h1>
         <p className="mb-4 font-light text-secondary">
