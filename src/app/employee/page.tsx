@@ -247,62 +247,62 @@ const Employee = () => {
     <>
       <BreadCrumbs breadcrumbs={breadcrumbs} />
       <Container>
-       <div className="flex flex-col md:flex-row justify-start md:justify-between items-between md:items-center">
-         <div className="mb-8 -mt-2 -ml-1 flex items-center justify-between">
-          <h1 className="text-2xl font-semibold">
-            {currentLanguage === "ar"
-              ? "جميع الموظفين"
-              : currentLanguage === "fr"
-                ? "Tous les employés"
-                : "All Employees"}
-            {/* default */}
-          </h1>
-        </div>
-        <div className="flex self-end items-center justify-between">
-          <div className="flex gap-4">
-            <button
-              onClick={handleOpenModal}
-              className="mx-3 mb-5 flex w-[190px] justify-center whitespace-nowrap rounded-xl border border-primary bg-bgPrimary px-4 py-2 text-[18px] font-semibold text-primary duration-300 ease-in hover:shadow-xl"
-            >
+        <div className="flex flex-col md:flex-row justify-start md:justify-between items-between md:items-center">
+          <div className="mb-8 -mt-2 -ml-1 flex items-center justify-between">
+            <h1 className="text-2xl font-semibold">
               {currentLanguage === "ar"
-                ? "إضافة"
+                ? "جميع الموظفين"
                 : currentLanguage === "fr"
-                  ? "ajouter"
-                  : "Upload"}
-              <HiUpload
-                className={`${currentLanguage == "ar" ? "mr-2" : "ml-2"} mt-1`}
-              />
-            </button>
-            <button
-              onClick={() =>
-                handleExport({
-                  size: rowsPerPage,
-                  page: currentPage,
-                  archived: false,
-                  graduated: false,
-                })
-              }
-              className="mx-3 mb-5 flex w-[190px] justify-center whitespace-nowrap rounded-xl border border-primary bg-bgPrimary px-4 py-2 text-[18px] font-semibold text-primary duration-300 ease-in hover:shadow-xl"
-            >
-              <HiDownload
-                size={20}
-                className={`${currentLanguage == "ar" ? "ml-2" : "mr-2"}`}
-              />
-              {isLoadingDownload
-                ? currentLanguage === "ar"
-                  ? "جارٍ التنزيل..."
+                  ? "Tous les employés"
+                  : "All Employees"}
+              {/* default */}
+            </h1>
+          </div>
+          <div className="flex self-end items-center justify-between">
+            <div className="flex gap-4">
+              <button
+                onClick={handleOpenModal}
+                className="mx-3 mb-5 flex w-[190px] justify-center whitespace-nowrap rounded-xl border border-primary bg-bgPrimary px-4 py-2 text-[18px] font-semibold text-primary duration-300 ease-in hover:shadow-xl"
+              >
+                {currentLanguage === "ar"
+                  ? "إضافة"
                   : currentLanguage === "fr"
-                    ? "Téléchargement..."
-                    : "Downloading..."
-                : currentLanguage === "ar"
-                  ? "تحميل"
-                  : currentLanguage === "fr"
-                    ? "Télécharger"
-                    : "Download"}
-            </button>
+                    ? "ajouter"
+                    : "Upload"}
+                <HiUpload
+                  className={`${currentLanguage == "ar" ? "mr-2" : "ml-2"} mt-1`}
+                />
+              </button>
+              <button
+                onClick={() =>
+                  handleExport({
+                    size: rowsPerPage,
+                    page: currentPage,
+                    archived: false,
+                    graduated: false,
+                  })
+                }
+                className="mx-3 mb-5 flex w-[190px] justify-center whitespace-nowrap rounded-xl border border-primary bg-bgPrimary px-4 py-2 text-[18px] font-semibold text-primary duration-300 ease-in hover:shadow-xl"
+              >
+                <HiDownload
+                  size={20}
+                  className={`${currentLanguage == "ar" ? "ml-2" : "mr-2"}`}
+                />
+                {isLoadingDownload
+                  ? currentLanguage === "ar"
+                    ? "جارٍ التنزيل..."
+                    : currentLanguage === "fr"
+                      ? "Téléchargement..."
+                      : "Downloading..."
+                  : currentLanguage === "ar"
+                    ? "تحميل"
+                    : currentLanguage === "fr"
+                      ? "Télécharger"
+                      : "Download"}
+              </button>
+            </div>
           </div>
         </div>
-       </div>
         <div className="flex justify-between rounded-t-xl bg-bgPrimary p-4 text-center max-[502px]:grid max-[502px]:justify-center">
           <div className="mb-3">
             <label htmlFor="icon" className="sr-only">
@@ -400,6 +400,7 @@ const Employee = () => {
                   )
                   .map((employee: Employee, index: number) => (
                     <TableRow
+                      className="cursor-pointer"
                       data-index={index}
                       key={employee.id}
                       onClick={() => {
@@ -437,8 +438,8 @@ const Employee = () => {
                           onClick={() => handleDelete(employee.id)}
                           disabled={employee.role === "Admin"}
                           className={`rounded-lg px-2 py-1 font-semibold text-white shadow-lg delay-150 duration-300 ease-in-out ${employee.role === "Admin"
-                              ? "cursor-not-allowed bg-red-800"
-                              : "bg-error hover:-translate-y-1 hover:scale-110"
+                            ? "cursor-not-allowed bg-red-800"
+                            : "bg-error hover:-translate-y-1 hover:scale-110"
                             }`}
                         >
                           {currentLanguage === "en" ? "Lock" : currentLanguage === "ar" ? "قفل" : "Verrouiller"}
