@@ -7,6 +7,7 @@ import { useGetSchoolLogoNameQuery } from "@/features/school/schoolLogo";
 import { useState } from "react";
 import { useUploadSchoolLogoMutation } from "@/features/school/schoolLogo";
 import { toast } from "react-toastify"; // إضافة toast notification
+import Container from "@/components/Container";
 
 const EditSchool = () => {
   const breadcrumbs = [
@@ -89,20 +90,21 @@ const EditSchool = () => {
   return (
     <>
       <BreadCrumbs breadcrumbs={breadcrumbs} />
-      <div
-        dir={currentLanguage === "ar" ? "rtl" : "ltr"}
-        className={`${
-          currentLanguage === "ar"
-            ? booleanValue
-              ? "lg:mr-[100px]"
-              : "lg:mr-[270px]"
-            : booleanValue
-              ? "lg:ml-[100px]"
-              : "lg:ml-[270px]"
-        } mx-[5px] mt-[40px] grid h-[450px] items-center justify-center`}
-      >
-        <form onSubmit={handleSubmit}>
-          <div className="grid h-[600px] items-center justify-center gap-5 rounded-xl bg-bgPrimary p-10 sm:w-[500px] md:w-[600px] lg:w-[750px] xl:h-[500px] xl:w-[1000px]">
+      <Container>
+        <div className="mb-8 -mt-2 -ml-1 flex items-center justify-between">
+          <h1 className="text-3xl font-semibold">
+            {currentLanguage === "en"
+              ? "Edit School Logo"
+              : currentLanguage === "ar"
+                ? "تعديل شعار المدرسة"
+                : currentLanguage === "fr"
+                  ? "Modifier le logo de l'école"
+                  : "Edit School Logo"}{" "}
+            {/* default */}
+          </h1>
+        </div>
+        <form className="flex h-full w-full items-center justify-center" onSubmit={handleSubmit}>
+          <div className="rounded-xl bg-bgPrimary p-10 w-[90] md:w-[80%]">
             <div className="flex items-center justify-start gap-2">
               <svg
                 className="h-6 w-6 font-bold text-secondary group-hover:text-hover"
@@ -128,7 +130,7 @@ const EditSchool = () => {
               <h1 className="text-[22px] font-semibold">
                 {logoData?.data?.name}
               </h1>
-              <div className="flex h-[200px] w-[200px] items-center justify-center overflow-hidden">
+              <div className="flex h-[100px] w-[100px] items-center justify-center overflow-hidden">
                 {logoData?.data?.hasLogo ? (
                   <img
                     src={logoData?.data?.logoLink || ""}
@@ -151,7 +153,7 @@ const EditSchool = () => {
               </div>
             </div>
 
-            <div className="grid grid-cols-2 gap-4 max-[1278px]:grid-cols-1">
+            <div className="p-6 grid gap-4 grid-cols-1">
               <label htmlFor="logo" className="grid text-[18px] font-semibold">
                 {currentLanguage === "en"
                   ? "Upload Logo"
@@ -164,7 +166,7 @@ const EditSchool = () => {
                   id="logo"
                   type="file"
                   onChange={handleFileChange}
-                  className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                 />
               </label>
             </div>
@@ -186,7 +188,7 @@ const EditSchool = () => {
             </div>
           </div>
         </form>
-      </div>
+      </Container>
     </>
   );
 };

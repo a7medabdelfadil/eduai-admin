@@ -1,6 +1,5 @@
 "use client";
 /* eslint-disable @next/next/no-img-element */
-import Spinner from "@/components/spinner";
 import {
   useGetAllBussQuery,
   useDeleteBussMutation,

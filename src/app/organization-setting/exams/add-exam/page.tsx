@@ -8,7 +8,7 @@ import { useCreateExamTypeMutation } from "@/features/Acadimic/examsApi";
 import { useState } from "react";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
-import { useGetAllCoursesQuery } from "@/features/Acadimic/courseApi";
+import Container from "@/components/Container";
 
 const AddExam = () => {
   const router = useRouter();
@@ -118,20 +118,21 @@ const AddExam = () => {
   return (
     <>
       <BreadCrumbs breadcrumbs={breadcrumbs} />
-      <div
-        dir={currentLanguage === "ar" ? "rtl" : "ltr"}
-        className={`${
-          currentLanguage === "ar"
-            ? booleanValue
-              ? "lg:mr-[100px]"
-              : "lg:mr-[270px]"
-            : booleanValue
-              ? "lg:ml-[100px]"
-              : "lg:ml-[270px]"
-        } mx-3 mt-[40px] grid items-center justify-center`}
-      >
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <div className="grid items-center justify-center gap-5 rounded-xl bg-bgPrimary p-10 sm:w-[500px] md:w-[600px] lg:w-[750px] xl:w-[1000px]">
+      <Container>
+        <div className="mb-8 -mt-2 -ml-1 flex items-center justify-between">
+          <h1 className="text-3xl font-semibold">
+            {currentLanguage === "en"
+              ? "Add Exam"
+              : currentLanguage === "ar"
+                ? "إضافة إمتحان"
+                : currentLanguage === "fr"
+                  ? "Ajouter un examen"
+                  : "Add Exam"}{" "}
+            {/* default */}
+          </h1>
+        </div>
+        <form className="flex h-full w-full items-center justify-center" onSubmit={handleSubmit(onSubmit)}>
+          <div className="rounded-xl bg-bgPrimary p-10 w-[90] md:w-[80%]">
             <div className="flex items-center justify-start gap-2">
               <svg
                 className="h-6 w-6 font-bold text-secondary group-hover:text-hover"
@@ -163,7 +164,7 @@ const AddExam = () => {
               </h1>
             </div>
 
-            <div className="grid grid-cols-2 gap-4 max-[1278px]:grid-cols-1">
+            <div className="p-6 grid grid-cols-2 gap-4 max-[1278px]:grid-cols-1">
               <label
                 htmlFor="examName"
                 className="grid text-[18px] font-semibold"
@@ -176,7 +177,7 @@ const AddExam = () => {
                 <input
                   id="examName"
                   type="text"
-                  className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full bg-bgPrimary rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                   placeholder={
                     currentLanguage === "ar"
                       ? "أدخل اسم الامتحان"
@@ -209,7 +210,7 @@ const AddExam = () => {
                 <input
                   id="examGrade"
                   type="number"
-                  className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full bg-bgPrimary rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                   placeholder={
                     currentLanguage === "ar"
                       ? "أدخل درجة الامتحان"
@@ -242,7 +243,7 @@ const AddExam = () => {
                 <input
                   id="passingGrade"
                   type="number"
-                  className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full bg-bgPrimary rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                   placeholder={
                     currentLanguage === "ar"
                       ? "أدخل درجة النجاح"
@@ -274,7 +275,7 @@ const AddExam = () => {
                     : "Study Level"}
                 <select
                   id="studyLevel"
-                  className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full bg-bgPrimary rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                   {...register("studyLevel", { required: true })}
                 >
                   <option value="">
@@ -314,7 +315,7 @@ const AddExam = () => {
                     : "Legal Type"}
                 <select
                   id="legalType"
-                  className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full bg-bgPrimary rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                   {...register("legalType", { required: true })}
                 >
                   <option value="">
@@ -367,7 +368,7 @@ const AddExam = () => {
             </div>
           </div>
         </form>
-      </div>
+      </Container>
     </>
   );
 };
