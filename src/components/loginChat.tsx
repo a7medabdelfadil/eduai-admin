@@ -10,8 +10,7 @@ const LoginForm = ({ onClose }: { onClose: () => void }) => {
       await loginUser(userId);
       console.log("User logged in successfully");
       onClose(); // Close the modal after successful login
-    } catch (error) {
-    }
+    } catch (error) {}
   };
 
   return (

@@ -7,6 +7,7 @@ import { useSelector } from "react-redux";
 import { RootState } from "@/GlobalRedux/store";
 import BreadCrumbs from "@/components/BreadCrumbs";
 import { useUpdateSemestersMutation } from "@/features/Organization-Setteings/semesterApi";
+import Container from "@/components/Container";
 interface ParamsType {
   params: {
     semesterId: number;
@@ -34,8 +35,8 @@ const UpdateSemester = ({ params }: ParamsType) => {
       href: "/organization-setting/semester",
     },
     {
-      nameEn: "Update Semester",
-      nameAr: "تحديث فصل دراسي",
+      nameEn: "Edit Semester",
+      nameAr: "تعديل فصل دراسي",
       nameFr: "Ajouter un semestre",
       href: `/organization-setting/semester/${params.semesterId}`,
     },
@@ -70,20 +71,24 @@ const UpdateSemester = ({ params }: ParamsType) => {
   return (
     <>
       <BreadCrumbs breadcrumbs={breadcrumbs} />
-      <div
-        dir={currentLanguage === "ar" ? "rtl" : "ltr"}
-        className={` ${
-          currentLanguage === "ar"
-            ? booleanValue
-              ? "lg:mr-[100px]"
-              : "lg:mr-[270px]"
-            : booleanValue
-              ? "lg:ml-[100px]"
-              : "lg:ml-[270px]"
-        } mx-3 mt-[40px] grid h-[850px] items-center justify-center`}
-      >
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <div className="grid h-[900px] items-center justify-center gap-5 rounded-xl bg-bgPrimary p-10 sm:w-[500px] md:w-[600px] lg:w-[750px] xl:h-[800px] xl:w-[1000px]">
+      <Container>
+        <div className="-ml-1 -mt-2 mb-8 flex items-center justify-between">
+          <h1 className="text-3xl font-semibold">
+            {currentLanguage === "en"
+              ? "Edit Semester"
+              : currentLanguage === "ar"
+                ? "تعديل فصل دراسي"
+                : currentLanguage === "fr"
+                  ? "Modifier le semestre"
+                  : "Edit Semester"}{" "}
+            {/* default */}
+          </h1>
+        </div>
+        <form
+          className="flex h-full w-full items-center justify-center"
+          onSubmit={handleSubmit(onSubmit)}
+        >
+          <div className="w-[90] rounded-xl bg-bgPrimary p-10 md:w-[80%]">
             <div className="flex items-center justify-start gap-2">
               <svg
                 className="h-6 w-6 font-bold text-secondary group-hover:text-primary"
@@ -115,7 +120,7 @@ const UpdateSemester = ({ params }: ParamsType) => {
                     : "Semester Information"}
               </h1>
             </div>
-            <div className="grid grid-cols-2 gap-4 max-[1278px]:grid-cols-1">
+            <div className="grid grid-cols-2 gap-4 p-6 max-[1278px]:grid-cols-1">
               <label htmlFor="code" className="grid text-[18px] font-semibold">
                 {currentLanguage === "ar"
                   ? "بداية الفصل الدراسي"
@@ -126,7 +131,7 @@ const UpdateSemester = ({ params }: ParamsType) => {
                 <input
                   id="code"
                   type="date"
-                  className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                   {...register("startDate", { required: true })}
                 />
                 {errors.startDate && (
@@ -149,7 +154,7 @@ const UpdateSemester = ({ params }: ParamsType) => {
                 <input
                   id="about"
                   type="date"
-                  className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                   {...register("endDate", { required: true })}
                 />
                 {errors.endDate && (
@@ -182,7 +187,7 @@ const UpdateSemester = ({ params }: ParamsType) => {
             </div>
           </div>
         </form>
-      </div>
+      </Container>
     </>
   );
 };

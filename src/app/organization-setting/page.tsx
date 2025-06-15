@@ -17,7 +17,6 @@ import BreadCrumbs from "@/components/BreadCrumbs";
 import Spinner from "@/components/spinner";
 import { LuSchool } from "react-icons/lu";
 
-
 const OrganizationSettings = () => {
   const breadcrumbs = [
     {

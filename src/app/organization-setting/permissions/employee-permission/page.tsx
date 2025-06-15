@@ -1,13 +1,23 @@
 /* eslint-disable @next/next/no-img-element */
 "use client";
-import Spinner from "@/components/spinner";
 import { useGetAllEmployeePermissionsQuery } from "@/features/Organization-Setteings/employeePermissionApi";
 import Link from "next/link";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "@/GlobalRedux/store";
 import BreadCrumbs from "@/components/BreadCrumbs";
 import Container from "@/components/Container";
+import {
+  Table,
+  TableHeader,
+  TableRow,
+  TableHead,
+  TableBody,
+  TableCell,
+} from "@/components/Table";
+import { Skeleton } from "@/components/Skeleton";
+import SeeMoreButton from "@/components/SeeMoreButton";
+import { BiEditAlt, BiSearchAlt, BiTrash } from "react-icons/bi";
 
 const EmployeePermission = () => {
   const breadcrumbs = [
@@ -31,112 +41,159 @@ const EmployeePermission = () => {
     },
   ];
 
-  const booleanValue = useSelector((state: RootState) => state.boolean.value);
   type EmployeePermission = Record<string, any>;
   const [search, setSearch] = useState("");
   const { data, error, isLoading } = useGetAllEmployeePermissionsQuery(null);
-  const [selectAll, setSelectAll] = useState(false);
-
-
-
-  const handleSelectAll = () => {
-    setSelectAll(!selectAll);
-    const checkboxes = document.querySelectorAll<HTMLInputElement>(
-      'input[type="checkbox"]:not(#checkbox-all-search)',
-    );
-    checkboxes.forEach(checkbox => {
-      checkbox.checked = !selectAll;
-    });
-  };
-
-  useEffect(() => {
-    const handleOtherCheckboxes = () => {
-      const allCheckboxes = document.querySelectorAll<HTMLInputElement>(
-        'input[type="checkbox"]:not(#checkbox-all-search)',
-      );
-      const allChecked = Array.from(allCheckboxes).every(
-        checkbox => checkbox.checked,
-      );
-      const selectAllCheckbox = document.getElementById(
-        "checkbox-all-search",
-      ) as HTMLInputElement | null;
-      if (selectAllCheckbox) {
-        selectAllCheckbox.checked = allChecked;
-        setSelectAll(allChecked);
-      }
-    };
-
-    const otherCheckboxes = document.querySelectorAll<HTMLInputElement>(
-      'input[type="checkbox"]:not(#checkbox-all-search)',
-    );
-    otherCheckboxes.forEach(checkbox => {
-      checkbox.addEventListener("change", handleOtherCheckboxes);
-    });
-
-    return () => {
-      otherCheckboxes.forEach(checkbox => {
-        checkbox.removeEventListener("change", handleOtherCheckboxes);
-      });
-    };
-  }, []);
-
-  const { language: currentLanguage, loading } = useSelector(
+  const [visibleCount, setVisibleCount] = useState(20);
+  const { language: currentLanguage } = useSelector(
     (state: RootState) => state.language,
   );
 
-  if (loading || isLoading)
-    return (
-      <div className="flex h-screen w-full items-center justify-center">
-        <Spinner />
-      </div>
-    );
+  const translate = {
+    name:
+      currentLanguage === "ar"
+        ? "الاسم"
+        : currentLanguage === "fr"
+          ? "Nom"
+          : "Name",
+    id:
+      currentLanguage === "ar"
+        ? "معرف"
+        : currentLanguage === "fr"
+          ? "ID"
+          : "ID",
+    academic:
+      currentLanguage === "ar"
+        ? "إدارة أكاديمية كاملة"
+        : currentLanguage === "fr"
+          ? "Académique complet"
+          : "is Full Academic",
+    admin:
+      currentLanguage === "ar"
+        ? "إدارة إدارية كاملة"
+        : currentLanguage === "fr"
+          ? "Administration complète"
+          : "is Full Administration",
+    comm:
+      currentLanguage === "ar"
+        ? "اتصالات كاملة"
+        : currentLanguage === "fr"
+          ? "Communication complète"
+          : "is Full Communication",
+    ops:
+      currentLanguage === "ar"
+        ? "عمليات كاملة"
+        : currentLanguage === "fr"
+          ? "Opérations complètes"
+          : "is Full Operations",
+    action:
+      currentLanguage === "ar"
+        ? "الإجراء"
+        : currentLanguage === "fr"
+          ? "Action"
+          : "Action",
+    edit:
+      currentLanguage === "ar"
+        ? "تعديل"
+        : currentLanguage === "fr"
+          ? "modifier"
+          : "Edit",
+    del:
+      currentLanguage === "ar"
+        ? "حذف"
+        : currentLanguage === "fr"
+          ? "supprimer"
+          : "Delete",
+    noData:
+      currentLanguage === "ar"
+        ? "لا توجد بيانات"
+        : currentLanguage === "fr"
+          ? "Aucune donnée disponible"
+          : "No data available",
+    searchPlaceholder:
+      currentLanguage === "ar"
+        ? "ابحث عن قسم"
+        : currentLanguage === "fr"
+          ? "Rechercher un département"
+          : "Search department",
+    result:
+      currentLanguage === "ar"
+        ? "نتيجة"
+        : currentLanguage === "fr"
+          ? "résultat(s)"
+          : "Result(s)",
+  };
+
+  const filteredData =
+    data?.data?.content?.filter((employeePermission: any) =>
+      search.trim() === ""
+        ? true
+        : employeePermission.name.toLowerCase().includes(search.toLowerCase()),
+    ) || [];
+
+  const visibleData = filteredData.slice(0, visibleCount);
+
   return (
     <>
       <BreadCrumbs breadcrumbs={breadcrumbs} />
       <Container>
-        <div className="flex justify-between text-center max-[502px]:grid max-[502px]:justify-center">
-          <div className="mb-3">
-            <label htmlFor="icon" className="sr-only">
-              Search
-            </label>
-            <div className="relative min-w-72 md:min-w-80">
+        <div className="-ml-1 -mt-2 mb-6 flex items-center justify-between">
+          <h1 className="mb-4 text-2xl font-bold text-textPrimary">
+            {currentLanguage === "ar"
+              ? "صلاحيات الموظفين"
+              : currentLanguage === "fr"
+                ? "Autorisations des employés"
+                : "Employee Permissions"}
+          </h1>
+        </div>
+        <div className="justify-left mb-6 ml-4 flex flex-wrap gap-5 text-[20px] font-semibold max-[725px]:text-[15px]">
+          <Link
+            className="hover:text-primary hover:underline"
+            href="/organization-setting/permissions/department-permission"
+          >
+            {currentLanguage === "ar"
+              ? "القسم"
+              : currentLanguage === "fr"
+                ? "Département"
+                : "Department"}
+          </Link>
+          <Link
+            className="text-primary underline"
+            href="/organization-setting/permissions/employee-permission"
+          >
+            {currentLanguage === "ar"
+              ? "الموظف"
+              : currentLanguage === "fr"
+                ? "Employé"
+                : "Employee"}
+          </Link>
+        </div>
+        <div className="rounded-xl bg-bgPrimary">
+          <div className="flex flex-col items-center justify-between gap-4 rounded-lg px-4 py-4 md:flex-row">
+            {/* Search Input */}
+            <div
+              dir={currentLanguage === "ar" ? "rtl" : "ltr"}
+              className="relative w-full max-w-md"
+            >
               <div className="pointer-events-none absolute inset-y-0 start-0 z-20 flex items-center ps-4">
-                <svg
-                  className="size-4 flex-shrink-0 text-gray-400"
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                >
-                  <circle cx="11" cy="11" r="8" />
-                  <path d="m21 21-4.3-4.3" />
-                </svg>
+                <BiSearchAlt className="text-secondary" size={18} />
               </div>
-              <input
-                onChange={e => setSearch(e.target.value)}
-                type="text"
-                id="icon"
-                name="icon"
-                className="block w-full rounded-lg border-2 border-borderPrimary px-4 py-2 ps-11 text-sm outline-none focus:border-primary focus:ring-primary disabled:pointer-events-none disabled:opacity-50"
-                placeholder={
-                  currentLanguage === "en"
-                    ? "Search"
-                    : currentLanguage === "ar"
-                      ? "بحث"
-                      : "Recherche"
-                }
-              />
+              <div className="flex items-center gap-2">
+                <input
+                  onChange={e => setSearch(e.target.value)}
+                  type="text"
+                  className="w-full rounded-lg border-2 border-borderPrimary bg-bgPrimary px-4 py-2 ps-11 text-lg outline-none"
+                  placeholder={translate.searchPlaceholder}
+                />
+                <span className="min-w-[120px] text-primary">
+                  {filteredData.length} {translate.result}
+                </span>
+              </div>
             </div>
-          </div>
-          <div className="flex justify-center">
+
             <Link
               href="/organization-setting/permissions/add/employee"
-              className="mx-3 mb-5 whitespace-nowrap rounded-xl bg-primary px-4 py-2 text-[18px] font-semibold text-white duration-300 ease-in hover:bg-hover hover:shadow-xl"
+              className="mx-3 whitespace-nowrap rounded-xl bg-primary px-4 py-2 text-[18px] font-semibold text-white duration-300 ease-in hover:bg-hover hover:shadow-xl"
             >
               {currentLanguage === "ar"
                 ? "+ إضافة صلاحيات الموظفين"
@@ -145,146 +202,84 @@ const EmployeePermission = () => {
                   : "+ Add Employee Permissions"}
             </Link>
           </div>
-        </div>
-        <div className="relative shadow-md sm:rounded-lg">
-          <table className="w-full text-left text-sm text-textSecondary rtl:text-right">
-            <thead className="bg-thead text-xs uppercase text-textPrimary">
-              <tr>
-                <th scope="col" className="p-4">
-                  <div className="flex items-center">
-                    {/* Add event listener for select all checkbox */}
-                    <input
-                      id="checkbox-all-search"
-                      type="checkbox"
-                      className="-gray-800 h-4 w-4 rounded border-gray-300 bg-gray-100 text-blue-600 focus:ring-2 focus:ring-primary"
-                      onChange={handleSelectAll}
-                    />
-                  </div>
-                </th>
-                <th scope="col" className="whitespace-nowrap px-6 py-3">
-                  {currentLanguage === "ar"
-                    ? "الاسم"
-                    : currentLanguage === "fr"
-                      ? "Nom"
-                      : "Name"}
-                </th>
-                <th scope="col" className="whitespace-nowrap px-6 py-3">
-                  {currentLanguage === "ar"
-                    ? "معرف"
-                    : currentLanguage === "fr"
-                      ? "id"
-                      : "id"}
-                </th>
-                <th scope="col" className="whitespace-nowrap px-6 py-3">
-                  {currentLanguage === "ar"
-                    ? "إدارة أكاديمية كاملة"
-                    : currentLanguage === "fr"
-                      ? "Académique complet"
-                      : "is Full Academic"}
-                </th>
-                <th scope="col" className="whitespace-nowrap px-6 py-3">
-                  {currentLanguage === "ar"
-                    ? "إدارة إدارية كاملة"
-                    : currentLanguage === "fr"
-                      ? "Administration complète"
-                      : "is Full Administration"}
-                </th>
-                <th scope="col" className="whitespace-nowrap px-6 py-3">
-                  {currentLanguage === "ar"
-                    ? "اتصالات كاملة"
-                    : currentLanguage === "fr"
-                      ? "Communication complète"
-                      : "is Full Communication"}
-                </th>
-                <th scope="col" className="whitespace-nowrap px-6 py-3">
-                  {currentLanguage === "ar"
-                    ? "عمليات كاملة"
-                    : currentLanguage === "fr"
-                      ? "Opérations complètes"
-                      : "is Full Operations"}
-                </th>
-                <th scope="col" className="whitespace-nowrap px-6 py-3">
-                  {currentLanguage === "ar"
-                    ? "عرض"
-                    : currentLanguage === "fr"
-                      ? "voir"
-                      : "view"}
-                </th>
-                <th scope="col" className="whitespace-nowrap px-6 py-3">
-                  {currentLanguage === "ar"
-                    ? "الإجراء"
-                    : currentLanguage === "fr"
-                      ? "Action"
-                      : "Action"}
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              {data?.data.content
-                .filter((employeePermission: EmployeePermission) => {
-                  return search.toLocaleLowerCase() === ""
-                    ? employeePermission
-                    : employeePermission.name
-                        .toLocaleLowerCase()
-                        .includes(search);
-                })
-                .map((employeePermission: EmployeePermission) => (
-                  <tr
-                    key={employeePermission.id}
-                    className="border-b border-borderPrimary bg-bgPrimary hover:bg-bgSecondary"
-                  >
-                    <td className="w-4 p-4">
-                      <div className="flex items-center">
-                        <input
-                          id="checkbox-table-search-1"
-                          type="checkbox"
-                          className="h-4 w-4 rounded border-borderPrimary bg-bgPrimary text-primary focus:ring-2 focus:ring-hover"
-                        />
-                      </div>
-                    </td>
-                    <th scope="row" className="whitespace-nowrap px-6 py-4">
-                      <p> {employeePermission.name} </p>
-                    </th>
-                    <td className="whitespace-nowrap px-6 py-4">
-                      {employeePermission.id}
-                    </td>
-                    <td className="whitespace-nowrap px-6 py-4">
-                      {employeePermission.isFullAcademic ? "Yes" : "No"}
-                    </td>
-                    <td className="whitespace-nowrap px-6 py-4">
-                      {employeePermission.isFullAdministration ? "Yes" : "No"}
-                    </td>
-                    <td className="whitespace-nowrap px-6 py-4">
-                      {employeePermission.isFullCommunication ? "Yes" : "No"}
-                    </td>
-                    <td className="whitespace-nowrap px-6 py-4">
-                      {employeePermission.isFullOperations ? "Yes" : "No"}
-                    </td>
-                    <td className="whitespace-nowrap px-6 py-4">
-                      <Link
-                        href={`/organization-setting/permissions/employee-permission/${employeePermission.id}`}
-                        className="font-medium text-blue-600 hover:underline"
-                      >
-                        {currentLanguage === "ar"
-                          ? "تعديل"
-                          : currentLanguage === "fr"
-                            ? "modifier"
-                            : "edit"}
-                      </Link>
-                    </td>
-                    <td className="whitespace-nowrap px-6 py-4">
-                      <button className="rounded-lg bg-error px-2 py-1 font-semibold text-white shadow-lg delay-150 duration-300 ease-in-out hover:-translate-y-1 hover:scale-110">
-                        {currentLanguage === "ar"
-                          ? "حذف"
-                          : currentLanguage === "fr"
-                            ? "supprimer"
-                            : "Delete"}
-                      </button>
-                    </td>
-                  </tr>
-                ))}
-            </tbody>
-          </table>
+
+          <div className="relative bg-bgPrimary shadow-md sm:rounded-lg">
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>{translate.name}</TableHead>
+                  <TableHead>{translate.id}</TableHead>
+                  <TableHead>{translate.academic}</TableHead>
+                  <TableHead>{translate.admin}</TableHead>
+                  <TableHead>{translate.comm}</TableHead>
+                  <TableHead>{translate.ops}</TableHead>
+                  <TableHead>{translate.action}</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {isLoading ? (
+                  [...Array(3)].map((_, i) => (
+                    <TableRow key={i}>
+                      {Array.from({ length: 7 }).map((_, j) => (
+                        <TableCell key={j}>
+                          <Skeleton className="h-4 w-24" />
+                        </TableCell>
+                      ))}
+                    </TableRow>
+                  ))
+                ) : visibleData.length === 0 ? (
+                  <TableRow>
+                    <TableCell colSpan={7} className="text-center font-medium">
+                      {translate.noData}
+                    </TableCell>
+                  </TableRow>
+                ) : (
+                  visibleData.map((employeePermission: any, index: number) => (
+                    <TableRow key={employeePermission.id} data-index={index}>
+                      <TableCell>{employeePermission.name}</TableCell>
+                      <TableCell>{employeePermission.id}</TableCell>
+                      <TableCell>
+                        {employeePermission.isFullAcademic ? "Yes" : "No"}
+                      </TableCell>
+                      <TableCell>
+                        {employeePermission.isFullAdministration ? "Yes" : "No"}
+                      </TableCell>
+                      <TableCell>
+                        {employeePermission.isFullCommunication ? "Yes" : "No"}
+                      </TableCell>
+                      <TableCell>
+                        {employeePermission.isFullOperations ? "Yes" : "No"}
+                      </TableCell>
+                      <TableCell className="flex items-center gap-3">
+                        <Link
+                          href={`/organization-setting/permissions/employee-permission/${employeePermission.id}`}
+                          className="text-primary transition hover:text-hover"
+                          title={translate.edit}
+                        >
+                          <BiEditAlt size={20} />
+                        </Link>
+                        <button
+                          className="text-error transition hover:text-red-800"
+                          title={translate.del}
+                          onClick={() =>
+                            console.log("Delete", employeePermission.id)
+                          }
+                        >
+                          <BiTrash size={20} />
+                        </button>
+                      </TableCell>
+                    </TableRow>
+                  ))
+                )}
+              </TableBody>
+            </Table>
+
+            {visibleCount < filteredData.length && (
+              <SeeMoreButton
+                onClick={() => setVisibleCount(prev => prev + 20)}
+              />
+            )}
+          </div>
         </div>
       </Container>
     </>

@@ -7,6 +7,7 @@ import Spinner from "@/components/spinner";
 import { useUpdatePasswordMutation } from "@/features/User-Management/employeeApi";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
+import Container from "@/components/Container";
 const Password = () => {
   const booleanValue = useSelector((state: RootState) => state.boolean.value); // sidebar
   const { language: currentLanguage, loading } = useSelector(
@@ -36,18 +37,7 @@ const Password = () => {
     );
   return (
     <>
-      <div
-        dir={currentLanguage === "ar" ? "rtl" : "ltr"}
-        className={` ${
-          currentLanguage === "ar"
-            ? booleanValue
-              ? "lg:mr-[100px]"
-              : "lg:mr-[270px]"
-            : booleanValue
-              ? "lg:ml-[100px]"
-              : "lg:ml-[270px]"
-        } mt-7`}
-      >
+      <Container>
         <div className="grid h-full w-full rounded-xl bg-bgPrimary p-7">
           <div>
             <div className="justify-left mb-5 ml-4 flex gap-5 text-[18px] font-semibold">
@@ -70,11 +60,11 @@ const Password = () => {
               </Link>
             </div>
           </div>
-          <div className="text-semibold mt-5 flex h-full w-full rounded-xl border-2 border-borderPrimary p-5">
+          <div className="text-semibold mb-5 flex h-full w-full rounded-xl border-2 border-borderPrimary p-5">
             <div className="grid w-full gap-2">
               <form onSubmit={handleSubmit(onSubmit)}>
-                <div className="grid justify-center">
-                  <div className="grid grid-cols-2 gap-4 max-[1278px]:grid-cols-1">
+                <div className="w-full">
+                  <div className="w-full grid grid-cols-2 gap-4 max-[1278px]:grid-cols-1">
                     <label
                       htmlFor="password"
                       className="grid text-[18px] font-semibold"
@@ -89,7 +79,7 @@ const Password = () => {
                         {...register("password")}
                         id="password"
                         type="password"
-                        className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                        className="w-full rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                       />
                     </label>
                     <label
@@ -105,14 +95,14 @@ const Password = () => {
                         {...register("newPassword")}
                         id="newPassword"
                         type="password"
-                        className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                        className="w-full rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                       />
                     </label>
                   </div>
-                  <div className="mt-7 flex justify-between">
+                  <div className="mt-7 flex justify-center">
                     <button
                       type="submit"
-                      className="mx-3 mb-5 w-fit whitespace-nowrap rounded-xl bg-primary px-4 py-2 text-[18px] font-semibold text-white duration-300 ease-in hover:bg-hover hover:shadow-xl"
+                      className="mx-3 mb-5 w-fit whitespace-nowrap rounded-xl bg-primary px-6 py-2 text-[18px] font-semibold text-white duration-300 ease-in hover:bg-hover hover:shadow-xl"
                     >
                       {currentLanguage === "ar"
                         ? "حفظ"
@@ -136,7 +126,7 @@ const Password = () => {
             </div>
           </div>
         </div>
-      </div>
+      </Container>
     </>
   );
 };

@@ -24,7 +24,7 @@ const UserManagment = () => {
   const UserManagments = [
     {
       href: "/driver",
-      icon: <FaCar size={40} />,
+      icon: <FaCar size={30} />,
       title:
         currentLanguage === "en"
           ? "Drivers"
@@ -44,7 +44,7 @@ const UserManagment = () => {
     },
     {
       href: "/employee",
-      icon: <FaBriefcase size={40} />,
+      icon: <FaBriefcase size={30} />,
       title:
         currentLanguage === "en"
           ? "Employees"
@@ -64,7 +64,7 @@ const UserManagment = () => {
     },
     {
       href: "/parent",
-      icon: <FaUserFriends size={40} />,
+      icon: <FaUserFriends size={30} />,
 
       title:
         currentLanguage === "en"
@@ -85,7 +85,7 @@ const UserManagment = () => {
     },
     {
       href: "/student",
-      icon: <FaUserGraduate size={40} />,
+      icon: <FaUserGraduate size={30} />,
       title:
         currentLanguage === "en"
           ? "Students"
@@ -105,7 +105,7 @@ const UserManagment = () => {
     },
     {
       href: "/teacher",
-      icon: <FaChalkboardTeacher size={40} />,
+      icon: <FaChalkboardTeacher size={30} />,
       title:
         currentLanguage === "en"
           ? "Teachers"
@@ -125,7 +125,7 @@ const UserManagment = () => {
     },
     {
       href: "/worker",
-      icon: <FaHardHat size={40} />,
+      icon: <FaHardHat size={30} />,
       title:
         currentLanguage === "en"
           ? "Workers"

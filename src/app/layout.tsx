@@ -8,12 +8,12 @@ import Notification from "@/components/Notifications";
 import "react-toastify/dist/ReactToastify.css";
 import { usePathname } from "next/navigation";
 import ThemeProvider from "./providers/themeProvider";
-import { Sora } from 'next/font/google';
+import { Sora } from "next/font/google";
 
 const sora = Sora({
-  subsets: ['latin'],
-  weight: ['400', '500', '600', '700'],
-  variable: '--font-sora',
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+  variable: "--font-sora",
 });
 
 interface RootLayoutProps {
@@ -46,7 +46,7 @@ const RootLayout: React.FC<RootLayoutProps> = ({ children }) => {
         <link rel="icon" type="image/x-icon" href="/images/Login.png" />
       </head>
       <body className={`bg-bgSecondary ${sora.variable} font-sora`}>
-      <Providers>
+        <Providers>
           <ThemeProvider attribute="class" defaultTheme="light" enableSystem>
             {!isLoginPage && <NavBar />}
             <Notification />

@@ -128,7 +128,7 @@ const AddNewParent = () => {
       <BreadCrumbs breadcrumbs={breadcrumbs} />
 
       <Container>
-        <div className="mb-8 -mt-2 -ml-1 flex items-center justify-between">
+        <div className="-ml-1 -mt-2 mb-8 flex items-center justify-between">
           <h1 className="text-3xl font-semibold">
             {currentLanguage === "en"
               ? "Add New Parent"
@@ -140,8 +140,11 @@ const AddNewParent = () => {
             {/* default */}
           </h1>
         </div>
-        <form className="flex justify-center items-center w-full h-full" onSubmit={handleSubmit(onSubmit)}>
-          <div className="rounded-xl bg-bgPrimary p-10 w-[90] md:w-[80%]">
+        <form
+          className="flex h-full w-full items-center justify-center"
+          onSubmit={handleSubmit(onSubmit)}
+        >
+          <div className="w-[90] rounded-xl bg-bgPrimary p-10 md:w-[80%]">
             {backendError && (
               <div className="text-center text-error">{backendError}</div>
             )}
@@ -177,7 +180,7 @@ const AddNewParent = () => {
                       : "Parent Information"}
               </h1>
             </div>
-            <div className="p-6 grid grid-cols-2 gap-4 max-[1278px]:grid-cols-1">
+            <div className="grid grid-cols-2 gap-4 p-6 max-[1278px]:grid-cols-1">
               {/* Input fields for parent information */}
               <label
                 htmlFor="username"

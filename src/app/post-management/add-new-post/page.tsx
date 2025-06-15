@@ -8,6 +8,8 @@ import { AiOutlineSave } from "react-icons/ai"; // Save Icon
 import BreadCrumbs from "@/components/BreadCrumbs";
 import Spinner from "@/components/spinner";
 import { useState } from "react";
+import Container from "@/components/Container";
+import { Text } from "@/components/Text";
 
 const AddNewPost = () => {
   const [imagePreview, setImagePreview] = useState<string | null>(null);
@@ -32,7 +34,6 @@ const AddNewPost = () => {
     },
   ];
 
-  const booleanValue = useSelector((state: RootState) => state.boolean.value);
   const {
     register,
     handleSubmit,
@@ -92,18 +93,14 @@ const AddNewPost = () => {
   return (
     <>
       <BreadCrumbs breadcrumbs={breadcrumbs} />
-      <div
-        dir={currentLanguage === "ar" ? "rtl" : "ltr"}
-        className={`${
-          currentLanguage === "ar"
-            ? booleanValue
-              ? "lg:mr-[100px]"
-              : "lg:mr-[270px]"
-            : booleanValue
-              ? "lg:ml-[100px]"
-              : "lg:ml-[270px]"
-        } mt-20`}
-      >
+      <Container>
+        <Text font="bold" size="3xl">
+          {currentLanguage === "ar"
+            ? "إضافة منشور"
+            : currentLanguage === "fr"
+              ? "Ajouter un post"
+              : "Add Post"}
+        </Text>
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="grid gap-3 rounded-xl bg-bgSecondary p-10">
             <div className="rounded-xl border border-borderPrimary bg-bgPrimary p-10">
@@ -403,7 +400,7 @@ const AddNewPost = () => {
             </div>
           </div>
         </form>
-      </div>
+      </Container>
     </>
   );
 };

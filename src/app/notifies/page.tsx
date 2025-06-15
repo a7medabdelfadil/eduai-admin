@@ -17,8 +17,9 @@ import { useNotificationsSocket } from "@/hooks/useGetAllNotifications";
 
 const Notifies = () => {
   const userId = useSelector((state: RootState) => state.user.id);
-  const { notifications: socketNotifications, isConnected } = useNotificationsSocket(userId);
-  
+  const { notifications: socketNotifications, isConnected } =
+    useNotificationsSocket(userId);
+
   const booleanValue = useSelector((state: RootState) => state.boolean.value);
   const breadcrumbs = [
     {
@@ -34,7 +35,7 @@ const Notifies = () => {
       href: "/notifies",
     },
   ];
-  
+
   const formatTransactionDate = (dateString: string | number | Date) => {
     if (!dateString) return "No transaction date";
     const formatter = new Intl.DateTimeFormat("en-EG", {
@@ -46,16 +47,11 @@ const Notifies = () => {
     });
     return formatter.format(new Date(dateString));
   };
-  
+
   const [currentPage, setCurrentPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
-  
-  const { 
-    data, 
-    error, 
-    isLoading, 
-    refetch 
-  } = useGetAllNotificationsQuery({ 
+
+  const { data, error, isLoading, refetch } = useGetAllNotificationsQuery({
     page: currentPage,
     size: rowsPerPage,
   });
@@ -63,13 +59,13 @@ const Notifies = () => {
   // Combine fetched and socket notifications
   const combinedNotifications = [
     ...(socketNotifications || []),
-    ...(data?.data.content || [])
+    ...(data?.data.content || []),
   ];
 
   const onPageChange = (page: SetStateAction<number>) => {
     setCurrentPage(page);
   };
-  
+
   const onElementChange = (ele: SetStateAction<number>) => {
     setRowsPerPage(ele);
     setCurrentPage(0);
@@ -266,8 +262,8 @@ const Notifies = () => {
               onChangeElementsPerPage={onElementChange}
               currentPage={currentPage}
               onChangePage={onPageChange}
-          />
-        </div>
+            />
+          </div>
         </div>
       </div>
     </>

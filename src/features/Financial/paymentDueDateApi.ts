@@ -58,13 +58,12 @@ export const paymentDueDateApi = createApi({
       }),
     }),
     updateFeesDueDates: builder.mutation({
-  query: ({ id, formData }) => ({
-    url: `/api/v1/fees-due-dates/${id}`,
-    method: "PUT",
-    body: formData,
-  }),
-}),
-
+      query: ({ id, formData }) => ({
+        url: `/api/v1/fees-due-dates/${id}`,
+        method: "PUT",
+        body: formData,
+      }),
+    }),
   }),
 });
 

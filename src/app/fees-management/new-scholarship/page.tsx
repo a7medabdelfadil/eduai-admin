@@ -92,7 +92,8 @@ const NewScholarship = () => {
       toast.success("Scholarship created successfully");
     } catch (err) {
       toast.error(
-        (err as { data?: { message?: string } })?.data?.message || "An error occurred"
+        (err as { data?: { message?: string } })?.data?.message ||
+          "An error occurred",
       );
     }
   };
@@ -113,14 +114,15 @@ const NewScholarship = () => {
       <BreadCrumbs breadcrumbs={breadcrumbs} />
       <div
         dir={currentLanguage === "ar" ? "rtl" : "ltr"}
-        className={`${currentLanguage === "ar"
+        className={`${
+          currentLanguage === "ar"
             ? booleanValue
               ? "lg:mr-[100px]"
               : "lg:mr-[270px]"
             : booleanValue
               ? "lg:ml-[100px]"
               : "lg:ml-[270px]"
-          } mx-3 mt-[40px] grid h-[850px] items-center justify-center`}
+        } mx-3 mt-[40px] grid h-[850px] items-center justify-center`}
       >
         <form onSubmit={handleSubmit(onSubmit)} encType="multipart/form-data">
           <div className="grid items-center justify-center gap-5 rounded-xl bg-bgPrimary p-10 sm:w-[500px] md:w-[600px] lg:w-[750px] xl:w-[1000px]">
@@ -148,7 +150,7 @@ const NewScholarship = () => {
                 <select
                   id="studentId"
                   {...register("studentId")}
-                  className="h-full w-[400px] bg-bgPrimary border border-borderPrimary text-textPrimary rounded-xl px-4 py-3 text-[18px] outline-none max-[458px]:w-[350px]"
+                  className="h-full w-[400px] rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 text-[18px] text-textPrimary outline-none max-[458px]:w-[350px]"
                 >
                   <option value="">
                     {currentLanguage === "en"
@@ -161,12 +163,12 @@ const NewScholarship = () => {
                     (student: {
                       id: string | null | undefined;
                       name:
-                      | string
-                      | number
-                      | bigint
-                      | boolean
-                      | null
-                      | undefined;
+                        | string
+                        | number
+                        | bigint
+                        | boolean
+                        | null
+                        | undefined;
                     }) => (
                       <option key={student.id} value={student.id ?? ""}>
                         {String(student.name)}
@@ -215,7 +217,7 @@ const NewScholarship = () => {
 
                 <select
                   id="scholarshipType"
-                  className="w-[400px] rounded-xl bg-bgPrimary border border-borderPrimary text-textPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-[400px] rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 text-textPrimary outline-none max-[471px]:w-[350px]"
                   {...register("scholarshipType", { required: true })}
                 >
                   <option value="">

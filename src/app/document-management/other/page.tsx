@@ -42,7 +42,12 @@ const Card = () => {
 
   const [selectedRole, setSelectedRole] = useState("TEACHER");
 
-const { data: idCards, isLoading, isFetching, error } = useGetIdCardsQuery(selectedRole);
+  const {
+    data: idCards,
+    isLoading,
+    isFetching,
+    error,
+  } = useGetIdCardsQuery(selectedRole);
   const { language: currentLanguage, loading } = useSelector(
     (state: RootState) => state.language,
   );
@@ -65,7 +70,7 @@ const { data: idCards, isLoading, isFetching, error } = useGetIdCardsQuery(selec
               ? "Autres documents officiels"
               : "Other Official Documents"}
         </Text>
-        <div className="justify-left ml-4 my-8 flex flex-wrap gap-5 text-[20px] font-semibold max-[725px]:text-[15px]">
+        <div className="justify-left my-8 ml-4 flex flex-wrap gap-5 text-[20px] font-semibold max-[725px]:text-[15px]">
           <Link
             href="/document-management/other"
             className="text-blue-500 underline"
@@ -78,7 +83,8 @@ const { data: idCards, isLoading, isFetching, error } = useGetIdCardsQuery(selec
           </Link>
           <Link
             className="hover:text-blue-500 hover:underline"
-            href="/document-management/other/medical">
+            href="/document-management/other/medical"
+          >
             {currentLanguage === "ar"
               ? "السجلات الطبية"
               : currentLanguage === "fr"
@@ -87,7 +93,8 @@ const { data: idCards, isLoading, isFetching, error } = useGetIdCardsQuery(selec
           </Link>
           <Link
             className="hover:text-blue-500 hover:underline"
-            href="/document-management/other/disciplinary">
+            href="/document-management/other/disciplinary"
+          >
             {currentLanguage === "ar"
               ? "السجلات التأديبية"
               : currentLanguage === "fr"
@@ -96,7 +103,8 @@ const { data: idCards, isLoading, isFetching, error } = useGetIdCardsQuery(selec
           </Link>
           <Link
             className="hover:text-blue-500 hover:underline"
-            href="/document-management/other/financial">
+            href="/document-management/other/financial"
+          >
             {currentLanguage === "ar"
               ? "المساعدات المالية"
               : currentLanguage === "fr"
@@ -105,7 +113,8 @@ const { data: idCards, isLoading, isFetching, error } = useGetIdCardsQuery(selec
           </Link>
           <Link
             className="hover:text-blue-500 hover:underline"
-            href="/document-management/other/legal">
+            href="/document-management/other/legal"
+          >
             {currentLanguage === "ar"
               ? "الوثائق القانونية"
               : currentLanguage === "fr"
@@ -152,21 +161,21 @@ const { data: idCards, isLoading, isFetching, error } = useGetIdCardsQuery(selec
             </div>
           </div>
           <div className="flex items-center gap-4">
-            <label htmlFor="roleSelect" className="font-medium text-sm">
+            <label htmlFor="roleSelect" className="text-sm font-medium">
               Filter by Role:
             </label>
             <select
               id="roleSelect"
-              className="border border-gray-300 rounded-md px-3 py-1 text-sm"
+              className="rounded-md border border-gray-300 px-3 py-1 text-sm"
               value={selectedRole}
-              onChange={(e) => setSelectedRole(e.target.value)}
+              onChange={e => setSelectedRole(e.target.value)}
             >
               <option value="TEACHER">Teacher</option>
               <option value="STUDENT">Student</option>
             </select>
           </div>
         </div>
-        <div className="relative bg-bgPrimary w-full overflow-x-auto shadow-md sm:rounded-lg p-6">
+        <div className="relative w-full overflow-x-auto bg-bgPrimary p-6 shadow-md sm:rounded-lg">
           {isFetching ? (
             <div className="flex w-full items-center justify-center py-10">
               <Spinner />
@@ -176,10 +185,10 @@ const { data: idCards, isLoading, isFetching, error } = useGetIdCardsQuery(selec
               {idCards.map((card: any, index: any) => (
                 <div
                   key={index}
-                  className="flex flex-col md:flex-row mt-4 items-center justify-between md:items-start gap-6 pb-6"
+                  className="mt-4 flex flex-col items-center justify-between gap-6 pb-6 md:flex-row md:items-start"
                 >
                   {/* Profile */}
-                  <div className="flex items-center mx-4 mt-14 gap-4 w-[250px] h-full">
+                  <div className="mx-4 mt-14 flex h-full w-[250px] items-center gap-4">
                     <img
                       src={
                         card.hasPicture && card.picture
@@ -187,7 +196,7 @@ const { data: idCards, isLoading, isFetching, error } = useGetIdCardsQuery(selec
                           : "/images/userr.png"
                       }
                       alt={card.name}
-                      className="rounded-full h-[50px] w-[50px] object-cover"
+                      className="h-[50px] w-[50px] rounded-full object-cover"
                     />
                     <div>
                       <h3 className="text-lg font-semibold">{card.name}</h3>
@@ -195,13 +204,13 @@ const { data: idCards, isLoading, isFetching, error } = useGetIdCardsQuery(selec
                       <p className="text-sm font-medium">{card.role}</p>
                     </div>
                   </div>
-                  <div className="flex flex-col md:flex-row justify-center md:justify-around items-center gap-4 w-full">
+                  <div className="flex w-full flex-col items-center justify-center gap-4 md:flex-row md:justify-around">
                     {/* Card Image back */}
 
-                    <div className="w-full mx-4 max-w-[400px] aspect-[7/4]">
+                    <div className="mx-4 aspect-[7/4] w-full max-w-[400px]">
                       <CardBackComponent />
                     </div>
-                    <div className="w-full  mx-4 max-w-[400px] aspect-[7/4]">
+                    <div className="mx-4 aspect-[7/4] w-full max-w-[400px]">
                       <CardFrontComponent
                         name={card.name}
                         studentId={card.id.toString()}
@@ -215,8 +224,6 @@ const { data: idCards, isLoading, isFetching, error } = useGetIdCardsQuery(selec
                         role={card.role}
                       />
                     </div>
-
-
                   </div>
                 </div>
               ))}

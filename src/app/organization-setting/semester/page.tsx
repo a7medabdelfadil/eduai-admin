@@ -1,6 +1,5 @@
 /* eslint-disable @next/next/no-img-element */
 "use client";
-import Spinner from "@/components/spinner";
 import {
   useDeleteSemestersMutation,
   useGetAllSemestersQuery,
@@ -11,6 +10,18 @@ import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import { RootState } from "@/GlobalRedux/store";
 import BreadCrumbs from "@/components/BreadCrumbs";
+import Container from "@/components/Container";
+import {
+  Table,
+  TableHeader,
+  TableRow,
+  TableHead,
+  TableBody,
+  TableCell,
+} from "@/components/Table";
+import { Skeleton } from "@/components/Skeleton";
+import SeeMoreButton from "@/components/SeeMoreButton";
+import { BiSearchAlt, BiShow, BiTrash } from "react-icons/bi";
 
 const Semester = () => {
   const breadcrumbs = [
@@ -33,13 +44,10 @@ const Semester = () => {
       href: "/organization-setting/semester",
     },
   ];
-  const booleanValue = useSelector((state: RootState) => state.boolean.value);
   type Semester = Record<string, any>;
   const [search, setSearch] = useState("");
   const { data, error, isLoading, refetch } = useGetAllSemestersQuery(null);
-  const [selectAll, setSelectAll] = useState(false);
-
-
+  const [visibleCount, setVisibleCount] = useState(20);
 
   const [deleteSemester, { isLoading: isDeleting }] =
     useDeleteSemestersMutation();
@@ -54,116 +62,124 @@ const Semester = () => {
     }
   };
 
-  const handleSelectAll = () => {
-    setSelectAll(!selectAll);
-    const checkboxes = document.querySelectorAll<HTMLInputElement>(
-      'input[type="checkbox"]:not(#checkbox-all-search)',
-    );
-    checkboxes.forEach(checkbox => {
-      checkbox.checked = !selectAll;
-    });
-  };
-
-  useEffect(() => {
-    const handleOtherCheckboxes = () => {
-      const allCheckboxes = document.querySelectorAll<HTMLInputElement>(
-        'input[type="checkbox"]:not(#checkbox-all-search)',
-      );
-      const allChecked = Array.from(allCheckboxes).every(
-        checkbox => checkbox.checked,
-      );
-      const selectAllCheckbox = document.getElementById(
-        "checkbox-all-search",
-      ) as HTMLInputElement | null;
-      if (selectAllCheckbox) {
-        selectAllCheckbox.checked = allChecked;
-        setSelectAll(allChecked);
-      }
-    };
-
-    const otherCheckboxes = document.querySelectorAll<HTMLInputElement>(
-      'input[type="checkbox"]:not(#checkbox-all-search)',
-    );
-    otherCheckboxes.forEach(checkbox => {
-      checkbox.addEventListener("change", handleOtherCheckboxes);
-    });
-
-    return () => {
-      otherCheckboxes.forEach(checkbox => {
-        checkbox.removeEventListener("change", handleOtherCheckboxes);
-      });
-    };
-  }, []);
-
   const { language: currentLanguage, loading } = useSelector(
     (state: RootState) => state.language,
   );
 
-  if (loading || isLoading)
-    return (
-      <div className="flex h-screen w-full items-center justify-center">
-        <Spinner />
-      </div>
-    );
+  const translate = {
+    name:
+      currentLanguage === "ar"
+        ? "الاسم"
+        : currentLanguage === "fr"
+          ? "Nom"
+          : "Name",
+    id:
+      currentLanguage === "ar"
+        ? "معرف"
+        : currentLanguage === "fr"
+          ? "ID"
+          : "ID",
+    startDate:
+      currentLanguage === "ar"
+        ? "تاريخ البدء"
+        : currentLanguage === "fr"
+          ? "Date de début"
+          : "Start Date",
+    endDate:
+      currentLanguage === "ar"
+        ? "تاريخ الانتهاء"
+        : currentLanguage === "fr"
+          ? "Date de fin"
+          : "End Date",
+    view:
+      currentLanguage === "ar"
+        ? "عرض"
+        : currentLanguage === "fr"
+          ? "Voir"
+          : "View",
+    del:
+      currentLanguage === "ar"
+        ? "حذف"
+        : currentLanguage === "fr"
+          ? "Supprimer"
+          : "Delete",
+    action:
+      currentLanguage === "ar"
+        ? "الإجراء"
+        : currentLanguage === "fr"
+          ? "Action"
+          : "Action",
+    noData:
+      currentLanguage === "ar"
+        ? "لا توجد بيانات"
+        : currentLanguage === "fr"
+          ? "Aucune donnée disponible"
+          : "No data available",
+    searchPlaceholder:
+      currentLanguage === "ar"
+        ? "ابحث عن قسم"
+        : currentLanguage === "fr"
+          ? "Rechercher un département"
+          : "Search department",
+    result:
+      currentLanguage === "ar"
+        ? "نتيجة"
+        : currentLanguage === "fr"
+          ? "résultat(s)"
+          : "Result(s)",
+  };
+
+  const filteredData =
+    data?.data?.content?.filter((semester: Semester) =>
+      search.trim() === ""
+        ? true
+        : semester.name.toLowerCase().includes(search.toLowerCase()),
+    ) || [];
+
+  const visibleData = filteredData.slice(0, visibleCount);
 
   return (
     <>
       <BreadCrumbs breadcrumbs={breadcrumbs} />
-      <div
-        dir={currentLanguage === "ar" ? "rtl" : "ltr"}
-        className={`${
-          currentLanguage === "ar"
-            ? booleanValue
-              ? "lg:mr-[100px]"
-              : "lg:mr-[270px]"
-            : booleanValue
-              ? "lg:ml-[100px]"
-              : "lg:ml-[270px]"
-        } relative mx-3 mt-10 h-screen overflow-x-auto bg-transparent sm:rounded-lg`}
-      >
-        <div className="flex justify-between text-center max-[502px]:grid max-[502px]:justify-center">
-          <div className="mb-3">
-            <label htmlFor="icon" className="sr-only">
-              Search
-            </label>
-            <div className="relative min-w-72 md:min-w-80">
+      <Container>
+        <div className="-ml-1 -mt-2 mb-8 flex items-center justify-between">
+          <h1 className="text-3xl font-semibold">
+            {currentLanguage === "en"
+              ? "Semester"
+              : currentLanguage === "ar"
+                ? "الفصل الدراسي"
+                : currentLanguage === "fr"
+                  ? "semestre"
+                  : "Semester"}{" "}
+            {/* default */}
+          </h1>
+        </div>
+        <div className="rounded-xl bg-bgPrimary">
+          <div className="flex flex-col items-center justify-between gap-4 rounded-lg px-4 py-4 md:flex-row">
+            {/* Search Input */}
+            <div
+              dir={currentLanguage === "ar" ? "rtl" : "ltr"}
+              className="relative w-full max-w-md"
+            >
               <div className="pointer-events-none absolute inset-y-0 start-0 z-20 flex items-center ps-4">
-                <svg
-                  className="size-4 flex-shrink-0 text-gray-400"
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                >
-                  <circle cx="11" cy="11" r="8" />
-                  <path d="m21 21-4.3-4.3" />
-                </svg>
+                <BiSearchAlt className="text-secondary" size={18} />
               </div>
-              <input
-                onChange={e => setSearch(e.target.value)}
-                type="text"
-                id="icon"
-                name="icon"
-                className="block w-full rounded-lg border-2 border-borderPrimary px-4 py-2 ps-11 text-sm outline-none focus:border-primary focus:ring-primary disabled:pointer-events-none disabled:opacity-50"
-                placeholder={
-                  currentLanguage === "en"
-                    ? "Search"
-                    : currentLanguage === "ar"
-                      ? "بحث"
-                      : "Recherche"
-                }
-              />
+              <div className="flex items-center gap-2">
+                <input
+                  onChange={e => setSearch(e.target.value)}
+                  type="text"
+                  className="w-full rounded-lg border-2 border-borderPrimary bg-bgPrimary px-4 py-2 ps-11 text-lg outline-none"
+                  placeholder={translate.searchPlaceholder}
+                />
+                <span className="min-w-[120px] text-primary">
+                  {filteredData.length} {translate.result}
+                </span>
+              </div>
             </div>
-          </div>
-          <div className="flex justify-center">
+
             <Link
               href="/organization-setting/semester/add-semester"
-              className="mx-3 mb-5 whitespace-nowrap rounded-xl bg-primary px-4 py-2 text-[18px] font-semibold text-white duration-300 ease-in hover:bg-hover hover:shadow-xl"
+              className="mx-3 whitespace-nowrap rounded-xl bg-primary px-4 py-2 text-[18px] font-semibold text-white duration-300 ease-in hover:bg-hover hover:shadow-xl"
             >
               {currentLanguage === "ar"
                 ? "+ أضف فصل"
@@ -172,148 +188,82 @@ const Semester = () => {
                   : "+ Add Semester"}
             </Link>
           </div>
-        </div>
-        <div className="relative overflow-auto shadow-md sm:rounded-lg">
-          <table className="w-full overflow-x-auto text-left text-sm text-textSecondary rtl:text-right">
-            <thead className="bg-thead text-xs uppercase text-textPrimary">
-              <tr>
-                <th scope="col" className="p-4">
-                  <div className="flex items-center">
-                    {/* Add event listener for select all checkbox */}
-                    <input
-                      id="checkbox-all-search"
-                      type="checkbox"
-                      className="-gray-800 h-4 w-4 rounded border-gray-300 bg-gray-100 text-primary focus:ring-2 focus:ring-primary"
-                      onChange={handleSelectAll}
-                    />
-                  </div>
-                </th>
-                <th scope="col" className="whitespace-nowrap px-6 py-3">
-                  {currentLanguage === "ar"
-                    ? "الاسم"
-                    : currentLanguage === "fr"
-                      ? "Nom"
-                      : "Name"}
-                </th>
-                <th scope="col" className="whitespace-nowrap px-6 py-3">
-                  {currentLanguage === "ar"
-                    ? "معرف"
-                    : currentLanguage === "fr"
-                      ? "ID"
-                      : "id"}
-                </th>
-                <th scope="col" className="whitespace-nowrap px-6 py-3">
-                  {currentLanguage === "ar"
-                    ? "تاريخ البدء"
-                    : currentLanguage === "fr"
-                      ? "date de début"
-                      : "start Date"}
-                </th>
-                <th scope="col" className="whitespace-nowrap px-6 py-3">
-                  {currentLanguage === "ar"
-                    ? "تاريخ الانتهاء"
-                    : currentLanguage === "fr"
-                      ? "Date de fin"
-                      : "end Date"}
-                </th>
-                <th scope="col" className="whitespace-nowrap px-6 py-3">
-                  {currentLanguage === "ar"
-                    ? "عرض"
-                    : currentLanguage === "fr"
-                      ? "Voir"
-                      : "View"}
-                </th>
-                <th scope="col" className="whitespace-nowrap px-6 py-3">
-                  {currentLanguage === "ar"
-                    ? "إجراء"
-                    : currentLanguage === "fr"
-                      ? "Action"
-                      : "Action"}
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              {data?.data.content
-                .filter((Semester: Semester) => {
-                  return search.toLocaleLowerCase() === ""
-                    ? Semester
-                    : Semester.name.toLocaleLowerCase().includes(search);
-                })
-                .map((Semester: Semester) => (
-                  <tr
-                    key={Semester.id}
-                    className="border-b border-borderPrimary bg-bgPrimary hover:bg-bgSecondary"
-                  >
-                    <td className="w-4 p-4">
-                      <div className="flex items-center">
-                        <input
-                          id="checkbox-table-search-1"
-                          type="checkbox"
-                          className="h-4 w-4 rounded border-borderPrimary bg-bgPrimary text-primary focus:ring-2 focus:ring-hover"
-                        />
-                      </div>
-                    </td>
-                    <th
-                      scope="row"
-                      className="flex items-center gap-2 whitespace-nowrap px-6 py-4 font-medium text-gray-900"
-                    >
-                      <div className="w-[50px]">
-                        {Semester.picture == null ? (
+
+          <div className="relative overflow-auto bg-bgPrimary shadow-md sm:rounded-lg">
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>{translate.name}</TableHead>
+                  <TableHead>{translate.id}</TableHead>
+                  <TableHead>{translate.startDate}</TableHead>
+                  <TableHead>{translate.endDate}</TableHead>
+                  <TableHead>{translate.action}</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {isLoading ? (
+                  [...Array(3)].map((_, i) => (
+                    <TableRow key={i}>
+                      {Array.from({ length: 5 }).map((_, j) => (
+                        <TableCell key={j}>
+                          <Skeleton className="h-4 w-24" />
+                        </TableCell>
+                      ))}
+                    </TableRow>
+                  ))
+                ) : visibleData.length === 0 ? (
+                  <TableRow>
+                    <TableCell colSpan={5} className="text-center font-medium">
+                      {translate.noData}
+                    </TableCell>
+                  </TableRow>
+                ) : (
+                  visibleData.map((semester: Semester, index: number) => (
+                    <TableRow key={semester.id} data-index={index}>
+                      <TableCell className="flex items-center gap-2">
+                        <div className="w-[50px]">
                           <img
-                            src="/images/userr.png"
-                            className="mx-2 h-[40px] w-[40px] rounded-full"
+                            src={semester.picture ?? "/images/userr.png"}
+                            className="mx-2 h-6 w-6 rounded-full"
                             alt="#"
                           />
-                        ) : (
-                          <img
-                            src={Semester.picture}
-                            className="mx-2 h-[40px] w-[40px] rounded-full"
-                            alt="#"
-                          />
-                        )}
-                      </div>
-                      <p className="text-textSecondary"> {Semester.name} </p>
-                    </th>
-                    <td className="whitespace-nowrap px-6 py-4">
-                      {Semester.id}
-                    </td>
-                    <td className="whitespace-nowrap px-6 py-4">
-                      {Semester.startDate}
-                    </td>
-                    <td className="whitespace-nowrap px-6 py-4">
-                      {Semester.endDate}
-                    </td>
-                    <td className="whitespace-nowrap px-6 py-4">
-                      <Link
-                        href={`/organization-setting/semester/${Semester.id}`}
-                        className="font-medium text-primary hover:underline"
-                      >
-                        {currentLanguage === "ar"
-                          ? "عرض"
-                          : currentLanguage === "fr"
-                            ? "Voir"
-                            : "View"}
-                      </Link>
-                    </td>
-                    <td className="whitespace-nowrap px-6 py-4">
-                      <button
-                        disabled={isDeleting}
-                        onClick={() => handleDelete(Semester.id)}
-                        className="rounded-lg bg-error px-2 py-1 font-semibold text-white shadow-lg delay-150 duration-300 ease-in-out hover:-translate-y-1 hover:scale-110"
-                      >
-                        {currentLanguage === "ar"
-                          ? "حذف"
-                          : currentLanguage === "fr"
-                            ? "Supprimer"
-                            : "Delete"}
-                      </button>
-                    </td>
-                  </tr>
-                ))}
-            </tbody>
-          </table>
+                        </div>
+                        <p className="text-textSecondary">{semester.name}</p>
+                      </TableCell>
+                      <TableCell>{semester.id}</TableCell>
+                      <TableCell>{semester.startDate}</TableCell>
+                      <TableCell>{semester.endDate}</TableCell>
+                      <TableCell className="flex items-center gap-3">
+                        <Link
+                          href={`/organization-setting/semester/${semester.id}`}
+                          className="text-primary transition hover:text-hover"
+                          title={translate.view}
+                        >
+                          <BiShow size={20} />
+                        </Link>
+                        <button
+                          disabled={isDeleting}
+                          onClick={() => handleDelete(semester.id)}
+                          className="text-error transition hover:text-red-800"
+                          title={translate.del}
+                        >
+                          <BiTrash size={20} />
+                        </button>
+                      </TableCell>
+                    </TableRow>
+                  ))
+                )}
+              </TableBody>
+            </Table>
+
+            {visibleCount < filteredData.length && (
+              <SeeMoreButton
+                onClick={() => setVisibleCount(prev => prev + 20)}
+              />
+            )}
+          </div>
         </div>
-      </div>
+      </Container>
     </>
   );
 };

@@ -1,18 +1,15 @@
 /* eslint-disable @next/next/no-img-element */
 "use client";
 import Link from "next/link";
-import { useState, useEffect, SetStateAction } from "react";
+import { useState } from "react";
 import {
   useDeleteStudentsMutation,
   useGetAllStudentsQuery,
   useGetStudentByIdQuery,
-  useLazyExportStudentsFileQuery,
 } from "@/features/User-Management/studentApi";
-import Spinner from "@/components/spinner";
 import { useSelector } from "react-redux";
 import { RootState } from "@/GlobalRedux/store";
 import { toast } from "react-toastify";
-import Pagination from "@/components/pagination";
 import BreadCrumbs from "@/components/BreadCrumbs";
 import { baseUrl } from "@/components/BaseURL";
 import { BiSearchAlt } from "react-icons/bi";
@@ -156,9 +153,13 @@ const Student = () => {
     (state: RootState) => state.language,
   );
 
-
   const translations = [
-    { key: "Full Name", en: "Full Name", ar: "الاسم الكامل", fr: "Nom complet" },
+    {
+      key: "Full Name",
+      en: "Full Name",
+      ar: "الاسم الكامل",
+      fr: "Nom complet",
+    },
     { key: "ID", en: "ID", ar: "الرقم التعريفي", fr: "ID" },
     { key: "Gender", en: "Gender", ar: "الجنس", fr: "Genre" },
     { key: "Nationality", en: "Nationality", ar: "الجنسية", fr: "Nationalité" },
@@ -168,7 +169,12 @@ const Student = () => {
     { key: "View", en: "View", ar: "عرض", fr: "Voir" },
     { key: "Action", en: "Action", ar: "الإجراء", fr: "Action" },
     { key: "Lock", en: "Lock", ar: "قفل", fr: "Verrouiller" },
-    { key: "No data available", en: "No data available", ar: "لا توجد بيانات", fr: "Aucune donnée" },
+    {
+      key: "No data available",
+      en: "No data available",
+      ar: "لا توجد بيانات",
+      fr: "Aucune donnée",
+    },
   ];
 
   const t = (en: string, ar: string, fr: string) => {
@@ -178,11 +184,12 @@ const Student = () => {
   const [visibleCount, setVisibleCount] = useState(20);
   const handleShowMore = () => setVisibleCount(prev => prev + 20);
   const filteredData = data?.data.content?.filter((student: any) =>
-    search.trim() === "" ? true : student.name?.toLowerCase().includes(search.toLowerCase())
+    search.trim() === ""
+      ? true
+      : student.name?.toLowerCase().includes(search.toLowerCase()),
   );
 
   const displayedData = filteredData?.slice(0, visibleCount);
-
 
   // -----------------------------
   // Create a unique list of classrooms from backend data
@@ -200,7 +207,7 @@ const Student = () => {
     <>
       <BreadCrumbs breadcrumbs={breadcrumbs} />
       <Container>
-        <div className="flex items-center justify-between">
+        <div className="-mt-6 flex items-center justify-between">
           <Text font="bold" size="3xl">
             {currentLanguage === "ar"
               ? "جميع الطلاب"
@@ -208,6 +215,27 @@ const Student = () => {
                 ? "Tous les étudiants"
                 : "All Students"}
           </Text>
+        </div>
+        <div className="flex items-center justify-between">
+          <div className="mx-10 flex gap-5">
+            <Link href="/student" className="text-primary underline">
+              {currentLanguage === "ar"
+                ? "طالب نشط"
+                : currentLanguage === "fr"
+                  ? "Étudiant actif"
+                  : "Active Student"}
+            </Link>
+            <Link
+              className="hover:text-blue-500 hover:underline"
+              href="/student/graduated"
+            >
+              {currentLanguage === "ar"
+                ? "طالب خريج"
+                : currentLanguage === "fr"
+                  ? "Étudiant diplômé"
+                  : "Graduate Student"}
+            </Link>
+          </div>
           <button
             onClick={() =>
               handleExport({
@@ -217,7 +245,7 @@ const Student = () => {
                 graduated: false,
               })
             }
-            className="mx-3 mb-5 flex w-fit justify-center whitespace-nowrap rounded-xl border border-primary bg-bgPrimary p-4 text-sm text-primary duration-300 ease-in hover:shadow-xl"
+            className="mx-3 flex w-fit justify-center whitespace-nowrap rounded-xl border border-primary bg-bgPrimary p-4 text-sm text-primary duration-300 ease-in hover:shadow-xl"
           >
             <HiDownload
               size={20}
@@ -236,30 +264,16 @@ const Student = () => {
                   : "Exporter les données"}
           </button>
         </div>
-        <div className="mx-10 flex gap-5">
-          <Link href="/student" className="text-primary underline">
-            {currentLanguage === "ar"
-              ? "طالب نشط"
-              : currentLanguage === "fr"
-                ? "Étudiant actif"
-                : "Active Student"}
-          </Link>
-          <Link className="hover:text-blue-500 hover:underline" href="/student/graduated">
-            {currentLanguage === "ar"
-              ? "طالب خريج"
-              : currentLanguage === "fr"
-                ? "Étudiant diplômé"
-                : "Graduate Student"}
-          </Link>
-        </div>
       </Container>
 
       <Container>
         {/* SEARCH + FILTERS + NEW STUDENT BUTTON */}
-        <div className="flex flex-wrap items-center justify-between gap-4 rounded-t-xl bg-bgPrimary p-4 text-center">
+        <div className="-mt-4 flex flex-wrap items-center justify-between gap-4 rounded-t-xl bg-bgPrimary p-4 text-center">
           {/* Search Box */}
-          <div className="min-w-72 flex items-center gap-4 md:min-w-80">
-            <label htmlFor="searchInput" className="sr-only">Search</label>
+          <div className="flex min-w-72 items-center gap-4 md:min-w-80">
+            <label htmlFor="searchInput" className="sr-only">
+              Search
+            </label>
             <div className="relative">
               <div className="pointer-events-none absolute inset-y-0 start-0 z-20 flex items-center ps-4">
                 <BiSearchAlt className="text-secondary" size={18} />
@@ -269,7 +283,7 @@ const Student = () => {
                 type="text"
                 id="searchInput"
                 name="search"
-                className="block w-full rounded-lg bg-bgPrimary border-2 border-borderSecondary ps-11 pe-4 py-2 text-lg outline-none dark:border-borderPrimary"
+                className="border-borderSecondary block w-full rounded-lg border-2 bg-bgPrimary py-2 pe-4 ps-11 text-lg outline-none dark:border-borderPrimary"
                 placeholder={
                   currentLanguage === "ar"
                     ? "ابحث عن أي شيء"
@@ -293,7 +307,10 @@ const Student = () => {
           <div className="flex flex-wrap items-center gap-4">
             {/* Gender Filter */}
             <div className="flex flex-col text-start">
-              <label htmlFor="genderFilter" className="text-sm font-semibold text-gray-700">
+              <label
+                htmlFor="genderFilter"
+                className="text-sm font-semibold text-gray-700"
+              >
                 {currentLanguage === "en"
                   ? "Gender"
                   : currentLanguage === "ar"
@@ -304,28 +321,61 @@ const Student = () => {
                 id="genderFilter"
                 value={selectedGender}
                 onChange={e => setSelectedGender(e.target.value)}
-                className="w-40 rounded-md border bg-bgPrimary border-borderPrimary px-2 py-2 text-sm outline-none focus:border-blue-500 focus:ring-blue-500"
+                className="w-40 rounded-md border border-borderPrimary bg-bgPrimary px-2 py-2 text-sm outline-none focus:border-blue-500 focus:ring-blue-500"
               >
-                <option value="">{currentLanguage === "en" ? "All" : currentLanguage === "ar" ? "الكل" : "Tous"}</option>
-                <option value="male">{currentLanguage === "en" ? "Male" : currentLanguage === "ar" ? "ذكر" : "Masculin"}</option>
-                <option value="female">{currentLanguage === "en" ? "Female" : currentLanguage === "ar" ? "أنثى" : "Féminin"}</option>
+                <option value="">
+                  {currentLanguage === "en"
+                    ? "All"
+                    : currentLanguage === "ar"
+                      ? "الكل"
+                      : "Tous"}
+                </option>
+                <option value="male">
+                  {currentLanguage === "en"
+                    ? "Male"
+                    : currentLanguage === "ar"
+                      ? "ذكر"
+                      : "Masculin"}
+                </option>
+                <option value="female">
+                  {currentLanguage === "en"
+                    ? "Female"
+                    : currentLanguage === "ar"
+                      ? "أنثى"
+                      : "Féminin"}
+                </option>
               </select>
             </div>
 
             {/* Classroom Filter */}
             <div className="flex flex-col text-start">
-              <label htmlFor="classroomFilter" className="text-sm font-semibold text-gray-700">
-                {currentLanguage === "en" ? "Classroom" : currentLanguage === "ar" ? "الفصل الدراسي" : "Classe"}
+              <label
+                htmlFor="classroomFilter"
+                className="text-sm font-semibold text-gray-700"
+              >
+                {currentLanguage === "en"
+                  ? "Classroom"
+                  : currentLanguage === "ar"
+                    ? "الفصل الدراسي"
+                    : "Classe"}
               </label>
               <select
                 id="classroomFilter"
                 value={selectedClassroom}
                 onChange={e => setSelectedClassroom(e.target.value)}
-                className="w-40 rounded-md border bg-bgPrimary border-borderPrimary px-2 py-2 text-sm outline-none focus:border-blue-500 focus:ring-blue-500"
+                className="w-40 rounded-md border border-borderPrimary bg-bgPrimary px-2 py-2 text-sm outline-none focus:border-blue-500 focus:ring-blue-500"
               >
-                <option value="">{currentLanguage === "en" ? "All" : currentLanguage === "ar" ? "الكل" : "Tous"}</option>
+                <option value="">
+                  {currentLanguage === "en"
+                    ? "All"
+                    : currentLanguage === "ar"
+                      ? "الكل"
+                      : "Tous"}
+                </option>
                 {uniqueClassrooms.map((classroom: any) => (
-                  <option key={classroom} value={classroom}>{classroom}</option>
+                  <option key={classroom} value={classroom}>
+                    {classroom}
+                  </option>
                 ))}
               </select>
             </div>
@@ -348,17 +398,25 @@ const Student = () => {
 
         {/* END OF SEARCH + FILTERS + NEW STUDENT BUTTON */}
 
-        <div className="relative overflow-auto shadow-md sm:rounded-lg bg-bgPrimary">
+        <div className="relative overflow-auto bg-bgPrimary shadow-md sm:rounded-lg">
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>{t("Full Name", "الاسم الكامل", "Nom complet")}</TableHead>
+                <TableHead>
+                  {t("Full Name", "الاسم الكامل", "Nom complet")}
+                </TableHead>
                 <TableHead>{t("ID", "الرقم التعريفي", "ID")}</TableHead>
                 <TableHead>{t("Gender", "الجنس", "Genre")}</TableHead>
-                <TableHead>{t("Nationality", "الجنسية", "Nationalité")}</TableHead>
-                <TableHead>{t("Email", "البريد الإلكتروني", "E-mail")}</TableHead>
+                <TableHead>
+                  {t("Nationality", "الجنسية", "Nationalité")}
+                </TableHead>
+                <TableHead>
+                  {t("Email", "البريد الإلكتروني", "E-mail")}
+                </TableHead>
                 <TableHead>{t("Mobile", "الهاتف المحمول", "Mobile")}</TableHead>
-                <TableHead>{t("Classroom", "الفصل الدراسي", "Classe")}</TableHead>
+                <TableHead>
+                  {t("Classroom", "الفصل الدراسي", "Classe")}
+                </TableHead>
                 <TableHead>{t("View", "عرض", "Voir")}</TableHead>
                 <TableHead>{t("Action", "الإجراء", "Action")}</TableHead>
               </TableRow>
@@ -367,14 +425,21 @@ const Student = () => {
               {isLoading ? (
                 [...Array(3)].map((_, i) => (
                   <TableRow key={i}>
-                    {Array(9).fill(0).map((_, j) => (
-                      <TableCell key={j}><Skeleton className="h-4 w-full" /></TableCell>
-                    ))}
+                    {Array(9)
+                      .fill(0)
+                      .map((_, j) => (
+                        <TableCell key={j}>
+                          <Skeleton className="h-4 w-full" />
+                        </TableCell>
+                      ))}
                   </TableRow>
                 ))
               ) : filteredData?.length === 0 ? (
                 <TableRow>
-                  <TableCell colSpan={9} className="text-center py-6 text-gray-500">
+                  <TableCell
+                    colSpan={9}
+                    className="py-6 text-center text-gray-500"
+                  >
                     {t("No data available", "لا توجد بيانات", "Aucune donnée")}
                   </TableCell>
                 </TableRow>
@@ -383,7 +448,7 @@ const Student = () => {
                   <TableRow
                     data-index={index}
                     key={student.id}
-                    onClick={(e) => {
+                    onClick={e => {
                       if ((e.target as HTMLElement).closest("a")) return;
                       setSelectedStudent(student);
                       setShowModal(true);
@@ -409,7 +474,7 @@ const Student = () => {
                     <TableCell>
                       <Link
                         href={`/student/view-student/${student.id}`}
-                        className="text-primary hover:underline text-sm"
+                        className="text-sm text-primary hover:underline"
                       >
                         {t("View", "عرض", "Voir")}
                       </Link>
@@ -417,7 +482,7 @@ const Student = () => {
                     <TableCell>
                       <button
                         onClick={() => handleDelete(student.id)}
-                        className="rounded bg-error px-2 py-1 text-white text-sm hover:scale-105"
+                        className="rounded bg-error px-2 py-1 text-sm text-white hover:scale-105"
                       >
                         {t("Lock", "قفل", "Verrouiller")}
                       </button>
@@ -430,7 +495,6 @@ const Student = () => {
           {filteredData?.length > visibleCount && (
             <SeeMoreButton onClick={handleShowMore} />
           )}
-
         </div>
       </Container>
       {showModal && selectedStudent && (

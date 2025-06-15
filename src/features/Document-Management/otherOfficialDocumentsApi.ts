@@ -30,7 +30,6 @@ export const otherOfficialDocumentsApi = createApi({
       transformResponse: (response: any) => response.data.content,
     }),
 
-
     getStudentsWithMedicalStatus: builder.query({
       query: () => "/api/v1/student/medical-record/students-with-status",
       transformResponse: (response: any) => response.data.content,
@@ -124,7 +123,6 @@ export const otherOfficialDocumentsApi = createApi({
         };
       },
     }),
-
   }),
 });
 

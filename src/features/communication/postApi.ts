@@ -48,21 +48,21 @@ export const postApi = createApi({
     }),
     //
     deletePostImages: builder.mutation({
-      query: ({postId, imageId}) => ({
+      query: ({ postId, imageId }) => ({
         url: `/api/v1/management/post/${postId}/files?filesIds=${imageId}`,
         method: "DELETE",
       }),
     }),
     //
     deletePostComment: builder.mutation({
-      query: ({postId, commentId}) => ({
+      query: ({ postId, commentId }) => ({
         url: `/api/v1/post/${postId}/comment/${commentId}`,
         method: "DELETE",
       }),
     }),
     //
     UpdatePostComment: builder.mutation({
-      query: ({postId, commentId, comment}) => ({
+      query: ({ postId, commentId, comment }) => ({
         url: `/api/v1/post/${postId}/comment/${commentId}`,
         method: "PUT",
         body: { comment },
@@ -70,7 +70,7 @@ export const postApi = createApi({
     }),
     //
     LikePostComment: builder.mutation({
-      query: ({postId, commentId, liked}) => ({
+      query: ({ postId, commentId, liked }) => ({
         url: `/api/v1/post/${postId}/comment/${commentId}/like?liked=${liked}`,
         method: "PUT",
       }),

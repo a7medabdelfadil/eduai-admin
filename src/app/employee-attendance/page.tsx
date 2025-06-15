@@ -123,7 +123,6 @@ const EmployeeAttendance = () => {
     setCurrentPage(0);
   };
 
-
   const [deleteEmployees] = useDeleteEmployeesMutation();
 
   const handleDelete = async (id: string) => {

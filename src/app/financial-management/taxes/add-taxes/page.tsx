@@ -108,10 +108,10 @@ const AddTaxes = () => {
       setSelectedFile(file);
 
       // Create file preview
-      if (file.type.startsWith('image/')) {
+      if (file.type.startsWith("image/")) {
         const reader = new FileReader();
         reader.onloadend = () => {
-          if (typeof reader.result === 'string') {
+          if (typeof reader.result === "string") {
             setFilePreview(reader.result);
           }
         };
@@ -146,7 +146,9 @@ const AddTaxes = () => {
     } else {
       // Create an empty file if none is selected (to satisfy the server requirement)
       const emptyBlob = new Blob([""], { type: "application/octet-stream" });
-      const emptyFile = new File([emptyBlob], "empty.txt", { type: "application/octet-stream" });
+      const emptyFile = new File([emptyBlob], "empty.txt", {
+        type: "application/octet-stream",
+      });
       formData.append("file", emptyFile);
     }
 
@@ -181,7 +183,7 @@ const AddTaxes = () => {
     <>
       <BreadCrumbs breadcrumbs={breadcrumbs} />
       <Container>
-        <div className="mb-8 -mt-2 -ml-1 flex items-center justify-between">
+        <div className="-ml-1 -mt-2 mb-8 flex items-center justify-between">
           <h1 className="text-3xl font-semibold">
             {currentLanguage === "en"
               ? "Add Taxes"

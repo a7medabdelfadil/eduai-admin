@@ -12,6 +12,8 @@ import { useEffect, useState } from "react";
 import Spinner from "@/components/spinner";
 import BreadCrumbs from "@/components/BreadCrumbs";
 import { toast } from "react-toastify";
+import Container from "@/components/Container";
+import { Text } from "@/components/Text";
 
 interface EditPostProps {
   params: {
@@ -56,12 +58,17 @@ const EditPost = ({ params }: EditPostProps) => {
   const currentLanguage = useSelector(
     (state: RootState) => state.language.language,
   );
-  const booleanValue = useSelector((state: RootState) => state.boolean.value);
   const { data: post, isLoading, refetch } = useGetPostByIdQuery(params.postId);
   const [deletePostImages] = useDeletePostImagesMutation();
-  const handleDelete = async ({ postId, imageId }: { postId: string; imageId: string }) => {
+  const handleDelete = async ({
+    postId,
+    imageId,
+  }: {
+    postId: string;
+    imageId: string;
+  }) => {
     try {
-      await deletePostImages({postId, imageId}).unwrap();
+      await deletePostImages({ postId, imageId }).unwrap();
       toast.success("Delete Post Image Success");
       void refetch();
     } catch (err) {
@@ -125,19 +132,15 @@ const EditPost = ({ params }: EditPostProps) => {
   return (
     <>
       <BreadCrumbs breadcrumbs={breadcrumbs} />
-      <div
-        dir={currentLanguage === "ar" ? "rtl" : "ltr"}
-        className={`${
-          currentLanguage === "ar"
-            ? booleanValue
-              ? "lg:mr-[100px]"
-              : "lg:mr-[270px]"
-            : booleanValue
-              ? "lg:ml-[100px]"
-              : "lg:ml-[270px]"
-        } mt-20`}
-      >
-        <form onSubmit={handleSubmit(onSubmitText)}>
+      <Container>
+        <Text font="bold" size="3xl">
+          {currentLanguage === "ar"
+            ? "تعديل المنشور"
+            : currentLanguage === "fr"
+              ? "Modifier la publication"
+              : "Edit Post"}
+        </Text>
+        <form className="mt-6" onSubmit={handleSubmit(onSubmitText)}>
           <div className="grid gap-3 rounded-xl bg-bgPrimary p-10">
             <div className="rounded-xl border border-borderPrimary bg-bgPrimary p-10">
               <div className="mb-10 flex w-full items-center justify-between text-[18px] font-semibold">
@@ -480,27 +483,32 @@ const EditPost = ({ params }: EditPostProps) => {
                     alt="#"
                     className="mt-10 h-[120px] w-[120px] rounded-lg"
                   />
-                  <button type="button" onClick={() => handleDelete({ postId: params.postId, imageId: img.id })}>
-                  <svg
-                                  className="h-5 w-5 mr-2"
-                                  fill="none"
-                                  viewBox="0 0 24 24"
-                                  stroke="currentColor"
-                                >
-                                  <path
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                    strokeWidth="2"
-                                    d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-                                  />
-                                </svg>
+                  <button
+                    type="button"
+                    onClick={() =>
+                      handleDelete({ postId: params.postId, imageId: img.id })
+                    }
+                  >
+                    <svg
+                      className="mr-2 h-5 w-5"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
+                        d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                      />
+                    </svg>
                   </button>
                 </div>
               ))}
             </div>
           </div>
         </form>
-      </div>
+      </Container>
     </>
   );
 };

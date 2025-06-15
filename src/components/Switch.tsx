@@ -27,7 +27,7 @@ const Switch: React.FC<SwitchProps> = ({ theme, setTheme }) => {
         } relative`}
       >
         <div
-          className={`absolute top-1 left-1 flex h-6 w-6 items-center justify-center rounded-full transition-all duration-500 shadow-md ${
+          className={`absolute left-1 top-1 flex h-6 w-6 items-center justify-center rounded-full shadow-md transition-all duration-500 ${
             isDark
               ? "translate-x-8 bg-black text-[#C8BCF6]"
               : "bg-[#C8BCF6] text-[#F4F4F4]"

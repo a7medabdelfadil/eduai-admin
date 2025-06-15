@@ -4,9 +4,10 @@ import Link from "next/link";
 import { useSelector } from "react-redux";
 import { RootState } from "@/GlobalRedux/store";
 import Spinner from "@/components/spinner";
+import { Text } from "@/components/Text";
+import Container from "@/components/Container";
 
 const FeesSearch = () => {
-  const booleanValue = useSelector((state: RootState) => state.boolean.value);
   const { language: currentLanguage, loading } = useSelector(
     (state: RootState) => state.language,
   );
@@ -19,22 +20,19 @@ const FeesSearch = () => {
     );
   return (
     <>
-      <div
-        className={`${
-          currentLanguage === "ar"
-            ? booleanValue
-              ? "lg:mr-[90px]"
-              : "lg:mr-[290px]"
-            : booleanValue
-              ? "lg:ml-[90px]"
-              : "lg:ml-[290px]"
-        } mt-12`}
-      >
-        <div className="flex h-full w-full justify-center overflow-auto p-2">
+      <Container>
+        <Text font="bold" size="3xl">
+          {currentLanguage === "ar"
+            ? "بحث"
+            : currentLanguage === "fr"
+              ? "Recherche"
+              : "Search"}
+        </Text>
+        <div className="flex h-full w-full justify-center overflow-auto my-4">
           <div className="grid h-full w-full overflow-auto rounded-xl bg-bgPrimary">
             <div
               dir={currentLanguage === "ar" ? "rtl" : "ltr"}
-              className="flex h-[70px] items-center gap-7 overflow-auto rounded-t-xl bg-bgPrimary px-3 font-semibold"
+              className="flex h-[70px] items-center gap-7 overflow-auto rounded-t-xl bg-bgRowTable px-3 font-semibold"
             >
               <Link
                 className="underline-offset-4 hover:text-blue-500 hover:underline"
@@ -190,7 +188,7 @@ const FeesSearch = () => {
             </div>
           </div>
         </div>
-      </div>
+      </Container>
     </>
   );
 };

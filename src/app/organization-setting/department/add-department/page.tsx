@@ -89,7 +89,7 @@ const AddDepartment = () => {
     <>
       <BreadCrumbs breadcrumbs={breadcrumbs} />
       <Container>
-        <div className="mb-8 -mt-2 -ml-1 flex items-center justify-between">
+        <div className="-ml-1 -mt-2 mb-8 flex items-center justify-between">
           <h1 className="text-3xl font-semibold">
             {currentLanguage === "en"
               ? "Add Department"
@@ -101,8 +101,11 @@ const AddDepartment = () => {
             {/* default */}
           </h1>
         </div>
-        <form className="flex h-full w-full items-center justify-center" onSubmit={handleSubmit(onSubmit)}>
-          <div className="rounded-xl bg-bgPrimary p-10 w-[90] md:w-[80%]">
+        <form
+          className="flex h-full w-full items-center justify-center"
+          onSubmit={handleSubmit(onSubmit)}
+        >
+          <div className="w-[90] rounded-xl bg-bgPrimary p-10 md:w-[80%]">
             <div className="flex items-center justify-start gap-2">
               <svg
                 className="h-6 w-6 font-bold text-secondary group-hover:text-primary"
@@ -134,7 +137,7 @@ const AddDepartment = () => {
                     : "Department Information"}
               </h1>
             </div>
-            <div className="p-6 grid grid-cols-2 gap-4 max-[1278px]:grid-cols-1">
+            <div className="grid grid-cols-2 gap-4 p-6 max-[1278px]:grid-cols-1">
               <label
                 htmlFor="name_en"
                 className="grid text-[18px] font-semibold"

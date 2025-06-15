@@ -4,7 +4,11 @@ import { Text } from "./Text";
 import { useEffect, useState, useRef } from "react";
 import Input from "./Input";
 import ImageComponent from "./ImageSrc";
-import { useDeletePostCommentMutation, useUpdatePostCommentMutation, useLikePostCommentMutation } from "@/features/communication/postApi";
+import {
+  useDeletePostCommentMutation,
+  useUpdatePostCommentMutation,
+  useLikePostCommentMutation,
+} from "@/features/communication/postApi";
 
 const Comment = ({
   userName,
@@ -31,8 +35,10 @@ const Comment = ({
   const [isEditing, setIsEditing] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false); // For controlling the menu visibility
 
-  const [updateComment, { error: updateError }] = useUpdatePostCommentMutation();
-  const [deleteComment, { error: deleteError }] = useDeletePostCommentMutation();
+  const [updateComment, { error: updateError }] =
+    useUpdatePostCommentMutation();
+  const [deleteComment, { error: deleteError }] =
+    useDeletePostCommentMutation();
   const [likeComment, { error: likeError }] = useLikePostCommentMutation(); // Mutation for liking the comment
 
   const menuRef = useRef<HTMLDivElement | null>(null); // Ref for the menu
@@ -45,10 +51,12 @@ const Comment = ({
 
   // Handle delete button click
   const handleDeleteClick = () => {
-    deleteComment({ postId, commentId }).unwrap().then(() => {
-      refetchComments(); // Refetch comments only after successful deletion
-      setIsMenuOpen(false); // Close the menu
-    });
+    deleteComment({ postId, commentId })
+      .unwrap()
+      .then(() => {
+        refetchComments(); // Refetch comments only after successful deletion
+        setIsMenuOpen(false); // Close the menu
+      });
   };
 
   // Handle comment input change
@@ -97,18 +105,18 @@ const Comment = ({
   return (
     <div className="mb-4 flex">
       <div className="mr-4">
-      <ImageComponent
-        fallbackSrc="/images/noImage.png"
-        priority={true}
+        <ImageComponent
+          fallbackSrc="/images/noImage.png"
+          priority={true}
           src={imageUrl}
           alt="Profile Photo"
-          className="rounded-full w-[60px] h-[60px]"
+          className="h-[60px] w-[60px] rounded-full"
           width={60}
           height={60}
         />
       </div>
       <div>
-        <div className="flex justify-between gap-4 rounded-xl bg-comment p-4">
+        <div className="bg-comment flex justify-between gap-4 rounded-xl p-4">
           <div>
             <Text className="font-semibold">{userName}</Text>
             {isEditing ? (

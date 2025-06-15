@@ -51,7 +51,7 @@ const FeesManagement = () => {
   const [search, setSearch] = useState("");
 
   const { language: currentLanguage } = useSelector(
-    (state: RootState) => state.language
+    (state: RootState) => state.language,
   );
 
   const translate = {
@@ -97,18 +97,17 @@ const FeesManagement = () => {
   };
 
   const filteredData = data?.data?.content?.filter((invoice: any) =>
-    invoice.billedToName.toLowerCase().includes(search.trim().toLowerCase())
+    invoice.billedToName.toLowerCase().includes(search.trim().toLowerCase()),
   );
 
   const [visibleCount, setVisibleCount] = useState(20);
   const visibleData = filteredData?.slice(0, visibleCount);
 
-
   return (
     <>
       <BreadCrumbs breadcrumbs={breadcrumbs} />
       <Container>
-        <div className="mb-6 -mt-2 -ml-1 flex items-center justify-between">
+        <div className="-ml-1 -mt-2 mb-6 flex items-center justify-between">
           <h1 className="text-3xl font-semibold">
             {currentLanguage === "en"
               ? "Fees Management"
@@ -117,8 +116,8 @@ const FeesManagement = () => {
                 : "Gestion des documents"}
           </h1>
         </div>
-        <div className="bg-bgPrimary rounded-xl">
-          <div className="flex flex-col md:flex-row justify-between items-center gap-4 px-4 py-4 rounded-lg">
+        <div className="rounded-xl bg-bgPrimary">
+          <div className="flex flex-col items-center justify-between gap-4 rounded-lg px-4 py-4 md:flex-row">
             <div
               dir={currentLanguage === "ar" ? "rtl" : "ltr"}
               className="relative w-full max-w-md"
@@ -128,9 +127,9 @@ const FeesManagement = () => {
               </div>
               <div className="flex items-center gap-2">
                 <input
-                  onChange={(e) => setSearch(e.target.value)}
+                  onChange={e => setSearch(e.target.value)}
                   type="text"
-                  className="w-full border-borderPrimary bg-bgPrimary rounded-lg border-2 px-4 py-2 ps-11 text-lg outline-none"
+                  className="w-full rounded-lg border-2 border-borderPrimary bg-bgPrimary px-4 py-2 ps-11 text-lg outline-none"
                   placeholder={translate.searchPlaceholder}
                 />
                 <span className="min-w-[120px] text-primary">
@@ -150,7 +149,7 @@ const FeesManagement = () => {
                   : "+ Ajouter des factures"}
             </Link>
           </div>
-          <div className="relative overflow-auto shadow-md sm:rounded-lg bg-bgPrimary">
+          <div className="relative overflow-auto bg-bgPrimary shadow-md sm:rounded-lg">
             <Table>
               <TableHeader>
                 <TableRow>
@@ -161,12 +160,48 @@ const FeesManagement = () => {
                         ? "الاسم"
                         : "Nom"}
                   </TableHead>
-                  <TableHead>{currentLanguage === "en" ? "Paid Amount" : currentLanguage === "ar" ? "المبلغ المدفوع" : "Montant Payé"}</TableHead>
-                  <TableHead>{currentLanguage === "en" ? "Total Fees Amount" : currentLanguage === "ar" ? "إجمالي مبلغ الرسوم" : "Montant Total des Frais"}</TableHead>
-                  <TableHead>{currentLanguage === "en" ? "Invoice Date" : currentLanguage === "ar" ? "تاريخ الفاتورة" : "Date de la Facture"}</TableHead>
-                  <TableHead>{currentLanguage === "en" ? "Status" : currentLanguage === "ar" ? "الحالة" : "Statut"}</TableHead>
-                  <TableHead>{currentLanguage === "en" ? "Discount" : currentLanguage === "ar" ? "الخصم" : "Réduction"}</TableHead>
-                  <TableHead>{currentLanguage === "en" ? "Action" : currentLanguage === "ar" ? "الإجراء" : "Action"}</TableHead>
+                  <TableHead>
+                    {currentLanguage === "en"
+                      ? "Paid Amount"
+                      : currentLanguage === "ar"
+                        ? "المبلغ المدفوع"
+                        : "Montant Payé"}
+                  </TableHead>
+                  <TableHead>
+                    {currentLanguage === "en"
+                      ? "Total Fees Amount"
+                      : currentLanguage === "ar"
+                        ? "إجمالي مبلغ الرسوم"
+                        : "Montant Total des Frais"}
+                  </TableHead>
+                  <TableHead>
+                    {currentLanguage === "en"
+                      ? "Invoice Date"
+                      : currentLanguage === "ar"
+                        ? "تاريخ الفاتورة"
+                        : "Date de la Facture"}
+                  </TableHead>
+                  <TableHead>
+                    {currentLanguage === "en"
+                      ? "Status"
+                      : currentLanguage === "ar"
+                        ? "الحالة"
+                        : "Statut"}
+                  </TableHead>
+                  <TableHead>
+                    {currentLanguage === "en"
+                      ? "Discount"
+                      : currentLanguage === "ar"
+                        ? "الخصم"
+                        : "Réduction"}
+                  </TableHead>
+                  <TableHead>
+                    {currentLanguage === "en"
+                      ? "Action"
+                      : currentLanguage === "ar"
+                        ? "الإجراء"
+                        : "Action"}
+                  </TableHead>
                 </TableRow>
               </TableHeader>
 
@@ -193,15 +228,19 @@ const FeesManagement = () => {
                       <TableCell>{invoice.billedToName}</TableCell>
                       <TableCell>{invoice.paidAmount}</TableCell>
                       <TableCell>{invoice.totalFeesAmount}</TableCell>
-                      <TableCell>{formatTransactionDate(invoice.creationDate)}</TableCell>
+                      <TableCell>
+                        {formatTransactionDate(invoice.creationDate)}
+                      </TableCell>
                       <TableCell>
                         {invoice.paymentStatus === "NOT_FULLY_PAID" ? (
                           <div className="flex items-center gap-2 font-semibold text-error">
-                            <div className="h-2.5 w-2.5 rounded-full bg-error"></div> Unpaid
+                            <div className="h-2.5 w-2.5 rounded-full bg-error"></div>{" "}
+                            Unpaid
                           </div>
                         ) : (
                           <div className="flex items-center gap-2 font-semibold text-primary">
-                            <div className="h-2.5 w-2.5 rounded-full bg-primary"></div> Paid
+                            <div className="h-2.5 w-2.5 rounded-full bg-primary"></div>{" "}
+                            Paid
                           </div>
                         )}
                       </TableCell>
@@ -209,17 +248,42 @@ const FeesManagement = () => {
                       <TableCell>
                         <div className="flex items-center gap-3">
                           <button onClick={() => handleDelete(invoice.id)}>
-                            <svg className="h-6 w-6 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                            <svg
+                              className="h-6 w-6 text-red-500"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              stroke="currentColor"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth="2"
+                                d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                              />
                             </svg>
                           </button>
                           <Link
                             href={`/fees-management/${invoice.id}`}
                             className="font-medium text-blue-600 hover:underline"
                           >
-                            <svg className="h-6 w-6 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                            <svg
+                              className="h-6 w-6 text-blue-500"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              stroke="currentColor"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth="2"
+                                d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                              />
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth="2"
+                                d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
+                              />
                             </svg>
                           </Link>
                         </div>
@@ -230,7 +294,9 @@ const FeesManagement = () => {
               </TableBody>
             </Table>
             {visibleCount < (filteredData?.length || 0) && (
-              <SeeMoreButton onClick={() => setVisibleCount(prev => prev + 20)} />
+              <SeeMoreButton
+                onClick={() => setVisibleCount(prev => prev + 20)}
+              />
             )}
           </div>
         </div>

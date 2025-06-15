@@ -55,7 +55,7 @@ const EditExam = () => {
     <>
       <BreadCrumbs breadcrumbs={breadcrumbs} />
       <Container>
-        <div className="mb-8 -mt-2 -ml-1 flex items-center justify-between">
+        <div className="-ml-1 -mt-2 mb-8 flex items-center justify-between">
           <h1 className="text-3xl font-semibold">
             {currentLanguage === "en"
               ? "Edit Exam"
@@ -68,7 +68,7 @@ const EditExam = () => {
           </h1>
         </div>
         <form className="flex h-full w-full items-center justify-center">
-          <div className="rounded-xl bg-bgPrimary p-10 w-[90] md:w-[80%]">
+          <div className="w-[90] rounded-xl bg-bgPrimary p-10 md:w-[80%]">
             <div className="flex items-center justify-start gap-2">
               <svg
                 className="h-6 w-6 font-bold text-secondary group-hover:text-hover"
@@ -101,7 +101,7 @@ const EditExam = () => {
                 {/* default */}
               </h1>
             </div>
-            <div className="p-6 grid grid-cols-2 gap-4 max-[1278px]:grid-cols-1">
+            <div className="grid grid-cols-2 gap-4 p-6 max-[1278px]:grid-cols-1">
               <label
                 htmlFor="annual"
                 className="grid text-[18px] font-semibold"
@@ -116,7 +116,7 @@ const EditExam = () => {
                 <input
                   id="annual"
                   type="number"
-                  className="w-full bg-bgPrimary rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                   placeholder={
                     currentLanguage === "ar"
                       ? "أدخل اسم الامتحان"
@@ -140,7 +140,7 @@ const EditExam = () => {
                 <input
                   id="annual"
                   type="number"
-                  className="w-full bg-bgPrimary rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                   placeholder={
                     currentLanguage === "ar"
                       ? "أدخل درجة الامتحان"
@@ -164,7 +164,7 @@ const EditExam = () => {
                 <input
                   id="annual"
                   type="number"
-                  className="w-full bg-bgPrimary rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                   placeholder={
                     currentLanguage === "ar"
                       ? "أدخل درجة النجاح"
@@ -186,7 +186,7 @@ const EditExam = () => {
                     : "Study Level"}
                 <select
                   id="leaveType"
-                  className="w-full bg-bgPrimary rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                   {...register("leaveType", { required: true })}
                 >
                   <option value="">

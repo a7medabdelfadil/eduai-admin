@@ -13,6 +13,8 @@ import { RootState } from "@/GlobalRedux/store";
 import { toast } from "react-toastify";
 import Pagination from "@/components/pagination";
 import BreadCrumbs from "@/components/BreadCrumbs";
+import Container from "@/components/Container";
+import { BiSearchAlt } from "react-icons/bi";
 
 const WorkerAttendance = () => {
   const breadcrumbs = [
@@ -111,10 +113,15 @@ const WorkerAttendance = () => {
     setCurrentPage(0);
   };
 
-
   const { language: currentLanguage, loading } = useSelector(
     (state: RootState) => state.language,
   );
+
+  const filteredEmployees = data?.data.content.filter((employee: Employee) =>
+    search.trim() === ""
+      ? true
+      : employee.userFullName?.toLowerCase()?.includes(search.toLowerCase())
+  ) || [];
 
   if (loading || isLoading)
     return (
@@ -125,66 +132,37 @@ const WorkerAttendance = () => {
   return (
     <>
       <BreadCrumbs breadcrumbs={breadcrumbs} />
-      <div
-        dir={currentLanguage === "ar" ? "rtl" : "ltr"}
-        className={`${
-          currentLanguage === "ar"
-            ? booleanValue
-              ? "lg:mr-[100px]"
-              : "lg:mr-[270px]"
-            : booleanValue
-              ? "lg:ml-[100px]"
-              : "lg:ml-[270px]"
-        } relative mx-3 mt-10 h-screen overflow-x-auto bg-transparent sm:rounded-lg`}
-      >
-        <div className="flex justify-between text-center max-[502px]:grid max-[502px]:justify-center">
-          <div className="mb-3">
-            <label htmlFor="icon" className="sr-only">
-              Search
-            </label>
-            <div className="relative min-w-72 md:min-w-80">
-              <div className="pointer-events-none absolute inset-y-0 start-0 z-20 flex items-center ps-4">
-                <svg
-                  className="size-4 flex-shrink-0 text-gray-400"
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                >
-                  <circle cx="11" cy="11" r="8" />
-                  <path d="m21 21-4.3-4.3" />
-                </svg>
-              </div>
-              <input
-                onChange={e => setSearch(e.target.value)}
-                type="text"
-                id="icon"
-                name="icon"
-                className="block w-full rounded-lg border-2 border-borderPrimary px-4 py-2 ps-11 text-sm outline-none focus:border-blue-500 focus:ring-blue-500 disabled:pointer-events-none disabled:opacity-50"
-                placeholder={
-                  currentLanguage === "en"
-                    ? "Search"
-                    : currentLanguage === "ar"
-                      ? "بحث"
-                      : "Recherche"
-                }
-              />
-            </div>
+      <Container>
+        {/* Search Input */}
+        <div
+          dir={currentLanguage === "ar" ? "rtl" : "ltr"}
+          className="relative w-full max-w-md mb-4"
+        >
+          <div className="pointer-events-none absolute inset-y-0 start-0 z-20 flex items-center ps-4">
+            <BiSearchAlt className="text-secondary" size={18} />
+          </div>
+          <div className="flex items-center gap-2">
+            <input
+              onChange={e => setSearch(e.target.value)}
+              type="text"
+              className="w-full rounded-lg border-2 border-borderPrimary bg-bgPrimary px-4 py-2 ps-11 text-lg outline-none"
+              placeholder={currentLanguage === "ar"
+                ? "بحث"
+                : currentLanguage === "fr"
+                  ? "Rechercher"
+                  : "Search"}
+            />
+            <span className="min-w-[120px] text-primary">
+              {filteredEmployees?.length ?? 0} {currentLanguage === "ar"
+                ? "نتيجة"
+                : currentLanguage === "fr"
+                  ? "résultat(s)"
+                  : "Result(s)"}
+            </span>
           </div>
         </div>
         <div className="flex flex-wrap justify-center gap-4">
-          {data?.data.content
-            .filter((employee: Employee) => {
-              return search.toLocaleLowerCase() === ""
-                ? employee
-                : employee.userFullName.toLocaleLowerCase().includes(search);
-            })
-            .map((employee: Employee, index: number) => (
+          {filteredEmployees?.map((employee: Employee, index: number) => (
               <div
                 key={index}
                 className="grid h-[320px] w-[300px] items-center justify-center rounded-xl bg-bgPrimary shadow-lg"
@@ -224,18 +202,17 @@ const WorkerAttendance = () => {
                   {["P", "A", "L"].map(label => (
                     <label
                       key={label}
-                      className={`flex h-[55px] w-[55px] cursor-pointer items-center justify-center rounded-full border border-borderPrimary p-5 text-center text-[24px] font-semibold ${
-                        selectedStates[index] === label ||
+                      className={`flex h-[55px] w-[55px] cursor-pointer items-center justify-center rounded-full border border-borderPrimary p-5 text-center text-[24px] font-semibold ${selectedStates[index] === label ||
                         (label === "P" && employee.status === "PRESENT") ||
                         (label === "L" && employee.status === "LEAVE") ||
                         (label === "A" && employee.status === "ABSENT")
-                          ? label === "P"
-                            ? "bg-success text-blackOrWhite"
-                            : label === "A"
-                              ? "bg-error text-blackOrWhite"
-                              : "bg-warning text-blackOrWhite"
-                          : "bg-bgSecondary"
-                      } `}
+                        ? label === "P"
+                          ? "bg-success text-blackOrWhite"
+                          : label === "A"
+                            ? "bg-error text-blackOrWhite"
+                            : "bg-warning text-blackOrWhite"
+                        : "bg-bgSecondary"
+                        } `}
                     >
                       <input
                         type="checkbox"
@@ -278,7 +255,7 @@ const WorkerAttendance = () => {
             onChangePage={onPageChange}
           />
         </div>
-      </div>
+      </Container>
     </>
   );
 };

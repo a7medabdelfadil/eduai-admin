@@ -1,20 +1,22 @@
 // components/MapComponent.tsx
-'use client';
+"use client";
 
-import { useEffect, useState, useRef } from 'react';
-import L from 'leaflet';
-import 'leaflet/dist/leaflet.css';
-import { Client } from '@stomp/stompjs';
-import Cookies from 'js-cookie';
-import markerIcon2x from 'leaflet/dist/images/marker-icon-2x.png';
-import markerIcon from 'leaflet/dist/images/marker-icon.png';
-import markerShadow from 'leaflet/dist/images/marker-shadow.png';
-import { baseUrlStock } from '@/components/BaseURL';
+import { useEffect, useState, useRef } from "react";
+import L from "leaflet";
+import "leaflet/dist/leaflet.css";
+import { Client } from "@stomp/stompjs";
+import Cookies from "js-cookie";
+import markerIcon2x from "leaflet/dist/images/marker-icon-2x.png";
+import markerIcon from "leaflet/dist/images/marker-icon.png";
+import markerShadow from "leaflet/dist/images/marker-shadow.png";
+import { baseUrlStock } from "@/components/BaseURL";
 
 export default function MapComponent({ busId }: { busId: string }) {
   const [connected, setConnected] = useState(false);
   const [isConnecting, setIsConnecting] = useState(false);
-  const [employeePosition, setEmployeePosition] = useState<[number, number] | null>(null);
+  const [employeePosition, setEmployeePosition] = useState<
+    [number, number] | null
+  >(null);
 
   const mapRef = useRef<L.Map | null>(null);
   const markerRef = useRef<L.Marker | null>(null);
@@ -36,16 +38,19 @@ export default function MapComponent({ busId }: { busId: string }) {
   useEffect(() => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
-        (position) => {
-          setEmployeePosition([position.coords.latitude, position.coords.longitude]);
+        position => {
+          setEmployeePosition([
+            position.coords.latitude,
+            position.coords.longitude,
+          ]);
         },
-        (error) => {
-          console.error('Geolocation error:', error);
+        error => {
+          console.error("Geolocation error:", error);
           setEmployeePosition([30.0444, 31.2357]); // fallback to Cairo
-        }
+        },
       );
     } else {
-      console.error('Geolocation not supported');
+      console.error("Geolocation not supported");
       setEmployeePosition([30.0444, 31.2357]); // fallback
     }
   }, []);
@@ -54,15 +59,18 @@ export default function MapComponent({ busId }: { busId: string }) {
   useEffect(() => {
     if (!employeePosition) return;
 
-    const map = L.map('map').setView(employeePosition, 10);
+    const map = L.map("map").setView(employeePosition, 10);
     mapRef.current = map;
 
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      attribution: '&copy; OpenStreetMap contributors',
+    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+      attribution: "&copy; OpenStreetMap contributors",
     }).addTo(map);
 
     // Add employee marker
-    employeeMarkerRef.current = L.marker(employeePosition).addTo(map).bindPopup('Employee').openPopup();
+    employeeMarkerRef.current = L.marker(employeePosition)
+      .addTo(map)
+      .bindPopup("Employee")
+      .openPopup();
 
     return () => {
       map.remove();
@@ -80,22 +88,22 @@ export default function MapComponent({ busId }: { busId: string }) {
     if (!busId || connected || isConnecting || !employeePosition) return;
 
     setIsConnecting(true);
-    const token = Cookies.get('token');
+    const token = Cookies.get("token");
 
     const client = new Client({
       brokerURL: `${baseUrlStock}ws?token=${token}`,
       reconnectDelay: 5000,
       heartbeatIncoming: 4000,
       heartbeatOutgoing: 4000,
-      debug: (str) => console.log(str),
+      debug: str => console.log(str),
     });
 
     client.onConnect = () => {
-      console.log('WebSocket Connected');
+      console.log("WebSocket Connected");
       setConnected(true);
       setIsConnecting(false);
 
-      client.subscribe(`/topic/bus-location/${busId}`, (message) => {
+      client.subscribe(`/topic/bus-location/${busId}`, message => {
         const data = JSON.parse(message.body);
         const { latitude, longitude } = data.data;
         const driverLatLng: [number, number] = [latitude, longitude];
@@ -106,7 +114,7 @@ export default function MapComponent({ busId }: { busId: string }) {
         } else {
           markerRef.current = L.marker(driverLatLng)
             .addTo(mapRef.current!)
-            .bindPopup('Driver')
+            .bindPopup("Driver")
             .openPopup();
         }
 
@@ -115,9 +123,9 @@ export default function MapComponent({ busId }: { busId: string }) {
           routeRef.current.setLatLngs([employeePosition, driverLatLng]);
         } else {
           routeRef.current = L.polyline([employeePosition, driverLatLng], {
-            color: 'blue',
+            color: "blue",
             weight: 4,
-            dashArray: '5,10',
+            dashArray: "5,10",
           }).addTo(mapRef.current!);
         }
 
@@ -127,7 +135,7 @@ export default function MapComponent({ busId }: { busId: string }) {
 
     client.onStompError = () => {
       setIsConnecting(false);
-      console.error('WebSocket connection error');
+      console.error("WebSocket connection error");
     };
 
     client.activate();
@@ -152,8 +160,8 @@ export default function MapComponent({ busId }: { busId: string }) {
   };
 
   return (
-    <div className="w-full h-[calc(100vh-220px)] rounded-md overflow-hidden shadow">
-      <div id="map" className="w-full h-full" />
+    <div className="h-[calc(100vh-220px)] w-full overflow-hidden rounded-md shadow">
+      <div id="map" className="h-full w-full" />
     </div>
   );
 }

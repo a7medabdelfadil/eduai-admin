@@ -28,7 +28,14 @@ export const studentApi = createApi({
   }),
   endpoints: builder => ({
     getAllStudents: builder.query({
-      query: ({ archived, page, size, graduated, gender = "", classRoom = "" }) =>
+      query: ({
+        archived,
+        page,
+        size,
+        graduated,
+        gender = "",
+        classRoom = "",
+      }) =>
         `/api/v1/management/student/all?size=${size}&page=${page}&archived=${archived}&graduated=${graduated}&genders=${gender}&classroom-names=${classRoom}`,
     }),
     //
@@ -58,7 +65,8 @@ export const studentApi = createApi({
     }),
     //
     getStudentExams: builder.query({
-      query: ({id, date}) => `/api/v1/student-study/schedule-at-date-for-admin-to-student?date=${date}&studentId=${id}`,
+      query: ({ id, date }) =>
+        `/api/v1/student-study/schedule-at-date-for-admin-to-student?date=${date}&studentId=${id}`,
     }),
     //
     getStudentUpdateById: builder.query({
@@ -70,7 +78,8 @@ export const studentApi = createApi({
     }),
     //
     getAllEducations: builder.query({
-      query: id => `/api/v1/management/education-system/all?size=1000000&page=0`,
+      query: id =>
+        `/api/v1/management/education-system/all?size=1000000&page=0`,
     }),
     //
     updateStudents: builder.mutation({

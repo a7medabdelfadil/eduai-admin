@@ -47,7 +47,7 @@ const GraduateStudent = () => {
   ];
 
   const { language: currentLanguage } = useSelector(
-    (state: RootState) => state.language
+    (state: RootState) => state.language,
   );
   const t = (en: string, ar: string, fr: string) =>
     currentLanguage === "ar" ? ar : currentLanguage === "fr" ? fr : en;
@@ -77,7 +77,7 @@ const GraduateStudent = () => {
   const filteredData = data?.data.content?.filter((student: any) =>
     search.trim() === ""
       ? true
-      : student.name?.toLowerCase().includes(search.toLowerCase())
+      : student.name?.toLowerCase().includes(search.toLowerCase()),
   );
 
   const displayedData = filteredData?.slice(0, visibleCount);
@@ -90,27 +90,37 @@ const GraduateStudent = () => {
           {t("All Students", "جميع الطلاب", "Tous les étudiants")}
         </Text>
 
-        <div className="flex items-center gap-4 mb-5 mt-3">
-          <Link className="hover:text-blue-500 hover:underline" href="/student">{t("Active Student", "طالب نشط", "Étudiant actif")}</Link>
+        <div className="mb-5 mt-3 flex items-center gap-4">
+          <Link className="hover:text-blue-500 hover:underline" href="/student">
+            {t("Active Student", "طالب نشط", "Étudiant actif")}
+          </Link>
           <Link className="text-blue-500 underline" href="/student/graduated">
             {t("Graduate Student", "طالب خريج", "Étudiant diplômé")}
           </Link>
         </div>
-        <div className="bg-bgPrimary rounded-xl">
-          <div className="flex flex-col md:flex-row justify-between items-center gap-4 px-4 py-4 rounded-lg">
-            <div dir={currentLanguage === "ar" ? "rtl" : "ltr"} className="relative w-full max-w-md">
+        <div className="rounded-xl bg-bgPrimary">
+          <div className="flex flex-col items-center justify-between gap-4 rounded-lg px-4 py-4 md:flex-row">
+            <div
+              dir={currentLanguage === "ar" ? "rtl" : "ltr"}
+              className="relative w-full max-w-md"
+            >
               <div className="pointer-events-none absolute inset-y-0 start-0 z-20 flex items-center ps-4">
                 <BiSearchAlt className="text-secondary" size={18} />
               </div>
               <div className="flex items-center gap-2">
                 <input
-                  onChange={(e) => setSearch(e.target.value)}
+                  onChange={e => setSearch(e.target.value)}
                   type="text"
-                  className="w-full border-borderPrimary bg-bgPrimary rounded-lg border-2 px-4 py-2 ps-11 text-lg outline-none"
-                  placeholder={t("Search anything", "ابحث عن أي شيء", "Rechercher n'importe quoi")}
+                  className="w-full rounded-lg border-2 border-borderPrimary bg-bgPrimary px-4 py-2 ps-11 text-lg outline-none"
+                  placeholder={t(
+                    "Search anything",
+                    "ابحث عن أي شيء",
+                    "Rechercher n'importe quoi",
+                  )}
                 />
                 <span className="min-w-[120px] text-primary">
-                  {filteredData?.length ?? 0} {t("Result(s)", "نتيجة", "résultat(s)")}
+                  {filteredData?.length ?? 0}{" "}
+                  {t("Result(s)", "نتيجة", "résultat(s)")}
                 </span>
               </div>
             </div>
@@ -122,16 +132,22 @@ const GraduateStudent = () => {
               {t("+ New Student", "+ طالب جديد", "+ Nouvel Élève")}
             </Link>
           </div>
-          <div className="relative overflow-auto shadow-md sm:rounded-lg bg-bgPrimary">
+          <div className="relative overflow-auto bg-bgPrimary shadow-md sm:rounded-lg">
             <Table>
               <TableHeader>
                 <TableRow>
                   <TableHead>{t("Name", "الاسم", "Nom")}</TableHead>
                   <TableHead>{t("ID", "الرقم التعريفي", "ID")}</TableHead>
                   <TableHead>{t("Gender", "الجنس", "Genre")}</TableHead>
-                  <TableHead>{t("Nationality", "الجنسية", "Nationalité")}</TableHead>
-                  <TableHead>{t("Email", "البريد الإلكتروني", "E-mail")}</TableHead>
-                  <TableHead>{t("Mobile", "الهاتف المحمول", "Mobile")}</TableHead>
+                  <TableHead>
+                    {t("Nationality", "الجنسية", "Nationalité")}
+                  </TableHead>
+                  <TableHead>
+                    {t("Email", "البريد الإلكتروني", "E-mail")}
+                  </TableHead>
+                  <TableHead>
+                    {t("Mobile", "الهاتف المحمول", "Mobile")}
+                  </TableHead>
                   <TableHead>{t("View", "عرض", "Voir")}</TableHead>
                   <TableHead>{t("Action", "الإجراء", "Action")}</TableHead>
                 </TableRow>
@@ -152,8 +168,15 @@ const GraduateStudent = () => {
                   ))
                 ) : displayedData?.length === 0 ? (
                   <TableRow>
-                    <TableCell colSpan={8} className="text-center py-6 text-gray-500">
-                      {t("No data available", "لا توجد بيانات", "Aucune donnée")}
+                    <TableCell
+                      colSpan={8}
+                      className="py-6 text-center text-gray-500"
+                    >
+                      {t(
+                        "No data available",
+                        "لا توجد بيانات",
+                        "Aucune donnée",
+                      )}
                     </TableCell>
                   </TableRow>
                 ) : (
@@ -177,7 +200,7 @@ const GraduateStudent = () => {
                       <TableCell>
                         <Link
                           href={`/student/view-student/${student.id}`}
-                          className="text-primary hover:underline text-sm"
+                          className="text-sm text-primary hover:underline"
                         >
                           {t("View", "عرض", "Voir")}
                         </Link>
@@ -185,7 +208,7 @@ const GraduateStudent = () => {
                       <TableCell>
                         <button
                           onClick={() => handleDelete(student.id)}
-                          className="rounded bg-error px-2 py-1 text-white text-sm hover:scale-105"
+                          className="rounded bg-error px-2 py-1 text-sm text-white hover:scale-105"
                         >
                           {t("Lock", "قفل", "Verrouiller")}
                         </button>
@@ -197,7 +220,9 @@ const GraduateStudent = () => {
             </Table>
 
             {filteredData?.length > visibleCount && (
-              <SeeMoreButton onClick={() => setVisibleCount(prev => prev + 10)} />
+              <SeeMoreButton
+                onClick={() => setVisibleCount(prev => prev + 10)}
+              />
             )}
           </div>
         </div>

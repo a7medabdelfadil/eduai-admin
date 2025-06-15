@@ -26,11 +26,8 @@ const AttendCard: React.FC<CardProps> = ({
   );
 
   return (
-    <Link
-      href={href}
-      className="flex items-center justify-center text-center"
-    >
-      <div className="grid h-[180px] w-full max-w-[300px] items-center justify-center rounded-xl bg-bgPrimary px-3 py-2 shadow-lg dark:shadow-[0_5px_20px_rgba(255,255,255,0.25)] transition-shadow">
+    <Link href={href} className="flex items-center justify-center text-center">
+      <div className="grid h-[180px] w-full max-w-[300px] items-center justify-center rounded-xl bg-bgPrimary px-3 py-2 shadow-lg transition-shadow dark:shadow-[0_5px_20px_rgba(255,255,255,0.25)]">
         <div className="flex items-center justify-between gap-5">
           <div className="grid items-center justify-center gap-2 text-start">
             <p className="mt-2 text-[17px] font-semibold text-secondary">
@@ -47,7 +44,6 @@ const AttendCard: React.FC<CardProps> = ({
                     ? "Absents aujourd’hui"
                     : "Absence today"}
             </p>
-
           </div>
           <div className="grid h-[50px] w-[50px] items-center justify-center rounded-full bg-attendance">
             {imgSrc ? <img src={imgSrc} alt={title} /> : icon}

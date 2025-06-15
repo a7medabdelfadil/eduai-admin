@@ -195,7 +195,7 @@ const AddNewStudent = () => {
     <>
       <BreadCrumbs breadcrumbs={breadcrumbs} />
       <Container>
-        <div className="mb-8 -mt-2 -ml-1 flex items-center justify-between">
+        <div className="-ml-1 -mt-2 mb-8 flex items-center justify-between">
           <h1 className="text-3xl font-semibold">
             {currentLanguage === "en"
               ? "Add New Student"
@@ -207,8 +207,11 @@ const AddNewStudent = () => {
             {/* default */}
           </h1>
         </div>
-        <form className="flex justify-center items-center w-full h-full" onSubmit={handleSubmit(onSubmit)}>
-          <div className="rounded-xl bg-bgPrimary p-10 w-[90] md:w-[80%]">
+        <form
+          className="flex h-full w-full items-center justify-center"
+          onSubmit={handleSubmit(onSubmit)}
+        >
+          <div className="w-[90] rounded-xl bg-bgPrimary p-10 md:w-[80%]">
             <div className="flex items-center justify-start gap-2">
               <svg
                 className="h-6 w-6 font-bold text-secondary group-hover:text-hover"
@@ -245,7 +248,7 @@ const AddNewStudent = () => {
             {backendError && (
               <div className="text-center text-error">{backendError}</div>
             )}
-            <div className="p-6 grid grid-cols-2 gap-4 max-[1278px]:grid-cols-1">
+            <div className="grid grid-cols-2 gap-4 p-6 max-[1278px]:grid-cols-1">
               {/* Parent ID dropdown */}
               <label
                 htmlFor="parentId"
@@ -590,9 +593,9 @@ const AddNewStudent = () => {
                         age > 6 ||
                         (age === 6 &&
                           today >=
-                          new Date(
-                            birthDate.setFullYear(today.getFullYear()),
-                          ));
+                            new Date(
+                              birthDate.setFullYear(today.getFullYear()),
+                            ));
                       return isOlderThanSix;
                     },
                   })}
@@ -631,7 +634,7 @@ const AddNewStudent = () => {
                   defaultValue=""
                   id="studyLevel"
                   {...register("studyLevel", { required: true })}
-                  className={`border ${errors.studyLevel ? "border-warning" : "border-borderPrimary"} bg-bgPrimary h-full w-full rounded-xl px-4 py-3 text-sm text-blackOrWhite outline-none max-[458px]:w-[350px]`}
+                  className={`border ${errors.studyLevel ? "border-warning" : "border-borderPrimary"} h-full w-full rounded-xl bg-bgPrimary px-4 py-3 text-sm text-blackOrWhite outline-none max-[458px]:w-[350px]`}
                 >
                   <option selected value="">
                     {currentLanguage === "ar"
@@ -671,7 +674,7 @@ const AddNewStudent = () => {
                   defaultValue=""
                   id="language"
                   {...register("language", { required: true })}
-                  className={`border ${errors.language ? "border-warning" : "border-borderPrimary"} bg-bgPrimary h-full w-full rounded-xl px-4 py-3 text-sm text-blackOrWhite outline-none max-[458px]:w-[350px]`}
+                  className={`border ${errors.language ? "border-warning" : "border-borderPrimary"} h-full w-full rounded-xl bg-bgPrimary px-4 py-3 text-sm text-blackOrWhite outline-none max-[458px]:w-[350px]`}
                 >
                   <option selected value="">
                     {currentLanguage === "ar"

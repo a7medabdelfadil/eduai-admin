@@ -147,8 +147,6 @@ const Events = () => {
     }
   };
 
-
-
   // Function to get error message based on current language
   const getErrorMessage = (message: string) => {
     switch (message) {

@@ -237,18 +237,20 @@ const Employee = () => {
   };
 
   const [visibleCount, setVisibleCount] = useState(20);
-  const filteredData = data?.data?.content?.filter((employee: Employee) =>
-    search.trim() === "" ? true : employee.name?.toLowerCase().includes(search.trim().toLowerCase())
-  ) || [];
+  const filteredData =
+    data?.data?.content?.filter((employee: Employee) =>
+      search.trim() === ""
+        ? true
+        : employee.name?.toLowerCase().includes(search.trim().toLowerCase()),
+    ) || [];
   const visibleData = filteredData.slice(0, visibleCount);
-
 
   return (
     <>
       <BreadCrumbs breadcrumbs={breadcrumbs} />
       <Container>
-        <div className="flex flex-col md:flex-row justify-start md:justify-between items-between md:items-center">
-          <div className="mb-8 -mt-2 -ml-1 flex items-center justify-between">
+        <div className="items-between flex flex-col justify-start md:flex-row md:items-center md:justify-between">
+          <div className="-ml-1 -mt-2 mb-8 flex items-center justify-between">
             <h1 className="text-2xl font-semibold">
               {currentLanguage === "ar"
                 ? "جميع الموظفين"
@@ -258,7 +260,7 @@ const Employee = () => {
               {/* default */}
             </h1>
           </div>
-          <div className="flex self-end items-center justify-between">
+          <div className="flex items-center justify-between self-end">
             <div className="flex gap-4">
               <button
                 onClick={handleOpenModal}
@@ -318,7 +320,7 @@ const Employee = () => {
                   type="text"
                   id="icon"
                   name="icon"
-                  className="border-borderSecondary block w-full rounded-lg border-2 px-4 py-2 ps-11 text-lg outline-none disabled:pointer-events-none disabled:opacity-50 dark:border-borderPrimary"
+                  className="border-borderSecondary block w-full rounded-lg border-2 bg-bgPrimary px-4 py-2 ps-11 text-lg outline-none disabled:pointer-events-none disabled:opacity-50 dark:border-borderPrimary"
                   placeholder={
                     currentLanguage === "ar"
                       ? "ابحث عن أي شيء"
@@ -354,19 +356,62 @@ const Employee = () => {
             </Link>
           </div>
         </div>
-        <div className="-mt-4 relative overflow-auto shadow-md sm:rounded-lg bg-bgPrimary">
-
+        <div className="relative -mt-4 overflow-auto bg-bgPrimary shadow-md sm:rounded-lg">
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>{currentLanguage === "ar" ? "الاسم الكامل" : currentLanguage === "fr" ? "Nom complet" : "Full Name"}</TableHead>
-                <TableHead>{currentLanguage === "ar" ? "الرقم" : "ID"}</TableHead>
-                <TableHead>{currentLanguage === "ar" ? "الجنس" : currentLanguage === "fr" ? "Genre" : "Gender"}</TableHead>
-                <TableHead>{currentLanguage === "ar" ? "الجنسية" : currentLanguage === "fr" ? "Nationalité" : "Nationality"}</TableHead>
-                <TableHead>{currentLanguage === "ar" ? "البريد الإلكتروني" : currentLanguage === "fr" ? "Courriel" : "Email"}</TableHead>
-                <TableHead>{currentLanguage === "ar" ? "الهاتف المحمول" : currentLanguage === "fr" ? "Téléphone" : "Mobile"}</TableHead>
-                <TableHead>{currentLanguage === "ar" ? "عرض" : currentLanguage === "fr" ? "Voir" : "View"}</TableHead>
-                <TableHead>{currentLanguage === "ar" ? "الإجراء" : currentLanguage === "fr" ? "Action" : "Action"}</TableHead>
+                <TableHead>
+                  {currentLanguage === "ar"
+                    ? "الاسم الكامل"
+                    : currentLanguage === "fr"
+                      ? "Nom complet"
+                      : "Full Name"}
+                </TableHead>
+                <TableHead>
+                  {currentLanguage === "ar" ? "الرقم" : "ID"}
+                </TableHead>
+                <TableHead>
+                  {currentLanguage === "ar"
+                    ? "الجنس"
+                    : currentLanguage === "fr"
+                      ? "Genre"
+                      : "Gender"}
+                </TableHead>
+                <TableHead>
+                  {currentLanguage === "ar"
+                    ? "الجنسية"
+                    : currentLanguage === "fr"
+                      ? "Nationalité"
+                      : "Nationality"}
+                </TableHead>
+                <TableHead>
+                  {currentLanguage === "ar"
+                    ? "البريد الإلكتروني"
+                    : currentLanguage === "fr"
+                      ? "Courriel"
+                      : "Email"}
+                </TableHead>
+                <TableHead>
+                  {currentLanguage === "ar"
+                    ? "الهاتف المحمول"
+                    : currentLanguage === "fr"
+                      ? "Téléphone"
+                      : "Mobile"}
+                </TableHead>
+                <TableHead>
+                  {currentLanguage === "ar"
+                    ? "عرض"
+                    : currentLanguage === "fr"
+                      ? "Voir"
+                      : "View"}
+                </TableHead>
+                <TableHead>
+                  {currentLanguage === "ar"
+                    ? "الإجراء"
+                    : currentLanguage === "fr"
+                      ? "Action"
+                      : "Action"}
+                </TableHead>
               </TableRow>
             </TableHeader>
 
@@ -383,7 +428,10 @@ const Employee = () => {
                 ))
               ) : !visibleData || visibleData.length === 0 ? (
                 <TableRow>
-                  <TableCell colSpan={8} className="text-center font-medium py-6">
+                  <TableCell
+                    colSpan={8}
+                    className="py-6 text-center font-medium"
+                  >
                     {currentLanguage === "ar"
                       ? "لا توجد بيانات"
                       : currentLanguage === "fr"
@@ -396,14 +444,16 @@ const Employee = () => {
                   .filter((employee: Employee) =>
                     search.trim() === ""
                       ? true
-                      : employee.name?.toLowerCase().includes(search.trim().toLowerCase())
+                      : employee.name
+                          ?.toLowerCase()
+                          .includes(search.trim().toLowerCase()),
                   )
                   .map((employee: Employee, index: number) => (
                     <TableRow
                       className="cursor-pointer"
                       data-index={index}
                       key={employee.id}
-                      onClick={(e) => {
+                      onClick={e => {
                         if ((e.target as HTMLElement).closest("a")) return;
                         setSelectedEmployee(employee);
                         setShowModal(true);
@@ -418,7 +468,9 @@ const Employee = () => {
                               alt="#"
                             />
                           </div>
-                          <p className="text-textPrimary">{String(employee.name)}</p>
+                          <p className="text-textPrimary">
+                            {String(employee.name)}
+                          </p>
                         </div>
                       </TableCell>
                       <TableCell>{employee.id}</TableCell>
@@ -431,19 +483,28 @@ const Employee = () => {
                           href={`/employee/view-employee/${employee.id}`}
                           className="font-medium text-blue-600 hover:underline"
                         >
-                          {currentLanguage === "en" ? "View" : currentLanguage === "ar" ? "عرض" : "Voir"}
+                          {currentLanguage === "en"
+                            ? "View"
+                            : currentLanguage === "ar"
+                              ? "عرض"
+                              : "Voir"}
                         </Link>
                       </TableCell>
                       <TableCell>
                         <button
                           onClick={() => handleDelete(employee.id)}
                           disabled={employee.role === "Admin"}
-                          className={`rounded-lg px-2 py-1 font-semibold text-white shadow-lg delay-150 duration-300 ease-in-out ${employee.role === "Admin"
-                            ? "cursor-not-allowed bg-red-800"
-                            : "bg-error hover:-translate-y-1 hover:scale-110"
-                            }`}
+                          className={`rounded-lg px-2 py-1 font-semibold text-white shadow-lg delay-150 duration-300 ease-in-out ${
+                            employee.role === "Admin"
+                              ? "cursor-not-allowed bg-red-800"
+                              : "bg-error hover:-translate-y-1 hover:scale-110"
+                          }`}
                         >
-                          {currentLanguage === "en" ? "Lock" : currentLanguage === "ar" ? "قفل" : "Verrouiller"}
+                          {currentLanguage === "en"
+                            ? "Lock"
+                            : currentLanguage === "ar"
+                              ? "قفل"
+                              : "Verrouiller"}
                         </button>
                       </TableCell>
                     </TableRow>
@@ -454,9 +515,7 @@ const Employee = () => {
           {visibleCount < filteredData.length && (
             <SeeMoreButton onClick={() => setVisibleCount(prev => prev + 20)} />
           )}
-
         </div>
-
       </Container>
       <Modal isOpen={isModalOpen} onClose={handleCloseModal}>
         <h1 className="text-lg font-semibold">Upload File</h1>

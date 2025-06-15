@@ -28,19 +28,14 @@ export const enrollmentApi = createApi({
   }),
   endpoints: builder => ({
     getEnrollmentStatus: builder.query({
-      query: () =>
-        "/api/v1/Enrollment/status",
+      query: () => "/api/v1/Enrollment/status",
     }),
-   
+
     getEnrollmentDate: builder.query({
-      query: () =>
-        "/api/v1/Enrollment/date",
+      query: () => "/api/v1/Enrollment/date",
     }),
-   
   }),
 });
 
-export const {
-  useGetEnrollmentStatusQuery,
-  useGetEnrollmentDateQuery
-} = enrollmentApi;
+export const { useGetEnrollmentStatusQuery, useGetEnrollmentDateQuery } =
+  enrollmentApi;

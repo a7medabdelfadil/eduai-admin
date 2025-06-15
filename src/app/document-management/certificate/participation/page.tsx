@@ -27,9 +27,24 @@ import SeeMoreButton from "@/components/SeeMoreButton";
 
 const Participation = () => {
   const breadcrumbs = [
-    { nameEn: "Administration", nameAr: "الإدارة", nameFr: "Administration", href: "/" },
-    { nameEn: "Document Management", nameAr: "إدارة المستندات", nameFr: "Gestion des documents", href: "/document-management" },
-    { nameEn: "Participation", nameAr: "مشاركة", nameFr: "Participation", href: "/document-management/certificate/participation" },
+    {
+      nameEn: "Administration",
+      nameAr: "الإدارة",
+      nameFr: "Administration",
+      href: "/",
+    },
+    {
+      nameEn: "Document Management",
+      nameAr: "إدارة المستندات",
+      nameFr: "Gestion des documents",
+      href: "/document-management",
+    },
+    {
+      nameEn: "Participation",
+      nameAr: "مشاركة",
+      nameFr: "Participation",
+      href: "/document-management/certificate/participation",
+    },
   ];
 
   type Participation = Record<string, any>;
@@ -37,30 +52,75 @@ const Participation = () => {
   const { data, isLoading, refetch } = useGetAllParticipationsQuery(null);
   const [deleteParticipation] = useDeleteParticipationsMutation();
 
-  const { language: currentLanguage } = useSelector((state: RootState) => state.language);
+  const { language: currentLanguage } = useSelector(
+    (state: RootState) => state.language,
+  );
 
   const translate = {
     searchPlaceholder:
-      currentLanguage === "ar" ? "ابحث عن اسم المستخدم" :
-        currentLanguage === "fr" ? "Rechercher un utilisateur" :
-          "Search user",
-    result: currentLanguage === "ar" ? "نتيجة" : currentLanguage === "fr" ? "résultat(s)" : "Result(s)",
-    noData: currentLanguage === "ar" ? "لا توجد بيانات" : currentLanguage === "fr" ? "Aucune donnée" : "No data available",
-    userName: currentLanguage === "ar" ? "اسم المستخدم" : currentLanguage === "fr" ? "Nom d'utilisateur" : "User Name",
-    userId: currentLanguage === "ar" ? "معرف المستخدم" : currentLanguage === "fr" ? "ID utilisateur" : "User Id",
-    role: currentLanguage === "ar" ? "الدور" : currentLanguage === "fr" ? "Rôle" : "Role",
-    issueDate: currentLanguage === "ar" ? "تاريخ الإصدار" : currentLanguage === "fr" ? "Date d'émission" : "Issue Date",
-    action: currentLanguage === "ar" ? "إجراء" : currentLanguage === "fr" ? "Action" : "Action",
-    delete: currentLanguage === "ar" ? "حذف" : currentLanguage === "fr" ? "Supprimer" : "Delete",
+      currentLanguage === "ar"
+        ? "ابحث عن اسم المستخدم"
+        : currentLanguage === "fr"
+          ? "Rechercher un utilisateur"
+          : "Search user",
+    result:
+      currentLanguage === "ar"
+        ? "نتيجة"
+        : currentLanguage === "fr"
+          ? "résultat(s)"
+          : "Result(s)",
+    noData:
+      currentLanguage === "ar"
+        ? "لا توجد بيانات"
+        : currentLanguage === "fr"
+          ? "Aucune donnée"
+          : "No data available",
+    userName:
+      currentLanguage === "ar"
+        ? "اسم المستخدم"
+        : currentLanguage === "fr"
+          ? "Nom d'utilisateur"
+          : "User Name",
+    userId:
+      currentLanguage === "ar"
+        ? "معرف المستخدم"
+        : currentLanguage === "fr"
+          ? "ID utilisateur"
+          : "User Id",
+    role:
+      currentLanguage === "ar"
+        ? "الدور"
+        : currentLanguage === "fr"
+          ? "Rôle"
+          : "Role",
+    issueDate:
+      currentLanguage === "ar"
+        ? "تاريخ الإصدار"
+        : currentLanguage === "fr"
+          ? "Date d'émission"
+          : "Issue Date",
+    action:
+      currentLanguage === "ar"
+        ? "إجراء"
+        : currentLanguage === "fr"
+          ? "Action"
+          : "Action",
+    delete:
+      currentLanguage === "ar"
+        ? "حذف"
+        : currentLanguage === "fr"
+          ? "Supprimer"
+          : "Delete",
   };
 
   const filteredData = data?.data?.content?.filter((item: Participation) =>
-    search.trim() === "" ? true : item.userName?.toLowerCase()?.includes(search.trim().toLowerCase())
+    search.trim() === ""
+      ? true
+      : item.userName?.toLowerCase()?.includes(search.trim().toLowerCase()),
   );
 
   const [visibleCount, setVisibleCount] = useState(20);
   const visibleData = filteredData?.slice(0, visibleCount);
-
 
   const handleDelete = async (id: string) => {
     try {
@@ -77,31 +137,61 @@ const Participation = () => {
       <BreadCrumbs breadcrumbs={breadcrumbs} />
       <Container>
         <div className="justify-left mb-6 ml-4 flex flex-wrap gap-5 text-[20px] font-semibold max-[725px]:text-[15px]">
-          <Link href="/document-management/certificate" className="hover:text-blue-500 hover:underline">
-            {currentLanguage === "ar" ? "إكمال" : currentLanguage === "fr" ? "Achèvement" : "Completion"}
+          <Link
+            href="/document-management/certificate"
+            className="hover:text-blue-500 hover:underline"
+          >
+            {currentLanguage === "ar"
+              ? "إكمال"
+              : currentLanguage === "fr"
+                ? "Achèvement"
+                : "Completion"}
           </Link>
-          <Link href="/document-management/certificate/achievement" className="hover:text-blue-500 hover:underline">
-            {currentLanguage === "ar" ? "إنجاز" : currentLanguage === "fr" ? "Réussite" : "Achievement"}
+          <Link
+            href="/document-management/certificate/achievement"
+            className="hover:text-blue-500 hover:underline"
+          >
+            {currentLanguage === "ar"
+              ? "إنجاز"
+              : currentLanguage === "fr"
+                ? "Réussite"
+                : "Achievement"}
           </Link>
-          <Link href="/document-management/certificate/participation" className="text-blue-500 underline">
-            {currentLanguage === "ar" ? "مشاركة" : currentLanguage === "fr" ? "Participation" : "Participation"}
+          <Link
+            href="/document-management/certificate/participation"
+            className="text-blue-500 underline"
+          >
+            {currentLanguage === "ar"
+              ? "مشاركة"
+              : currentLanguage === "fr"
+                ? "Participation"
+                : "Participation"}
           </Link>
-          <Link href="/document-management/certificate/professional-development" className="hover:text-blue-500 hover:underline">
-            {currentLanguage === "ar" ? "تطوير مهني" : currentLanguage === "fr" ? "Développement Professionnel" : "Professional Development"}
+          <Link
+            href="/document-management/certificate/professional-development"
+            className="hover:text-blue-500 hover:underline"
+          >
+            {currentLanguage === "ar"
+              ? "تطوير مهني"
+              : currentLanguage === "fr"
+                ? "Développement Professionnel"
+                : "Professional Development"}
           </Link>
         </div>
-        <div className="bg-bgPrimary rounded-xl mb-6">
-
-          <div className="flex flex-col md:flex-row justify-between items-center gap-4 px-4 py-4 rounded-lg">
-            <div dir={currentLanguage === "ar" ? "rtl" : "ltr"} className="relative w-full max-w-md">
+        <div className="mb-6 rounded-xl bg-bgPrimary">
+          <div className="flex flex-col items-center justify-between gap-4 rounded-lg px-4 py-4 md:flex-row">
+            <div
+              dir={currentLanguage === "ar" ? "rtl" : "ltr"}
+              className="relative w-full max-w-md"
+            >
               <div className="pointer-events-none absolute inset-y-0 start-0 z-20 flex items-center ps-4">
                 <BiSearchAlt className="text-secondary" size={18} />
               </div>
               <div className="flex items-center gap-2">
                 <input
-                  onChange={(e) => setSearch(e.target.value)}
+                  onChange={e => setSearch(e.target.value)}
                   type="text"
-                  className="w-full border-borderPrimary bg-bgPrimary rounded-lg border-2 px-4 py-2 ps-11 text-lg outline-none"
+                  className="w-full rounded-lg border-2 border-borderPrimary bg-bgPrimary px-4 py-2 ps-11 text-lg outline-none"
                   placeholder={translate.searchPlaceholder}
                 />
                 <span className="min-w-[120px] text-primary">
@@ -122,7 +212,7 @@ const Participation = () => {
             </Link>
           </div>
 
-          <div className="relative overflow-auto shadow-md sm:rounded-lg bg-bgPrimary">
+          <div className="relative overflow-auto bg-bgPrimary shadow-md sm:rounded-lg">
             <Table>
               <TableHeader>
                 <TableRow>
@@ -152,34 +242,37 @@ const Participation = () => {
                     </TableCell>
                   </TableRow>
                 ) : (
-                  visibleData.map((participation: Participation, index: number) => (
-                    <TableRow key={participation.id} data-index={index}>
-                      <TableCell>{participation.userName}</TableCell>
-                      <TableCell>{participation.userId}</TableCell>
-                      <TableCell>{participation.role}</TableCell>
-                      <TableCell>{participation.issueDate}</TableCell>
-                      <TableCell className="flex items-center gap-2">
-                        <Link
-                          href={`/document-management/certificate/participation/${participation.id}`}
-                          className="font-medium text-blue-600 hover:underline"
-                          title="View"
-                        >
-                          <img src="/images/print.png" alt="#" />
-                        </Link>
-                        <RiDeleteBin6Fill
-                          className="text-2xl text-red-600 cursor-pointer hover:text-red-800"
-                          onClick={() => handleDelete(participation.id)}
-                        />
-                      </TableCell>
-                    </TableRow>
-                  ))
+                  visibleData.map(
+                    (participation: Participation, index: number) => (
+                      <TableRow key={participation.id} data-index={index}>
+                        <TableCell>{participation.userName}</TableCell>
+                        <TableCell>{participation.userId}</TableCell>
+                        <TableCell>{participation.role}</TableCell>
+                        <TableCell>{participation.issueDate}</TableCell>
+                        <TableCell className="flex items-center gap-2">
+                          <Link
+                            href={`/document-management/certificate/participation/${participation.id}`}
+                            className="font-medium text-blue-600 hover:underline"
+                            title="View"
+                          >
+                            <img src="/images/print.png" alt="#" />
+                          </Link>
+                          <RiDeleteBin6Fill
+                            className="cursor-pointer text-2xl text-red-600 hover:text-red-800"
+                            onClick={() => handleDelete(participation.id)}
+                          />
+                        </TableCell>
+                      </TableRow>
+                    ),
+                  )
                 )}
               </TableBody>
             </Table>
             {visibleCount < (filteredData?.length || 0) && (
-              <SeeMoreButton onClick={() => setVisibleCount(prev => prev + 20)} />
+              <SeeMoreButton
+                onClick={() => setVisibleCount(prev => prev + 20)}
+              />
             )}
-
           </div>
         </div>
       </Container>

@@ -10,8 +10,7 @@ const RegisterForm = ({ onClose }: { onClose: () => void }) => {
     try {
       await createUser(userId, username);
       onClose(); // Close the modal after successful registration
-    } catch (error) {
-    }
+    } catch (error) {}
   };
 
   return (

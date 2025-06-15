@@ -53,7 +53,7 @@ const Grads = () => {
     archived: "false",
     page: 0,
     size: 1000000,
-    graduated: "false"
+    graduated: "false",
   });
 
   const { data: years, isLoading: isYear } = useGetAllAcadimicYearQuery(null);
@@ -79,14 +79,15 @@ const Grads = () => {
       <BreadCrumbs breadcrumbs={breadcrumbs} />
       <div
         dir={currentLanguage === "ar" ? "rtl" : "ltr"}
-        className={`${currentLanguage === "ar"
-          ? booleanValue
-            ? "lg:mr-[100px]"
-            : "lg:mr-[270px]"
-          : booleanValue
-            ? "lg:ml-[100px]"
-            : "lg:ml-[270px]"
-          } relative mx-3 mt-10 h-screen overflow-x-auto bg-transparent sm:rounded-lg`}
+        className={`${
+          currentLanguage === "ar"
+            ? booleanValue
+              ? "lg:mr-[100px]"
+              : "lg:mr-[270px]"
+            : booleanValue
+              ? "lg:ml-[100px]"
+              : "lg:ml-[270px]"
+        } relative mx-3 mt-10 h-screen overflow-x-auto bg-transparent sm:rounded-lg`}
       >
         <div className="mb-5 flex justify-between gap-5 max-[1150px]:grid max-[1150px]:justify-center">
           {/* Student Select */}
@@ -271,7 +272,9 @@ const Grads = () => {
                       <TableCell>{course.secondExamScore ?? "-"}</TableCell>
                       <TableCell>{course.thirdExamScore ?? "-"}</TableCell>
                       <TableCell>{course.fourthExamScore ?? "-"}</TableCell>
-                      <TableCell>{course.integratedActivitiesScore ?? "-"}</TableCell>
+                      <TableCell>
+                        {course.integratedActivitiesScore ?? "-"}
+                      </TableCell>
                       <TableCell>{course.points}</TableCell>
                       <TableCell>{course.coefficient}</TableCell>
                       <TableCell>{course.gpa}</TableCell>
@@ -279,7 +282,6 @@ const Grads = () => {
                   ))
                 )}
               </TableBody>
-
 
               <tfoot className="text-sm font-semibold">
                 <TableRow>
@@ -300,11 +302,12 @@ const Grads = () => {
                         ? "معدل الفصل"
                         : "Moyenne du Semestre"}
                   </TableCell>
-                  <TableCell colSpan={3}>{grades.averageOfThisSemester ?? "-"}</TableCell>
+                  <TableCell colSpan={3}>
+                    {grades.averageOfThisSemester ?? "-"}
+                  </TableCell>
                 </TableRow>
               </tfoot>
             </Table>
-
           </div>
         )}
       </div>

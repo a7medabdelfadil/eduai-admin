@@ -135,7 +135,7 @@ const EditScholarship = ({ params }: { params: { scholarshipId: number } }) => {
     <>
       <BreadCrumbs breadcrumbs={breadcrumbs} />
       <Container>
-        <div className="mb-8 -mt-2 -ml-1 flex items-center justify-between">
+        <div className="-ml-1 -mt-2 mb-8 flex items-center justify-between">
           <h1 className="text-3xl font-semibold">
             {currentLanguage === "en"
               ? "Edit scholarship"
@@ -147,8 +147,11 @@ const EditScholarship = ({ params }: { params: { scholarshipId: number } }) => {
             {/* default */}
           </h1>
         </div>
-        <form className="flex h-full w-full items-center justify-center" onSubmit={handleSubmit(onSubmit)}>
-          <div className="rounded-xl bg-bgPrimary p-10 w-[90] md:w-[80%]">
+        <form
+          className="flex h-full w-full items-center justify-center"
+          onSubmit={handleSubmit(onSubmit)}
+        >
+          <div className="w-[90] rounded-xl bg-bgPrimary p-10 md:w-[80%]">
             <div className="flex items-center justify-start gap-2">
               <h1 className="text-[22px] font-semibold">
                 {currentLanguage === "en"
@@ -158,7 +161,7 @@ const EditScholarship = ({ params }: { params: { scholarshipId: number } }) => {
                     : "Informations sur la bourse"}
               </h1>
             </div>
-            <div className="p-6 grid grid-cols-2 gap-4 max-[1278px]:grid-cols-1">
+            <div className="grid grid-cols-2 gap-4 p-6 max-[1278px]:grid-cols-1">
               {/* Student ID Field */}
               <label
                 htmlFor="studentId"
@@ -186,12 +189,12 @@ const EditScholarship = ({ params }: { params: { scholarshipId: number } }) => {
                     (student: {
                       id: string | null | undefined;
                       name:
-                      | string
-                      | number
-                      | bigint
-                      | boolean
-                      | null
-                      | undefined;
+                        | string
+                        | number
+                        | bigint
+                        | boolean
+                        | null
+                        | undefined;
                     }) => (
                       <option key={student.id} value={student.id ?? ""}>
                         {String(student.name)}

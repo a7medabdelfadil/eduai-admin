@@ -14,7 +14,7 @@ import {
   TableCell,
   TableHead,
   TableHeader,
-  TableRow
+  TableRow,
 } from "@/components/Table";
 import { useGetEnrollmentDateQuery } from "@/features/Document-Management/enrollmentApi";
 import { IoTrashOutline } from "react-icons/io5";
@@ -27,16 +27,34 @@ import SeeMoreButton from "@/components/SeeMoreButton";
 
 const EnrollmentDate = () => {
   const breadcrumbs = [
-    { nameEn: "Administration", nameAr: "الإدارة", nameFr: "Administration", href: "/" },
-    { nameEn: "Document Management", nameAr: "إدارة المستندات", nameFr: "Gestion des documents", href: "/document-management" },
-    { nameEn: "Enrollment Date", nameAr: "تاريخ التسجيل", nameFr: "Date d'inscription", href: "/document-management/enrollment/date" },
+    {
+      nameEn: "Administration",
+      nameAr: "الإدارة",
+      nameFr: "Administration",
+      href: "/",
+    },
+    {
+      nameEn: "Document Management",
+      nameAr: "إدارة المستندات",
+      nameFr: "Gestion des documents",
+      href: "/document-management",
+    },
+    {
+      nameEn: "Enrollment Date",
+      nameAr: "تاريخ التسجيل",
+      nameFr: "Date d'inscription",
+      href: "/document-management/enrollment/date",
+    },
   ];
 
   const [search, setSearch] = useState("");
   const booleanValue = useSelector((state: RootState) => state.boolean.value);
-  const { language: currentLanguage, loading } = useSelector((state: RootState) => state.language);
+  const { language: currentLanguage, loading } = useSelector(
+    (state: RootState) => state.language,
+  );
   const { data, isLoading, refetch } = useGetEnrollmentDateQuery(null);
-  const [deleteStudents, { isLoading: isDeleting }] = useDeleteStudentsMutation();
+  const [deleteStudents, { isLoading: isDeleting }] =
+    useDeleteStudentsMutation();
   const pathname = usePathname();
 
   const handleDelete = async (id: string) => {
@@ -47,7 +65,7 @@ const EnrollmentDate = () => {
           ? "تم قفل حساب الطالب بنجاح."
           : currentLanguage === "fr"
             ? "Compte de l'élève verrouillé avec succès."
-            : "Student account locked successfully."
+            : "Student account locked successfully.",
       );
       refetch();
     } catch {
@@ -56,7 +74,7 @@ const EnrollmentDate = () => {
           ? "فشل في قفل الحساب."
           : currentLanguage === "fr"
             ? "Échec du verrouillage du compte."
-            : "Failed to lock student account."
+            : "Failed to lock student account.",
       );
     }
   };
@@ -66,7 +84,7 @@ const EnrollmentDate = () => {
   }, [refetch]);
 
   const filteredData = data?.data?.content?.filter((student: any) =>
-    student.name?.toLowerCase().includes(search.trim().toLowerCase())
+    student.name?.toLowerCase().includes(search.trim().toLowerCase()),
   );
 
   const [visibleCount, setVisibleCount] = useState(20);
@@ -74,48 +92,126 @@ const EnrollmentDate = () => {
 
   const navItems = [
     {
-      name: currentLanguage === "ar" ? "حالة التسجيل" : currentLanguage === "fr" ? "Statut d'inscription" : "Enrollment Status",
+      name:
+        currentLanguage === "ar"
+          ? "حالة التسجيل"
+          : currentLanguage === "fr"
+            ? "Statut d'inscription"
+            : "Enrollment Status",
       href: "/document-management/enrollment/status",
     },
     {
-      name: currentLanguage === "ar" ? "تاريخ التسجيل" : currentLanguage === "fr" ? "Date d'inscription" : "Enrollment Date",
+      name:
+        currentLanguage === "ar"
+          ? "تاريخ التسجيل"
+          : currentLanguage === "fr"
+            ? "Date d'inscription"
+            : "Enrollment Date",
       href: "/document-management/enrollment/date",
     },
   ];
 
   const translate = {
-    title: currentLanguage === "ar" ? "سجلات التسجيل" : currentLanguage === "fr" ? "Dossiers d'inscription" : "Enrollment Records",
-    fullName: currentLanguage === "ar" ? "الاسم الكامل" : currentLanguage === "fr" ? "Nom complet" : "Full Name",
+    title:
+      currentLanguage === "ar"
+        ? "سجلات التسجيل"
+        : currentLanguage === "fr"
+          ? "Dossiers d'inscription"
+          : "Enrollment Records",
+    fullName:
+      currentLanguage === "ar"
+        ? "الاسم الكامل"
+        : currentLanguage === "fr"
+          ? "Nom complet"
+          : "Full Name",
     id: "ID",
-    gender: currentLanguage === "ar" ? "النوع" : currentLanguage === "fr" ? "Genre" : "Gender",
-    age: currentLanguage === "ar" ? "العمر" : currentLanguage === "fr" ? "Âge" : "Age",
-    stage: currentLanguage === "ar" ? "المرحلة التعليمية" : currentLanguage === "fr" ? "Niveau scolaire" : "Educational Stage",
-    creation: currentLanguage === "ar" ? "بداية التسجيل" : currentLanguage === "fr" ? "Début d'inscription" : "Enrollment Start",
-    lastSemester: currentLanguage === "ar" ? "آخر فصل" : currentLanguage === "fr" ? "Dernier semestre" : "Last Semester",
-    mobile: currentLanguage === "ar" ? "رقم ولي الأمر" : currentLanguage === "fr" ? "Mobile" : "Mobile",
-    delete: currentLanguage === "ar" ? "حذف" : currentLanguage === "fr" ? "Supprimer" : "Delete",
-    noData: currentLanguage === "ar" ? "لا توجد بيانات" : currentLanguage === "fr" ? "Aucune donnée disponible" : "No data available",
-    result: currentLanguage === "ar" ? "نتيجة" : currentLanguage === "fr" ? "résultat(s)" : "Result(s)",
-    searchPlaceholder: currentLanguage === "ar" ? "ابحث عن طالب" : currentLanguage === "fr" ? "Rechercher un étudiant" : "Search student",
+    gender:
+      currentLanguage === "ar"
+        ? "النوع"
+        : currentLanguage === "fr"
+          ? "Genre"
+          : "Gender",
+    age:
+      currentLanguage === "ar"
+        ? "العمر"
+        : currentLanguage === "fr"
+          ? "Âge"
+          : "Age",
+    stage:
+      currentLanguage === "ar"
+        ? "المرحلة التعليمية"
+        : currentLanguage === "fr"
+          ? "Niveau scolaire"
+          : "Educational Stage",
+    creation:
+      currentLanguage === "ar"
+        ? "بداية التسجيل"
+        : currentLanguage === "fr"
+          ? "Début d'inscription"
+          : "Enrollment Start",
+    lastSemester:
+      currentLanguage === "ar"
+        ? "آخر فصل"
+        : currentLanguage === "fr"
+          ? "Dernier semestre"
+          : "Last Semester",
+    mobile:
+      currentLanguage === "ar"
+        ? "رقم ولي الأمر"
+        : currentLanguage === "fr"
+          ? "Mobile"
+          : "Mobile",
+    delete:
+      currentLanguage === "ar"
+        ? "حذف"
+        : currentLanguage === "fr"
+          ? "Supprimer"
+          : "Delete",
+    noData:
+      currentLanguage === "ar"
+        ? "لا توجد بيانات"
+        : currentLanguage === "fr"
+          ? "Aucune donnée disponible"
+          : "No data available",
+    result:
+      currentLanguage === "ar"
+        ? "نتيجة"
+        : currentLanguage === "fr"
+          ? "résultat(s)"
+          : "Result(s)",
+    searchPlaceholder:
+      currentLanguage === "ar"
+        ? "ابحث عن طالب"
+        : currentLanguage === "fr"
+          ? "Rechercher un étudiant"
+          : "Search student",
   };
 
-  if (loading) return <div className="flex h-screen w-full items-center justify-center"><Spinner /></div>;
+  if (loading)
+    return (
+      <div className="flex h-screen w-full items-center justify-center">
+        <Spinner />
+      </div>
+    );
 
   return (
     <>
       <BreadCrumbs breadcrumbs={breadcrumbs} />
       <Container>
         <div>
-          <h2 className="text-2xl font-bold mb-4 text-textPrimary">{translate.title}</h2>
+          <h2 className="mb-4 text-2xl font-bold text-textPrimary">
+            {translate.title}
+          </h2>
           <div className="flex gap-8 text-base font-medium text-gray-500">
-            {navItems.map((item) => (
+            {navItems.map(item => (
               <Link
                 key={item.href}
                 href={item.href}
-                className={`transition duration-200 ease-in-out ${pathname === item.href
-                  ? "text-indigo-600 underline underline-offset-4"
-                  : "hover:text-indigo-500"
-                  }`}
+                className={`transition duration-200 ease-in-out ${
+                  pathname === item.href
+                    ? "text-indigo-600 underline underline-offset-4"
+                    : "hover:text-indigo-500"
+                }`}
               >
                 {item.name}
               </Link>
@@ -124,8 +220,11 @@ const EnrollmentDate = () => {
         </div>
 
         {/* Search */}
-        <div dir={currentLanguage === "ar" ? "rtl" : "ltr"} className={`relative mt-10 overflow-x-auto bg-bgPrimary sm:rounded-lg mb-8`}>
-          <div className="p-4 flex justify-between text-center max-[502px]:grid max-[502px]:justify-center">
+        <div
+          dir={currentLanguage === "ar" ? "rtl" : "ltr"}
+          className={`relative mb-8 mt-10 overflow-x-auto bg-bgPrimary sm:rounded-lg`}
+        >
+          <div className="flex justify-between p-4 text-center max-[502px]:grid max-[502px]:justify-center">
             <div className="mb-3">
               <div className="relative min-w-72 md:min-w-80">
                 <div className="pointer-events-none absolute inset-y-0 start-0 z-20 flex items-center ps-4">
@@ -145,8 +244,7 @@ const EnrollmentDate = () => {
               </div>
             </div>
           </div>
-          <div className="relative overflow-auto shadow-md sm:rounded-lg bg-bgPrimary">
-
+          <div className="relative overflow-auto bg-bgPrimary shadow-md sm:rounded-lg">
             {/* Table */}
             <Table>
               <TableHeader>
@@ -163,13 +261,17 @@ const EnrollmentDate = () => {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {isLoading ? [...Array(3)].map((_, i) => (
-                  <TableRow key={i}>
-                    {Array.from({ length: 9 }).map((_, j) => (
-                      <TableCell key={j}><Skeleton className="h-4 w-24" /></TableCell>
-                    ))}
-                  </TableRow>
-                )) : !filteredData?.length ? (
+                {isLoading ? (
+                  [...Array(3)].map((_, i) => (
+                    <TableRow key={i}>
+                      {Array.from({ length: 9 }).map((_, j) => (
+                        <TableCell key={j}>
+                          <Skeleton className="h-4 w-24" />
+                        </TableCell>
+                      ))}
+                    </TableRow>
+                  ))
+                ) : !filteredData?.length ? (
                   <TableRow>
                     <TableCell colSpan={9} className="text-center">
                       {translate.noData}
@@ -180,10 +282,17 @@ const EnrollmentDate = () => {
                     <TableRow key={index} data-index={index}>
                       <TableCell>
                         <div className="flex items-center gap-3">
-                          {student.hasPicture && student.picture?.startsWith("http") ? (
-                            <img src={student.picture} alt={student.name} className="h-6 w-6 rounded-full object-cover" />
+                          {student.hasPicture &&
+                          student.picture?.startsWith("http") ? (
+                            <img
+                              src={student.picture}
+                              alt={student.name}
+                              className="h-6 w-6 rounded-full object-cover"
+                            />
                           ) : (
-                            <div className="h-6 w-6 rounded-full bg-muted flex items-center justify-center text-xs text-gray-500">N/A</div>
+                            <div className="flex h-6 w-6 items-center justify-center rounded-full bg-muted text-xs text-gray-500">
+                              N/A
+                            </div>
                           )}
                           <span>{student.name}</span>
                         </div>
@@ -211,9 +320,10 @@ const EnrollmentDate = () => {
               </TableBody>
             </Table>
             {visibleCount < (filteredData?.length || 0) && (
-              <SeeMoreButton onClick={() => setVisibleCount(prev => prev + 20)} />
+              <SeeMoreButton
+                onClick={() => setVisibleCount(prev => prev + 20)}
+              />
             )}
-
           </div>
         </div>
       </Container>

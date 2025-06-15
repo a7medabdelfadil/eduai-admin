@@ -11,6 +11,7 @@ import { useSelector } from "react-redux";
 import { RootState } from "@/GlobalRedux/store";
 import { toast } from "react-toastify";
 import BreadCrumbs from "@/components/BreadCrumbs";
+import Container from "@/components/Container";
 
 const Suggestion = () => {
   const breadcrumbs = [
@@ -51,8 +52,6 @@ const Suggestion = () => {
     }
   };
 
-
-
   const { language: currentLanguage, loading } = useSelector(
     (state: RootState) => state.language,
   );
@@ -67,47 +66,43 @@ const Suggestion = () => {
   return (
     <>
       <BreadCrumbs breadcrumbs={breadcrumbs} />
-      <div
-        dir={currentLanguage === "ar" ? "rtl" : "ltr"}
-        className={`${
-          currentLanguage === "ar"
-            ? booleanValue
-              ? "lg:mr-[100px]"
-              : "lg:mr-[270px]"
-            : booleanValue
-              ? "lg:ml-[100px]"
-              : "lg:ml-[270px]"
-        } justify-left mb-4 ml-4 mt-5 flex gap-5 text-[23px] font-semibold`}
-      >
-        <Link href="/organization-setting/reports">
-          {currentLanguage === "ar"
-            ? "التقارير"
-            : currentLanguage === "fr"
-              ? "Rapports"
-              : "Reports"}
-        </Link>
-        <Link
-          href="/organization-setting/suggestions"
-          className="text-blue-500 underline"
-        >
-          {currentLanguage === "ar"
-            ? "الاقتراحات"
-            : currentLanguage === "fr"
+
+      <Container>
+        <div className="-ml-1 -mt-2 mb-8 flex items-center justify-between">
+          <h1 className="text-3xl font-semibold">
+            {currentLanguage === "en"
               ? "Suggestions"
-              : "Suggestions"}
-        </Link>
-      </div>
-      <div
-        className={`${
-          currentLanguage === "ar"
-            ? booleanValue
-              ? "lg:mr-[100px]"
-              : "lg:mr-[270px]"
-            : booleanValue
-              ? "lg:ml-[100px]"
-              : "lg:ml-[270px]"
-        } relative mx-3 mt-10 h-screen overflow-x-auto bg-transparent sm:rounded-lg`}
-      >
+              : currentLanguage === "ar"
+                ? "الاقتراحات"
+                : currentLanguage === "fr"
+                  ? "Suggestions"
+                  : "Suggestions"}{" "}
+            {/* default */}
+          </h1>
+        </div>
+        <div className="mx-2 -ml-1 -mt-2 mb-8 flex items-center gap-4 text-xl font-semibold">
+          <Link
+            className="hover:text-blue-500 hover:underline"
+            href="/organization-setting/reports"
+          >
+            {currentLanguage === "ar"
+              ? "التقارير"
+              : currentLanguage === "fr"
+                ? "Rapports"
+                : "Reports"}
+          </Link>
+          <Link
+            className="text-blue-500 underline"
+            href="/organization-setting/suggestions"
+          >
+            {currentLanguage === "ar"
+              ? "الاقتراحات"
+              : currentLanguage === "fr"
+                ? "Suggestions"
+                : "Suggestions"}
+          </Link>
+        </div>
+
         <div className="relative overflow-auto shadow-md sm:rounded-lg">
           <table className="w-full overflow-x-auto text-left text-sm text-textSecondary rtl:text-right">
             <tbody>
@@ -188,7 +183,7 @@ const Suggestion = () => {
             </div>
           )}
         </div>
-      </div>
+      </Container>
     </>
   );
 };

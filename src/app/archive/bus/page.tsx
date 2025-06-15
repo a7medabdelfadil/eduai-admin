@@ -11,7 +11,14 @@ import { RootState } from "@/GlobalRedux/store";
 import { toast } from "react-toastify";
 import BreadCrumbs from "@/components/BreadCrumbs";
 import Container from "@/components/Container";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/Table";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/Table";
 import { Skeleton } from "@/components/Skeleton";
 import { BiTrash, BiEditAlt, BiSearchAlt } from "react-icons/bi";
 import SeeMoreButton from "@/components/SeeMoreButton";
@@ -43,15 +50,60 @@ const Bus = () => {
   );
 
   const translate = {
-    busNumber: currentLanguage === "ar" ? "رقم الحافلة" : currentLanguage === "fr" ? "Numéro de bus" : "Bus Number",
-    capacity: currentLanguage === "ar" ? "سعة الحافلة" : currentLanguage === "fr" ? "Capacité du bus" : "Bus Capacity",
-    schoolId: currentLanguage === "ar" ? "رقم المدرسة" : currentLanguage === "fr" ? "ID de l'école" : "School ID",
-    createdAt: currentLanguage === "ar" ? "تاريخ الإنشاء" : currentLanguage === "fr" ? "Date de création" : "Created At",
-    updatedAt: currentLanguage === "ar" ? "تاريخ التحديث" : currentLanguage === "fr" ? "Date de mise à jour" : "Updated At",
-    action: currentLanguage === "ar" ? "الإجراء" : currentLanguage === "fr" ? "Action" : "Action",
-    edit: currentLanguage === "ar" ? "تعديل" : currentLanguage === "fr" ? "Modifier" : "Edit",
-    delete: currentLanguage === "ar" ? "حذف" : currentLanguage === "fr" ? "Supprimer" : "Delete",
-    noData: currentLanguage === "ar" ? "لا توجد بيانات" : currentLanguage === "fr" ? "Aucune donnée disponible" : "No data available",
+    busNumber:
+      currentLanguage === "ar"
+        ? "رقم الحافلة"
+        : currentLanguage === "fr"
+          ? "Numéro de bus"
+          : "Bus Number",
+    capacity:
+      currentLanguage === "ar"
+        ? "سعة الحافلة"
+        : currentLanguage === "fr"
+          ? "Capacité du bus"
+          : "Bus Capacity",
+    schoolId:
+      currentLanguage === "ar"
+        ? "رقم المدرسة"
+        : currentLanguage === "fr"
+          ? "ID de l'école"
+          : "School ID",
+    createdAt:
+      currentLanguage === "ar"
+        ? "تاريخ الإنشاء"
+        : currentLanguage === "fr"
+          ? "Date de création"
+          : "Created At",
+    updatedAt:
+      currentLanguage === "ar"
+        ? "تاريخ التحديث"
+        : currentLanguage === "fr"
+          ? "Date de mise à jour"
+          : "Updated At",
+    action:
+      currentLanguage === "ar"
+        ? "الإجراء"
+        : currentLanguage === "fr"
+          ? "Action"
+          : "Action",
+    edit:
+      currentLanguage === "ar"
+        ? "تعديل"
+        : currentLanguage === "fr"
+          ? "Modifier"
+          : "Edit",
+    delete:
+      currentLanguage === "ar"
+        ? "حذف"
+        : currentLanguage === "fr"
+          ? "Supprimer"
+          : "Delete",
+    noData:
+      currentLanguage === "ar"
+        ? "لا توجد بيانات"
+        : currentLanguage === "fr"
+          ? "Aucune donnée disponible"
+          : "No data available",
     searchPlaceholder:
       currentLanguage === "ar"
         ? "ابحث عن حافلة"
@@ -74,7 +126,6 @@ const Bus = () => {
   type Bus = Record<string, any>;
 
   const handleDelete = async (id: number) => {
-
     try {
       await deleteBuses(id).unwrap();
 
@@ -97,7 +148,7 @@ const Bus = () => {
     return formatter.format(new Date(dateString));
   };
   const filteredData = data?.data?.content?.filter((bus: Bus) =>
-    bus.busNumber?.toLowerCase().includes(search.trim().toLowerCase())
+    bus.busNumber?.toLowerCase().includes(search.trim().toLowerCase()),
   );
 
   const [visibleCount, setVisibleCount] = useState(20);
@@ -107,7 +158,7 @@ const Bus = () => {
     <>
       <BreadCrumbs breadcrumbs={breadcrumbs} />
       <Container>
-        <div className="mb-6 -mt-2 -ml-1 flex items-center justify-between">
+        <div className="-ml-1 -mt-2 mb-6 flex items-center justify-between">
           <h1 className="text-3xl font-semibold">
             {currentLanguage === "en"
               ? "Bus"
@@ -119,9 +170,8 @@ const Bus = () => {
             {/* default */}
           </h1>
         </div>
-        <div className="bg-bgPrimary rounded-xl">
-
-          <div className="flex flex-col md:flex-row justify-between items-center gap-4 px-4 py-4 rounded-lg">
+        <div className="rounded-xl bg-bgPrimary">
+          <div className="flex flex-col items-center justify-between gap-4 rounded-lg px-4 py-4 md:flex-row">
             {/* Search Input */}
             <div
               dir={currentLanguage === "ar" ? "rtl" : "ltr"}
@@ -132,9 +182,9 @@ const Bus = () => {
               </div>
               <div className="flex items-center gap-2">
                 <input
-                  onChange={(e) => setSearch(e.target.value)}
+                  onChange={e => setSearch(e.target.value)}
                   type="text"
-                  className="w-full border-borderPrimary bg-bgPrimary rounded-lg border-2 px-4 py-2 ps-11 text-lg outline-none"
+                  className="w-full rounded-lg border-2 border-borderPrimary bg-bgPrimary px-4 py-2 ps-11 text-lg outline-none"
                   placeholder={translate.searchPlaceholder}
                 />
                 <span className="min-w-[120px] text-primary">
@@ -146,7 +196,7 @@ const Bus = () => {
             {/* Add New Bus Button */}
             <Link
               href="/add-new-bus"
-              className="whitespace-nowrap rounded-xl bg-primary px-4 py-2 text-[16px] font-semibold text-white hover:bg-hover hover:shadow-md transition"
+              className="whitespace-nowrap rounded-xl bg-primary px-4 py-2 text-[16px] font-semibold text-white transition hover:bg-hover hover:shadow-md"
             >
               {currentLanguage === "ar"
                 ? "+ إضافة حافلة جديدة"
@@ -156,7 +206,7 @@ const Bus = () => {
             </Link>
           </div>
 
-          <div className="relative overflow-auto shadow-md sm:rounded-lg bg-bgPrimary">
+          <div className="relative overflow-auto bg-bgPrimary shadow-md sm:rounded-lg">
             <Table>
               <TableHeader>
                 <TableRow>
@@ -191,36 +241,40 @@ const Bus = () => {
                       <TableCell>{bus.busNumber}</TableCell>
                       <TableCell>{bus.busCapacity}</TableCell>
                       <TableCell>{bus.schoolId}</TableCell>
-                      <TableCell>{formatTransactionDate(bus.createdAt)}</TableCell>
-                      <TableCell>{formatTransactionDate(bus.updatedAt)}</TableCell>
+                      <TableCell>
+                        {formatTransactionDate(bus.createdAt)}
+                      </TableCell>
+                      <TableCell>
+                        {formatTransactionDate(bus.updatedAt)}
+                      </TableCell>
                       <TableCell className="flex items-center gap-3">
                         <Link
                           href={`/edit-bus/${bus.busId}`}
-                          className="text-primary hover:text-primaryHover transition"
+                          className="text-primary transition hover:text-hover"
                           title={translate.edit}
                         >
                           <BiEditAlt size={20} />
                         </Link>
                         <button
                           onClick={() => handleDelete(bus.busId)}
-                          className="text-error hover:text-red-800 transition"
+                          className="text-error transition hover:text-red-800"
                           title={translate.delete}
                         >
                           <BiTrash size={20} />
                         </button>
                       </TableCell>
-
                     </TableRow>
                   ))
                 )}
               </TableBody>
             </Table>
             {visibleCount < (filteredData?.length || 0) && (
-              <SeeMoreButton onClick={() => setVisibleCount(prev => prev + 20)} />
+              <SeeMoreButton
+                onClick={() => setVisibleCount(prev => prev + 20)}
+              />
             )}
           </div>
         </div>
-
       </Container>
     </>
   );

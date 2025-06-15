@@ -46,7 +46,7 @@ export const chatApi = createApi({
     }),
     //
     uploadFile: builder.mutation({
-      query: ({id, formData}) => ({
+      query: ({ id, formData }) => ({
         url: `/api/v1/messages/${id}/file`,
         method: "POST",
         body: formData,

@@ -144,7 +144,7 @@ const AddNewTeacher = () => {
     <>
       <BreadCrumbs breadcrumbs={breadcrumbs} />
       <Container>
-        <div className="mb-8 -mt-2 -ml-1 flex items-center justify-between">
+        <div className="-ml-1 -mt-2 mb-8 flex items-center justify-between">
           <h1 className="text-3xl font-semibold">
             {currentLanguage === "en"
               ? "Add New Teacher"
@@ -157,8 +157,11 @@ const AddNewTeacher = () => {
           </h1>
         </div>
         <FormProvider {...formMethods}>
-          <form className="flex justify-center items-center w-full h-full" onSubmit={handleSubmit(onSubmit)}>
-            <div className="rounded-xl bg-bgPrimary p-10 w-[90] md:w-[80%]">
+          <form
+            className="flex h-full w-full items-center justify-center"
+            onSubmit={handleSubmit(onSubmit)}
+          >
+            <div className="w-[90] rounded-xl bg-bgPrimary p-10 md:w-[80%]">
               {backendError && (
                 <div className="text-center text-error">{backendError}</div>
               )}
@@ -194,7 +197,7 @@ const AddNewTeacher = () => {
                         : "Teacher Information"}
                 </h1>
               </div>
-              <div className="px-6 pt-6 grid grid-cols-2 gap-4 max-[1278px]:grid-cols-1">
+              <div className="grid grid-cols-2 gap-4 px-6 pt-6 max-[1278px]:grid-cols-1">
                 <label
                   htmlFor="username"
                   className="grid text-[18px] font-semibold"
@@ -321,7 +324,7 @@ const AddNewTeacher = () => {
                   control={control}
                 />
               </div>
-              <div className="px-6 pt-6 grid grid-cols-2 gap-4 max-[1278px]:grid-cols-1">
+              <div className="grid grid-cols-2 gap-4 px-6 pt-6 max-[1278px]:grid-cols-1">
                 <label
                   htmlFor="nationality"
                   className="grid text-[18px] font-semibold"
@@ -600,7 +603,7 @@ const AddNewTeacher = () => {
                   )}
                 </label>
               </div>
-              <div className="px-6 pt-6 grid grid-cols-2 gap-4 max-[1278px]:grid-cols-1">
+              <div className="grid grid-cols-2 gap-4 px-6 pt-6 max-[1278px]:grid-cols-1">
                 <label
                   htmlFor="hireDate"
                   className="grid text-[18px] font-semibold"
@@ -662,7 +665,7 @@ const AddNewTeacher = () => {
                     defaultValue=""
                     id="positionId"
                     {...register("positionId", { required: true })}
-                    className={`border ${errors.positionId ? "border-borderPrimary" : "border-borderPrimary"} bg-bgPrimary h-full w-full rounded-xl px-4 py-3 text-[18px] text-blackOrWhite outline-none max-[458px]:w-[350px]`}
+                    className={`border ${errors.positionId ? "border-borderPrimary" : "border-borderPrimary"} h-full w-full rounded-xl bg-bgPrimary px-4 py-3 text-[18px] text-blackOrWhite outline-none max-[458px]:w-[350px]`}
                   >
                     <option value="">
                       {currentLanguage === "en"
@@ -681,18 +684,18 @@ const AddNewTeacher = () => {
                             title: string;
                             id: string | number | readonly string[] | undefined;
                             name:
-                            | string
-                            | number
-                            | bigint
-                            | boolean
-                            | React.ReactElement<
-                              any,
-                              string | React.JSXElementConstructor<any>
-                            >
-                            | Iterable<React.ReactNode>
-                            | React.ReactPortal
-                            | null
-                            | undefined;
+                              | string
+                              | number
+                              | bigint
+                              | boolean
+                              | React.ReactElement<
+                                  any,
+                                  string | React.JSXElementConstructor<any>
+                                >
+                              | Iterable<React.ReactNode>
+                              | React.ReactPortal
+                              | null
+                              | undefined;
                           },
                           index: React.Key | null | undefined,
                         ) => (
@@ -747,7 +750,7 @@ const AddNewTeacher = () => {
                   )}
                 </label>
               </div>
-              <div className="flex justify-center text-center mt-6">
+              <div className="mt-6 flex justify-center text-center">
                 <button
                   disabled={isLoading}
                   type="submit"

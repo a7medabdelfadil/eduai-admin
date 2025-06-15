@@ -25,12 +25,24 @@ import SeeMoreButton from "@/components/SeeMoreButton";
 
 const Bus = () => {
   const breadcrumbs = [
-    { nameEn: "Administration", nameAr: "الإدارة", nameFr: "Administration", href: "/" },
-    { nameEn: "Infrastructure", nameAr: "الدورات والموارد", nameFr: "Cours et Ressources", href: "/infrastructure" },
+    {
+      nameEn: "Administration",
+      nameAr: "الإدارة",
+      nameFr: "Administration",
+      href: "/",
+    },
+    {
+      nameEn: "Infrastructure",
+      nameAr: "الدورات والموارد",
+      nameFr: "Cours et Ressources",
+      href: "/infrastructure",
+    },
     { nameEn: "Bus", nameAr: "الأتوبيس", nameFr: "Autobus", href: "/bus" },
   ];
 
-  const { language: currentLanguage, loading } = useSelector((state: RootState) => state.language);
+  const { language: currentLanguage, loading } = useSelector(
+    (state: RootState) => state.language,
+  );
   const { data, error, isLoading, refetch } = useGetAllBussQuery("1");
   const [search, setSearch] = useState("");
   const [deleteBuses] = useDeleteBussMutation();
@@ -43,9 +55,9 @@ const Bus = () => {
       "School Id": { ar: "معرف المدرسة", fr: "ID de l'école" },
       "Created At": { ar: "تاريخ الإنشاء", fr: "Créé le" },
       "Updated At": { ar: "تاريخ التعديل", fr: "Mis à jour le" },
-      "Action": { ar: "الإجراء", fr: "Action" },
-      "Edit": { ar: "تعديل", fr: "Modifier" },
-      "Delete": { ar: "حذف", fr: "Supprimer" },
+      Action: { ar: "الإجراء", fr: "Action" },
+      Edit: { ar: "تعديل", fr: "Modifier" },
+      Delete: { ar: "حذف", fr: "Supprimer" },
     };
     return translations[label]?.[currentLanguage] || label;
   };
@@ -73,18 +85,19 @@ const Bus = () => {
   };
 
   const filtered = data?.data.content?.filter((bus: Bus) =>
-    search === "" ? true : bus.busNumber?.toString().toLowerCase().includes(search.toLowerCase())
+    search === ""
+      ? true
+      : bus.busNumber?.toString().toLowerCase().includes(search.toLowerCase()),
   );
 
   const [visibleCount, setVisibleCount] = useState(20);
   const visible = filtered?.slice(0, visibleCount);
 
-
   return (
     <>
       <BreadCrumbs breadcrumbs={breadcrumbs} />
       <Container>
-        <div className="mb-6 -mt-2 -ml-1 flex items-center justify-between">
+        <div className="-ml-1 -mt-2 mb-6 flex items-center justify-between">
           <h1 className="text-3xl font-semibold">
             {currentLanguage === "en"
               ? "Bus"
@@ -96,8 +109,8 @@ const Bus = () => {
             {/* default */}
           </h1>
         </div>
-        <div className="bg-bgPrimary rounded-xl">
-          <div className="flex flex-col md:flex-row justify-between items-center gap-4 px-4 py-4">
+        <div className="rounded-xl bg-bgPrimary">
+          <div className="flex flex-col items-center justify-between gap-4 px-4 py-4 md:flex-row">
             <div
               dir={currentLanguage === "ar" ? "rtl" : "ltr"}
               className="relative w-full max-w-md"
@@ -107,9 +120,9 @@ const Bus = () => {
               </div>
               <div className="flex items-center gap-2">
                 <input
-                  onChange={(e) => setSearch(e.target.value)}
+                  onChange={e => setSearch(e.target.value)}
                   type="text"
-                  className="w-full border-borderPrimary bg-bgPrimary rounded-lg border-2 px-4 py-2 ps-11 text-lg outline-none"
+                  className="w-full rounded-lg border-2 border-borderPrimary bg-bgPrimary px-4 py-2 ps-11 text-lg outline-none"
                   placeholder={
                     currentLanguage === "en"
                       ? "Search"
@@ -118,10 +131,9 @@ const Bus = () => {
                         : "Recherche"
                   }
                 />
-                <span className="text-sm text-primary whitespace-nowrap">
+                <span className="whitespace-nowrap text-sm text-primary">
                   {filtered?.length ?? 0} {t("Results")}
                 </span>
-
               </div>
             </div>
 
@@ -129,10 +141,14 @@ const Bus = () => {
               href="/add-new-bus"
               className="mx-3 w-fit whitespace-nowrap rounded-xl bg-primary px-4 py-2 text-[18px] font-semibold text-white hover:bg-hover hover:shadow-xl"
             >
-              {currentLanguage === "ar" ? "+ إضافة حافلة جديدة" : currentLanguage === "fr" ? "+ Ajouter un nouveau bus" : "+ Add New Bus"}
+              {currentLanguage === "ar"
+                ? "+ إضافة حافلة جديدة"
+                : currentLanguage === "fr"
+                  ? "+ Ajouter un nouveau bus"
+                  : "+ Add New Bus"}
             </Link>
           </div>
-          <div className="relative overflow-auto shadow-md sm:rounded-lg bg-bgPrimary">
+          <div className="relative overflow-auto bg-bgPrimary shadow-md sm:rounded-lg">
             <Table>
               <TableHeader>
                 <TableRow>
@@ -145,18 +161,24 @@ const Bus = () => {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {(loading || isLoading) ? (
+                {loading || isLoading ? (
                   [...Array(3)].map((_, i) => (
                     <TableRow key={i}>
                       {Array.from({ length: 6 }).map((_, j) => (
-                        <TableCell key={j}><Skeleton className="h-4 w-24" /></TableCell>
+                        <TableCell key={j}>
+                          <Skeleton className="h-4 w-24" />
+                        </TableCell>
                       ))}
                     </TableRow>
                   ))
                 ) : !filtered?.length ? (
                   <TableRow>
                     <TableCell colSpan={6} className="text-center font-medium">
-                      {currentLanguage === "ar" ? "لا توجد بيانات" : currentLanguage === "fr" ? "Aucune donnée disponible" : "No data available"}
+                      {currentLanguage === "ar"
+                        ? "لا توجد بيانات"
+                        : currentLanguage === "fr"
+                          ? "Aucune donnée disponible"
+                          : "No data available"}
                     </TableCell>
                   </TableRow>
                 ) : (
@@ -165,19 +187,23 @@ const Bus = () => {
                       <TableCell>{bus.busNumber}</TableCell>
                       <TableCell>{bus.busCapacity}</TableCell>
                       <TableCell>{bus.schoolId}</TableCell>
-                      <TableCell>{formatTransactionDate(bus.createdAt)}</TableCell>
-                      <TableCell>{formatTransactionDate(bus.updatedAt)}</TableCell>
+                      <TableCell>
+                        {formatTransactionDate(bus.createdAt)}
+                      </TableCell>
+                      <TableCell>
+                        {formatTransactionDate(bus.updatedAt)}
+                      </TableCell>
                       <TableCell className="flex items-center gap-3">
                         <Link
                           href={`/edit-bus/${bus.busId}`}
-                          className="text-primary hover:text-primaryHover transition"
+                          className="text-primary transition hover:text-hover"
                           title={t("Edit")}
                         >
                           <BiEditAlt size={20} />
                         </Link>
                         <button
                           onClick={() => handleDelete(bus.busId)}
-                          className="text-error hover:text-red-800 transition"
+                          className="text-error transition hover:text-red-800"
                           title={t("Delete")}
                         >
                           <BiTrash size={20} />
@@ -192,8 +218,7 @@ const Bus = () => {
           {visibleCount < (filtered?.length || 0) && (
             <SeeMoreButton onClick={() => setVisibleCount(prev => prev + 20)} />
           )}
-
-        </div >
+        </div>
       </Container>
     </>
   );

@@ -18,7 +18,6 @@ const ViewAchievement: React.FC<ViewDriverProps> = ({ params }) => {
     params.achievementId,
   );
 
-
   const { language: currentLanguage, loading } = useSelector(
     (state: RootState) => state.language,
   );

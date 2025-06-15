@@ -31,7 +31,7 @@ const Points = () => {
   ];
 
   const booleanValue = useSelector((state: RootState) => state.boolean.value); // sidebar
-  const { data, isLoading } = useGetAllListPointsQuery(null)
+  const { data, isLoading } = useGetAllListPointsQuery(null);
   const [selectAll, setSelectAll] = useState(false); // State to track whether select all checkbox is checked
   const [search, setSearch] = useState("");
   // Function to handle click on select all checkbox
@@ -95,26 +95,27 @@ const Points = () => {
       <BreadCrumbs breadcrumbs={breadcrumbs} />
       <div
         dir={currentLanguage === "ar" ? "rtl" : "ltr"}
-        className={`${currentLanguage === "ar"
-          ? booleanValue
-            ? "lg:mr-[100px]"
-            : "lg:mr-[270px]"
-          : booleanValue
-            ? "lg:ml-[100px]"
-            : "lg:ml-[270px]"
-          } justify-left mb-4 ml-4 mt-5 flex gap-5 text-[20px] font-medium`}
+        className={`${
+          currentLanguage === "ar"
+            ? booleanValue
+              ? "lg:mr-[100px]"
+              : "lg:mr-[270px]"
+            : booleanValue
+              ? "lg:ml-[100px]"
+              : "lg:ml-[270px]"
+        } justify-left mb-4 ml-4 mt-5 flex gap-5 text-[20px] font-medium`}
       >
-        <Link
-          href="/document-management/transcript"
-
-        >
+        <Link href="/document-management/transcript">
           {currentLanguage === "ar"
             ? "قائمة الدورات"
             : currentLanguage === "fr"
               ? "Liste des cours"
               : "Course List"}
         </Link>
-        <Link href="/document-management/transcript/points" className="text-blue-500 underline">
+        <Link
+          href="/document-management/transcript/points"
+          className="text-blue-500 underline"
+        >
           {currentLanguage === "ar"
             ? "قائمة النقاط"
             : currentLanguage === "fr"
@@ -124,14 +125,15 @@ const Points = () => {
       </div>
       <div
         dir={currentLanguage === "ar" ? "rtl" : "ltr"}
-        className={`${currentLanguage === "ar"
-          ? booleanValue
-            ? "lg:mr-[100px]"
-            : "lg:mr-[270px]"
-          : booleanValue
-            ? "lg:ml-[100px]"
-            : "lg:ml-[270px]"
-          } relative mx-3 mt-10 overflow-x-auto bg-transparent sm:rounded-lg`}
+        className={`${
+          currentLanguage === "ar"
+            ? booleanValue
+              ? "lg:mr-[100px]"
+              : "lg:mr-[270px]"
+            : booleanValue
+              ? "lg:ml-[100px]"
+              : "lg:ml-[270px]"
+        } relative mx-3 mt-10 overflow-x-auto bg-transparent sm:rounded-lg`}
       >
         <div className="flex justify-between text-center max-[502px]:grid max-[502px]:justify-center">
           <div className="mb-3">
@@ -237,7 +239,6 @@ const Points = () => {
                     ? "Voir"
                     : "View"}
               </th>
-
             </tr>
           </thead>
           <tbody>
@@ -246,7 +247,8 @@ const Points = () => {
                 return search.toLocaleLowerCase() === ""
                   ? employee
                   : employee.studentName.toLocaleLowerCase().includes(search);
-              }).map((point: any) => (
+              })
+              .map((point: any) => (
                 <tr className="border-b border-borderPrimary bg-bgPrimary hover:bg-bgSecondary">
                   <td className="w-4 p-4">
                     <div className="flex items-center">
@@ -276,15 +278,21 @@ const Points = () => {
                         />
                       )}
                     </div>
-                    <p className="text-textSecondary">
-                      {point.studentName}
-                    </p>
+                    <p className="text-textSecondary">{point.studentName}</p>
                   </th>
-                  <td className="whitespace-nowrap px-6 py-4">{point.studentId}</td>
-                  <td className="whitespace-nowrap px-6 py-4">{point.gender}</td>
+                  <td className="whitespace-nowrap px-6 py-4">
+                    {point.studentId}
+                  </td>
+                  <td className="whitespace-nowrap px-6 py-4">
+                    {point.gender}
+                  </td>
                   <td className="whitespace-nowrap px-6 py-4">{point.age}</td>
-                  <td className="whitespace-nowrap px-6 py-4">{point.studyLevel}</td>
-                  <td className="whitespace-nowrap px-6 py-4">{point.studyStage}</td>
+                  <td className="whitespace-nowrap px-6 py-4">
+                    {point.studyLevel}
+                  </td>
+                  <td className="whitespace-nowrap px-6 py-4">
+                    {point.studyStage}
+                  </td>
                   <td className="whitespace-nowrap px-6 py-4">
                     <Link
                       href={`/document-management/transcript/points/${point.studentId}`}
@@ -294,9 +302,7 @@ const Points = () => {
                     </Link>
                   </td>
                 </tr>
-              ))
-            }
-
+              ))}
           </tbody>
         </table>
         {(data?.data.content.length == 0 || data == null) && (

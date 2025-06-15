@@ -128,7 +128,7 @@ const Budget = () => {
       <BreadCrumbs breadcrumbs={breadcrumbs} />
 
       <Container>
-        <div className="mb-6 -mt-2 -ml-1 flex items-center justify-between">
+        <div className="-ml-1 -mt-2 mb-6 flex items-center justify-between">
           <h1 className="text-3xl font-semibold">
             {currentLanguage === "en"
               ? "Budget"

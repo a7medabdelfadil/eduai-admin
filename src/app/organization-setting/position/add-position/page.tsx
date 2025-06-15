@@ -8,9 +8,9 @@ import { toast } from "react-toastify";
 import { useSelector } from "react-redux";
 import { RootState } from "@/GlobalRedux/store";
 import BreadCrumbs from "@/components/BreadCrumbs";
-import { useGetAllPositionsQuery } from "@/features/User-Management/driverApi";
 import { useGetAllDepartmentsQuery } from "@/features/Organization-Setteings/departmentApi";
 import { useRouter } from "next/navigation";
+import Container from "@/components/Container";
 
 const AddPosition = () => {
   const breadcrumbs = [
@@ -72,20 +72,24 @@ const AddPosition = () => {
   return (
     <>
       <BreadCrumbs breadcrumbs={breadcrumbs} />
-      <div
-        dir={currentLanguage === "ar" ? "rtl" : "ltr"}
-        className={` ${
-          currentLanguage === "ar"
-            ? booleanValue
-              ? "lg:mr-[100px]"
-              : "lg:mr-[270px]"
-            : booleanValue
-              ? "lg:ml-[100px]"
-              : "lg:ml-[270px]"
-        } mx-3 mt-[40px] grid h-[850px] items-center justify-center`}
-      >
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <div className="grid h-[900px] items-center justify-center gap-5 rounded-xl bg-bgPrimary p-10 sm:w-[500px] md:w-[600px] lg:w-[750px] xl:h-[800px] xl:w-[1000px]">
+      <Container>
+        <div className="-ml-1 -mt-2 mb-8 flex items-center justify-between">
+          <h1 className="text-3xl font-semibold">
+            {currentLanguage === "en"
+              ? "Add Position"
+              : currentLanguage === "ar"
+                ? "إضافة منصب"
+                : currentLanguage === "fr"
+                  ? "Ajouter un poste"
+                  : "Add Position"}{" "}
+            {/* default */}
+          </h1>
+        </div>
+        <form
+          className="flex h-full w-full items-center justify-center"
+          onSubmit={handleSubmit(onSubmit)}
+        >
+          <div className="w-[90] rounded-xl bg-bgPrimary p-10 md:w-[80%]">
             <div className="flex items-center justify-start gap-2">
               <svg
                 className="h-6 w-6 font-bold text-secondary group-hover:text-primary"
@@ -117,7 +121,7 @@ const AddPosition = () => {
                     : "Position Information"}
               </h1>
             </div>
-            <div className="grid grid-cols-2 gap-4 max-[1278px]:grid-cols-1">
+            <div className="grid grid-cols-2 gap-4 p-6 max-[1278px]:grid-cols-1">
               <label
                 htmlFor="departmentId"
                 className="grid text-[18px] font-semibold"
@@ -132,7 +136,7 @@ const AddPosition = () => {
                   defaultValue=""
                   id="departmentId"
                   {...register("departmentId", { required: true })}
-                  className={`border ${errors.departmentId ? "border-borderPrimary" : "border-borderPrimary"} h-full w-[400px] rounded-xl px-4 py-3 text-[18px] text-blackOrWhite outline-none max-[458px]:w-[350px]`}
+                  className={`border ${errors.departmentId ? "border-borderPrimary" : "border-borderPrimary"} h-full w-full rounded-xl px-4 py-3 text-[18px] text-blackOrWhite outline-none max-[458px]:w-[350px]`}
                 >
                   <option value="">
                     {currentLanguage === "en"
@@ -194,7 +198,7 @@ const AddPosition = () => {
                 <input
                   id="title_en"
                   type="text"
-                  className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                   {...register("title_en", { required: true })}
                 />
                 {errors.title_en && (
@@ -219,7 +223,7 @@ const AddPosition = () => {
                 <input
                   id="title_fr"
                   type="text"
-                  className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                   {...register("title_fr", { required: true })}
                 />
                 {errors.title_en && (
@@ -244,7 +248,7 @@ const AddPosition = () => {
                 <input
                   id="title_ar"
                   type="text"
-                  className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                   {...register("title_ar", { required: true })}
                 />
                 {errors.title_ar && (
@@ -277,7 +281,7 @@ const AddPosition = () => {
             </div>
           </div>
         </form>
-      </div>
+      </Container>
     </>
   );
 };

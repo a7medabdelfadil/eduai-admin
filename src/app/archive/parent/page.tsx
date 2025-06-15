@@ -12,7 +12,14 @@ import { RootState } from "@/GlobalRedux/store";
 import { toast } from "react-toastify";
 import BreadCrumbs from "@/components/BreadCrumbs";
 import Container from "@/components/Container";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/Table";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/Table";
 import { Skeleton } from "@/components/Skeleton";
 import { BiSearchAlt, BiTrash } from "react-icons/bi";
 import SeeMoreButton from "@/components/SeeMoreButton";
@@ -48,7 +55,7 @@ const Parent = () => {
   });
 
   const filteredData = data?.data?.content?.filter((parent: Parent) =>
-    parent.name?.toLowerCase().includes(search.trim().toLowerCase())
+    parent.name?.toLowerCase().includes(search.trim().toLowerCase()),
   );
 
   const { language: currentLanguage, loading } = useSelector(
@@ -57,16 +64,66 @@ const Parent = () => {
 
   const [deleteParents] = useDeleteParentsMutation();
   const translate = {
-    name: currentLanguage === "ar" ? "الاسم" : currentLanguage === "fr" ? "Nom" : "Name",
-    gender: currentLanguage === "ar" ? "الجنس" : currentLanguage === "fr" ? "Genre" : "Gender",
-    nationality: currentLanguage === "ar" ? "الجنسية" : currentLanguage === "fr" ? "Nationalité" : "Nationality",
-    email: currentLanguage === "ar" ? "البريد الإلكتروني" : currentLanguage === "fr" ? "Courriel" : "Email",
-    mobile: currentLanguage === "ar" ? "الجوال" : currentLanguage === "fr" ? "Mobile" : "Mobile",
-    view: currentLanguage === "ar" ? "عرض" : currentLanguage === "fr" ? "Voir" : "View",
-    action: currentLanguage === "ar" ? "الإجراء" : currentLanguage === "fr" ? "Action" : "Action",
-    unlock: currentLanguage === "ar" ? "إلغاء الحظر" : currentLanguage === "fr" ? "Débloquer" : "Unblock",
-    noData: currentLanguage === "ar" ? "لا توجد بيانات" : currentLanguage === "fr" ? "Aucune donnée disponible" : "No data available",
-    result: currentLanguage === "ar" ? "نتيجة" : currentLanguage === "fr" ? "résultat(s)" : "Result(s)",
+    name:
+      currentLanguage === "ar"
+        ? "الاسم"
+        : currentLanguage === "fr"
+          ? "Nom"
+          : "Name",
+    gender:
+      currentLanguage === "ar"
+        ? "الجنس"
+        : currentLanguage === "fr"
+          ? "Genre"
+          : "Gender",
+    nationality:
+      currentLanguage === "ar"
+        ? "الجنسية"
+        : currentLanguage === "fr"
+          ? "Nationalité"
+          : "Nationality",
+    email:
+      currentLanguage === "ar"
+        ? "البريد الإلكتروني"
+        : currentLanguage === "fr"
+          ? "Courriel"
+          : "Email",
+    mobile:
+      currentLanguage === "ar"
+        ? "الجوال"
+        : currentLanguage === "fr"
+          ? "Mobile"
+          : "Mobile",
+    view:
+      currentLanguage === "ar"
+        ? "عرض"
+        : currentLanguage === "fr"
+          ? "Voir"
+          : "View",
+    action:
+      currentLanguage === "ar"
+        ? "الإجراء"
+        : currentLanguage === "fr"
+          ? "Action"
+          : "Action",
+    unlock:
+      currentLanguage === "ar"
+        ? "إلغاء الحظر"
+        : currentLanguage === "fr"
+          ? "Débloquer"
+          : "Unblock",
+    noData:
+      currentLanguage === "ar"
+        ? "لا توجد بيانات"
+        : currentLanguage === "fr"
+          ? "Aucune donnée disponible"
+          : "No data available",
+    result:
+      currentLanguage === "ar"
+        ? "نتيجة"
+        : currentLanguage === "fr"
+          ? "résultat(s)"
+          : "Result(s)",
   };
   const handleDelete = async (id: string) => {
     try {
@@ -89,7 +146,7 @@ const Parent = () => {
       <BreadCrumbs breadcrumbs={breadcrumbs} />
 
       <Container>
-        <div className="mb-6 -mt-2 -ml-1 flex items-center justify-between">
+        <div className="-ml-1 -mt-2 mb-6 flex items-center justify-between">
           <h1 className="text-3xl font-semibold">
             {currentLanguage === "en"
               ? "All Parents"
@@ -101,8 +158,8 @@ const Parent = () => {
             {/* default */}
           </h1>
         </div>
-        <div className="bg-bgPrimary rounded-xl">
-          <div className="flex flex-col md:flex-row justify-between items-center gap-4 px-4 py-4">
+        <div className="rounded-xl bg-bgPrimary">
+          <div className="flex flex-col items-center justify-between gap-4 px-4 py-4 md:flex-row">
             <div
               dir={currentLanguage === "ar" ? "rtl" : "ltr"}
               className="relative w-full max-w-md"
@@ -112,9 +169,9 @@ const Parent = () => {
               </div>
               <div className="flex items-center gap-2">
                 <input
-                  onChange={(e) => setSearch(e.target.value)}
+                  onChange={e => setSearch(e.target.value)}
                   type="text"
-                  className="w-full border-borderPrimary bg-bgPrimary rounded-lg border-2 px-4 py-2 ps-11 text-lg outline-none"
+                  className="w-full rounded-lg border-2 border-borderPrimary bg-bgPrimary px-4 py-2 ps-11 text-lg outline-none"
                   placeholder={
                     currentLanguage === "en"
                       ? "Search"
@@ -123,10 +180,9 @@ const Parent = () => {
                         : "Recherche"
                   }
                 />
-                <span className="text-sm text-primary whitespace-nowrap">
+                <span className="whitespace-nowrap text-sm text-primary">
                   {filteredData?.length ?? 0} {translate.result}
                 </span>
-
               </div>
             </div>
 
@@ -141,7 +197,7 @@ const Parent = () => {
                   : "+ Add New Parent"}
             </Link>
           </div>
-          <div className="relative overflow-auto shadow-md sm:rounded-lg bg-bgPrimary">
+          <div className="relative overflow-auto bg-bgPrimary shadow-md sm:rounded-lg">
             <Table>
               <TableHeader>
                 <TableRow>
@@ -179,7 +235,7 @@ const Parent = () => {
                         <div className="flex items-center gap-2">
                           <img
                             src={parent.picture || "/images/userr.png"}
-                            className="h-6 w-6 rounded-full object-cover border"
+                            className="h-6 w-6 rounded-full border object-cover"
                             alt={parent.name || "parent"}
                           />
                           <span>{parent.name}</span>
@@ -201,7 +257,7 @@ const Parent = () => {
                       <TableCell>
                         <button
                           onClick={() => handleDelete(parent.id)}
-                          className="text-error hover:text-red-800 transition"
+                          className="text-error transition hover:text-red-800"
                           title={translate.unlock}
                         >
                           <BiTrash size={20} />
@@ -213,9 +269,10 @@ const Parent = () => {
               </TableBody>
             </Table>
             {visibleCount < (filteredData?.length || 0) && (
-              <SeeMoreButton onClick={() => setVisibleCount(prev => prev + 20)} />
+              <SeeMoreButton
+                onClick={() => setVisibleCount(prev => prev + 20)}
+              />
             )}
-
           </div>
         </div>
       </Container>

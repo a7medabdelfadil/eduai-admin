@@ -25,8 +25,8 @@ describe("Pagination Component", () => {
 
   beforeEach(() => {
     // Default language is set to English.
-    mockedUseSelector.mockImplementation((callback) =>
-      callback({ language: "en" })
+    mockedUseSelector.mockImplementation(callback =>
+      callback({ language: "en" }),
     );
     jest.clearAllMocks();
   });
@@ -40,8 +40,8 @@ describe("Pagination Component", () => {
   });
 
   test("renders localized labels in Arabic", () => {
-    mockedUseSelector.mockImplementation((callback) =>
-      callback({ language: "ar" })
+    mockedUseSelector.mockImplementation(callback =>
+      callback({ language: "ar" }),
     );
     render(<Pagination {...defaultProps} />);
     expect(screen.getByText("عرض")).toBeInTheDocument();
@@ -49,8 +49,8 @@ describe("Pagination Component", () => {
   });
 
   test("renders localized labels in French", () => {
-    mockedUseSelector.mockImplementation((callback) =>
-      callback({ language: "fr" })
+    mockedUseSelector.mockImplementation(callback =>
+      callback({ language: "fr" }),
     );
     render(<Pagination {...defaultProps} />);
     expect(screen.getByText("Afficher")).toBeInTheDocument();
@@ -63,7 +63,7 @@ describe("Pagination Component", () => {
       <Pagination
         {...defaultProps}
         onChangeElementsPerPage={onChangeElementsPerPage}
-      />
+      />,
     );
     // The select element is associated with the label "Show" (for English)
     const dropdown = screen.getByRole("combobox");
@@ -80,7 +80,7 @@ describe("Pagination Component", () => {
         currentPage={2}
         onChangePage={onChangePage}
         totalPages={5}
-      />
+      />,
     );
     // The page buttons are rendered with numbers starting at 1.
     // Clicking the button labeled "1" should call onChangePage with 0.
@@ -97,7 +97,7 @@ describe("Pagination Component", () => {
         currentPage={2}
         onChangePage={onChangePage}
         totalPages={5}
-      />
+      />,
     );
     // The component renders two button groups in its bottom section:
     // The first button in that group is the Previous button.
@@ -116,7 +116,7 @@ describe("Pagination Component", () => {
         currentPage={2}
         onChangePage={onChangePage}
         totalPages={5}
-      />
+      />,
     );
     // When totalPages <= 5, the structure is:
     // [Previous Button] + (totalPages page buttons) + [Next Button]
@@ -129,18 +129,14 @@ describe("Pagination Component", () => {
   });
 
   test("Previous button is hidden when currentPage is 0", () => {
-    render(
-      <Pagination {...defaultProps} currentPage={0} totalPages={5} />
-    );
+    render(<Pagination {...defaultProps} currentPage={0} totalPages={5} />);
     const allButtons = screen.getAllByRole("button");
     const prevButton = allButtons[0];
     expect(prevButton).toHaveStyle("visibility: hidden");
   });
 
   test("Next button is hidden when currentPage is totalPages - 1", () => {
-    render(
-      <Pagination {...defaultProps} currentPage={4} totalPages={5} />
-    );
+    render(<Pagination {...defaultProps} currentPage={4} totalPages={5} />);
     const allButtons = screen.getAllByRole("button");
     // The Next button is the last button in the second group.
     const nextButton = allButtons[allButtons.length - 1];

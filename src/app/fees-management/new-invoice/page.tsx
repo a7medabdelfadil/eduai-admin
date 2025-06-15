@@ -79,7 +79,6 @@ const NewInvoice = () => {
     size: 1000000,
   });
 
-
   const {
     register,
     handleSubmit,
@@ -111,7 +110,6 @@ const NewInvoice = () => {
     } catch (err: any) {
       toast.error(err?.data?.message || "Failed to create invoice");
     }
-
   };
 
   const { language: currentLanguage, loading } = useSelector(
@@ -129,7 +127,7 @@ const NewInvoice = () => {
     <>
       <BreadCrumbs breadcrumbs={breadcrumbs} />
       <Container>
-        <div className="mb-8 -mt-2 -ml-1 flex items-center justify-between">
+        <div className="-ml-1 -mt-2 mb-8 flex items-center justify-between">
           <h1 className="text-3xl font-semibold">
             {currentLanguage === "en"
               ? "Add Invoices"
@@ -141,8 +139,11 @@ const NewInvoice = () => {
             {/* default */}
           </h1>
         </div>
-        <form className="flex h-full w-full items-center justify-center" onSubmit={handleSubmit(onSubmit)}>
-          <div className="rounded-xl bg-bgPrimary p-10 w-[90] md:w-[80%]">
+        <form
+          className="flex h-full w-full items-center justify-center"
+          onSubmit={handleSubmit(onSubmit)}
+        >
+          <div className="w-[90] rounded-xl bg-bgPrimary p-10 md:w-[80%]">
             <div className="flex items-center justify-start gap-2">
               <h1 className="text-[22px] font-semibold">
                 {currentLanguage === "en"
@@ -152,7 +153,7 @@ const NewInvoice = () => {
                     : "Informations sur la facture"}
               </h1>
             </div>
-            <div className="p-6 grid grid-cols-2 gap-4 max-[1278px]:grid-cols-1">
+            <div className="grid grid-cols-2 gap-4 p-6 max-[1278px]:grid-cols-1">
               {/* Paid Amount Field */}
               <label
                 htmlFor="paidAmount"
@@ -199,7 +200,10 @@ const NewInvoice = () => {
                 )}
               </label>
               {/* Item Type Field */}
-              <label htmlFor="userType" className="grid text-[18px] font-semibold">
+              <label
+                htmlFor="userType"
+                className="grid text-[18px] font-semibold"
+              >
                 {currentLanguage === "en"
                   ? "User Type"
                   : currentLanguage === "ar"
@@ -208,7 +212,9 @@ const NewInvoice = () => {
                 <select
                   id="userType"
                   value={isForStudent}
-                  onChange={(e) => setIsForStudent(Number(e.target.value) as 1 | 0)}
+                  onChange={e =>
+                    setIsForStudent(Number(e.target.value) as 1 | 0)
+                  }
                   className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                 >
                   <option value={1}>
@@ -229,7 +235,10 @@ const NewInvoice = () => {
               </label>
 
               {/* Billed To ID Field */}
-              <label htmlFor="billedToId" className="grid text-[18px] font-semibold">
+              <label
+                htmlFor="billedToId"
+                className="grid text-[18px] font-semibold"
+              >
                 {currentLanguage === "en"
                   ? "Billed To"
                   : currentLanguage === "ar"
@@ -247,17 +256,21 @@ const NewInvoice = () => {
                         ? "اختر الشخص"
                         : "Sélectionner une personne"}
                   </option>
-                  {(isForStudent ? studentsData : teachersData)?.data?.content?.map((person: any) => (
+                  {(isForStudent
+                    ? studentsData
+                    : teachersData
+                  )?.data?.content?.map((person: any) => (
                     <option key={person.id} value={person.id}>
                       {person.name}
                     </option>
                   ))}
                 </select>
                 {errors.billedToId && (
-                  <span className="text-error">{errors.billedToId.message}</span>
+                  <span className="text-error">
+                    {errors.billedToId.message}
+                  </span>
                 )}
               </label>
-
 
               {/* Item Rate Field */}
               <label htmlFor="rate" className="grid text-[18px] font-semibold">
@@ -298,8 +311,6 @@ const NewInvoice = () => {
                   </span>
                 )}
               </label>
-
-
 
               <label htmlFor="type" className="grid text-[18px] font-semibold">
                 {currentLanguage === "en"
@@ -343,14 +354,15 @@ const NewInvoice = () => {
                   {...register("invoiceItem.about")}
                   type="text"
                   className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
-                  placeholder={currentLanguage === "en"
-                    ? "Optional description"
-                    : currentLanguage === "ar"
-                      ? "وصف اختياري"
-                      : "Description facultative"}
+                  placeholder={
+                    currentLanguage === "en"
+                      ? "Optional description"
+                      : currentLanguage === "ar"
+                        ? "وصف اختياري"
+                        : "Description facultative"
+                  }
                 />
               </label>
-
             </div>
             <div className="flex justify-center text-center">
               {isLoading ? (

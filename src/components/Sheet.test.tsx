@@ -15,7 +15,7 @@ describe("Sheet Component", () => {
     const { container, queryByText } = render(
       <Sheet isOpen={false} onClose={onClose}>
         <div>Sheet Content</div>
-      </Sheet>
+      </Sheet>,
     );
 
     // The outer container (backdrop) should have classes that hide it.
@@ -31,7 +31,7 @@ describe("Sheet Component", () => {
     const { getByText, container } = render(
       <Sheet isOpen={true} onClose={onClose}>
         <div>Sheet Content</div>
-      </Sheet>
+      </Sheet>,
     );
 
     // The backdrop should have the visible classes.
@@ -49,7 +49,7 @@ describe("Sheet Component", () => {
     const { container } = render(
       <Sheet isOpen={true} onClose={onClose}>
         <div>Sheet Content</div>
-      </Sheet>
+      </Sheet>,
     );
 
     // The backdrop is the outermost element.
@@ -64,7 +64,7 @@ describe("Sheet Component", () => {
     const { container } = render(
       <Sheet isOpen={true} onClose={onClose}>
         <div>Sheet Content</div>
-      </Sheet>
+      </Sheet>,
     );
 
     // The inner sheet content has a translation class when open.
@@ -80,7 +80,7 @@ describe("Sheet Component", () => {
     const { getByText } = render(
       <Sheet isOpen={true} onClose={onClose}>
         <div>Sheet Content</div>
-      </Sheet>
+      </Sheet>,
     );
 
     // The close button is rendered with the text "✕".

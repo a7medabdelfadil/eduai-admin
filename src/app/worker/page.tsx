@@ -1,7 +1,5 @@
 /* eslint-disable @next/next/no-img-element */
 "use client";
-import Pagination from "@/components/pagination";
-import Spinner from "@/components/spinner";
 import {
   useDeleteWorkersMutation,
   useGetAllWorkersQuery,
@@ -17,6 +15,18 @@ import { Text } from "@/components/Text";
 import { HiDownload } from "react-icons/hi";
 import { BiSearchAlt } from "react-icons/bi";
 import { MdEdit } from "react-icons/md";
+import Container from "@/components/Container";
+import {
+  Table,
+  TableHeader,
+  TableRow,
+  TableHead,
+  TableBody,
+  TableCell,
+} from "@/components/Table";
+import { Skeleton } from "@/components/Skeleton";
+import SeeMoreButton from "@/components/SeeMoreButton";
+import { BiShow, BiLock } from "react-icons/bi";
 
 const Worker = () => {
   const breadcrumbs = [
@@ -41,30 +51,17 @@ const Worker = () => {
   ];
 
   const [selectedWorker, setSelectedWorker] = useState<Worker | null>(null);
-  console.log("👾 ~ Worker ~ selectedWorker:", selectedWorker);
   const [showModal, setShowModal] = useState(false);
-
-  const booleanValue = useSelector((state: RootState) => state.boolean.value);
+  const [visibleCount, setVisibleCount] = useState(20);
 
   type Worker = Record<string, any>;
   const [search, setSearch] = useState("");
-  const [currentPage, setCurrentPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(10);
   const { data, error, isLoading, refetch } = useGetAllWorkersQuery({
     archived: "false",
-    page: currentPage,
-    size: rowsPerPage,
+    page: 0,
+    size: 1000000,
   });
-  const [selectAll, setSelectAll] = useState(false);
-
-  const onPageChange = (page: SetStateAction<number>) => {
-    setCurrentPage(page);
-  };
-  const onElementChange = (ele: SetStateAction<number>) => {
-    setRowsPerPage(ele);
-    setCurrentPage(0);
-  };
-  const [deleteWorker] = useDeleteWorkersMutation();
+  const [deleteWorker, { isLoading: isDeleting }] = useDeleteWorkersMutation();
 
   const handleDelete = async (id: string) => {
     try {
@@ -138,50 +135,28 @@ const Worker = () => {
     }
   };
 
-  const handleSelectAll = () => {
-    setSelectAll(!selectAll);
-    const checkboxes = document.querySelectorAll<HTMLInputElement>(
-      'input[type="checkbox"]:not(#checkbox-all-search)',
-    );
-    checkboxes.forEach(checkbox => {
-      checkbox.checked = !selectAll;
-    });
-  };
-
-  useEffect(() => {
-    const handleOtherCheckboxes = () => {
-      const allCheckboxes = document.querySelectorAll<HTMLInputElement>(
-        'input[type="checkbox"]:not(#checkbox-all-search)',
-      );
-      const allChecked = Array.from(allCheckboxes).every(
-        checkbox => checkbox.checked,
-      );
-      const selectAllCheckbox = document.getElementById(
-        "checkbox-all-search",
-      ) as HTMLInputElement | null;
-      if (selectAllCheckbox) {
-        selectAllCheckbox.checked = allChecked;
-        setSelectAll(allChecked);
-      }
-    };
-
-    const otherCheckboxes = document.querySelectorAll<HTMLInputElement>(
-      'input[type="checkbox"]:not(#checkbox-all-search)',
-    );
-    otherCheckboxes.forEach(checkbox => {
-      checkbox.addEventListener("change", handleOtherCheckboxes);
-    });
-
-    return () => {
-      otherCheckboxes.forEach(checkbox => {
-        checkbox.removeEventListener("change", handleOtherCheckboxes);
-      });
-    };
-  }, []);
-
   const { language: currentLanguage, loading } = useSelector(
     (state: RootState) => state.language,
   );
+
+
+  const translate = {
+    fullName: currentLanguage === "ar" ? "الاسم الكامل" : currentLanguage === "fr" ? "Nom complet" : "Full Name",
+    id: currentLanguage === "ar" ? "الرقم" : currentLanguage === "fr" ? "ID" : "ID",
+    gender: currentLanguage === "ar" ? "الجنس" : currentLanguage === "fr" ? "Genre" : "Gender",
+    nationality: currentLanguage === "ar" ? "الجنسية" : currentLanguage === "fr" ? "Nationalité" : "Nationality",
+    email: currentLanguage === "ar" ? "البريد الإلكتروني" : currentLanguage === "fr" ? "Email" : "Email",
+    mobile: currentLanguage === "ar" ? "الموبايل" : currentLanguage === "fr" ? "Mobile" : "Mobile",
+    view: currentLanguage === "ar" ? "عرض" : currentLanguage === "fr" ? "Voir" : "View",
+    lock: currentLanguage === "ar" ? "قفل" : currentLanguage === "fr" ? "Verrouiller" : "Lock",
+    action: currentLanguage === "ar" ? "الإجراء" : currentLanguage === "fr" ? "Action" : "Action",
+    noData: currentLanguage === "ar" ? "لا توجد بيانات" : currentLanguage === "fr" ? "Aucune donnée disponible" : "No data available",
+  };
+  const filteredData = data?.data?.content?.filter((worker: any) => {
+    return search.trim() === "" || worker.name?.toLowerCase()?.includes(search.toLowerCase());
+  }) || [];
+
+  const visibleData = filteredData.slice(0, visibleCount);
 
   const getAgeFromBirthDate = (birthDate: string | null) => {
     if (!birthDate) return "N/A";
@@ -195,28 +170,11 @@ const Worker = () => {
     return new Date(date).toLocaleDateString("en-GB");
   };
 
-  if (loading || isLoading)
-    return (
-      <div className="flex h-screen w-full items-center justify-center">
-        <Spinner />
-      </div>
-    );
   return (
     <>
       <BreadCrumbs breadcrumbs={breadcrumbs} />
-      <div
-        dir={currentLanguage === "ar" ? "rtl" : "ltr"}
-        className={`${
-          currentLanguage === "ar"
-            ? booleanValue
-              ? "lg:mr-[100px]"
-              : "lg:mr-[270px]"
-            : booleanValue
-              ? "lg:ml-[100px]"
-              : "lg:ml-[270px]"
-        } relative mx-3 overflow-x-auto bg-transparent sm:rounded-lg`}
-      >
-        <div className="flex items-center justify-between">
+      <Container>
+        <div className="-mt-6 flex items-center justify-between">
           <Text font="bold" size="3xl">
             {currentLanguage === "ar"
               ? "جميع العمال"
@@ -228,8 +186,8 @@ const Worker = () => {
           <button
             onClick={() =>
               handleExport({
-                size: rowsPerPage,
-                page: currentPage,
+                size: 0,
+                page: 1000000,
                 archived: false,
                 graduated: false,
               })
@@ -268,7 +226,7 @@ const Worker = () => {
                   type="text"
                   id="icon"
                   name="icon"
-                  className="border-borderSecondary block w-full rounded-lg border-2 px-4 py-2 ps-11 text-lg outline-none disabled:pointer-events-none disabled:opacity-50 dark:border-borderPrimary"
+                  className="border-borderSecondary block w-full rounded-lg border-2 bg-bgPrimary px-4 py-2 ps-11 text-lg outline-none disabled:pointer-events-none disabled:opacity-50 dark:border-borderPrimary"
                   placeholder={
                     currentLanguage === "ar"
                       ? "ابحث عن أي شيء"
@@ -279,11 +237,7 @@ const Worker = () => {
                 />
                 <span className="min-w-[120px] text-primary">
                   {
-                    data?.data.content.filter((worker: Worker) => {
-                      return search.toLocaleLowerCase() === ""
-                        ? worker
-                        : worker.name.toLocaleLowerCase().includes(search);
-                    }).length
+                    filteredData.length
                   }{" "}
                   Result(s)
                 </span>
@@ -305,201 +259,94 @@ const Worker = () => {
             </Link>
           </div>
         </div>
-        <div className="relative overflow-auto shadow-md sm:rounded-lg">
-          <table className="w-full overflow-x-auto text-left text-sm text-textSecondary rtl:text-right">
-            <thead className="bg-thead text-xs uppercase text-textPrimary">
-              <tr>
-                <th scope="col" className="p-4">
-                  <div className="flex items-center">
-                    {/* Add event listener for select all checkbox */}
-                    <input
-                      id="checkbox-all-search"
-                      type="checkbox"
-                      className="-gray-800 h-4 w-4 rounded border-borderPrimary bg-bgPrimary text-blue-600 focus:ring-2 focus:ring-hover"
-                      onChange={handleSelectAll}
-                    />
-                  </div>
-                </th>
-                <th scope="col" className="whitespace-nowrap px-6 py-1">
-                  {currentLanguage === "ar"
-                    ? "الاسم الكامل"
-                    : currentLanguage === "fr"
-                      ? "Nom complet"
-                      : "Full Name"}
-                </th>
-                <th scope="col" className="whitespace-nowrap px-6 py-1">
-                  {currentLanguage === "en"
-                    ? "ID"
-                    : currentLanguage === "ar"
-                      ? "الرقم"
-                      : currentLanguage === "fr"
-                        ? "ID"
-                        : "ID"}
-                </th>
-                <th scope="col" className="whitespace-nowrap px-6 py-1">
-                  {currentLanguage === "en"
-                    ? "Gender"
-                    : currentLanguage === "ar"
-                      ? "الجنس"
-                      : currentLanguage === "fr"
-                        ? "Genre"
-                        : "Gender"}
-                </th>
-                <th scope="col" className="whitespace-nowrap px-6 py-1">
-                  {currentLanguage === "en"
-                    ? "Nationality"
-                    : currentLanguage === "ar"
-                      ? "الجنسية"
-                      : currentLanguage === "fr"
-                        ? "Nationalité"
-                        : "Nationality"}
-                </th>
-                <th scope="col" className="whitespace-nowrap px-6 py-1">
-                  {currentLanguage === "en"
-                    ? "Email"
-                    : currentLanguage === "ar"
-                      ? "البريد الإلكتروني"
-                      : currentLanguage === "fr"
-                        ? "Email"
-                        : "Email"}
-                </th>
-                <th scope="col" className="whitespace-nowrap px-6 py-1">
-                  {currentLanguage === "en"
-                    ? "Mobile"
-                    : currentLanguage === "ar"
-                      ? "الموبايل"
-                      : currentLanguage === "fr"
-                        ? "Mobile"
-                        : "Mobile"}
-                </th>
-                <th scope="col" className="whitespace-nowrap px-6 py-1">
-                  {currentLanguage === "en"
-                    ? "View"
-                    : currentLanguage === "ar"
-                      ? "عرض"
-                      : currentLanguage === "fr"
-                        ? "Voir"
-                        : "View"}
-                </th>
-                <th scope="col" className="whitespace-nowrap px-6 py-1">
-                  {currentLanguage === "en"
-                    ? "Action"
-                    : currentLanguage === "ar"
-                      ? "الإجراء"
-                      : currentLanguage === "fr"
-                        ? "Action"
-                        : "Action"}
-                </th>
-              </tr>
-            </thead>
+        <div className="relative overflow-auto shadow-md sm:rounded-lg -mt-4 bg-bgPrimary">
 
-            <tbody>
-              {data?.data.content
-                .filter((worker: Worker) => {
-                  return search.toLocaleLowerCase() === ""
-                    ? worker
-                    : worker.name.toLocaleLowerCase().includes(search);
-                })
-                .map((worker: Worker, index: number) => (
-                  <tr
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>{translate.fullName}</TableHead>
+                <TableHead>{translate.id}</TableHead>
+                <TableHead>{translate.gender}</TableHead>
+                <TableHead>{translate.nationality}</TableHead>
+                <TableHead>{translate.email}</TableHead>
+                <TableHead>{translate.mobile}</TableHead>
+                <TableHead>{translate.action}</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {isLoading ? (
+                [...Array(3)].map((_, i) => (
+                  <TableRow key={i}>
+                    {Array.from({ length: 7 }).map((_, j) => (
+                      <TableCell key={j}>
+                        <Skeleton className="h-4 w-24" />
+                      </TableCell>
+                    ))}
+                  </TableRow>
+                ))
+              ) : visibleData.length === 0 ? (
+                <TableRow>
+                  <TableCell colSpan={7} className="text-center font-medium">
+                    {translate.noData}
+                  </TableCell>
+                </TableRow>
+              ) : (
+                visibleData.map((worker: Worker, index: number) => (
+                  <TableRow
                     key={worker.id}
-                    onClick={() => {
+                    onClick={(e) => {
+                      if ((e.target as HTMLElement).closest("a")) return;
                       setSelectedWorker(worker);
                       setShowModal(true);
                     }}
-                    className={`cursor-pointer border-b border-borderPrimary text-textPrimary ${
-                      index % 2 === 0 ? "bg-bgRowTable" : "bg-bgPrimary"
-                    }`}
+                    data-index={index}
                   >
-                    <td className="w-4 p-4">
-                      <div className="flex items-center">
-                        <input
-                          id="checkbox-table-search-1"
-                          type="checkbox"
-                          className="h-4 w-4 rounded border-gray-300 bg-gray-100 text-blue-600 focus:ring-2 focus:ring-blue-500"
-                        />
-                      </div>
-                    </td>
-                    <th
-                      scope="row"
-                      className="whitespace-nowrap px-6 py-1 align-middle font-medium"
-                    >
-                      <div className="flex items-center gap-2">
-                        <div className="w-[50px]">
-                          <img
-                            src={worker.picture ?? "/images/userr.png"}
-                            className="mx-2 h-[25px] w-[25px] rounded-full"
-                            alt="#"
-                          />
-                        </div>
-                        <p className="text-textPrimary">
-                          {String(worker.name)}
-                        </p>
-                      </div>
-                    </th>
-                    <td className="whitespace-nowrap px-6 py-1">{worker.id}</td>
-                    <td className="whitespace-nowrap px-6 py-1">
-                      {worker.gender}
-                    </td>
-                    <td className="whitespace-nowrap px-6 py-1">
-                      {worker.nationality}
-                    </td>
-                    <td className="whitespace-nowrap px-6 py-1">
-                      {worker.email}
-                    </td>
-                    <td className="whitespace-nowrap px-6 py-1">
-                      {worker.number}
-                    </td>
-                    <td className="whitespace-nowrap px-6 py-1">
+                    <TableCell className="flex items-center gap-2">
+                      <img
+                        src={worker.picture ?? "/images/userr.png"}
+                        className="mx-2 h-[25px] w-[25px] rounded-full"
+                        alt="#"
+                      />
+                      <p>{worker.name}</p>
+                    </TableCell>
+                    <TableCell>{worker.id}</TableCell>
+                    <TableCell>{worker.gender}</TableCell>
+                    <TableCell>{worker.nationality}</TableCell>
+                    <TableCell>{worker.email}</TableCell>
+                    <TableCell>{worker.number}</TableCell>
+                    <TableCell className="flex items-center gap-3">
                       <Link
                         href={`/worker/view-worker/${worker.id}`}
-                        className="font-medium text-blue-600 hover:underline"
+                        className="text-primary hover:text-primaryHover transition"
+                        title={translate.view}
+                        onClick={(e) => e.stopPropagation()}
                       >
-                        {currentLanguage === "en"
-                          ? "View"
-                          : currentLanguage === "ar"
-                            ? "عرض"
-                            : "Voir"}
+                        <BiShow size={20} />
                       </Link>
-                    </td>
-                    <td className="whitespace-nowrap px-6 py-1">
                       <button
-                        onClick={() => handleDelete(worker.id)}
-                        className="rounded-lg bg-error px-2 py-1 font-semibold text-white shadow-lg delay-150 duration-300 ease-in-out hover:-translate-y-1 hover:scale-110"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleDelete(worker.id);
+                        }}
+                        className="text-error hover:text-red-800 transition"
+                        title={translate.lock}
+                        disabled={isDeleting}
                       >
-                        {currentLanguage === "en"
-                          ? "Lock"
-                          : currentLanguage === "ar"
-                            ? "قفل"
-                            : "Verrouiller"}
+                        <BiLock size={20} />
                       </button>
-                    </td>
-                  </tr>
-                ))}
-            </tbody>
-          </table>
-          {(data?.data.content.length == 0 || data == null) && (
-            <div className="flex w-full justify-center py-3 text-center text-[18px] font-semibold">
-              {currentLanguage === "en"
-                ? "There is No Data"
-                : currentLanguage === "ar"
-                  ? "لا توجد بيانات"
-                  : currentLanguage === "fr"
-                    ? "Aucune donnée"
-                    : "There is No Data"}
-            </div>
+                    </TableCell>
+                  </TableRow>
+                ))
+              )}
+            </TableBody>
+          </Table>
+
+          {visibleCount < filteredData.length && (
+            <SeeMoreButton onClick={() => setVisibleCount(prev => prev + 20)} />
           )}
+
         </div>
-        <div className="relative overflow-auto">
-          <Pagination
-            totalPages={data?.data.totalPages}
-            elementsPerPage={rowsPerPage}
-            onChangeElementsPerPage={onElementChange}
-            currentPage={currentPage}
-            onChangePage={onPageChange}
-          />
-        </div>
-      </div>
+      </Container>
       {showModal && selectedWorker && (
         <div
           onClick={() => setShowModal(false)}

@@ -1,5 +1,5 @@
-import { cn } from "@/lib/utils"
-import * as React from "react"
+import { cn } from "@/lib/utils";
+import * as React from "react";
 
 const Table = React.forwardRef<
   HTMLTableElement,
@@ -12,16 +12,23 @@ const Table = React.forwardRef<
       {...props}
     />
   </div>
-))
-Table.displayName = "Table"
+));
+Table.displayName = "Table";
 
 const TableHeader = React.forwardRef<
   HTMLTableSectionElement,
   React.HTMLAttributes<HTMLTableSectionElement>
 >(({ className, ...props }, ref) => (
-  <thead ref={ref} className={cn("[&_tr]:border-b text-start bg-thead text-textPrimary", className)} {...props} />
-))
-TableHeader.displayName = "TableHeader"
+  <thead
+    ref={ref}
+    className={cn(
+      "bg-thead text-start text-textPrimary [&_tr]:border-b",
+      className,
+    )}
+    {...props}
+  />
+));
+TableHeader.displayName = "TableHeader";
 
 const TableBody = React.forwardRef<
   HTMLTableSectionElement,
@@ -29,11 +36,11 @@ const TableBody = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <tbody
     ref={ref}
-    className={cn("[&_tr:last-child]:border-0 bg-bgPrimary", className)}
+    className={cn("bg-bgPrimary [&_tr:last-child]:border-0", className)}
     {...props}
   />
-))
-TableBody.displayName = "TableBody"
+));
+TableBody.displayName = "TableBody";
 
 const TableFooter = React.forwardRef<
   HTMLTableSectionElement,
@@ -43,48 +50,52 @@ const TableFooter = React.forwardRef<
     ref={ref}
     className={cn(
       "border-t border-borderPrimary bg-muted/50 font-medium [&>tr]:last:border-b-0",
-      className
+      className,
     )}
     {...props}
   />
-))
-TableFooter.displayName = "TableFooter"
+));
+TableFooter.displayName = "TableFooter";
 
 const TableRow = React.forwardRef<
   HTMLTableRowElement,
-  React.HTMLAttributes<HTMLTableRowElement> & { "data-index"?: number; "data-length"?: number }
->(({ className, "data-index": index, "data-length": length, ...props }, ref) => {
-  const rowColor = index !== undefined
-    ? index % 2 === 0
-      ? "bg-bgPrimary"
-      : "bg-bgRowTable"
-    : "";
+  React.HTMLAttributes<HTMLTableRowElement> & {
+    "data-index"?: number;
+    "data-length"?: number;
+  }
+>(
+  (
+    { className, "data-index": index, "data-length": length, ...props },
+    ref,
+  ) => {
+    const rowColor =
+      index !== undefined
+        ? index % 2 === 0
+          ? "bg-bgPrimary"
+          : "bg-bgRowTable"
+        : "";
 
-  const isFirst = index === 0;
-  const isLast = index === length! - 1;
+    const isFirst = index === 0;
+    const isLast = index === length! - 1;
 
-  const roundClass = isFirst
-    ? "rounded-t-md"
-    : isLast
-    ? "rounded-b-md"
-    : "";
+    const roundClass = isFirst ? "rounded-t-md" : isLast ? "rounded-b-md" : "";
 
-  return (
-    <tr
-      ref={ref}
-      className={cn(
-        "border-b border-borderPrimary transition-colors rounded-xl overflow-hidden data-[state=selected]:bg-muted",
-        rowColor,
-        roundClass,
-        className
-      )}
-      {...props}
-    />
-  );
-});
+    return (
+      <tr
+        ref={ref}
+        className={cn(
+          "overflow-hidden rounded-xl border-b border-borderPrimary transition-colors data-[state=selected]:bg-muted",
+          rowColor,
+          roundClass,
+          className,
+        )}
+        {...props}
+      />
+    );
+  },
+);
 
-
-TableRow.displayName = "TableRow"
+TableRow.displayName = "TableRow";
 
 const TableHead = React.forwardRef<
   HTMLTableCellElement,
@@ -94,12 +105,12 @@ const TableHead = React.forwardRef<
     ref={ref}
     className={cn(
       "h-12 px-4 text-start font-semibold text-textPrimary [&:has([role=checkbox])]:pr-0",
-      className
+      className,
     )}
     {...props}
   />
-))
-TableHead.displayName = "TableHead"
+));
+TableHead.displayName = "TableHead";
 
 const TableCell = React.forwardRef<
   HTMLTableCellElement,
@@ -107,11 +118,14 @@ const TableCell = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <td
     ref={ref}
-    className={cn("py-2 px-4 align-start [&:has([role=checkbox])]:pr-0", className)}
+    className={cn(
+      "align-start px-4 py-2 [&:has([role=checkbox])]:pr-0",
+      className,
+    )}
     {...props}
   />
-))
-TableCell.displayName = "TableCell"
+));
+TableCell.displayName = "TableCell";
 
 const TableCaption = React.forwardRef<
   HTMLTableCaptionElement,
@@ -122,8 +136,8 @@ const TableCaption = React.forwardRef<
     className={cn("mt-4 text-sm text-muted-foreground", className)}
     {...props}
   />
-))
-TableCaption.displayName = "TableCaption"
+));
+TableCaption.displayName = "TableCaption";
 
 export {
   Table,
@@ -134,4 +148,4 @@ export {
   TableRow,
   TableCell,
   TableCaption,
-}
+};

@@ -10,11 +10,11 @@ const ExpirePage = () => {
         className="relative top-[110px] h-[108px] w-[353px]"
       />
 
-      <h2 className="font-sora relative top-[160px] text-[36px] font-semibold leading-[44px] text-black">
+      <h2 className="relative top-[160px] font-sora text-[36px] font-semibold leading-[44px] text-black">
         You have been disconnected
       </h2>
 
-      <p className="font-sora relative top-[200px] text-[28px] font-semibold leading-[36px] text-[#4f5c72]">
+      <p className="relative top-[200px] font-sora text-[28px] font-semibold leading-[36px] text-[#4f5c72]">
         The page has expired!
       </p>
 

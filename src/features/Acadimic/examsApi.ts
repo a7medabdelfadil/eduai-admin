@@ -73,7 +73,8 @@ export const examsApi = createApi({
     }),
     //
     getExamTypeByCourseId: builder.query({
-      query: id => `/api/v1/academic/educationalAffairs/exam-types/non-teacher/all-by-course/${id}`,
+      query: id =>
+        `/api/v1/academic/educationalAffairs/exam-types/non-teacher/all-by-course/${id}`,
     }),
     //
     updateExam: builder.mutation({

@@ -155,8 +155,8 @@ const School = () => {
           </div>
         </div>
 
-        <div className="flex flex-col py-6 md:flex-row gap-6 max-md:px-6">
-        <Card className="flex flex-1 flex-col bg-bgPrimary">
+        <div className="flex flex-col gap-6 py-6 max-md:px-6 md:flex-row">
+          <Card className="flex flex-1 flex-col bg-bgPrimary">
             <CardHeader>
               <CardTitle>School Performance</CardTitle>
             </CardHeader>
@@ -222,8 +222,6 @@ const School = () => {
               </ChartContainer>
             </CardContent>
           </Card>
-
-         
         </div>
       </div>
     </>

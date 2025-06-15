@@ -9,7 +9,7 @@ describe("Modal Component", () => {
     const { container } = render(
       <Modal isOpen={false} onClose={jest.fn()}>
         <div>Modal Content</div>
-      </Modal>
+      </Modal>,
     );
     // When the modal is closed, nothing should be rendered.
     expect(container.firstChild).toBeNull();
@@ -19,7 +19,7 @@ describe("Modal Component", () => {
     const { getByText, container } = render(
       <Modal isOpen={true} onClose={jest.fn()}>
         <div>Modal Content</div>
-      </Modal>
+      </Modal>,
     );
     // The modal content should be visible.
     expect(getByText("Modal Content")).toBeInTheDocument();
@@ -32,7 +32,7 @@ describe("Modal Component", () => {
     const { container } = render(
       <Modal isOpen={true} onClose={onClose}>
         <div>Modal Content</div>
-      </Modal>
+      </Modal>,
     );
     // The backdrop is the outermost div.
     const backdrop = container.firstChild;
@@ -48,7 +48,7 @@ describe("Modal Component", () => {
     const { getByText } = render(
       <Modal isOpen={true} onClose={onClose}>
         <div>Modal Content</div>
-      </Modal>
+      </Modal>,
     );
     // Get the inner modal content.
     const modalContent = getByText("Modal Content");

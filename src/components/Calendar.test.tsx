@@ -13,13 +13,13 @@ jest.mock("react-redux", () => ({
 }));
 
 // Create a helper variable for the mocked useSelector.
-const mockedUseSelector = (useSelector as unknown) as jest.Mock;
+const mockedUseSelector = useSelector as unknown as jest.Mock;
 
 describe("Calendar Component", () => {
   beforeEach(() => {
     // By default, set the language to English.
-    mockedUseSelector.mockImplementation((callback) =>
-      callback({ language: "en" })
+    mockedUseSelector.mockImplementation(callback =>
+      callback({ language: "en" }),
     );
   });
 
@@ -32,12 +32,14 @@ describe("Calendar Component", () => {
 
     // Compute expected month and year header.
     const currentDate = new Date();
-    const expectedMonthYear = format(currentDate, "LLLL yyyy", { locale: enUS });
-    
+    const expectedMonthYear = format(currentDate, "LLLL yyyy", {
+      locale: enUS,
+    });
+
     // The header is rendered as an h2 element with aria-live attribute.
     const header = screen.getByRole("heading", { level: 2 });
     expect(header).toHaveTextContent(expectedMonthYear);
-    
+
     // Check that the day names are rendered in English.
     expect(screen.getByText("SUN")).toBeInTheDocument();
     expect(screen.getByText("MON")).toBeInTheDocument();
@@ -51,40 +53,44 @@ describe("Calendar Component", () => {
   test("clicking the Next Month button updates the header", () => {
     render(<Calendar />);
     const header = screen.getByRole("heading", { level: 2 });
-    
+
     // Compute expected header for the next month.
     const currentDate = new Date();
     const nextMonthDate = new Date(
       currentDate.getFullYear(),
       currentDate.getMonth() + 1,
-      1
+      1,
     );
-    const expectedNextMonthYear = format(nextMonthDate, "LLLL yyyy", { locale: enUS });
-    
+    const expectedNextMonthYear = format(nextMonthDate, "LLLL yyyy", {
+      locale: enUS,
+    });
+
     // Click the "Next month" button.
     const nextButton = screen.getByRole("button", { name: /next month/i });
     fireEvent.click(nextButton);
-    
+
     expect(header).toHaveTextContent(expectedNextMonthYear);
   });
 
   test("clicking the Previous Month button updates the header", () => {
     render(<Calendar />);
     const header = screen.getByRole("heading", { level: 2 });
-    
+
     // Compute expected header for the previous month.
     const currentDate = new Date();
     const prevMonthDate = new Date(
       currentDate.getFullYear(),
       currentDate.getMonth() - 1,
-      1
+      1,
     );
-    const expectedPrevMonthYear = format(prevMonthDate, "LLLL yyyy", { locale: enUS });
-    
+    const expectedPrevMonthYear = format(prevMonthDate, "LLLL yyyy", {
+      locale: enUS,
+    });
+
     // Click the "Previous month" button.
     const prevButton = screen.getByRole("button", { name: /previous month/i });
     fireEvent.click(prevButton);
-    
+
     expect(header).toHaveTextContent(expectedPrevMonthYear);
   });
 
@@ -94,16 +100,18 @@ describe("Calendar Component", () => {
     // (Note: there might be multiple gridcells, so we filter for those that are clickable.)
     const dayCells = screen.getAllByRole("gridcell");
     const clickableCells = dayCells.filter(
-      (cell) => cell.getAttribute("tabIndex") === "0" && cell.textContent?.trim() === "1"
+      cell =>
+        cell.getAttribute("tabIndex") === "0" &&
+        cell.textContent?.trim() === "1",
     );
 
     if (clickableCells.length === 0) {
       throw new Error("No clickable day cell with text '1' found");
     }
-    
+
     const dayCell = clickableCells[0];
     fireEvent.click(dayCell);
-    
+
     // After clicking, the cell should be marked as selected.
     // In our component, the selected cell gets "bg-primary" and "text-white" classes.
     expect(dayCell.className).toMatch(/bg-primary/);
@@ -112,12 +120,12 @@ describe("Calendar Component", () => {
 
   test("renders day names in Arabic when language is set to 'ar'", () => {
     // Override the Redux state to set language to Arabic.
-    mockedUseSelector.mockImplementation((callback) =>
-      callback({ language: "ar" })
+    mockedUseSelector.mockImplementation(callback =>
+      callback({ language: "ar" }),
     );
-    
+
     render(<Calendar />);
-    
+
     // Check that the Arabic day names are rendered.
     expect(screen.getByText("الأحد")).toBeInTheDocument();
     expect(screen.getByText("الإثنين")).toBeInTheDocument();

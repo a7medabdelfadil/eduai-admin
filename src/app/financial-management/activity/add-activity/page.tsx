@@ -6,7 +6,10 @@ import { useForm } from "react-hook-form";
 import Spinner from "@/components/spinner";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
-import { useCreateActivityMutation, useGetUnusedActivitiesQuery } from "@/features/Financial/activityApi";
+import {
+  useCreateActivityMutation,
+  useGetUnusedActivitiesQuery,
+} from "@/features/Financial/activityApi";
 import Container from "@/components/Container";
 
 const AddActivity = () => {
@@ -49,10 +52,14 @@ const AddActivity = () => {
     (state: RootState) => state.language,
   );
 
-  const { data, isLoading: activityLoading, refetch } = useGetUnusedActivitiesQuery(null);
-  console.log("👾 ~ AddActivity ~ data:", data)
-  const [createActivity, { isLoading: submitting }] = useCreateActivityMutation();
-
+  const {
+    data,
+    isLoading: activityLoading,
+    refetch,
+  } = useGetUnusedActivitiesQuery(null);
+  console.log("👾 ~ AddActivity ~ data:", data);
+  const [createActivity, { isLoading: submitting }] =
+    useCreateActivityMutation();
 
   const onSubmit = async (formData: any) => {
     console.log("Form data submitted:", formData);
@@ -67,25 +74,28 @@ const AddActivity = () => {
     }
   };
 
-
   if (activityLoading)
     return (
       <div className="flex h-screen w-full items-center justify-center">
         <Spinner />
       </div>
     );
-  if (!activityLoading && (!Array.isArray(data?.data) || data.data.length === 0)) {
+  if (
+    !activityLoading &&
+    (!Array.isArray(data?.data) || data.data.length === 0)
+  ) {
     return (
       <div
         dir={currentLanguage === "ar" ? "rtl" : "ltr"}
-        className={`${currentLanguage === "ar"
-          ? booleanValue
-            ? "lg:mr-[100px]"
-            : "lg:mr-[270px]"
-          : booleanValue
-            ? "lg:ml-[100px]"
-            : "lg:ml-[270px]"
-          } mx-3 mt-[40px] flex h-[500px] items-center justify-center text-center`}
+        className={`${
+          currentLanguage === "ar"
+            ? booleanValue
+              ? "lg:mr-[100px]"
+              : "lg:mr-[270px]"
+            : booleanValue
+              ? "lg:ml-[100px]"
+              : "lg:ml-[270px]"
+        } mx-3 mt-[40px] flex h-[500px] items-center justify-center text-center`}
       >
         <div className="rounded-xl bg-bgPrimary p-10 shadow-md">
           <h2 className="mb-4 text-[20px] font-semibold text-secondary">
@@ -110,12 +120,11 @@ const AddActivity = () => {
     );
   }
 
-
   return (
     <>
       <BreadCrumbs breadcrumbs={breadcrumbs} />
       <Container>
-        <div className="mb-8 -mt-2 -ml-1 flex items-center justify-between">
+        <div className="-ml-1 -mt-2 mb-8 flex items-center justify-between">
           <h1 className="text-3xl font-semibold">
             {currentLanguage === "en"
               ? "Add Activity"
@@ -127,8 +136,11 @@ const AddActivity = () => {
             {/* default */}
           </h1>
         </div>
-        <form className="flex h-full w-full items-center justify-center" onSubmit={handleSubmit(onSubmit)}>
-          <div className="rounded-xl bg-bgPrimary p-10 w-[90] md:w-[80%]">
+        <form
+          className="flex h-full w-full items-center justify-center"
+          onSubmit={handleSubmit(onSubmit)}
+        >
+          <div className="w-[90] rounded-xl bg-bgPrimary p-10 md:w-[80%]">
             <div className="flex items-center justify-start gap-2">
               <svg
                 className="h-6 w-6 font-bold text-secondary group-hover:text-hover"
@@ -160,7 +172,7 @@ const AddActivity = () => {
                 {/* default */}
               </h1>
             </div>
-            <div className="p-6 grid grid-cols-2 gap-4 max-[1278px]:grid-cols-1">
+            <div className="grid grid-cols-2 gap-4 p-6 max-[1278px]:grid-cols-1">
               <label
                 htmlFor="activityType"
                 className="grid text-[18px] font-semibold"
@@ -174,7 +186,7 @@ const AddActivity = () => {
                 <select
                   id="activityType"
                   {...register("activityType")}
-                  className="w-full rounded-xl bg-bgPrimary text-textPrimary border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 text-textPrimary outline-none max-[471px]:w-[350px]"
                 >
                   <option value="">
                     {currentLanguage === "ar"
@@ -189,7 +201,6 @@ const AddActivity = () => {
                         {activityType}
                       </option>
                     ))}
-
                 </select>
               </label>
               <label htmlFor="cost" className="grid text-[18px] font-semibold">
@@ -240,8 +251,11 @@ const AddActivity = () => {
               <button
                 type="submit"
                 disabled={submitting}
-                className={`w-fit rounded-xl px-4 py-2 text-[18px] text-white duration-300 ease-in hover:shadow-xl ${submitting ? "bg-gray-400 cursor-not-allowed" : "bg-primary hover:bg-hover"
-                  }`}
+                className={`w-fit rounded-xl px-4 py-2 text-[18px] text-white duration-300 ease-in hover:shadow-xl ${
+                  submitting
+                    ? "cursor-not-allowed bg-gray-400"
+                    : "bg-primary hover:bg-hover"
+                }`}
               >
                 {submitting
                   ? currentLanguage === "ar"
@@ -256,7 +270,6 @@ const AddActivity = () => {
                       : "Save"}
               </button>
             </div>
-
           </div>
         </form>
       </Container>

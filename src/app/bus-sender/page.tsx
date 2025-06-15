@@ -75,7 +75,7 @@ const DriverLocationSender: React.FC = () => {
     const interval = setInterval(() => {
       if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(
-          (position) => {
+          position => {
             const data = {
               busId: parseInt(formData.busId),
               latitude: position.coords.latitude,
@@ -89,7 +89,7 @@ const DriverLocationSender: React.FC = () => {
 
             console.log("📤 Location sent:", data);
           },
-          (err) => console.error("GPS Error:", err),
+          err => console.error("GPS Error:", err),
         );
       }
     }, 3000);
@@ -109,9 +109,7 @@ const DriverLocationSender: React.FC = () => {
         className="mb-4 w-full rounded border p-2"
         placeholder="Enter Bus ID"
         value={formData.busId}
-        onChange={(e) =>
-          setFormData({ ...formData, busId: e.target.value })
-        }
+        onChange={e => setFormData({ ...formData, busId: e.target.value })}
       />
 
       <div className="flex flex-wrap gap-3">
@@ -119,9 +117,7 @@ const DriverLocationSender: React.FC = () => {
           onClick={connect}
           disabled={connected}
           className={`rounded px-4 py-2 font-semibold text-white ${
-            connected
-              ? "bg-gray-400"
-              : "bg-green-500 hover:bg-green-600"
+            connected ? "bg-gray-400" : "bg-green-500 hover:bg-green-600"
           }`}
         >
           Connect
@@ -131,9 +127,7 @@ const DriverLocationSender: React.FC = () => {
           onClick={disconnect}
           disabled={!connected}
           className={`rounded px-4 py-2 font-semibold text-white ${
-            !connected
-              ? "bg-gray-400"
-              : "bg-red-500 hover:bg-red-600"
+            !connected ? "bg-gray-400" : "bg-red-500 hover:bg-red-600"
           }`}
         >
           Disconnect
@@ -146,8 +140,8 @@ const DriverLocationSender: React.FC = () => {
             !connected
               ? "bg-gray-400"
               : sending
-              ? "bg-yellow-500 hover:bg-yellow-600"
-              : "bg-blue-500 hover:bg-blue-600"
+                ? "bg-yellow-500 hover:bg-yellow-600"
+                : "bg-blue-500 hover:bg-blue-600"
           }`}
         >
           {sending ? "Stop Sending" : "Start Sending"}

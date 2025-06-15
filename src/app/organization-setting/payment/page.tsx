@@ -77,12 +77,9 @@ const Payment = () => {
     <>
       <BreadCrumbs breadcrumbs={breadcrumbs} />
       <Container>
-        <div className="grid grid-cols-3 w-full gap-10">
+        <div className="grid w-full grid-cols-3 gap-10">
           {taxFields?.map((tax, index) => (
-            <div
-              key={index}
-              className="grid gap-4 rounded-xl bg-bgPrimary p-8"
-            >
+            <div key={index} className="grid gap-4 rounded-xl bg-bgPrimary p-8">
               <div className="flex justify-between text-[20px] font-semibold">
                 <p className="flex gap-2">
                   <img src={tax.img} alt="#" />

@@ -35,38 +35,48 @@ const Transcript = () => {
 
   const booleanValue = useSelector((state: RootState) => state.boolean.value);
   const { language: currentLanguage, loading } = useSelector(
-    (state: RootState) => state.language
+    (state: RootState) => state.language,
   );
   const [selectedStudent, setSelectedStudent] = useState<number | null>(null);
-  const { data: studentsData, error, isLoading, refetch } = useGetAllStudentsQuery({
+  const {
+    data: studentsData,
+    error,
+    isLoading,
+    refetch,
+  } = useGetAllStudentsQuery({
     archived: "true",
     page: 0,
     size: 100000,
-    graduated: "false"
+    graduated: "false",
   });
 
-  console.log('studentsData', studentsData);
-  const { data: semestersData, isLoading: semestersLoading } = useGetAllSemestersQuery(null);
+  console.log("studentsData", studentsData);
+  const { data: semestersData, isLoading: semestersLoading } =
+    useGetAllSemestersQuery(null);
   const [selectedSemester, setSelectedSemester] = useState<number | null>(null);
   const shouldSkip = !selectedSemester || !selectedStudent;
-  const { data: coursesData, isFetching: isCoursesLoading, refetch: fetchCourses } = useGetAllTranscriptCoursesQuery(
-    shouldSkip ? skipToken : { studentId: selectedStudent, semesterId: selectedSemester }
+  const {
+    data: coursesData,
+    isFetching: isCoursesLoading,
+    refetch: fetchCourses,
+  } = useGetAllTranscriptCoursesQuery(
+    shouldSkip
+      ? skipToken
+      : { studentId: selectedStudent, semesterId: selectedSemester },
   );
 
-
-
-
-  const handleSemesterChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+  const handleSemesterChange = (
+    event: React.ChangeEvent<HTMLSelectElement>,
+  ) => {
     const semesterId = Number(event.target.value);
     setSelectedSemester(semesterId);
   };
 
-useEffect(() => {
-  if (selectedStudent && selectedSemester) {
-    fetchCourses();
-  }
-}, [selectedStudent, selectedSemester]);
-
+  useEffect(() => {
+    if (selectedStudent && selectedSemester) {
+      fetchCourses();
+    }
+  }, [selectedStudent, selectedSemester]);
 
   if (loading || semestersLoading)
     return (
@@ -80,14 +90,15 @@ useEffect(() => {
       <BreadCrumbs breadcrumbs={breadcrumbs} />
       <div
         dir={currentLanguage === "ar" ? "rtl" : "ltr"}
-        className={`${currentLanguage === "ar"
-          ? booleanValue
-            ? "lg:mr-[100px]"
-            : "lg:mr-[270px]"
-          : booleanValue
-            ? "lg:ml-[100px]"
-            : "lg:ml-[270px]"
-          } justify-left mb-4 ml-4 mt-5 flex gap-5 text-[20px] font-medium`}
+        className={`${
+          currentLanguage === "ar"
+            ? booleanValue
+              ? "lg:mr-[100px]"
+              : "lg:mr-[270px]"
+            : booleanValue
+              ? "lg:ml-[100px]"
+              : "lg:ml-[270px]"
+        } justify-left mb-4 ml-4 mt-5 flex gap-5 text-[20px] font-medium`}
       >
         <Link
           href="/document-management/transcript"
@@ -107,17 +118,23 @@ useEffect(() => {
               : "List Of Points"}
         </Link>
       </div>
-      <div dir={currentLanguage === "ar" ? "rtl" : "ltr"}
-        className={`${currentLanguage === "ar"
-          ? booleanValue ? "lg:mr-[100px]" : "lg:mr-[270px]"
-          : booleanValue ? "lg:ml-[100px]" : "lg:ml-[270px]"
-          } justify-left mb-4 ml-4 mt-5 flex gap-5 text-[20px] font-medium`}>
-
+      <div
+        dir={currentLanguage === "ar" ? "rtl" : "ltr"}
+        className={`${
+          currentLanguage === "ar"
+            ? booleanValue
+              ? "lg:mr-[100px]"
+              : "lg:mr-[270px]"
+            : booleanValue
+              ? "lg:ml-[100px]"
+              : "lg:ml-[270px]"
+        } justify-left mb-4 ml-4 mt-5 flex gap-5 text-[20px] font-medium`}
+      >
         <select
           id="semester-select"
           className="h-full w-[400px] rounded-xl border bg-bgPrimary px-4 py-3 text-[18px] text-textSecondary outline-none max-[458px]:w-[350px]"
           value={selectedSemester || ""}
-          onChange={(e) => setSelectedSemester(Number(e.target.value))}
+          onChange={e => setSelectedSemester(Number(e.target.value))}
         >
           <option value="" disabled>
             {currentLanguage === "ar"
@@ -137,7 +154,7 @@ useEffect(() => {
           id="student-select"
           className="h-full w-[400px] rounded-xl border bg-bgPrimary px-4 py-3 text-[18px] text-textSecondary outline-none max-[458px]:w-[350px]"
           value={selectedStudent || ""}
-          onChange={(e) => setSelectedStudent(Number(e.target.value))}
+          onChange={e => setSelectedStudent(Number(e.target.value))}
         >
           <option value="" disabled>
             {currentLanguage === "ar"
@@ -154,10 +171,8 @@ useEffect(() => {
         </select>
       </div>
 
-
-
       {!selectedStudent && !selectedSemester && (
-        <p className="mt-4 text-textPrimary text-center text-lg font-semibold">
+        <p className="mt-4 text-center text-lg font-semibold text-textPrimary">
           {currentLanguage === "ar"
             ? "يرجى اختيار الطالب والفصل الدراسي"
             : currentLanguage === "fr"
@@ -167,7 +182,7 @@ useEffect(() => {
       )}
 
       {selectedStudent && !selectedSemester && (
-        <p className="mt-4  text-textPrimary text-center text-lg font-semibold">
+        <p className="mt-4 text-center text-lg font-semibold text-textPrimary">
           {currentLanguage === "ar"
             ? "يرجى اختيار الفصل الدراسي"
             : currentLanguage === "fr"
@@ -177,7 +192,7 @@ useEffect(() => {
       )}
 
       {!selectedStudent && selectedSemester && (
-        <p className="mt-4  text-textPrimary text-center text-lg font-semibold">
+        <p className="mt-4 text-center text-lg font-semibold text-textPrimary">
           {currentLanguage === "ar"
             ? "يرجى اختيار الطالب"
             : currentLanguage === "fr"
@@ -188,14 +203,15 @@ useEffect(() => {
       {selectedSemester && coursesData && (
         <div
           dir={currentLanguage === "ar" ? "rtl" : "ltr"}
-          className={`${currentLanguage === "ar"
-            ? booleanValue
-              ? "lg:mr-[100px]"
-              : "lg:mr-[270px]"
-            : booleanValue
-              ? "lg:ml-[100px]"
-              : "lg:ml-[270px]"
-            } relative mx-3 mt-10 h-screen overflow-x-auto bg-transparent sm:rounded-lg`}
+          className={`${
+            currentLanguage === "ar"
+              ? booleanValue
+                ? "lg:mr-[100px]"
+                : "lg:mr-[270px]"
+              : booleanValue
+                ? "lg:ml-[100px]"
+                : "lg:ml-[270px]"
+          } relative mx-3 mt-10 h-screen overflow-x-auto bg-transparent sm:rounded-lg`}
         >
           <table className="w-full overflow-x-auto text-left text-sm text-gray-500 rtl:text-right">
             <thead className="bg-thead text-xs uppercase text-textPrimary">
@@ -261,7 +277,10 @@ useEffect(() => {
             <tbody>
               {isCoursesLoading ? (
                 Array.from({ length: 3 }).map((_, index) => (
-                  <tr key={index} className="border-b border-borderPrimary bg-bgPrimary">
+                  <tr
+                    key={index}
+                    className="border-b border-borderPrimary bg-bgPrimary"
+                  >
                     {Array.from({ length: 8 }).map((_, i) => (
                       <td key={i} className="px-6 py-4">
                         <Skeleton className="h-4 w-full" />
@@ -271,7 +290,10 @@ useEffect(() => {
                 ))
               ) : coursesData?.data?.length === 0 ? (
                 <tr>
-                  <td colSpan={8} className="px-6 py-8 text-center text-lg font-semibold text-textPrimary">
+                  <td
+                    colSpan={8}
+                    className="px-6 py-8 text-center text-lg font-semibold text-textPrimary"
+                  >
                     {currentLanguage === "ar"
                       ? "لا توجد بيانات متاحة"
                       : currentLanguage === "fr"
@@ -285,13 +307,27 @@ useEffect(() => {
                     key={course.courseSemesterRegistrationId}
                     className="border-b border-borderPrimary bg-bgPrimary hover:bg-bgSecondary"
                   >
-                    <td className="whitespace-nowrap px-6 py-4">{course.courseResponse.name}</td>
-                    <td className="whitespace-nowrap px-6 py-4">{course.courseResponse.code}</td>
-                    <td className="whitespace-nowrap px-6 py-4">{course.courseResponse.level}</td>
-                    <td className="whitespace-nowrap px-6 py-4">{course.courseResponse.language}</td>
-                    <td className="whitespace-nowrap px-6 py-4">{course.courseResponse.eduSystemName}</td>
-                    <td className="whitespace-nowrap px-6 py-4">{course.courseResponse.secondarySchoolDepartment}</td>
-                    <td className="whitespace-nowrap px-6 py-4">{course.courseResponse.subDepartment}</td>
+                    <td className="whitespace-nowrap px-6 py-4">
+                      {course.courseResponse.name}
+                    </td>
+                    <td className="whitespace-nowrap px-6 py-4">
+                      {course.courseResponse.code}
+                    </td>
+                    <td className="whitespace-nowrap px-6 py-4">
+                      {course.courseResponse.level}
+                    </td>
+                    <td className="whitespace-nowrap px-6 py-4">
+                      {course.courseResponse.language}
+                    </td>
+                    <td className="whitespace-nowrap px-6 py-4">
+                      {course.courseResponse.eduSystemName}
+                    </td>
+                    <td className="whitespace-nowrap px-6 py-4">
+                      {course.courseResponse.secondarySchoolDepartment}
+                    </td>
+                    <td className="whitespace-nowrap px-6 py-4">
+                      {course.courseResponse.subDepartment}
+                    </td>
                     <td className="whitespace-nowrap px-6 py-4">
                       <Link
                         href={`/document-management/transcript/${course.courseSemesterRegistrationId}`}
@@ -307,9 +343,7 @@ useEffect(() => {
                   </tr>
                 ))
               )}
-
             </tbody>
-
           </table>
         </div>
       )}

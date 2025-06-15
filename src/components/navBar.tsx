@@ -47,7 +47,7 @@ const NavBar = () => {
     error: userError,
     isLoading: userLoading,
   } = useGetAllCurrentUserQuery(null);
-  console.log(userData)
+  console.log(userData);
 
   const { theme, setTheme } = useTheme();
   const [isClient, setIsClient] = useState(false);
@@ -213,7 +213,7 @@ const NavBar = () => {
                     type="text"
                     id="icon"
                     name="icon"
-                    className="block w-full bg-transparent rounded-lg border-none px-4 py-2 ps-11 text-lg outline-none focus:border-blue-500 focus:ring-blue-500 disabled:pointer-events-none disabled:opacity-50"
+                    className="block w-full rounded-lg border-none bg-transparent px-4 py-2 ps-11 text-lg outline-none focus:border-blue-500 focus:ring-blue-500 disabled:pointer-events-none disabled:opacity-50"
                     placeholder={
                       currentLanguage === "ar"
                         ? "ابحث عن أي شيء"
@@ -354,7 +354,7 @@ const NavBar = () => {
                         <div
                           className={`flex flex-col text-left ${currentLanguage === "ar" ? "mr-2" : "ml-2"}`}
                         >
-                          <span className="text-xs sm:text-[16px] text-primary">
+                          <span className="text-xs text-primary sm:text-[16px]">
                             {currentLanguage === "ar"
                               ? "المسؤول"
                               : currentLanguage === "fr"
@@ -362,7 +362,7 @@ const NavBar = () => {
                                 : "Administrator"}
                           </span>
                           <div className="flex items-center gap-1">
-                            <span className="text-xs sm:text-sm font-medium text-textPrimary">
+                            <span className="text-xs font-medium text-textPrimary sm:text-sm">
                               {userData?.data.name || "User"}
                             </span>
                             <IoIosArrowDown
@@ -575,38 +575,62 @@ const NavBar = () => {
                 </div>
 
                 {userData?.data?.employeeType === "DRIVER" ? (
-                 <>
-                 <li>
-                   <Link
-                     onClick={() => setIsOpen(false)}
-                     className={`flex ${small ? "w-[40px]" : ""} text-md group mt-4 items-center gap-x-3.5 rounded-lg px-2.5 py-2 font-bold text-secondary hover:bg-bgSecondary hover:text-primary`}
-                     href="/attendances"
-                   >
-                     <FaClock className="text-xl" />
-                     {!small && <p>{currentLanguage === "ar" ? "الحضور" : currentLanguage === "fr" ? "Présence" : "Attendance"}</p>}
-                   </Link>
-                 </li>
-                 <li>
-                   <Link
-                     onClick={() => setIsOpen(false)}
-                     className={`flex ${small ? "w-[40px]" : ""} text-md group mt-4 items-center gap-x-3.5 rounded-lg px-2.5 py-2 font-bold text-secondary hover:bg-bgSecondary hover:text-primary`}
-                     href="/driver/salary"
-                   >
-                     <FaMoneyBillWave className="text-xl" />
-                     {!small && <p>{currentLanguage === "ar" ? "الراتب" : currentLanguage === "fr" ? "Salaire" : "Salary"}</p>}
-                   </Link>
-                 </li>
-                 <li>
-                   <Link
-                     onClick={() => setIsOpen(false)}
-                     className={`flex ${small ? "w-[40px]" : ""} text-md group mt-4 items-center gap-x-3.5 rounded-lg px-2.5 py-2 font-bold text-secondary hover:bg-bgSecondary hover:text-primary`}
-                     href="/driver/gps"
-                   >
-                     <FaMapMarkedAlt className="text-xl" />
-                     {!small && <p>{currentLanguage === "ar" ? "تتبع GPS" : currentLanguage === "fr" ? "Suivi GPS" : "GPS Tracking"}</p>}
-                   </Link>
-                 </li>
-               </>
+                  <>
+                    <li>
+                      <Link
+                        onClick={() => setIsOpen(false)}
+                        className={`flex ${small ? "w-[40px]" : ""} text-md group mt-4 items-center gap-x-3.5 rounded-lg px-2.5 py-2 font-bold text-secondary hover:bg-bgSecondary hover:text-primary`}
+                        href="/attendances"
+                      >
+                        <FaClock className="text-xl" />
+                        {!small && (
+                          <p>
+                            {currentLanguage === "ar"
+                              ? "الحضور"
+                              : currentLanguage === "fr"
+                                ? "Présence"
+                                : "Attendance"}
+                          </p>
+                        )}
+                      </Link>
+                    </li>
+                    <li>
+                      <Link
+                        onClick={() => setIsOpen(false)}
+                        className={`flex ${small ? "w-[40px]" : ""} text-md group mt-4 items-center gap-x-3.5 rounded-lg px-2.5 py-2 font-bold text-secondary hover:bg-bgSecondary hover:text-primary`}
+                        href="/driver/salary"
+                      >
+                        <FaMoneyBillWave className="text-xl" />
+                        {!small && (
+                          <p>
+                            {currentLanguage === "ar"
+                              ? "الراتب"
+                              : currentLanguage === "fr"
+                                ? "Salaire"
+                                : "Salary"}
+                          </p>
+                        )}
+                      </Link>
+                    </li>
+                    <li>
+                      <Link
+                        onClick={() => setIsOpen(false)}
+                        className={`flex ${small ? "w-[40px]" : ""} text-md group mt-4 items-center gap-x-3.5 rounded-lg px-2.5 py-2 font-bold text-secondary hover:bg-bgSecondary hover:text-primary`}
+                        href="/driver/gps"
+                      >
+                        <FaMapMarkedAlt className="text-xl" />
+                        {!small && (
+                          <p>
+                            {currentLanguage === "ar"
+                              ? "تتبع GPS"
+                              : currentLanguage === "fr"
+                                ? "Suivi GPS"
+                                : "GPS Tracking"}
+                          </p>
+                        )}
+                      </Link>
+                    </li>
+                  </>
                 ) : (
                   <>
                     {navigationItems.map(item => (

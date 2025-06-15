@@ -7,10 +7,20 @@ import { useSelector } from "react-redux";
 import { RootState } from "@/GlobalRedux/store";
 import { toast } from "react-toastify";
 import Spinner from "@/components/spinner";
-import { useDeleteExamTypeMutation, useGetExamTypeByCourseIdQuery } from "@/features/Acadimic/examsApi";
+import {
+  useDeleteExamTypeMutation,
+  useGetExamTypeByCourseIdQuery,
+} from "@/features/Acadimic/examsApi";
 import { useGetAllCoursesQuery } from "@/features/Acadimic/courseApi";
 import Container from "@/components/Container";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/Table";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/Table";
 import { Skeleton } from "@/components/Skeleton";
 
 const Exams = () => {
@@ -38,10 +48,15 @@ const Exams = () => {
   const [search, setSearch] = useState("");
   const [selectedCourseId, setSelectedCourseId] = useState(""); // State to store selected course ID
   const booleanValue = useSelector((state: RootState) => state.boolean.value); // sidebar
-  const { data: coursesData, isLoading: isCoursesLoading } = useGetAllCoursesQuery(null);
-  const { data: exams, isLoading: isExamsLoading, refetch: refetchExam } = useGetExamTypeByCourseIdQuery(
+  const { data: coursesData, isLoading: isCoursesLoading } =
+    useGetAllCoursesQuery(null);
+  const {
+    data: exams,
+    isLoading: isExamsLoading,
+    refetch: refetchExam,
+  } = useGetExamTypeByCourseIdQuery(
     selectedCourseId || "0", // Use "0" as default if no course selected
-    { skip: !selectedCourseId } // Skip the query if no course is selected
+    { skip: !selectedCourseId }, // Skip the query if no course is selected
   );
 
   const [deleteExamType, { isLoading: isDeleting }] =
@@ -80,12 +95,12 @@ const Exams = () => {
     <>
       <BreadCrumbs breadcrumbs={breadcrumbs} />
       <Container>
-        <div className="flex flex-col md:flex-row justify-between text-center gap-4">
+        <div className="flex flex-col justify-between gap-4 text-center md:flex-row">
           {/* Course selection dropdown */}
-          <div className="flex-1 min-w-72 md:min-w-80">
+          <div className="min-w-72 flex-1 md:min-w-80">
             <label
               htmlFor="course-select"
-              className="block mb-2 text-sm font-medium text-textPrimary text-left"
+              className="mb-2 block text-left text-sm font-medium text-textPrimary"
             >
               {currentLanguage === "ar"
                 ? "اختر المسار"
@@ -114,8 +129,11 @@ const Exams = () => {
             </select>
           </div>
 
-          <div className="flex-1 min-w-72 md:min-w-80">
-            <label htmlFor="icon" className="block mb-2 text-sm font-medium text-textPrimary text-left">
+          <div className="min-w-72 flex-1 md:min-w-80">
+            <label
+              htmlFor="icon"
+              className="mb-2 block text-left text-sm font-medium text-textPrimary"
+            >
               {currentLanguage === "ar"
                 ? "بحث"
                 : currentLanguage === "fr"
@@ -233,7 +251,9 @@ const Exams = () => {
                   ) : exams?.data?.length > 0 ? (
                     exams.data.map((exam: any, index: number) => (
                       <TableRow key={index} data-index={index}>
-                        <TableCell className="font-medium">{exam.name}</TableCell>
+                        <TableCell className="font-medium">
+                          {exam.name}
+                        </TableCell>
                         <TableCell>{exam.examGrade}</TableCell>
                         <TableCell>{exam.passingGrade}</TableCell>
                         <TableCell>{exam.studyLevel}</TableCell>
@@ -254,7 +274,10 @@ const Exams = () => {
                     ))
                   ) : (
                     <TableRow>
-                      <TableCell colSpan={5} className="text-center py-6 text-gray-500">
+                      <TableCell
+                        colSpan={5}
+                        className="py-6 text-center text-gray-500"
+                      >
                         {currentLanguage === "en"
                           ? "No exams found for this course"
                           : currentLanguage === "ar"
@@ -265,10 +288,9 @@ const Exams = () => {
                   )}
                 </TableBody>
               </Table>
-
             </div>
           </>
-       )}
+        )}
       </Container>
     </>
   );

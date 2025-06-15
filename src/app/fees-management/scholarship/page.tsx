@@ -49,7 +49,6 @@ const Scholarship = () => {
   };
   const [deleteInvoice] = useDeleteScholarshipMutation();
   const handleDelete = async (id: number) => {
-
     try {
       await deleteInvoice(id).unwrap();
 

@@ -12,7 +12,7 @@ interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   dir?: string;
   theme?: "solid" | "transparent" | "comment";
   border?: "primary" | "gray" | "none";
-  rounded?: "none" | "sm" | "md" | "lg" | "xl" | "2xl" | "full"; 
+  rounded?: "none" | "sm" | "md" | "lg" | "xl" | "2xl" | "full";
 }
 
 const Input: React.FC<InputProps> = ({
@@ -30,26 +30,32 @@ const Input: React.FC<InputProps> = ({
   const [inputType, setInputType] = useState(type);
 
   const handleTogglePassword = () => {
-    setInputType((prevType) => (prevType === "password" ? "text" : "password"));
+    setInputType(prevType => (prevType === "password" ? "text" : "password"));
   };
 
   const themeClasses =
     theme === "transparent"
       ? "bg-transparent"
       : theme === "comment"
-      ? "bg-comment rounded-xl"
-      : "bg-bgSecondary";
+        ? "bg-comment rounded-xl"
+        : "bg-bgSecondary";
 
   const borderClass =
-      border === "none" ? "" : 
-      type === "comment" ? "rounded-2xl" : 
-      border === "gray" ? "border border-borderPrimary" : "border border-borderSecondary";
-  
-  const roundedClass = `rounded-${rounded}`; 
+    border === "none"
+      ? ""
+      : type === "comment"
+        ? "rounded-2xl"
+        : border === "gray"
+          ? "border border-borderPrimary"
+          : "border border-borderSecondary";
+
+  const roundedClass = `rounded-${rounded}`;
 
   return (
     <label className={`grid w-full gap-1 text-end`}>
-      {label && <p className="text-textPrimary text-start font-medium">{label}</p>}
+      {label && (
+        <p className="text-start font-medium text-textPrimary">{label}</p>
+      )}
       <div className="relative w-full">
         <input
           {...props}
@@ -58,8 +64,10 @@ const Input: React.FC<InputProps> = ({
           dir={dir}
           className={`w-full px-4 py-3 ${
             inputType === "date" ? "mb-1" : ""
-          } outline-none text-textPrimary placeholder:text-textSecondary ${
-            error ? "border border-error bg-transparent" : `${themeClasses} ${borderClass}`
+          } text-textPrimary outline-none placeholder:text-textSecondary ${
+            error
+              ? "border border-error bg-transparent"
+              : `${themeClasses} ${borderClass}`
           } ${roundedClass} ${className}`}
         />
         {type === "password" && (
@@ -71,7 +79,7 @@ const Input: React.FC<InputProps> = ({
           >
             {inputType === "password" ? (
               <svg
-                className="h-5 w-5 translate-y-3 text-bgPowderBlue outline-none"
+                className="text-bgPowderBlue h-5 w-5 translate-y-3 outline-none"
                 viewBox="0 0 24 24"
                 fill="none"
                 stroke="currentColor"
@@ -84,7 +92,7 @@ const Input: React.FC<InputProps> = ({
               </svg>
             ) : (
               <svg
-                className="h-5 w-5 translate-y-3 text-bgPowderBlue outline-none"
+                className="text-bgPowderBlue h-5 w-5 translate-y-3 outline-none"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"

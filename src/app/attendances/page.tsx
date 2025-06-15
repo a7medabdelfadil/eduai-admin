@@ -160,8 +160,8 @@ const Attendance = () => {
     <>
       <BreadCrumbs breadcrumbs={breadcrumbs} />
       <Container>
-         <div className="mb-8 -mt-2 -ml-1 flex items-center justify-between">
-          <h1 className="text-2xl text-textPrimary font-semibold">
+        <div className="-ml-1 -mt-2 mb-8 flex items-center justify-between">
+          <h1 className="text-2xl font-semibold text-textPrimary">
             {currentLanguage === "en"
               ? "Attendance/Absence"
               : currentLanguage === "ar"
@@ -184,7 +184,6 @@ const Attendance = () => {
             />
           ))}
         </div>
-
       </Container>
     </>
   );

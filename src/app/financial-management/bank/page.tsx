@@ -95,7 +95,7 @@ const Bank = () => {
   };
   type Bank = Record<string, any>;
   const { data, error, isLoading, refetch } = useGetAllBankAcountsQuery(null);
-  console.log("🚀 ~ Bank ~ data:", data)
+  console.log("🚀 ~ Bank ~ data:", data);
   const [deleteBankAcount] = useDeleteBankAcountsMutation();
   const handleDelete = async (id: string) => {
     try {
@@ -333,7 +333,7 @@ const Bank = () => {
                                   : "Nom"}
                             </h1>
                             <p className="font-medium tracking-widest">
-                            {bank.beneficiaryName}
+                              {bank.beneficiaryName}
                             </p>
                           </div>
                           <img
@@ -351,20 +351,14 @@ const Bank = () => {
                                 : "Numéro de Carte"}
                           </h1>
                           <p className="tracking-more-wider font-medium">
-                          {bank.beneficiaryAccountNumber}
+                            {bank.beneficiaryAccountNumber}
                           </p>
                         </div>
                         <div className="pr-6 pt-6">
                           <div className="flex justify-between">
-                            <div className="">
-                              
-                            </div>
-                            <div className="">
-                              
-                            </div>
-                            <div className="">
-                              
-                            </div>
+                            <div className=""></div>
+                            <div className=""></div>
+                            <div className=""></div>
                           </div>
                         </div>
                       </div>

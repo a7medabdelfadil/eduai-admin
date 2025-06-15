@@ -14,7 +14,7 @@ import { useRouter } from "next/navigation";
 
 const AddDisciplinaryRecordForm = () => {
   const { language: currentLanguage } = useSelector(
-    (state: RootState) => state.language
+    (state: RootState) => state.language,
   );
   const router = useRouter();
 
@@ -61,10 +61,10 @@ const AddDisciplinaryRecordForm = () => {
   const handleChange = (
     e: React.ChangeEvent<
       HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
-    >
+    >,
   ) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
+    setFormData(prev => ({ ...prev, [name]: value }));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -86,10 +86,9 @@ const AddDisciplinaryRecordForm = () => {
           ? "تم إنشاء السجل بنجاح"
           : currentLanguage === "fr"
             ? "Dossier créé avec succès"
-            : "Record created successfully"
+            : "Record created successfully",
       );
-      router.push(
-        "/document-management/other/disciplinary");
+      router.push("/document-management/other/disciplinary");
     } catch (err: any) {
       const errorMessage =
         err?.data?.message ||
@@ -106,7 +105,7 @@ const AddDisciplinaryRecordForm = () => {
     <>
       <BreadCrumbs breadcrumbs={breadcrumbs} />
       <Container>
-        <h2 className="text-2xl md:text-3xl font-semibold mb-6">
+        <h2 className="mb-6 text-2xl font-semibold md:text-3xl">
           {currentLanguage === "ar"
             ? "إشعار تأديبي"
             : currentLanguage === "fr"
@@ -116,11 +115,11 @@ const AddDisciplinaryRecordForm = () => {
 
         <form
           onSubmit={handleSubmit}
-          className="mx-auto w-[80%] space-y-6 bg-bgPrimary p-6 shadow-md rounded-xl"
+          className="mx-auto w-[80%] space-y-6 rounded-xl bg-bgPrimary p-6 shadow-md"
         >
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
             <div>
-              <label className="block mb-1 font-medium">
+              <label className="mb-1 block font-medium">
                 {currentLanguage === "ar"
                   ? "معرف المستخدم"
                   : currentLanguage === "fr"
@@ -145,7 +144,7 @@ const AddDisciplinaryRecordForm = () => {
             </div>
 
             <div>
-              <label className="block mb-1 font-medium">
+              <label className="mb-1 block font-medium">
                 {currentLanguage === "ar"
                   ? "تاريخ الإصدار"
                   : currentLanguage === "fr"
@@ -164,7 +163,7 @@ const AddDisciplinaryRecordForm = () => {
           </div>
 
           <div>
-            <label className="block mb-1 font-medium">
+            <label className="mb-1 block font-medium">
               {currentLanguage === "ar"
                 ? "نوع المخالفة"
                 : currentLanguage === "fr"
@@ -194,7 +193,7 @@ const AddDisciplinaryRecordForm = () => {
           </div>
 
           <div>
-            <label className="block mb-1 font-medium">
+            <label className="mb-1 block font-medium">
               {currentLanguage === "ar"
                 ? "الإجراء المتخذ"
                 : currentLanguage === "fr"
@@ -224,7 +223,7 @@ const AddDisciplinaryRecordForm = () => {
           </div>
 
           <div>
-            <label className="block mb-1 font-medium">
+            <label className="mb-1 block font-medium">
               {currentLanguage === "ar"
                 ? "تفاصيل الواقعة"
                 : currentLanguage === "fr"
@@ -249,7 +248,7 @@ const AddDisciplinaryRecordForm = () => {
           </div>
 
           <div>
-            <label className="block mb-1 font-medium">
+            <label className="mb-1 block font-medium">
               {currentLanguage === "ar"
                 ? "نسخة مقدمة إلى"
                 : currentLanguage === "fr"
@@ -275,7 +274,7 @@ const AddDisciplinaryRecordForm = () => {
           <div className="flex justify-center">
             <button
               type="submit"
-              className="rounded-xl bg-primary px-10 py-2 text-white hover:bg-primaryHover"
+              className="rounded-xl bg-primary px-10 py-2 text-white hover:bg-hover"
               disabled={isLoading}
             >
               {isLoading

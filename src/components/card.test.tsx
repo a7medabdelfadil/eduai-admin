@@ -1,7 +1,7 @@
 // card.test.tsx
 import React from "react";
 import { render, screen } from "@testing-library/react";
-import '@testing-library/jest-dom';
+import "@testing-library/jest-dom";
 import Card from "./card";
 import { useSelector } from "react-redux";
 
@@ -17,7 +17,7 @@ describe("Card Component", () => {
   // By default, set the language to "en" (LTR)
   beforeEach(() => {
     mockedUseSelector.mockImplementation((callback: any) =>
-      callback({ language: "en" })
+      callback({ language: "en" }),
     );
   });
 
@@ -32,7 +32,7 @@ describe("Card Component", () => {
         title="Test Card"
         description="Test description"
         imgSrc="test-image.jpg"
-      />
+      />,
     );
 
     // The container element (parent of the link) should have "dir" set to "ltr"
@@ -56,7 +56,7 @@ describe("Card Component", () => {
   test("renders card with icon when imgSrc is not provided", () => {
     // Override the language to "ar" (RTL)
     mockedUseSelector.mockImplementation((callback: any) =>
-      callback({ language: "ar" })
+      callback({ language: "ar" }),
     );
 
     render(
@@ -66,7 +66,7 @@ describe("Card Component", () => {
         description="Test description"
         // Pass an icon as a ReactNode (a simple span with a test id)
         icon={<span data-testid="icon">Icon</span>}
-      />
+      />,
     );
 
     // The container element should now have "dir" set to "rtl"

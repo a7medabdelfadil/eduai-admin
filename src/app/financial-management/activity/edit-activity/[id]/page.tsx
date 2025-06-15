@@ -18,19 +18,16 @@ const EditActivity = () => {
   const router = useRouter();
   const params = useParams();
   const activityId = params.id as string;
-  console.log("👾 ~ EditActivity ~ activityId:", activityId)
+  console.log("👾 ~ EditActivity ~ activityId:", activityId);
 
-  const {
-    data: activityData,
-    isLoading: loadingActivity
-  } = useGetActivityByIdQuery(activityId);
-  console.log("👾 ~ EditActivity ~ activityData:", activityData)
-  const {
-    data: activityTypes,
-    isLoading: activityTypesLoading
-  } = useGetActivityTypesQuery(null);
+  const { data: activityData, isLoading: loadingActivity } =
+    useGetActivityByIdQuery(activityId);
+  console.log("👾 ~ EditActivity ~ activityData:", activityData);
+  const { data: activityTypes, isLoading: activityTypesLoading } =
+    useGetActivityTypesQuery(null);
 
-  const [updateActivity, { isLoading: submitting }] = useUpdateActivityMutation();
+  const [updateActivity, { isLoading: submitting }] =
+    useUpdateActivityMutation();
 
   const {
     register,
@@ -56,7 +53,7 @@ const EditActivity = () => {
   };
 
   const { language: currentLanguage, loading: langLoading } = useSelector(
-    (state: RootState) => state.language
+    (state: RootState) => state.language,
   );
   const sidebarOpen = useSelector((state: RootState) => state.boolean.value);
 
@@ -71,17 +68,37 @@ const EditActivity = () => {
   }
 
   const breadcrumbs = [
-    { nameEn: "Administration", nameAr: "الإدارة", nameFr: "Administration", href: "/" },
-    { nameEn: "Financial Management", nameAr: "الإدارة المالية", nameFr: "Gestion financière", href: "/financial-management" },
-    { nameEn: "Activity", nameAr: "النشاط", nameFr: "Activité", href: "/financial-management/activity" },
-    { nameEn: "Edit Activity", nameAr: "تعديل النشاط", nameFr: "Modifier l'activité", href: `/financial-management/activity/edit-activity/${activityId}` },
+    {
+      nameEn: "Administration",
+      nameAr: "الإدارة",
+      nameFr: "Administration",
+      href: "/",
+    },
+    {
+      nameEn: "Financial Management",
+      nameAr: "الإدارة المالية",
+      nameFr: "Gestion financière",
+      href: "/financial-management",
+    },
+    {
+      nameEn: "Activity",
+      nameAr: "النشاط",
+      nameFr: "Activité",
+      href: "/financial-management/activity",
+    },
+    {
+      nameEn: "Edit Activity",
+      nameAr: "تعديل النشاط",
+      nameFr: "Modifier l'activité",
+      href: `/financial-management/activity/edit-activity/${activityId}`,
+    },
   ];
 
   return (
     <>
       <BreadCrumbs breadcrumbs={breadcrumbs} />
       <Container>
-        <div className="mb-8 -mt-2 -ml-1 flex items-center justify-between">
+        <div className="-ml-1 -mt-2 mb-8 flex items-center justify-between">
           <h1 className="text-3xl font-semibold">
             {currentLanguage === "en"
               ? "Edit Activity"
@@ -93,8 +110,11 @@ const EditActivity = () => {
             {/* default */}
           </h1>
         </div>
-        <form className="flex h-full w-full items-center justify-center" onSubmit={handleSubmit(onSubmit)}>
-          <div className="rounded-xl bg-bgPrimary p-10 w-[90] md:w-[80%]">
+        <form
+          className="flex h-full w-full items-center justify-center"
+          onSubmit={handleSubmit(onSubmit)}
+        >
+          <div className="w-[90] rounded-xl bg-bgPrimary p-10 md:w-[80%]">
             <div className="flex items-center justify-start gap-2">
               <svg
                 className="h-6 w-6 font-bold text-secondary group-hover:text-hover"
@@ -125,8 +145,11 @@ const EditActivity = () => {
                     : "Edit Activity"}
               </h1>
             </div>
-            <div className="p-6 grid grid-cols-2 gap-4 max-[1278px]:grid-cols-1">
-              <label htmlFor="activityType" className="grid text-[18px] font-semibold">
+            <div className="grid grid-cols-2 gap-4 p-6 max-[1278px]:grid-cols-1">
+              <label
+                htmlFor="activityType"
+                className="grid text-[18px] font-semibold"
+              >
                 {currentLanguage === "ar"
                   ? "نوع النشاط"
                   : currentLanguage === "fr"
@@ -136,7 +159,7 @@ const EditActivity = () => {
                   id="activityType"
                   {...register("activityType")}
                   defaultValue={activityData?.data?.activityType ?? ""}
-                  className="w-full rounded-xl bg-bgPrimary text-textPrimary border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 text-textPrimary outline-none max-[471px]:w-[350px]"
                 >
                   <option value="">
                     {currentLanguage === "ar"
@@ -169,7 +192,8 @@ const EditActivity = () => {
                       ? "أدخل التكلفة"
                       : currentLanguage === "fr"
                         ? "Entrez le coût"
-                        : "Enter Cost"}
+                        : "Enter Cost"
+                  }
                 />
               </label>
               <label htmlFor="about" className="grid text-[18px] font-semibold">
@@ -188,7 +212,8 @@ const EditActivity = () => {
                       ? "اكتب شيئًا"
                       : currentLanguage === "fr"
                         ? "Écrivez quelque chose"
-                        : "Write Something"}
+                        : "Write Something"
+                  }
                 />
               </label>
             </div>
@@ -196,9 +221,11 @@ const EditActivity = () => {
               <button
                 type="submit"
                 disabled={submitting}
-                className={`w-fit rounded-xl px-4 py-2 text-[18px] text-white duration-300 ease-in hover:shadow-xl ${submitting
-                  ? "bg-gray-400 cursor-not-allowed"
-                  : "bg-primary hover:bg-hover"}`}
+                className={`w-fit rounded-xl px-4 py-2 text-[18px] text-white duration-300 ease-in hover:shadow-xl ${
+                  submitting
+                    ? "cursor-not-allowed bg-gray-400"
+                    : "bg-primary hover:bg-hover"
+                }`}
               >
                 {submitting
                   ? currentLanguage === "ar"

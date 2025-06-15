@@ -63,25 +63,26 @@ const Certificate = () => {
     }
   };
 
-  const filteredData = data?.data?.content?.filter((certificate: Certificate) =>
-    search.trim() === ""
-      ? true
-      : certificate.studentName?.toLowerCase()?.includes(search.trim().toLowerCase())
+  const filteredData = data?.data?.content?.filter(
+    (certificate: Certificate) =>
+      search.trim() === ""
+        ? true
+        : certificate.studentName
+            ?.toLowerCase()
+            ?.includes(search.trim().toLowerCase()),
   );
   const [visibleCount, setVisibleCount] = useState(20);
   const visibleData = filteredData?.slice(0, visibleCount);
-
 
   const { language: currentLanguage, loading } = useSelector(
     (state: RootState) => state.language,
   );
 
-
   return (
     <>
       <BreadCrumbs breadcrumbs={breadcrumbs} />
       <Container>
-        <div className="mb-6 -mt-2 -ml-1 flex items-center justify-between">
+        <div className="-ml-1 -mt-2 mb-6 flex items-center justify-between">
           <h1 className="text-3xl font-semibold">
             {currentLanguage === "en"
               ? "Certificates"
@@ -106,7 +107,8 @@ const Certificate = () => {
           </Link>
           <Link
             className="hover:text-blue-500 hover:underline"
-            href="/document-management/certificate/achievement">
+            href="/document-management/certificate/achievement"
+          >
             {currentLanguage === "ar"
               ? "إنجاز"
               : currentLanguage === "fr"
@@ -115,7 +117,8 @@ const Certificate = () => {
           </Link>
           <Link
             className="hover:text-blue-500 hover:underline"
-            href="/document-management/certificate/participation">
+            href="/document-management/certificate/participation"
+          >
             {currentLanguage === "ar"
               ? "مشاركة"
               : currentLanguage === "fr"
@@ -123,8 +126,9 @@ const Certificate = () => {
                 : "Participation"}
           </Link>
           <Link
-            className="hover:text-blue-500 hover:underline "
-            href="/document-management/certificate/professional-development">
+            className="hover:text-blue-500 hover:underline"
+            href="/document-management/certificate/professional-development"
+          >
             {currentLanguage === "ar"
               ? "تطوير مهني"
               : currentLanguage === "fr"
@@ -132,9 +136,8 @@ const Certificate = () => {
                 : "Professional Development"}
           </Link>
         </div>
-        <div className="bg-bgPrimary rounded-xl mb-6">
-
-          <div className="flex flex-col md:flex-row justify-between items-center gap-4 px-4 py-4 rounded-lg">
+        <div className="mb-6 rounded-xl bg-bgPrimary">
+          <div className="flex flex-col items-center justify-between gap-4 rounded-lg px-4 py-4 md:flex-row">
             {/* Search Input */}
             <div
               dir={currentLanguage === "ar" ? "rtl" : "ltr"}
@@ -145,17 +148,20 @@ const Certificate = () => {
               </div>
               <div className="flex items-center gap-2">
                 <input
-                  onChange={(e) => setSearch(e.target.value)}
+                  onChange={e => setSearch(e.target.value)}
                   type="text"
-                  className="w-full border-borderPrimary bg-bgPrimary rounded-lg border-2 px-4 py-2 ps-11 text-lg outline-none"
-                  placeholder={currentLanguage === "ar"
-                    ? "ابحث عن شهادة"
-                    : currentLanguage === "fr"
-                      ? "Rechercher un certificat"
-                      : "Search certificate"}
+                  className="w-full rounded-lg border-2 border-borderPrimary bg-bgPrimary px-4 py-2 ps-11 text-lg outline-none"
+                  placeholder={
+                    currentLanguage === "ar"
+                      ? "ابحث عن شهادة"
+                      : currentLanguage === "fr"
+                        ? "Rechercher un certificat"
+                        : "Search certificate"
+                  }
                 />
                 <span className="min-w-[120px] text-primary">
-                  {filteredData?.length ?? 0} {currentLanguage === "ar"
+                  {filteredData?.length ?? 0}{" "}
+                  {currentLanguage === "ar"
                     ? "نتيجة"
                     : currentLanguage === "fr"
                       ? "résultat(s)"
@@ -177,7 +183,7 @@ const Certificate = () => {
             </Link>
           </div>
 
-          <div className="relative overflow-auto shadow-md sm:rounded-lg bg-bgPrimary">
+          <div className="relative overflow-auto bg-bgPrimary shadow-md sm:rounded-lg">
             <Table>
               <TableHeader>
                 <TableRow>
@@ -256,24 +262,22 @@ const Certificate = () => {
                           <img src="/images/print.png" alt="#" />
                         </Link>
                         <RiDeleteBin6Fill
-                          className="text-2xl text-red-600 cursor-pointer hover:text-red-800"
+                          className="cursor-pointer text-2xl text-red-600 hover:text-red-800"
                           onClick={() => handleDelete(certificate.id)}
                         />
                       </TableCell>
                     </TableRow>
                   ))
                 )}
-
               </TableBody>
-
             </Table>
             {visibleCount < (filteredData?.length || 0) && (
-              <SeeMoreButton onClick={() => setVisibleCount(prev => prev + 20)} />
+              <SeeMoreButton
+                onClick={() => setVisibleCount(prev => prev + 20)}
+              />
             )}
-
           </div>
         </div>
-
       </Container>
     </>
   );

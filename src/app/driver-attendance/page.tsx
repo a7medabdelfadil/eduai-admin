@@ -85,7 +85,6 @@ const DriverAttendance = () => {
           toast.success("Attendance recorded successfully");
         })
         .catch(error => {
-          
           toast.error("Failed to record attendance");
         });
     } else {
@@ -136,8 +135,6 @@ const DriverAttendance = () => {
       toast.error("Failed to delete the Driver");
     }
   };
-
-
 
   const handleSelectAll = () => {
     setSelectAll(!selectAll);

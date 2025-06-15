@@ -1,10 +1,8 @@
-@import 'leaflet/dist/leaflet.css';
+@import "leaflet/dist/leaflet.css";
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
-
 
 body {
   background-color: #f5f6fa;
@@ -15,12 +13,12 @@ body {
   --primary: #3e5af0;
   --bg-primary: #ffffff;
   --bg-secondary: #f5f6fa;
-  --bg-row-table: #D9D9D980;
+  --bg-row-table: #d9d9d980;
   --text-primary: #041631;
   --text-secondary: #89939e;
   --warning: #f4bd0e;
   --error: #e53835;
-  --danger: #E85347;
+  --danger: #e85347;
   --success: #1ee0ac;
   --info: #09c2de;
   --border-primary: #d9d9d9;
@@ -28,7 +26,7 @@ body {
   --black-or-white: black;
   --chat: #ffead1;
   --bg-muted: #e4e4e7;
-  --attendance: #FAEFEF;
+  --attendance: #faefef;
 }
 
 .dark {
@@ -40,7 +38,7 @@ body {
   --text-secondary: #526484;
   --warning: #f89b22;
   --error: #eb675e;
-  --danger: #EB675E;
+  --danger: #eb675e;
   --success: #1ac877;
   --info: #34e4b5;
   --border-primary: #2a2d32;
@@ -48,10 +46,9 @@ body {
   --black-or-white: white;
   --notification: #0f0f0f;
   --chat: #dfbd90;
-  --bg-muted: #3f3f46; 
+  --bg-muted: #3f3f46;
   --attendance: #171717;
 }
-
 
 @layer base {
   :root {

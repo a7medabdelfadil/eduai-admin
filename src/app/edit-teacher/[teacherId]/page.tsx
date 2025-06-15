@@ -153,7 +153,7 @@ const EditTeacher: React.FC<ViewTeacherProps> = ({ params }) => {
       <BreadCrumbs breadcrumbs={breadcrumbs} />
 
       <Container>
-        <div className="mb-8 -mt-2 -ml-1 flex items-center justify-between">
+        <div className="-ml-1 -mt-2 mb-8 flex items-center justify-between">
           <h1 className="text-3xl font-semibold">
             {currentLanguage === "en"
               ? "Edit Teacher"
@@ -166,8 +166,11 @@ const EditTeacher: React.FC<ViewTeacherProps> = ({ params }) => {
           </h1>
         </div>
         <FormProvider {...formMethods}>
-          <form className="flex h-full w-full items-center justify-center" onSubmit={handleSubmit(onSubmit)}>
-            <div className="rounded-xl bg-bgPrimary p-10 w-[90] md:w-[80%]">
+          <form
+            className="flex h-full w-full items-center justify-center"
+            onSubmit={handleSubmit(onSubmit)}
+          >
+            <div className="w-[90] rounded-xl bg-bgPrimary p-10 md:w-[80%]">
               <div className="flex items-center justify-start gap-2">
                 <svg
                   className="h-6 w-6 font-bold text-secondary group-hover:text-hover"
@@ -200,7 +203,7 @@ const EditTeacher: React.FC<ViewTeacherProps> = ({ params }) => {
                         : "Teacher Information"}
                 </h1>
               </div>
-              <div className="px-6 pt-6 grid grid-cols-2 gap-4 max-[1278px]:grid-cols-1">
+              <div className="grid grid-cols-2 gap-4 px-6 pt-6 max-[1278px]:grid-cols-1">
                 <label
                   htmlFor="email"
                   className="grid text-[18px] font-semibold"
@@ -317,7 +320,7 @@ const EditTeacher: React.FC<ViewTeacherProps> = ({ params }) => {
                   )}
                 </label>
               </div>
-              <div className="px-6 pt-6 grid grid-cols-2 gap-4 max-[1278px]:grid-cols-1">
+              <div className="grid grid-cols-2 gap-4 px-6 pt-6 max-[1278px]:grid-cols-1">
                 <label
                   htmlFor="nationality"
                   className="grid text-[18px] font-semibold"
@@ -570,7 +573,7 @@ const EditTeacher: React.FC<ViewTeacherProps> = ({ params }) => {
                   )}
                 </label>
               </div>
-              <div className="pt-6 flex justify-center text-center">
+              <div className="flex justify-center pt-6 text-center">
                 {isUpdating ? (
                   <Spinner />
                 ) : (

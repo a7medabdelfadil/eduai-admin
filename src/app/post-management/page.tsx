@@ -1,6 +1,5 @@
 /* eslint-disable @next/next/no-img-element */
 "use client";
-import Spinner from "@/components/spinner";
 import {
   useDeletePostsMutation,
   useGetAllPostsQuery,
@@ -11,6 +10,27 @@ import { useSelector } from "react-redux";
 import { RootState } from "@/GlobalRedux/store";
 import BreadCrumbs from "@/components/BreadCrumbs";
 import { toast } from "react-toastify";
+import Container from "@/components/Container";
+import { Text } from "@/components/Text";
+import {
+  Table,
+  TableHeader,
+  TableRow,
+  TableHead,
+  TableBody,
+  TableCell,
+} from "@/components/Table";
+import { Skeleton } from "@/components/Skeleton";
+import SeeMoreButton from "@/components/SeeMoreButton";
+import {
+  BiEditAlt,
+  BiTrash,
+  BiShowAlt,
+  BiDownload,
+  BiSearchAlt,
+} from "react-icons/bi";
+import { FaDownload } from "react-icons/fa";
+import { FiDownload } from "react-icons/fi";
 
 const PostManagment = () => {
   const breadcrumbs = [
@@ -28,11 +48,10 @@ const PostManagment = () => {
     },
   ];
 
-  const booleanValue = useSelector((state: RootState) => state.boolean.value);
   const [search, setSearch] = useState("");
   type Post = Record<string, any>;
   const { data, error, isLoading, refetch } = useGetAllPostsQuery(null);
-  const [selectAll, setSelectAll] = useState(false);
+  console.log("🚀 ~ PostManagment ~ data:", data);
   const [filteredCount, setFilteredCount] = useState(0);
   const [filteredData, setFilteredData] = useState<Post[]>([]);
 
@@ -49,17 +68,6 @@ const PostManagment = () => {
     setFilteredCount(filtered.length);
   }, [search, data?.data.content]);
 
-
-
-  const handleSelectAll = () => {
-    setSelectAll(!selectAll);
-    const checkboxes = document.querySelectorAll<HTMLInputElement>(
-      'input[type="checkbox"]:not(#checkbox-all-search)',
-    );
-    checkboxes.forEach(checkbox => {
-      checkbox.checked = !selectAll;
-    });
-  };
   const [deletePosts] = useDeletePostsMutation();
   const handleDelete = async (id: string) => {
     try {
@@ -71,127 +79,142 @@ const PostManagment = () => {
     }
   };
 
-  useEffect(() => {
-    const handleOtherCheckboxes = () => {
-      const allCheckboxes = document.querySelectorAll<HTMLInputElement>(
-        'input[type="checkbox"]:not(#checkbox-all-search)',
-      );
-      const allChecked = Array.from(allCheckboxes).every(
-        checkbox => checkbox.checked,
-      );
-      const selectAllCheckbox = document.getElementById(
-        "checkbox-all-search",
-      ) as HTMLInputElement | null;
-      if (selectAllCheckbox) {
-        selectAllCheckbox.checked = allChecked;
-        setSelectAll(allChecked);
-      }
-    };
-
-    const otherCheckboxes = document.querySelectorAll<HTMLInputElement>(
-      'input[type="checkbox"]:not(#checkbox-all-search)',
-    );
-    otherCheckboxes.forEach(checkbox => {
-      checkbox.addEventListener("change", handleOtherCheckboxes);
-    });
-
-    return () => {
-      otherCheckboxes.forEach(checkbox => {
-        checkbox.removeEventListener("change", handleOtherCheckboxes);
-      });
-    };
-  }, []);
   const { language: currentLanguage, loading } = useSelector(
     (state: RootState) => state.language,
   );
 
-  if (loading || isLoading)
-    return (
-      <div className="flex h-screen w-full items-center justify-center">
-        <Spinner />
-      </div>
-    );
+  const translate = {
+    title:
+      currentLanguage === "ar"
+        ? "العنوان"
+        : currentLanguage === "fr"
+          ? "Titre"
+          : "Title",
+    id:
+      currentLanguage === "ar"
+        ? "المعرف"
+        : currentLanguage === "fr"
+          ? "Identifiant"
+          : "ID",
+    content:
+      currentLanguage === "ar"
+        ? "المحتوى"
+        : currentLanguage === "fr"
+          ? "Contenu"
+          : "Content",
+    attachment:
+      currentLanguage === "ar"
+        ? "مرفق"
+        : currentLanguage === "fr"
+          ? "Pièce jointe"
+          : "Attachment",
+    edit:
+      currentLanguage === "ar"
+        ? "تعديل"
+        : currentLanguage === "fr"
+          ? "Modifier"
+          : "Edit",
+    del:
+      currentLanguage === "ar"
+        ? "حذف"
+        : currentLanguage === "fr"
+          ? "Supprimer"
+          : "Delete",
+    action:
+      currentLanguage === "ar"
+        ? "الإجراء"
+        : currentLanguage === "fr"
+          ? "Action"
+          : "Action",
+    noData:
+      currentLanguage === "ar"
+        ? "لا توجد بيانات"
+        : currentLanguage === "fr"
+          ? "Aucune donnée disponible"
+          : "No data available",
+    searchPlaceholder:
+      currentLanguage === "ar"
+        ? "بحث"
+        : currentLanguage === "fr"
+          ? "Rechercher"
+          : "Search",
+
+    result:
+      currentLanguage === "ar"
+        ? "نتيجة"
+        : currentLanguage === "fr"
+          ? "résultat(s)"
+          : "Result(s)",
+  };
+  const [visibleCount, setVisibleCount] = useState(20);
+  const visibleData = filteredData?.slice(0, visibleCount) || [];
 
   return (
     <>
       <BreadCrumbs breadcrumbs={breadcrumbs} />
-      <div
-        dir={currentLanguage === "ar" ? "rtl" : "ltr"}
-        className={`${
-          currentLanguage === "ar"
-            ? booleanValue
-              ? "lg:mr-[100px]"
-              : "lg:mr-[270px]"
-            : booleanValue
-              ? "lg:ml-[100px]"
-              : "lg:ml-[270px]"
-        } relative mx-3 mt-10 h-screen overflow-x-auto bg-transparent sm:rounded-lg`}
-      >
-        {/* <div className="justify-left mb-[80px] ml-4 mt-[20px] flex gap-5 text-[23px] font-semibold">
+      <Container>
+        <Text font="bold" size="3xl">
+          {currentLanguage === "ar"
+            ? "إدارة المنشورات"
+            : currentLanguage === "fr"
+              ? "Gestion des publications"
+              : "Post Management"}
+        </Text>
+        <div className="justify-left my-6 ml-4 flex gap-5 text-xl font-medium text-secondary">
           <Link href="/post-management" className="text-blue-500 underline">
             {currentLanguage === "ar"
-              ? "منشور"
+              ? "منشورات"
               : currentLanguage === "fr"
-                ? "Publication"
-                : "Post"}
+                ? "Publications"
+                : "Posts"}
           </Link>
-          <Link href="/post-management/reviews">
+          <Link
+            className="hover:text-blue-500 hover:underline"
+            href="/post-management/reviews"
+          >
             {currentLanguage === "ar"
               ? "التقييمات"
               : currentLanguage === "fr"
                 ? "Avis"
                 : "Reviews"}
           </Link>
-        </div> */}
-        <div className="flex justify-between text-center max-[502px]:grid max-[502px]:justify-center">
-          <div className="mb-3">
-            <label htmlFor="icon" className="sr-only">
-              Search
-            </label>
-            <div className="flex gap-1">
-              <div className="relative min-w-72 md:min-w-80">
-                <div className="pointer-events-none absolute inset-y-0 start-0 z-20 flex items-center ps-4">
-                  <svg
-                    className="size-4 flex-shrink-0 text-gray-400"
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="24"
-                    height="24"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  >
-                    <circle cx="11" cy="11" r="8" />
-                    <path d="m21 21-4.3-4.3" />
-                  </svg>
-                </div>
+          <Link
+            className="hover:text-blue-500 hover:underline"
+            href="/post-management/news"
+          >
+            {currentLanguage === "ar"
+              ? "الأخبار"
+              : currentLanguage === "fr"
+                ? "Actualités"
+                : "News"}
+          </Link>
+        </div>
+        <div className="bg-bgPrimary rounded-xl">
+          <div className="flex flex-col items-center justify-between gap-4 rounded-lg px-4 py-4 md:flex-row">
+            {/* Search Input */}
+            <div
+              dir={currentLanguage === "ar" ? "rtl" : "ltr"}
+              className="relative w-full max-w-md"
+            >
+              <div className="pointer-events-none absolute inset-y-0 start-0 z-20 flex items-center ps-4">
+                <BiSearchAlt className="text-secondary" size={18} />
+              </div>
+              <div className="flex items-center gap-2">
                 <input
                   onChange={e => setSearch(e.target.value)}
                   type="text"
-                  id="icon"
-                  name="icon"
-                  className="block w-full rounded-lg border-2 border-borderPrimary px-4 py-2 ps-11 text-sm outline-none focus:border-blue-500 focus:ring-blue-500 disabled:pointer-events-none disabled:opacity-50"
-                  placeholder={
-                    currentLanguage === "en"
-                      ? "Search"
-                      : currentLanguage === "ar"
-                        ? "بحث"
-                        : "Recherche"
-                  }
+                  className="w-full rounded-lg border-2 border-borderPrimary bg-bgPrimary px-4 py-2 ps-11 text-lg outline-none"
+                  placeholder={translate.searchPlaceholder}
                 />
-              </div>
-              <div className="flex w-fit items-center justify-start rounded-lg border-2 border-borderPrimary bg-bgPrimary p-2 px-4 text-sm font-bold outline-none focus:border-blue-500 focus:ring-blue-500 disabled:pointer-events-none disabled:opacity-50">
-                {filteredCount}
-                <span className="ml-1 font-bold text-primary">result(s)</span>
+                <span className="min-w-[120px] text-primary">
+                  {filteredData?.length ?? 0} {translate.result}
+                </span>
               </div>
             </div>
-          </div>
-          <div className="flex justify-center">
+
             <Link
               href="/post-management/add-new-post"
-              className="mx-3 mb-5 w-fit whitespace-nowrap rounded-xl bg-primary px-4 py-2 text-[18px] font-semibold text-white duration-300 ease-in hover:bg-hover hover:shadow-xl"
+              className="mx-3 w-fit whitespace-nowrap rounded-xl bg-primary px-4 py-2 text-[18px] font-semibold text-white duration-300 ease-in hover:bg-hover hover:shadow-xl"
             >
               {currentLanguage === "ar"
                 ? "+ إضافة منشور جديد"
@@ -200,115 +223,103 @@ const PostManagment = () => {
                   : "+ Add new Post"}
             </Link>
           </div>
-        </div>
-        <div className="relative overflow-auto shadow-md sm:rounded-lg">
-          <table className="w-full overflow-x-auto text-left text-sm text-textSecondary rtl:text-right">
-            <thead className="bg-thead text-xs uppercase text-textPrimary">
-              <tr>
-                <th scope="col" className="whitespace-nowrap px-6 py-3">
-                  {currentLanguage === "ar"
-                    ? "العنوان"
-                    : currentLanguage === "fr"
-                      ? "Titre"
-                      : "Title"}
-                </th>
-                <th scope="col" className="whitespace-nowrap px-6 py-3">
-                  {currentLanguage === "ar"
-                    ? "المعرف"
-                    : currentLanguage === "fr"
-                      ? "Identifiant"
-                      : "ID"}
-                </th>
-                <th scope="col" className="whitespace-nowrap px-6 py-3">
-                  {currentLanguage === "ar"
-                    ? "المحتوى"
-                    : currentLanguage === "fr"
-                      ? "Contenu"
-                      : "Content"}
-                </th>
-                <th scope="col" className="whitespace-nowrap px-6 py-3">
-                  {currentLanguage === "ar"
-                    ? "الصورة"
-                    : currentLanguage === "fr"
-                      ? "Image"
-                      : "Image"}
-                </th>
-                <th scope="col" className="whitespace-nowrap px-6 py-3">
-                  {currentLanguage === "ar"
-                    ? "تحرير"
-                    : currentLanguage === "fr"
-                      ? "Modifier"
-                      : "Edit"}
-                </th>
-                <th scope="col" className="whitespace-nowrap px-6 py-3">
-                  {currentLanguage === "ar"
-                    ? "الإجراء"
-                    : currentLanguage === "fr"
-                      ? "Action"
-                      : "Action"}
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              {filteredData?.map((post: Post) => (
-                <tr
-                  key={post.id}
-                  className="border-b border-borderPrimary bg-bgPrimary hover:bg-bgSecondary"
-                >
-                  <th scope="row" className="whitespace-nowrap px-6 py-4">
-                    <p> {post.title_en} </p>
-                  </th>
-                  <td className="whitespace-nowrap px-6 py-4">{post.id}</td>
-                  <td className="whitespace-nowrap px-6 py-4">
-                    {post.content_en}
-                  </td>
-                  <td className="whitespace-nowrap px-6 py-4">
-                    <div className="grid grid-cols-2 gap-2">
-                      {post.attachments.map((img: any, index: number) => (
-                        <img
-                          className="w-[200px] rounded-md"
-                          src={img.viewLink}
-                          alt="#"
-                          key={index}
-                        />
+
+          <div className="relative overflow-auto bg-bgPrimary shadow-md sm:rounded-lg">
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>{translate.title}</TableHead>
+                  <TableHead>{translate.id}</TableHead>
+                  <TableHead>{translate.content}</TableHead>
+                  <TableHead>{translate.attachment}</TableHead>
+                  <TableHead>{translate.action}</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {isLoading ? (
+                  [...Array(3)].map((_, i) => (
+                    <TableRow key={i}>
+                      {Array.from({ length: 5 }).map((_, j) => (
+                        <TableCell key={j}>
+                          <Skeleton className="h-4 w-24" />
+                        </TableCell>
                       ))}
-                    </div>
-                  </td>
-                  <td className="whitespace-nowrap px-6 py-4">
-                    <Link
-                      href={`/post-management/${post.id}`}
-                      className="font-medium text-blue-600 hover:underline"
-                    >
-                      {currentLanguage === "ar"
-                        ? "تعديل"
-                        : currentLanguage === "fr"
-                          ? "Modifier"
-                          : "Edit"}
-                    </Link>
-                  </td>
-                  <td className="whitespace-nowrap px-6 py-4">
-                    <button
-                      onClick={() => handleDelete(post.id)}
-                      className="rounded-lg bg-error px-2 py-1 font-semibold text-white shadow-lg delay-150 duration-300 ease-in-out hover:-translate-y-1 hover:scale-110"
-                    >
-                      {currentLanguage === "ar"
-                        ? "حذف"
-                        : currentLanguage === "fr"
-                          ? "Supprimer"
-                          : "Delete"}
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-          {(data?.data.content.length == 0 || data == null) && (
-            <div className="flex w-full justify-center py-3 text-center text-[18px] font-semibold">
-              There is No Data
-            </div>
-          )}
+                    </TableRow>
+                  ))
+                ) : visibleData.length === 0 ? (
+                  <TableRow>
+                    <TableCell colSpan={5} className="text-center font-medium">
+                      {translate.noData}
+                    </TableCell>
+                  </TableRow>
+                ) : (
+                  visibleData.map((post: Post, index: number) => (
+                    <TableRow key={post.id} data-index={index}>
+                      <TableCell>{post.title_en}</TableCell>
+                      <TableCell>{post.id}</TableCell>
+                      <TableCell>{post.content_en}</TableCell>
+
+                      <TableCell>
+                        <div className="flex flex-wrap gap-3">
+                          {post.attachments.map(
+                            (attachment: any, index: number) => (
+                              <div
+                                key={index}
+                                className="flex items-center gap-2"
+                              >
+                                <a
+                                  href={attachment.viewLink}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="text-primary transition hover:text-hover"
+                                  title="View"
+                                >
+                                  <BiShowAlt size={20} />
+                                </a>
+                                <a
+                                  href={attachment.downloadLink}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="text-primary transition hover:text-hover"
+                                  title="Download"
+                                >
+                                  <FiDownload size={20} />
+                                </a>
+                              </div>
+                            ),
+                          )}
+                        </div>
+                      </TableCell>
+
+                      <TableCell className="flex items-center gap-3">
+                        <Link
+                          href={`/post-management/${post.id}`}
+                          className="text-primary transition hover:text-hover"
+                          title={translate.edit}
+                        >
+                          <BiEditAlt size={20} />
+                        </Link>
+                        <button
+                          onClick={() => handleDelete(post.id)}
+                          className="text-error transition hover:text-red-800"
+                          title={translate.del}
+                        >
+                          <BiTrash size={20} />
+                        </button>
+                      </TableCell>
+                    </TableRow>
+                  ))
+                )}
+              </TableBody>
+            </Table>
+
+            {visibleCount < filteredData?.length && (
+              <SeeMoreButton onClick={() => setVisibleCount(prev => prev + 20)} />
+            )}
+          </div>
         </div>
-      </div>
+
+      </Container>
     </>
   );
 };

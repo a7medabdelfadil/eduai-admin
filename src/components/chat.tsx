@@ -41,12 +41,50 @@ interface ChatPageProps {
 const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
 const ALLOWED_FILE_TYPES = ["image/jpeg", "image/png", "image/gif"];
 
-const EmojiPicker = ({ onEmojiSelect, onClose }: { onEmojiSelect: (emoji: string) => void; onClose: () => void }) => {
+const EmojiPicker = ({
+  onEmojiSelect,
+  onClose,
+}: {
+  onEmojiSelect: (emoji: string) => void;
+  onClose: () => void;
+}) => {
   const emojis = [
-    "😊", "😂", "🥰", "😍", "😎", "😢", "😭", "😤", "😡",
-    "👍", "👎", "❤️", "🎉", "🔥", "✨", "🌟", "💯", "🙏",
-    "🤔", "🤗", "🤫", "🤐", "😴", "🥱", "😷", "🤒", "🤕",
-    "💪", "👋", "🤝", "✌️", "👌", "🤌", "🤘", "🤙", "👊"
+    "😊",
+    "😂",
+    "🥰",
+    "😍",
+    "😎",
+    "😢",
+    "😭",
+    "😤",
+    "😡",
+    "👍",
+    "👎",
+    "❤️",
+    "🎉",
+    "🔥",
+    "✨",
+    "🌟",
+    "💯",
+    "🙏",
+    "🤔",
+    "🤗",
+    "🤫",
+    "🤐",
+    "😴",
+    "🥱",
+    "😷",
+    "🤒",
+    "🤕",
+    "💪",
+    "👋",
+    "🤝",
+    "✌️",
+    "👌",
+    "🤌",
+    "🤘",
+    "🤙",
+    "👊",
   ];
 
   return (
@@ -59,7 +97,7 @@ const EmojiPicker = ({ onEmojiSelect, onClose }: { onEmojiSelect: (emoji: string
               onEmojiSelect(emoji);
               onClose(); // Close after selecting
             }}
-            className="text-2xl hover:bg-gray-100 dark:hover:bg-gray-700 p-1 rounded"
+            className="rounded p-1 text-2xl hover:bg-gray-100 dark:hover:bg-gray-700"
           >
             {emoji}
           </button>
@@ -79,22 +117,27 @@ const DateSeparator = ({ date }: { date: string }) => (
 );
 
 // Connection status component with better visual feedback
-const ConnectionStatus = ({ isConnected }: { isConnected: boolean }) => (
+const ConnectionStatus = ({ isConnected }: { isConnected: boolean }) =>
   isConnected ? null : (
-    <div className="absolute top-0 left-0 right-0 bg-yellow-100 text-yellow-800 dark:bg-yellow-800 dark:text-yellow-100 text-xs p-1 text-center">
+    <div className="absolute left-0 right-0 top-0 bg-yellow-100 p-1 text-center text-xs text-yellow-800 dark:bg-yellow-800 dark:text-yellow-100">
       Connection issues. Messages will still be sent when possible.
     </div>
-  )
-);
+  );
 
 // Helper to log in development only
 const logDebug = (message: string, ...args: any[]) => {
-  if (process.env.NODE_ENV !== 'production') {
+  if (process.env.NODE_ENV !== "production") {
     console.log(`[ChatPage] ${message}`, ...args);
   }
 };
 
-const ChatPage = ({ userId, regetusers, userName, userRole, realuserId }: ChatPageProps) => {
+const ChatPage = ({
+  userId,
+  regetusers,
+  userName,
+  userRole,
+  realuserId,
+}: ChatPageProps) => {
   const chatEndRef = useRef<HTMLDivElement | null>(null);
   const chatContainerRef = useRef<HTMLDivElement | null>(null);
   const [messages, setMessages] = useState<Message[]>([]);
@@ -104,17 +147,22 @@ const ChatPage = ({ userId, regetusers, userName, userRole, realuserId }: ChatPa
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
   const [isSending, setIsSending] = useState(false);
   const [wasAtBottom, setWasAtBottom] = useState(true);
-  
+
   const { language: currentLanguage } = useSelector(
     (state: RootState) => state.language,
   );
-  
-  const { data: messagesData, isLoading, error, refetch } = useGetChatMessagesQuery(userId!, {
+
+  const {
+    data: messagesData,
+    isLoading,
+    error,
+    refetch,
+  } = useGetChatMessagesQuery(userId!, {
     skip: userId === null,
   });
 
   const currentUserName = useSelector(
-    (state: RootState) => state.user.name || "Unknown User"
+    (state: RootState) => state.user.name || "Unknown User",
   );
 
   // Format date for consistent display
@@ -123,30 +171,31 @@ const ChatPage = ({ userId, regetusers, userName, userRole, realuserId }: ChatPa
     const today = new Date();
     const yesterday = new Date(today);
     yesterday.setDate(yesterday.getDate() - 1);
-    
+
     // Check if date is today
     if (date.toDateString() === today.toDateString()) {
       return "Today";
     }
-    
+
     // Check if date is yesterday
     if (date.toDateString() === yesterday.toDateString()) {
       return "Yesterday";
     }
-    
+
     // Otherwise return full date
     return date.toLocaleDateString(undefined, {
-      weekday: 'long',
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric'
+      weekday: "long",
+      year: "numeric",
+      month: "long",
+      day: "numeric",
     });
   }, []);
 
   // Scroll handling for when new messages arrive
   const handleScroll = useCallback(() => {
     if (chatContainerRef.current) {
-      const { scrollTop, scrollHeight, clientHeight } = chatContainerRef.current;
+      const { scrollTop, scrollHeight, clientHeight } =
+        chatContainerRef.current;
       // Consider "at bottom" if within 100px of the bottom
       const isAtBottom = scrollHeight - scrollTop - clientHeight < 100;
       setWasAtBottom(isAtBottom);
@@ -154,21 +203,28 @@ const ChatPage = ({ userId, regetusers, userName, userRole, realuserId }: ChatPa
   }, []);
 
   // Initialize WebSocket chat hook
-  const { messages: wsMessages, isConnected, sendMessage, sendMessageWithAttachment } = useWebSocketChat({
+  const {
+    messages: wsMessages,
+    isConnected,
+    sendMessage,
+    sendMessageWithAttachment,
+  } = useWebSocketChat({
     userId,
-  initialMessages: messagesData || [],
-  refetchFunction: async () => { await refetch(); }, // Wrap refetch to return Promise<void>
-  onNewMessage: () => {
-    regetusers();
-    // The hook will handle calling refetch automatically
-    
-    if (wasAtBottom) {
-      setTimeout(() => {
-        chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
-      }, 100);
-    }
-  }
-});
+    initialMessages: messagesData || [],
+    refetchFunction: async () => {
+      await refetch();
+    }, // Wrap refetch to return Promise<void>
+    onNewMessage: () => {
+      regetusers();
+      // The hook will handle calling refetch automatically
+
+      if (wasAtBottom) {
+        setTimeout(() => {
+          chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
+        }, 100);
+      }
+    },
+  });
 
   // Reset messages when changing between chats
   useEffect(() => {
@@ -177,18 +233,18 @@ const ChatPage = ({ userId, regetusers, userName, userRole, realuserId }: ChatPa
     setInput(""); // Clear input field
     handleRemoveImage(); // Clear any uploaded images
     setWasAtBottom(true); // Reset scroll position tracking
-    
+
     if (messagesData) {
       // Only set messages for the current chat, ensuring strict type comparison
-      const filteredMessages = messagesData.filter((msg: { chatId: any; }) => 
-        String(msg.chatId) === String(userId)
+      const filteredMessages = messagesData.filter(
+        (msg: { chatId: any }) => String(msg.chatId) === String(userId),
       );
       setMessages(filteredMessages);
-      
+
       // Log message count for debugging
       logDebug(`Loaded ${filteredMessages.length} messages for chat ${userId}`);
     }
-    
+
     // Auto-scroll to bottom when changing chats
     setTimeout(() => {
       chatEndRef.current?.scrollIntoView({ behavior: "auto" });
@@ -199,29 +255,33 @@ const ChatPage = ({ userId, regetusers, userName, userRole, realuserId }: ChatPa
   useEffect(() => {
     if (wsMessages && wsMessages.length > 0 && userId) {
       // Filter to only include messages for the current chat with strict equality
-      const relevantMessages = wsMessages.filter(msg => 
-        String(msg.chatId) === String(userId)
+      const relevantMessages = wsMessages.filter(
+        msg => String(msg.chatId) === String(userId),
       );
-      
+
       if (relevantMessages.length > 0) {
-        logDebug(`Processing ${relevantMessages.length} WebSocket messages for chat ${userId}`);
+        logDebug(
+          `Processing ${relevantMessages.length} WebSocket messages for chat ${userId}`,
+        );
       }
-      
+
       // Merge with current messages, avoiding duplicates
       setMessages(prev => {
         const newMessages = [...prev];
         const seenIds = new Set(newMessages.map(msg => String(msg.id)));
-        
+
         relevantMessages.forEach(wsMsg => {
           if (!seenIds.has(String(wsMsg.id))) {
             newMessages.push(wsMsg);
             seenIds.add(String(wsMsg.id));
           }
         });
-        
+
         // Sort by creation time
-        return newMessages.sort((a, b) => 
-          new Date(a.creationTime).getTime() - new Date(b.creationTime).getTime()
+        return newMessages.sort(
+          (a, b) =>
+            new Date(a.creationTime).getTime() -
+            new Date(b.creationTime).getTime(),
         );
       });
     }
@@ -231,9 +291,9 @@ const ChatPage = ({ userId, regetusers, userName, userRole, realuserId }: ChatPa
   useEffect(() => {
     const container = chatContainerRef.current;
     if (container) {
-      container.addEventListener('scroll', handleScroll);
+      container.addEventListener("scroll", handleScroll);
       return () => {
-        container.removeEventListener('scroll', handleScroll);
+        container.removeEventListener("scroll", handleScroll);
       };
     }
   }, [handleScroll]);
@@ -241,13 +301,16 @@ const ChatPage = ({ userId, regetusers, userName, userRole, realuserId }: ChatPa
   // Handle clicking outside emoji picker
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (showEmojiPicker && !(event.target as Element).closest('.emoji-picker-container')) {
+      if (
+        showEmojiPicker &&
+        !(event.target as Element).closest(".emoji-picker-container")
+      ) {
         setShowEmojiPicker(false);
       }
     };
 
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [showEmojiPicker]);
 
   // Handle emoji selection
@@ -255,7 +318,9 @@ const ChatPage = ({ userId, regetusers, userName, userRole, realuserId }: ChatPa
     setInput(prev => prev + emoji);
     // Focus back on input after emoji selection
     setTimeout(() => {
-      const inputElement = document.querySelector('input[type="text"]') as HTMLInputElement;
+      const inputElement = document.querySelector(
+        'input[type="text"]',
+      ) as HTMLInputElement;
       if (inputElement) inputElement.focus();
     }, 0);
   };
@@ -297,7 +362,7 @@ const ChatPage = ({ userId, regetusers, userName, userRole, realuserId }: ChatPa
   // Send message with improved error handling and user feedback
   const handleSendMessage = async () => {
     const trimmedInput = input.trim();
-    
+
     if (!trimmedInput && !imageFile) {
       toast.error("Cannot send empty message");
       return;
@@ -317,21 +382,23 @@ const ChatPage = ({ userId, regetusers, userName, userRole, realuserId }: ChatPa
 
     try {
       let success;
-      
+
       // Prepare the message payload with string chat ID
       const messagePayload = {
         chatId: String(userId),
-        content: trimmedInput || " " // Use space if empty (for image-only messages)
+        content: trimmedInput || " ", // Use space if empty (for image-only messages)
       };
-      
+
       if (imageFile) {
         // Log for debugging
-        logDebug(`Sending message with image. File size: ${imageFile.size} bytes, type: ${imageFile.type}`);
-        
+        logDebug(
+          `Sending message with image. File size: ${imageFile.size} bytes, type: ${imageFile.type}`,
+        );
+
         // Use file upload + message sending with attachmentId
         success = await sendMessageWithAttachment({
           ...messagePayload,
-          file: imageFile
+          file: imageFile,
         });
       } else {
         // Use WebSocket for text-only messages
@@ -346,12 +413,12 @@ const ChatPage = ({ userId, regetusers, userName, userRole, realuserId }: ChatPa
         setInput("");
         handleRemoveImage();
         setWasAtBottom(true); // Reset scroll position after sending
-        
+
         // Scroll to bottom after sending
         setTimeout(() => {
           chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
         }, 100);
-        
+
         // Show success message
       } else {
         toast.error("Failed to send message. Please try again.");
@@ -365,64 +432,76 @@ const ChatPage = ({ userId, regetusers, userName, userRole, realuserId }: ChatPa
   };
 
   // Group messages by date
-  const groupMessagesByDate = useCallback((messages: Message[]) => {
-    const groups: { [key: string]: Message[] } = {};
-    
-    // Filter to only include messages for the current chat
-    const filteredMessages = messages.filter(msg => 
-      String(msg.chatId) === String(userId)
-    );
-    
-    filteredMessages.forEach(message => {
-      const dateStr = formatMessageDate(message.creationTime);
-      
-      if (!groups[dateStr]) {
-        groups[dateStr] = [];
-      }
-      groups[dateStr].push(message);
-    });
-    
-    return groups;
-  }, [userId, formatMessageDate]);
+  const groupMessagesByDate = useCallback(
+    (messages: Message[]) => {
+      const groups: { [key: string]: Message[] } = {};
+
+      // Filter to only include messages for the current chat
+      const filteredMessages = messages.filter(
+        msg => String(msg.chatId) === String(userId),
+      );
+
+      filteredMessages.forEach(message => {
+        const dateStr = formatMessageDate(message.creationTime);
+
+        if (!groups[dateStr]) {
+          groups[dateStr] = [];
+        }
+        groups[dateStr].push(message);
+      });
+
+      return groups;
+    },
+    [userId, formatMessageDate],
+  );
 
   const groupedMessages = groupMessagesByDate(messages);
 
   // Function to get user profile link based on role
   const getUserProfileLink = () => {
     const roleMap: Record<string, string> = {
-      "Teacher": `/teacher/view-teacher/${realuserId}`,
-      "Student": `/student/view-student/${realuserId}`,
-      "Parent": `/parent/view-parent/${realuserId}`,
-      "Employee": `/employee/view-employee/${realuserId}`,
-      "Worker": `/worker/view-worker/${realuserId}`
+      Teacher: `/teacher/view-teacher/${realuserId}`,
+      Student: `/student/view-student/${realuserId}`,
+      Parent: `/parent/view-parent/${realuserId}`,
+      Employee: `/employee/view-employee/${realuserId}`,
+      Worker: `/worker/view-worker/${realuserId}`,
     };
-    
+
     return roleMap[userRole] || "#";
   };
 
   return (
     <div className="mx-auto flex h-[700px] w-full flex-col rounded-xl bg-bgSecondary shadow-lg">
-      <div dir={currentLanguage === "ar" ? "rtl" : "ltr"} className="relative inline-block p-4 border-b border-borderPrimary">
+      <div
+        dir={currentLanguage === "ar" ? "rtl" : "ltr"}
+        className="relative inline-block border-b border-borderPrimary p-4"
+      >
         <div className="flex items-center gap-2 font-medium">
-          <img src="/images/userr.png" alt="User avatar" className="w-[50px] h-[50px] rounded-full object-cover" />
+          <img
+            src="/images/userr.png"
+            alt="User avatar"
+            className="h-[50px] w-[50px] rounded-full object-cover"
+          />
           <div>
             <p className="font-bold">{userName}</p>
             <p className="text-sm text-gray-500">{userRole}</p>
           </div>
         </div>
-        <div className={`absolute ${currentLanguage === "ar" ? "left-3" : "right-3"} top-5`}>
-          <Link 
-            href={getUserProfileLink()} 
-            className="font-medium text-secondary underline underline-offset-2 hover:text-secondary/80 transition-colors"
+        <div
+          className={`absolute ${currentLanguage === "ar" ? "left-3" : "right-3"} top-5`}
+        >
+          <Link
+            href={getUserProfileLink()}
+            className="font-medium text-secondary underline underline-offset-2 transition-colors hover:text-secondary/80"
           >
             View Profile
           </Link>
         </div>
       </div>
-      
-      <div 
+
+      <div
         ref={chatContainerRef}
-        className="flex-1 overflow-y-auto break-words rounded-xl  p-4"
+        className="flex-1 overflow-y-auto break-words rounded-xl p-4"
         onScroll={handleScroll}
       >
         {isLoading && (
@@ -430,16 +509,16 @@ const ChatPage = ({ userId, regetusers, userName, userRole, realuserId }: ChatPa
             <div className="h-8 w-8 animate-spin rounded-full border-4 border-blue-500 border-t-transparent"></div>
           </div>
         )}
-        
+
         {error && (
           <div className="flex h-full items-center justify-center text-red-500">
-            <div className="bg-red-50 dark:bg-red-900/20 p-4 rounded-lg">
+            <div className="rounded-lg bg-red-50 p-4 dark:bg-red-900/20">
               <p className="font-semibold">Error loading messages</p>
               <p className="text-sm">Please refresh the page and try again</p>
             </div>
           </div>
         )}
-        
+
         {!isLoading && !error && Object.keys(groupedMessages).length === 0 && (
           <div className="flex h-full items-center justify-center text-gray-500">
             <div className="text-center">
@@ -448,7 +527,7 @@ const ChatPage = ({ userId, regetusers, userName, userRole, realuserId }: ChatPa
             </div>
           </div>
         )}
-        
+
         {Object.entries(groupedMessages).map(([date, dateMessages]) => (
           <div key={date}>
             <DateSeparator date={date} />
@@ -458,7 +537,7 @@ const ChatPage = ({ userId, regetusers, userName, userRole, realuserId }: ChatPa
                 message={msg}
                 isCurrentUser={msg.creatorName === currentUserName}
                 userName={userName}
-                currentChatId={userId} 
+                currentChatId={userId}
               />
             ))}
           </div>
@@ -472,11 +551,11 @@ const ChatPage = ({ userId, regetusers, userName, userRole, realuserId }: ChatPa
             <img
               src={imagePreview}
               alt="Preview"
-              className="h-20 w-20 rounded-lg object-cover border border-borderPrimary"
+              className="h-20 w-20 rounded-lg border border-borderPrimary object-cover"
             />
             <button
               onClick={handleRemoveImage}
-              className="absolute -right-2 -top-2 rounded-full bg-red-500 p-1 text-white hover:bg-red-600 shadow-sm"
+              className="absolute -right-2 -top-2 rounded-full bg-red-500 p-1 text-white shadow-sm hover:bg-red-600"
               aria-label="Remove image"
             >
               <svg
@@ -495,10 +574,13 @@ const ChatPage = ({ userId, regetusers, userName, userRole, realuserId }: ChatPa
             </button>
           </div>
         )}
-        
+
         <div className="flex items-center justify-between gap-5 rounded-xl border border-borderPrimary bg-bgSecondary px-4 py-2">
           <div className="grid items-center justify-center">
-            <label className="relative inline-flex cursor-pointer items-center" aria-label="Upload image">
+            <label
+              className="relative inline-flex cursor-pointer items-center"
+              aria-label="Upload image"
+            >
               <input
                 type="file"
                 accept="image/*"
@@ -508,7 +590,7 @@ const ChatPage = ({ userId, regetusers, userName, userRole, realuserId }: ChatPa
                 disabled={isSending}
               />
               <svg
-                className={`h-6 w-6 cursor-pointer ${isSending ? 'opacity-50' : ''} text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200`}
+                className={`h-6 w-6 cursor-pointer ${isSending ? "opacity-50" : ""} text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200`}
                 viewBox="0 0 24 24"
                 fill="none"
                 stroke="currentColor"
@@ -523,30 +605,41 @@ const ChatPage = ({ userId, regetusers, userName, userRole, realuserId }: ChatPa
             </label>
           </div>
           <div className="emoji-picker-container relative">
-              <button
-                onClick={() => setShowEmojiPicker(!showEmojiPicker)}
-                className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-full"
-                aria-label="Emoji picker"
-                disabled={isSending}
+            <button
+              onClick={() => setShowEmojiPicker(!showEmojiPicker)}
+              className="rounded-full p-2 hover:bg-gray-100 dark:hover:bg-gray-700"
+              aria-label="Emoji picker"
+              disabled={isSending}
+            >
+              <svg
+                className={`h-6 w-6 ${isSending ? "opacity-50" : ""} text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200`}
+                viewBox="0 0 24 24"
+                width="24"
+                height="24"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
               >
-                <svg className={`h-6 w-6 ${isSending ? 'opacity-50' : ''} text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200`} viewBox="0 0 24 24" width="24" height="24" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <circle cx="12" cy="12" r="10" />
-                  <path d="M8 14s1.5 2 4 2 4-2 4-2" />
-                  <line x1="9" y1="9" x2="9.01" y2="9" />
-                  <line x1="15" y1="9" x2="15.01" y2="9" />
-                </svg>
-              </button>
-              {showEmojiPicker && (
-                <EmojiPicker
-                  onEmojiSelect={handleEmojiSelect}
-                  onClose={() => setShowEmojiPicker(false)}
-                />
-              )}
-            </div>
+                <circle cx="12" cy="12" r="10" />
+                <path d="M8 14s1.5 2 4 2 4-2 4-2" />
+                <line x1="9" y1="9" x2="9.01" y2="9" />
+                <line x1="15" y1="9" x2="15.01" y2="9" />
+              </svg>
+            </button>
+            {showEmojiPicker && (
+              <EmojiPicker
+                onEmojiSelect={handleEmojiSelect}
+                onClose={() => setShowEmojiPicker(false)}
+              />
+            )}
+          </div>
 
           <input
             type="text"
-            className="flex-1 rounded-lg p-2 focus:outline-none bg-transparent focus:bg-white dark:focus:bg-gray-700 border border-transparent focus:border-borderPrimary transition-colors"
+            className="flex-1 rounded-lg border border-transparent bg-transparent p-2 transition-colors focus:border-borderPrimary focus:bg-white focus:outline-none dark:focus:bg-gray-700"
             value={input}
             placeholder="Type your message..."
             onChange={e => setInput(e.target.value)}
@@ -559,7 +652,7 @@ const ChatPage = ({ userId, regetusers, userName, userRole, realuserId }: ChatPa
             disabled={isSending}
           />
           <button
-            className="ml-4 flex items-center gap-3 rounded-lg bg-[#1565C0] dark:bg-blue-900 hover:bg-[#1565CC] hover:dark:bg-blue-700 px-3 py-2 font-semibold text-white transition-colors disabled:cursor-not-allowed"
+            className="ml-4 flex items-center gap-3 rounded-lg bg-[#1565C0] px-3 py-2 font-semibold text-white transition-colors hover:bg-[#1565CC] disabled:cursor-not-allowed dark:bg-blue-900 hover:dark:bg-blue-700"
             onClick={handleSendMessage}
             disabled={isSending || (!input.trim() && !imageFile)}
             aria-label="Send message"

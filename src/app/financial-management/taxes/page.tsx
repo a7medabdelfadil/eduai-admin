@@ -47,7 +47,7 @@ const FeesManagement = () => {
   ];
 
   const { data, error, isLoading, refetch } = useGetAllTaxesQuery(null);
-  console.log("🚀 ~ FeesManagement ~ data:", data)
+  console.log("🚀 ~ FeesManagement ~ data:", data);
   type Invoice = Record<string, any>;
   const [search, setSearch] = useState("");
   const [deleteInvoice] = useDeleteTaxesMutation();
@@ -80,19 +80,54 @@ const FeesManagement = () => {
 
   const translations = [
     { key: "Tax Type", en: "Tax Type", ar: "نوع الضريبة", fr: "Type d'impôt" },
-    { key: "Start Date", en: "Start Date", ar: "تاريخ البدء", fr: "Date de début" },
-    { key: "End Date", en: "End Date", ar: "تاريخ الانتهاء", fr: "Date de fin" },
+    {
+      key: "Start Date",
+      en: "Start Date",
+      ar: "تاريخ البدء",
+      fr: "Date de début",
+    },
+    {
+      key: "End Date",
+      en: "End Date",
+      ar: "تاريخ الانتهاء",
+      fr: "Date de fin",
+    },
     { key: "About", en: "About", ar: "حول", fr: "À propos" },
-    { key: "Amount Paid", en: "Amount Paid", ar: "المبلغ المدفوع", fr: "Montant payé" },
-    { key: "Payment Date", en: "Payment Date", ar: "تاريخ الدفع", fr: "Date de paiement" },
-    { key: "Payment Method", en: "Payment Method", ar: "طريقة الدفع", fr: "Méthode de paiement" },
+    {
+      key: "Amount Paid",
+      en: "Amount Paid",
+      ar: "المبلغ المدفوع",
+      fr: "Montant payé",
+    },
+    {
+      key: "Payment Date",
+      en: "Payment Date",
+      ar: "تاريخ الدفع",
+      fr: "Date de paiement",
+    },
+    {
+      key: "Payment Method",
+      en: "Payment Method",
+      ar: "طريقة الدفع",
+      fr: "Méthode de paiement",
+    },
     { key: "Receipt", en: "Receipt", ar: "رقم الإيصال", fr: "Reçu" },
     { key: "Action", en: "Action", ar: "الإجراء", fr: "Action" },
-    { key: "Receipt Image", en: "Receipt Image", ar: "صورة الإيصال", fr: "Image du reçu" },
+    {
+      key: "Receipt Image",
+      en: "Receipt Image",
+      ar: "صورة الإيصال",
+      fr: "Image du reçu",
+    },
     { key: "View", en: "View", ar: "عرض", fr: "Voir" },
     { key: "No image", en: "No image", ar: "لا توجد صورة", fr: "Pas d'image" },
     { key: "Result(s)", en: "Result(s)", ar: "نتيجة", fr: "résultat(s)" },
-    { key: "No data available", en: "No data available", ar: "لا توجد بيانات", fr: "Aucune donnée disponible" }
+    {
+      key: "No data available",
+      en: "No data available",
+      ar: "لا توجد بيانات",
+      fr: "Aucune donnée disponible",
+    },
   ];
 
   const translate = (key: string, lang: string) => {
@@ -104,7 +139,7 @@ const FeesManagement = () => {
   const filteredData = data?.data.content?.filter((invoice: Invoice) =>
     search.trim() === ""
       ? true
-      : invoice.receiptNumber?.toLowerCase().includes(search.toLowerCase())
+      : invoice.receiptNumber?.toLowerCase().includes(search.toLowerCase()),
   );
 
   const [visibleCount, setVisibleCount] = useState(10);
@@ -112,12 +147,10 @@ const FeesManagement = () => {
 
   const displayedData = filteredData?.slice(0, visibleCount);
 
-
   return (
     <>
       <BreadCrumbs breadcrumbs={breadcrumbs} />
       <Container>
-
         <div className="justify-left mb-5 ml-4 flex gap-5 text-[23px] font-semibold">
           <Link
             href="/financial-management/taxes"
@@ -134,7 +167,8 @@ const FeesManagement = () => {
           </Link>
           <Link
             className="hover:text-blue-500 hover:underline"
-            href="/financial-management/taxes/invoices">
+            href="/financial-management/taxes/invoices"
+          >
             {currentLanguage === "en"
               ? "Invoices Taxes"
               : currentLanguage === "ar"
@@ -145,8 +179,8 @@ const FeesManagement = () => {
             {/* Default to English */}
           </Link>
         </div>
-        <div className="bg-bgPrimary rounded-xl">
-          <div className="flex flex-col md:flex-row justify-between items-center gap-4 px-4 py-4 rounded-lg">
+        <div className="rounded-xl bg-bgPrimary">
+          <div className="flex flex-col items-center justify-between gap-4 rounded-lg px-4 py-4 md:flex-row">
             {/* Search Input */}
             <div
               dir={currentLanguage === "ar" ? "rtl" : "ltr"}
@@ -159,17 +193,19 @@ const FeesManagement = () => {
                 <input
                   onChange={e => setSearch(e.target.value)}
                   type="text"
-                  className="w-full border-borderPrimary bg-bgPrimary rounded-lg border-2 px-4 py-2 ps-11 text-lg outline-none"
-                  placeholder={currentLanguage === "en"
-                    ? "Search"
-                    : currentLanguage === "ar"
-                      ? "بحث"
-                      : "Recherche"}
+                  className="w-full rounded-lg border-2 border-borderPrimary bg-bgPrimary px-4 py-2 ps-11 text-lg outline-none"
+                  placeholder={
+                    currentLanguage === "en"
+                      ? "Search"
+                      : currentLanguage === "ar"
+                        ? "بحث"
+                        : "Recherche"
+                  }
                 />
                 <span className="min-w-[120px] text-primary">
-                  {filteredData?.length ?? 0} {translate("Result(s)", currentLanguage)}
+                  {filteredData?.length ?? 0}{" "}
+                  {translate("Result(s)", currentLanguage)}
                 </span>
-
               </div>
             </div>
             <div className="flex justify-center">
@@ -189,20 +225,34 @@ const FeesManagement = () => {
             </div>
           </div>
 
-          <div className="relative overflow-auto shadow-md sm:rounded-lg bg-bgPrimary">
+          <div className="relative overflow-auto bg-bgPrimary shadow-md sm:rounded-lg">
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>{translate("Tax Type", currentLanguage)}</TableHead>
-                  <TableHead>{translate("Start Date", currentLanguage)}</TableHead>
-                  <TableHead>{translate("End Date", currentLanguage)}</TableHead>
+                  <TableHead>
+                    {translate("Tax Type", currentLanguage)}
+                  </TableHead>
+                  <TableHead>
+                    {translate("Start Date", currentLanguage)}
+                  </TableHead>
+                  <TableHead>
+                    {translate("End Date", currentLanguage)}
+                  </TableHead>
                   <TableHead>{translate("About", currentLanguage)}</TableHead>
-                  <TableHead>{translate("Amount Paid", currentLanguage)}</TableHead>
-                  <TableHead>{translate("Payment Date", currentLanguage)}</TableHead>
-                  <TableHead>{translate("Payment Method", currentLanguage)}</TableHead>
+                  <TableHead>
+                    {translate("Amount Paid", currentLanguage)}
+                  </TableHead>
+                  <TableHead>
+                    {translate("Payment Date", currentLanguage)}
+                  </TableHead>
+                  <TableHead>
+                    {translate("Payment Method", currentLanguage)}
+                  </TableHead>
                   <TableHead>{translate("Receipt", currentLanguage)}</TableHead>
                   <TableHead>{translate("Action", currentLanguage)}</TableHead>
-                  <TableHead>{translate("Receipt Image", currentLanguage)}</TableHead>
+                  <TableHead>
+                    {translate("Receipt Image", currentLanguage)}
+                  </TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -218,7 +268,10 @@ const FeesManagement = () => {
                   ))
                 ) : !filteredData?.length ? (
                   <TableRow>
-                    <TableCell colSpan={10} className="text-center py-4 text-gray-500">
+                    <TableCell
+                      colSpan={10}
+                      className="py-4 text-center text-gray-500"
+                    >
                       {translate("No data available", currentLanguage)}
                     </TableCell>
                   </TableRow>
@@ -226,19 +279,27 @@ const FeesManagement = () => {
                   displayedData.map((invoice: Invoice, index: number) => (
                     <TableRow key={index} data-index={index}>
                       <TableCell>{invoice.taxType}</TableCell>
-                      <TableCell>{formatTransactionDate(invoice.startDate)}</TableCell>
-                      <TableCell>{formatTransactionDate(invoice.endDate)}</TableCell>
+                      <TableCell>
+                        {formatTransactionDate(invoice.startDate)}
+                      </TableCell>
+                      <TableCell>
+                        {formatTransactionDate(invoice.endDate)}
+                      </TableCell>
                       <TableCell>{invoice.about}</TableCell>
                       <TableCell>{invoice.paidAmount}</TableCell>
-                      <TableCell>{formatTransactionDate(invoice.paymentDate)}</TableCell>
+                      <TableCell>
+                        {formatTransactionDate(invoice.paymentDate)}
+                      </TableCell>
                       <TableCell>{invoice.paymentMethod}</TableCell>
                       <TableCell>{invoice.receiptNumber}</TableCell>
                       <TableCell>
-                        <div className="flex justify-center items-center gap-3">
+                        <div className="flex items-center justify-center gap-3">
                           <button onClick={() => handleDelete(invoice.id)}>
                             <RiDeleteBin6Fill className="h-4 w-4 text-red-500" />
                           </button>
-                          <Link href={`/financial-management/taxes/${invoice.id}`}>
+                          <Link
+                            href={`/financial-management/taxes/${invoice.id}`}
+                          >
                             <RiEdit2Fill className="h-4 w-4 text-blue-600" />
                           </Link>
                         </div>
@@ -268,10 +329,8 @@ const FeesManagement = () => {
             {filteredData?.length > visibleCount && (
               <SeeMoreButton onClick={handleShowMore} />
             )}
-
           </div>
         </div>
-
       </Container>
     </>
   );

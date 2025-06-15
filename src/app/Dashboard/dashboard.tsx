@@ -74,13 +74,14 @@ const Dashboard: React.FC = () => {
     (state: RootState) => state.language,
   );
 
-  const locale = currentLanguage === "ar" ? ar : currentLanguage === "fr" ? fr : enUS;
+  const locale =
+    currentLanguage === "ar" ? ar : currentLanguage === "fr" ? fr : enUS;
   const { data: expenses, isLoading: isExpenses } = useGetExpensesQuery({
     start: start,
     end: end,
   });
   const { data: studentPercentage } = useGetStudentPercentageQuery(null);
-  console.log("👾 ~ studentPercentage:", studentPercentage?.data)
+  console.log("👾 ~ studentPercentage:", studentPercentage?.data);
   const { data: teacherAttendance } = useGetTeacherAttendenceQuery(null);
   const { data: employeeAttendance } = useGetEmployeeAttendenceQuery(null);
   const { data: workersAttendance } = useGetWorkerAttendenceQuery(null);
@@ -296,7 +297,7 @@ const Dashboard: React.FC = () => {
         className={`${currentLanguage === "ar" ? "pl-4 pr-4 lg:pl-10 lg:pr-0" : "pl-4 pr-4 lg:pl-0 lg:pr-10"} mt-6 grid w-full overflow-x-auto`}
       >
         <div className="grid overflow-x-auto">
-          <div className="mb-6 grid w-full grid-cols-1 sm:grid-cols-2 justify-center gap-4 whitespace-nowrap max-[812px]:justify-center md:grid-cols-3 2xl:grid-cols-5">
+          <div className="mb-6 grid w-full grid-cols-1 justify-center gap-4 whitespace-nowrap max-[812px]:justify-center sm:grid-cols-2 md:grid-cols-3 2xl:grid-cols-5">
             <div
               dir={currentLanguage === "ar" ? "rtl" : "ltr"}
               className="flex h-[120px] w-full flex-col justify-evenly rounded-xl bg-bgPrimary p-4 shadow-md max-[576px]:h-[100px]"
@@ -310,8 +311,11 @@ const Dashboard: React.FC = () => {
               </p>
               <h1 className="text-3xl font-semibold">{students?.data} </h1>
               <div className="flex gap-2">
-                <div className={`flex ${studentPercentage?.data > 0 ? "text-error" : "text-success"} text-success`}>
-                  <HiOutlineArrowNarrowUp className="mt-[2px]" /> {studentPercentage?.data}%
+                <div
+                  className={`flex ${studentPercentage?.data > 0 ? "text-error" : "text-success"} text-success`}
+                >
+                  <HiOutlineArrowNarrowUp className="mt-[2px]" />{" "}
+                  {studentPercentage?.data}%
                 </div>
                 <div>
                   <Text>
@@ -616,7 +620,7 @@ const Dashboard: React.FC = () => {
                     <div key={item.id} className="mb-6">
                       {/* Name + Time */}
                       <div className="flex items-center justify-between">
-                        <div className="flex gap-2 items-center">
+                        <div className="flex items-center gap-2">
                           <p
                             className={`text-lg font-semibold ${nameColors[index % nameColors.length]}`}
                           >
@@ -630,7 +634,9 @@ const Dashboard: React.FC = () => {
                           </span>
                         </div>
                         {/* Date on the right */}
-                        <div className={`text-right text-sm font-semibold ${nameColors[index % nameColors.length]}`}>
+                        <div
+                          className={`text-right text-sm font-semibold ${nameColors[index % nameColors.length]}`}
+                        >
                           {format(parseISO(item.createdAt), "dd - MMM - yyyy", {
                             locale,
                           })}

@@ -1,17 +1,27 @@
 /* eslint-disable @next/next/no-img-element */
 "use client";
-import Spinner from "@/components/spinner";
 import {
   useDeletePositionsMutation,
   useGetAllPositionsQuery,
 } from "@/features/Organization-Setteings/positionApi";
 import Link from "next/link";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import { RootState } from "@/GlobalRedux/store";
 import BreadCrumbs from "@/components/BreadCrumbs";
-
+import Container from "@/components/Container";
+import {
+  Table,
+  TableHeader,
+  TableRow,
+  TableHead,
+  TableBody,
+  TableCell,
+} from "@/components/Table";
+import { Skeleton } from "@/components/Skeleton";
+import SeeMoreButton from "@/components/SeeMoreButton";
+import { BiSearchAlt, BiShow, BiTrash } from "react-icons/bi";
 const Position = () => {
   const breadcrumbs = [
     {
@@ -34,13 +44,77 @@ const Position = () => {
     },
   ];
 
-  const booleanValue = useSelector((state: RootState) => state.boolean.value);
   type Position = Record<string, any>;
   const [search, setSearch] = useState("");
   const { data, error, isLoading, refetch } = useGetAllPositionsQuery(null);
-  const [selectAll, setSelectAll] = useState(false);
+  const [visibleCount, setVisibleCount] = useState(20);
 
+  const { language: currentLanguage, loading } = useSelector(
+    (state: RootState) => state.language,
+  );
 
+  const translate = {
+    name:
+      currentLanguage === "ar"
+        ? "الاسم"
+        : currentLanguage === "fr"
+          ? "Nom"
+          : "Name",
+    id:
+      currentLanguage === "ar"
+        ? "الرقم التعريفي"
+        : currentLanguage === "fr"
+          ? "ID"
+          : "ID",
+    createdAt:
+      currentLanguage === "ar"
+        ? "تم إنشاؤه في"
+        : currentLanguage === "fr"
+          ? "Créé à"
+          : "Created At",
+    updatedAt:
+      currentLanguage === "ar"
+        ? "تم التحديث في"
+        : currentLanguage === "fr"
+          ? "Mis à jour à"
+          : "Updated At",
+    view:
+      currentLanguage === "ar"
+        ? "عرض"
+        : currentLanguage === "fr"
+          ? "Afficher"
+          : "View",
+    action:
+      currentLanguage === "ar"
+        ? "الإجراء"
+        : currentLanguage === "fr"
+          ? "Action"
+          : "Action",
+    del:
+      currentLanguage === "ar"
+        ? "حذف"
+        : currentLanguage === "fr"
+          ? "Supprimer"
+          : "Delete",
+    noData:
+      currentLanguage === "ar"
+        ? "لا توجد بيانات"
+        : currentLanguage === "fr"
+          ? "Aucune donnée disponible"
+          : "No data available",
+    searchPlaceholder:
+      currentLanguage === "ar"
+        ? "ابحث عن قسم"
+        : currentLanguage === "fr"
+          ? "Rechercher un département"
+          : "Search department",
+    result:
+      currentLanguage === "ar"
+        ? "نتيجة"
+        : currentLanguage === "fr"
+          ? "résultat(s)"
+          : "Result(s)",
+  };
 
   const [deletePosition, { isLoading: isDeleting }] =
     useDeletePositionsMutation();
@@ -55,16 +129,6 @@ const Position = () => {
     }
   };
 
-  const handleSelectAll = () => {
-    setSelectAll(!selectAll);
-    const checkboxes = document.querySelectorAll<HTMLInputElement>(
-      'input[type="checkbox"]:not(#checkbox-all-search)',
-    );
-    checkboxes.forEach(checkbox => {
-      checkbox.checked = !selectAll;
-    });
-  };
-
   const formatTransactionDate = (dateString: string | number | Date) => {
     if (!dateString) return "No transaction date";
     const formatter = new Intl.DateTimeFormat("en-EG", {
@@ -77,106 +141,57 @@ const Position = () => {
     return formatter.format(new Date(dateString));
   };
 
-  useEffect(() => {
-    const handleOtherCheckboxes = () => {
-      const allCheckboxes = document.querySelectorAll<HTMLInputElement>(
-        'input[type="checkbox"]:not(#checkbox-all-search)',
-      );
-      const allChecked = Array.from(allCheckboxes).every(
-        checkbox => checkbox.checked,
-      );
-      const selectAllCheckbox = document.getElementById(
-        "checkbox-all-search",
-      ) as HTMLInputElement | null;
-      if (selectAllCheckbox) {
-        selectAllCheckbox.checked = allChecked;
-        setSelectAll(allChecked);
-      }
-    };
+  const filteredData =
+    data?.data?.content?.filter((position: Position) =>
+      search.trim() === ""
+        ? true
+        : position.title.toLowerCase().includes(search.toLowerCase()),
+    ) || [];
 
-    const otherCheckboxes = document.querySelectorAll<HTMLInputElement>(
-      'input[type="checkbox"]:not(#checkbox-all-search)',
-    );
-    otherCheckboxes.forEach(checkbox => {
-      checkbox.addEventListener("change", handleOtherCheckboxes);
-    });
-
-    return () => {
-      otherCheckboxes.forEach(checkbox => {
-        checkbox.removeEventListener("change", handleOtherCheckboxes);
-      });
-    };
-  }, []);
-
-  const { language: currentLanguage, loading } = useSelector(
-    (state: RootState) => state.language,
-  );
-
-  if (loading || isLoading)
-    return (
-      <div className="flex h-screen w-full items-center justify-center">
-        <Spinner />
-      </div>
-    );
+  const visibleData = filteredData.slice(0, visibleCount);
 
   return (
     <>
       <BreadCrumbs breadcrumbs={breadcrumbs} />
-      <div
-        dir={currentLanguage === "ar" ? "rtl" : "ltr"}
-        className={`${
-          currentLanguage === "ar"
-            ? booleanValue
-              ? "lg:mr-[100px]"
-              : "lg:mr-[270px]"
-            : booleanValue
-              ? "lg:ml-[100px]"
-              : "lg:ml-[270px]"
-        } relative mx-3 mt-10 h-screen overflow-x-auto bg-transparent sm:rounded-lg`}
-      >
-        <div className="flex justify-between text-center max-[502px]:grid max-[502px]:justify-center">
-          <div className="mb-3">
-            <label htmlFor="icon" className="sr-only">
-              Search
-            </label>
-            <div className="relative min-w-72 md:min-w-80">
+      <Container>
+        <div className="-ml-1 -mt-2 mb-6 flex items-center justify-between">
+          <h1 className="text-3xl font-semibold">
+            {currentLanguage === "en"
+              ? "Position"
+              : currentLanguage === "ar"
+                ? "المنصب"
+                : currentLanguage === "fr"
+                  ? "Poste"
+                  : "Position"}{" "}
+            {/* default */}
+          </h1>
+        </div>
+        <div className="rounded-xl bg-bgPrimary">
+          <div className="flex flex-col items-center justify-between gap-4 rounded-lg px-4 py-4 md:flex-row">
+            {/* Search Input */}
+            <div
+              dir={currentLanguage === "ar" ? "rtl" : "ltr"}
+              className="relative w-full max-w-md"
+            >
               <div className="pointer-events-none absolute inset-y-0 start-0 z-20 flex items-center ps-4">
-                <svg
-                  className="size-4 flex-shrink-0 text-gray-400"
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                >
-                  <circle cx="11" cy="11" r="8" />
-                  <path d="m21 21-4.3-4.3" />
-                </svg>
+                <BiSearchAlt className="text-secondary" size={18} />
               </div>
-              <input
-                onChange={e => setSearch(e.target.value)}
-                type="text"
-                id="icon"
-                name="icon"
-                className="block w-full rounded-lg border-2 border-borderPrimary px-4 py-2 ps-11 text-sm outline-none focus:border-primary focus:ring-primary disabled:pointer-events-none disabled:opacity-50"
-                placeholder={
-                  currentLanguage === "en"
-                    ? "Search"
-                    : currentLanguage === "ar"
-                      ? "بحث"
-                      : "Recherche"
-                }
-              />
+              <div className="flex items-center gap-2">
+                <input
+                  onChange={e => setSearch(e.target.value)}
+                  type="text"
+                  className="w-full rounded-lg border-2 border-borderPrimary bg-bgPrimary px-4 py-2 ps-11 text-lg outline-none"
+                  placeholder={translate.searchPlaceholder}
+                />
+                <span className="min-w-[120px] text-primary">
+                  {filteredData.length} {translate.result}
+                </span>
+              </div>
             </div>
-          </div>
-          <div className="flex justify-center">
+
             <Link
               href="/organization-setting/position/add-position"
-              className="mx-3 mb-5 w-fit whitespace-nowrap rounded-xl bg-primary px-4 py-2 text-[18px] font-semibold text-white duration-300 ease-in hover:bg-[#4a5cc5] hover:shadow-xl"
+              className="mx-3 w-fit whitespace-nowrap rounded-xl bg-primary px-4 py-2 text-[18px] font-semibold text-white duration-300 ease-in hover:bg-[#4a5cc5] hover:shadow-xl"
             >
               {currentLanguage === "ar"
                 ? "+ إضافة وظيفة"
@@ -185,148 +200,87 @@ const Position = () => {
                   : "+ Add Position"}
             </Link>
           </div>
-        </div>
-        <div className="relative overflow-auto shadow-md sm:rounded-lg">
-          <table className="w-full overflow-x-auto text-left text-sm text-textSecondary rtl:text-right">
-            <thead className="bg-thead text-xs uppercase text-textPrimary">
-              <tr>
-                <th scope="col" className="p-4">
-                  <div className="flex items-center">
-                    {/* Add event listener for select all checkbox */}
-                    <input
-                      id="checkbox-all-search"
-                      type="checkbox"
-                      className="-gray-800 h-4 w-4 rounded border-gray-300 bg-gray-100 text-primary focus:ring-2 focus:ring-primary"
-                      onChange={handleSelectAll}
-                    />
-                  </div>
-                </th>
-                <th scope="col" className="whitespace-nowrap px-6 py-3">
-                  {currentLanguage === "ar"
-                    ? "الاسم"
-                    : currentLanguage === "fr"
-                      ? "Nom"
-                      : "Name"}
-                </th>
-                <th scope="col" className="whitespace-nowrap px-6 py-3">
-                  {currentLanguage === "ar"
-                    ? "الرقم التعريفي"
-                    : currentLanguage === "fr"
-                      ? "ID"
-                      : "ID"}
-                </th>
-                <th scope="col" className="whitespace-nowrap px-6 py-3">
-                  {currentLanguage === "ar"
-                    ? "تم إنشاؤه في"
-                    : currentLanguage === "fr"
-                      ? "créé à"
-                      : "created At"}
-                </th>
-                <th scope="col" className="whitespace-nowrap px-6 py-3">
-                  {currentLanguage === "ar"
-                    ? "تم التحديث في"
-                    : currentLanguage === "fr"
-                      ? "mis à jour à"
-                      : "updated At"}
-                </th>
-                <th scope="col" className="whitespace-nowrap px-6 py-3">
-                  {currentLanguage === "ar"
-                    ? "عرض"
-                    : currentLanguage === "fr"
-                      ? "Afficher"
-                      : "View"}
-                </th>
-                <th scope="col" className="whitespace-nowrap px-6 py-3">
-                  {currentLanguage === "ar"
-                    ? "الإجراء"
-                    : currentLanguage === "fr"
-                      ? "Action"
-                      : "Action"}
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              {data?.data.content
-                .filter((Position: Position) => {
-                  return search.toLocaleLowerCase() === ""
-                    ? Position
-                    : Position.title.toLocaleLowerCase().includes(search);
-                })
-                .map((Position: Position) => (
-                  <tr
-                    key={Position.id}
-                    className="border-b border-borderPrimary bg-bgPrimary hover:bg-bgSecondary"
-                  >
-                    <td className="w-4 p-4">
-                      <div className="flex items-center">
-                        <input
-                          id="checkbox-table-search-1"
-                          type="checkbox"
-                          className="h-4 w-4 rounded border-gray-300 bg-gray-100 text-primary focus:ring-2 focus:ring-primary"
-                        />
-                      </div>
-                    </td>
-                    <th
-                      scope="row"
-                      className="flex items-center gap-2 whitespace-nowrap px-6 py-4 font-medium text-gray-900"
-                    >
-                      <div className="w-[50px]">
-                        {Position.picture == null ? (
+
+          <div className="relative overflow-auto bg-bgPrimary shadow-md sm:rounded-lg">
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>{translate.name}</TableHead>
+                  <TableHead>{translate.id}</TableHead>
+                  <TableHead>{translate.createdAt}</TableHead>
+                  <TableHead>{translate.updatedAt}</TableHead>
+                  <TableHead>{translate.action}</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {isLoading ? (
+                  [...Array(3)].map((_, i) => (
+                    <TableRow key={i}>
+                      {Array.from({ length: 6 }).map((_, j) => (
+                        <TableCell key={j}>
+                          <Skeleton className="h-4 w-24" />
+                        </TableCell>
+                      ))}
+                    </TableRow>
+                  ))
+                ) : visibleData.length === 0 ? (
+                  <TableRow>
+                    <TableCell colSpan={6} className="text-center font-medium">
+                      {translate.noData}
+                    </TableCell>
+                  </TableRow>
+                ) : (
+                  visibleData.map((position: any, index: number) => (
+                    <TableRow key={position.id} data-index={index}>
+                      <TableCell className="flex items-center gap-2">
+                        <div className="w-[50px]">
                           <img
-                            src="/images/userr.png"
-                            className="mx-2 h-[40px] w-[40px] rounded-full"
+                            src={position.picture ?? "/images/userr.png"}
+                            className="mx-2 h-6 w-6 rounded-full"
                             alt="#"
                           />
-                        ) : (
-                          <img
-                            src={Position.picture}
-                            className="mx-2 h-[40px] w-[40px] rounded-full"
-                            alt="#"
-                          />
-                        )}
-                      </div>
-                      <p className="text-textSecondary"> {Position.title} </p>
-                    </th>
-                    <td className="whitespace-nowrap px-6 py-4">
-                      {Position.id}
-                    </td>
-                    <td className="whitespace-nowrap px-6 py-4">
-                      {formatTransactionDate(Position.createdAt)}
-                    </td>
-                    <td className="whitespace-nowrap px-6 py-4">
-                      {formatTransactionDate(Position.updatedAt)}
-                    </td>
-                    <td className="whitespace-nowrap px-6 py-4">
-                      <Link
-                        href={`/organization-setting/position/${Position.id}`}
-                        className="font-medium text-primary hover:underline"
-                      >
-                        {currentLanguage === "ar"
-                          ? "عرض"
-                          : currentLanguage === "fr"
-                            ? "Afficher"
-                            : "View"}
-                      </Link>
-                    </td>
-                    <td className="whitespace-nowrap px-6 py-4">
-                      <button
-                        disabled={isDeleting}
-                        onClick={() => handleDelete(Position.id)}
-                        className="rounded-lg bg-error px-2 py-1 font-semibold text-white shadow-lg delay-150 duration-300 ease-in-out hover:-translate-y-1 hover:scale-110"
-                      >
-                        {currentLanguage === "ar"
-                          ? "حذف"
-                          : currentLanguage === "fr"
-                            ? "Supprimer"
-                            : "Delete"}
-                      </button>
-                    </td>
-                  </tr>
-                ))}
-            </tbody>
-          </table>
+                        </div>
+                        <p className="text-textSecondary">{position.title}</p>
+                      </TableCell>
+                      <TableCell>{position.id}</TableCell>
+                      <TableCell>
+                        {formatTransactionDate(position.createdAt)}
+                      </TableCell>
+                      <TableCell>
+                        {formatTransactionDate(position.updatedAt)}
+                      </TableCell>
+
+                      <TableCell className="flex items-center gap-3">
+                        <Link
+                          href={`/organization-setting/position/${position.id}`}
+                          className="text-primary transition hover:text-hover"
+                          title={translate.view}
+                        >
+                          <BiShow size={20} />
+                        </Link>
+                        <button
+                          disabled={isDeleting}
+                          onClick={() => handleDelete(position.id)}
+                          className="text-error transition hover:text-red-800"
+                          title={translate.del}
+                        >
+                          <BiTrash size={20} />
+                        </button>
+                      </TableCell>
+                    </TableRow>
+                  ))
+                )}
+              </TableBody>
+            </Table>
+
+            {visibleCount < filteredData.length && (
+              <SeeMoreButton
+                onClick={() => setVisibleCount(prev => prev + 20)}
+              />
+            )}
+          </div>
         </div>
-      </div>
+      </Container>
     </>
   );
 };

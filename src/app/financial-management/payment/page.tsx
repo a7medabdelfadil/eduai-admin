@@ -79,15 +79,40 @@ const Payment = () => {
 
   const translations = [
     { key: "Name", en: "Name", ar: "الاسم", fr: "Nom" },
-    { key: "Paid Amount", en: "Paid Amount", ar: "المبلغ المدفوع", fr: "Montant Payé" },
-    { key: "Total Fees Amount", en: "Total Fees Amount", ar: "إجمالي مبلغ الرسوم", fr: "Montant Total des Frais" },
-    { key: "Invoice Date", en: "Invoice Date", ar: "تاريخ الفاتورة", fr: "Date de la Facture" },
+    {
+      key: "Paid Amount",
+      en: "Paid Amount",
+      ar: "المبلغ المدفوع",
+      fr: "Montant Payé",
+    },
+    {
+      key: "Total Fees Amount",
+      en: "Total Fees Amount",
+      ar: "إجمالي مبلغ الرسوم",
+      fr: "Montant Total des Frais",
+    },
+    {
+      key: "Invoice Date",
+      en: "Invoice Date",
+      ar: "تاريخ الفاتورة",
+      fr: "Date de la Facture",
+    },
     { key: "Status", en: "Status", ar: "الحالة", fr: "Statut" },
     { key: "Discount", en: "Discount", ar: "الخصم", fr: "Réduction" },
     { key: "Action", en: "Action", ar: "الإجراء", fr: "Action" },
-    { key: "Search anything", en: "Search anything", ar: "ابحث عن أي شيء", fr: "Rechercher n'importe quoi" },
+    {
+      key: "Search anything",
+      en: "Search anything",
+      ar: "ابحث عن أي شيء",
+      fr: "Rechercher n'importe quoi",
+    },
     { key: "Result(s)", en: "Result(s)", ar: "نتيجة", fr: "résultat(s)" },
-    { key: "No data available", en: "No data available", ar: "لا توجد بيانات", fr: "Aucune donnée disponible" },
+    {
+      key: "No data available",
+      en: "No data available",
+      ar: "لا توجد بيانات",
+      fr: "Aucune donnée disponible",
+    },
   ];
 
   const translate = (key: string, language: string) => {
@@ -170,7 +195,8 @@ const Payment = () => {
           </Link>
           <Link
             className="text-secondary hover:text-blue-500 hover:underline"
-            href="/financial-management/activity">
+            href="/financial-management/activity"
+          >
             {currentLanguage === "en"
               ? "Activity"
               : currentLanguage === "ar"
@@ -182,7 +208,8 @@ const Payment = () => {
           </Link>
           <Link
             className="text-secondary hover:text-blue-500 hover:underline"
-            href="/financial-management/transport">
+            href="/financial-management/transport"
+          >
             {currentLanguage === "en"
               ? "Transport"
               : currentLanguage === "ar"
@@ -194,7 +221,8 @@ const Payment = () => {
           </Link>
           <Link
             className="text-secondary hover:text-blue-500 hover:underline"
-            href="/financial-management/uniform">
+            href="/financial-management/uniform"
+          >
             {currentLanguage === "en"
               ? "Uniform"
               : currentLanguage === "ar"
@@ -206,7 +234,8 @@ const Payment = () => {
           </Link>
           <Link
             className="text-secondary hover:text-blue-500 hover:underline"
-            href="/financial-management/material">
+            href="/financial-management/material"
+          >
             {currentLanguage === "en"
               ? "Material"
               : currentLanguage === "ar"
@@ -217,15 +246,20 @@ const Payment = () => {
             {/* Default to English */}
           </Link>
         </div>
-        <div className="relative overflow-auto shadow-md sm:rounded-lg bg-bgPrimary">
-
+        <div className="relative overflow-auto bg-bgPrimary shadow-md sm:rounded-lg">
           <Table>
             <TableHeader>
               <TableRow>
                 <TableHead>{translate("Name", currentLanguage)}</TableHead>
-                <TableHead>{translate("Paid Amount", currentLanguage)}</TableHead>
-                <TableHead>{translate("Total Fees Amount", currentLanguage)}</TableHead>
-                <TableHead>{translate("Invoice Date", currentLanguage)}</TableHead>
+                <TableHead>
+                  {translate("Paid Amount", currentLanguage)}
+                </TableHead>
+                <TableHead>
+                  {translate("Total Fees Amount", currentLanguage)}
+                </TableHead>
+                <TableHead>
+                  {translate("Invoice Date", currentLanguage)}
+                </TableHead>
                 <TableHead>{translate("Status", currentLanguage)}</TableHead>
                 <TableHead>{translate("Discount", currentLanguage)}</TableHead>
                 <TableHead>{translate("Action", currentLanguage)}</TableHead>
@@ -253,14 +287,18 @@ const Payment = () => {
                   .filter((invoice: Invoice) =>
                     search.trim() === ""
                       ? true
-                      : invoice.billedToName.toLowerCase().includes(search)
+                      : invoice.billedToName.toLowerCase().includes(search),
                   )
                   .map((invoice: Invoice, index: number) => (
                     <TableRow key={index}>
-                      <TableCell className="font-medium">{invoice.billedToName}</TableCell>
+                      <TableCell className="font-medium">
+                        {invoice.billedToName}
+                      </TableCell>
                       <TableCell>{invoice.paidAmount}</TableCell>
                       <TableCell>{invoice.totalFeesAmount}</TableCell>
-                      <TableCell>{formatTransactionDate(invoice.creationDate)}</TableCell>
+                      <TableCell>
+                        {formatTransactionDate(invoice.creationDate)}
+                      </TableCell>
                       <TableCell>
                         {invoice.paymentStatus === "NOT_FULLY_PAID" ? (
                           <div className="flex items-center gap-2 font-semibold text-error">
@@ -277,7 +315,9 @@ const Payment = () => {
                       <TableCell>{invoice.discountAmount}</TableCell>
                       <TableCell>
                         <div className="flex items-center gap-3">
-                          <button onClick={() => handleDelete(invoice.billedToId)}>
+                          <button
+                            onClick={() => handleDelete(invoice.billedToId)}
+                          >
                             <svg className="h-6 w-6 text-red-500" /* ... */ />
                           </button>
                           <Link

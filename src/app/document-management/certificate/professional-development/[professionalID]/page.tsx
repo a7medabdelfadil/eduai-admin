@@ -17,7 +17,6 @@ const ViewProfessional: React.FC<ViewDriverProps> = ({ params }) => {
     params.professionalID,
   );
 
-
   const { language: currentLanguage, loading } = useSelector(
     (state: RootState) => state.language,
   );

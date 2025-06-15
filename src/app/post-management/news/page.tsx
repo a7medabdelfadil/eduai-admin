@@ -26,6 +26,8 @@ import BreadCrumbs from "@/components/BreadCrumbs";
 import { FaComment } from "react-icons/fa";
 import ImageComponent from "@/components/ImageSrc";
 import Comment from "@/components/Comment";
+import Container from "@/components/Container";
+import { Text } from "@/components/Text";
 
 const News = () => {
   const breadcrumbs = [
@@ -120,9 +122,7 @@ const News = () => {
         like: "true",
       }).unwrap();
       void refetch();
-    } catch (err) {
-
-    }
+    } catch (err) { }
   };
   const DeleteLike = async (id: string) => {
     try {
@@ -131,9 +131,7 @@ const News = () => {
         like: "false",
       }).unwrap();
       void refetch();
-    } catch (err) {
-
-    }
+    } catch (err) { }
   };
 
   const formatTransactionDate = (dateString: string | number | Date) => {
@@ -155,19 +153,16 @@ const News = () => {
   return (
     <>
       <BreadCrumbs breadcrumbs={breadcrumbs} />
-      <div
-        dir={currentLanguage === "ar" ? "rtl" : "ltr"}
-        className={`${
-          currentLanguage === "ar"
-            ? booleanValue
-              ? "lg:mr-[100px]"
-              : "lg:mr-[270px]"
-            : booleanValue
-              ? "lg:ml-[100px]"
-              : "lg:ml-[270px]"
-        } mt-[40px]`}
-      >
-        <div className="grid h-full w-full items-center justify-center gap-4 rounded-xl bg-bgSecondary p-9 max-[505px]:p-2">
+      <Container>
+        <Text font="bold" size="3xl">
+          {currentLanguage === "ar"
+            ? "الأخبار"
+            : currentLanguage === "fr"
+              ? "Actualités"
+              : "News"}
+        </Text>
+
+        <div className="grid h-full w-full items-center justify-center gap-4 bg-bgPrimary my-6 rounded-xl p-9 max-[505px]:p-2">
           {data?.data.content.map((post: Post, index: number) => (
             <div
               key={post.id}
@@ -293,39 +288,39 @@ const News = () => {
               </div>
               <div className="mt-2 flex justify-center">
                 <div className="mt-2 flex flex-wrap justify-center gap-2">
-                {post.attachments.map((img: any, index: number) => (
-                  <ImageComponent
-                    src={img.viewLink}
-                    fallbackSrc="/images/noImage.png"
-                    aspectRatio="aspect-video"
-                    objectFit="fill"
-                    priority={true}
-                    key={index} 
-                    className="rounded-lg"
-                    alt={`product-${img.id}`} 
-                    onLoadingComplete={() => console.log('Image loaded')}
-                    onError={(error) => console.error('Image failed to load:', error)}
-                  />
-                ))}
+                  {post.attachments.map((img: any, index: number) => (
+                    <ImageComponent
+                      src={img.viewLink}
+                      fallbackSrc="/images/noImage.png"
+                      aspectRatio="aspect-video"
+                      objectFit="fill"
+                      priority={true}
+                      key={index}
+                      className="rounded-lg"
+                      alt={`product-${img.id}`}
+                      onLoadingComplete={() => console.log("Image loaded")}
+                      onError={error =>
+                        console.error("Image failed to load:", error)
+                      }
+                    />
+                  ))}
                 </div>
               </div>
-              <div className="mb-3 mt-2 flex items-center justify-between font-semibold">
+              <div className="mb-3 mt-2 gap-1 flex items-center justify-between font-semibold">
                 <div className="flex items-center">
-                  {currentLanguage ? (
+                  {currentLanguage == "ar"? (
                     <>
                       <p className="text-textSecondary">{post.likesCount}</p>
-                      <FaThumbsUp
-                        size={20}
-                        className="mx-[10px] text-primary"
-                      />
+                      <div className="w-[22px] ml-1 h-[22px] rounded-full bg-gradient-to-b from-[#33bfff] to-[#0066ff] flex items-center justify-center">
+                        <FaThumbsUp className="text-white text-[12px]" />
+                      </div>
                     </>
                   ) : (
                     <>
-                      <FaThumbsUp
-                        size={20}
-                        className="mx-[10px] text-primary"
-                      />
-                      <p className="text-textSecondary">{post.likesCount}</p>
+                      <div className="w-[22px] mr-1 h-[22px] rounded-full bg-gradient-to-b from-[#33bfff] to-[#0066ff] flex items-center justify-center">
+                        <FaThumbsUp className="text-white text-[12px]" />
+                      </div>
+                       <p className="text-textSecondary">{post.likesCount}</p>
                     </>
                   )}
                 </div>
@@ -352,16 +347,12 @@ const News = () => {
                     onClick={() =>
                       !post.isLiked ? PutLike(post.id) : DeleteLike(post.id)
                     }
-                    className="flex gap-2"
+                    className={`flex gap-2 ${post.isLiked && "text-primary" }`}
                   >
-                    {post.isLiked ? (
                       <FaThumbsUp
                         size={20}
-                        className="mx-[10px] text-primary"
+                        className="mx-[10px]"
                       />
-                    ) : (
-                      <FaThumbsUp size={20} className="mx-[10px]" />
-                    )}
                     {currentLanguage === "ar"
                       ? "إعجاب"
                       : currentLanguage === "fr"
@@ -429,25 +420,25 @@ const News = () => {
                   ) : (
                     <div className="grid h-full w-full overflow-y-auto">
                       {Comments?.data.content.map((comment: any) => (
-                          <Comment
-                            refetchComments={refetchComment}
-                            key={comment.id}
-                            userName={comment.creatorName}
-                            comment={comment.comment}
-                            time={new Date(
-                              comment.createdDate,
-                            ).toLocaleTimeString()}
-                            imageUrl={
-                              comment.isCreatorPictureExists
-                                ? comment.creatorPicture
-                                : "/images/default.png"
-                            }
-                            postId={selectedPostId}
-                            commentId={comment.id}
-                            isLiked={comment.isLiked}
-                            likesCount={comment.likesCount}
-                          />
-                        ))}
+                        <Comment
+                          refetchComments={refetchComment}
+                          key={comment.id}
+                          userName={comment.creatorName}
+                          comment={comment.comment}
+                          time={new Date(
+                            comment.createdDate,
+                          ).toLocaleTimeString()}
+                          imageUrl={
+                            comment.isCreatorPictureExists
+                              ? comment.creatorPicture
+                              : "/images/default.png"
+                          }
+                          postId={selectedPostId}
+                          commentId={comment.id}
+                          isLiked={comment.isLiked}
+                          likesCount={comment.likesCount}
+                        />
+                      ))}
                     </div>
                   )}
                 </div>
@@ -455,7 +446,8 @@ const News = () => {
             </div>
           ))}
         </div>
-      </div>
+
+      </Container>
     </>
   );
 };

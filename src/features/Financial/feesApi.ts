@@ -96,7 +96,6 @@ export const feesApi = createApi({
         body: formData,
       }),
     }),
-       
   }),
 });
 

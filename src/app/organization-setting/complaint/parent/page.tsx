@@ -68,14 +68,14 @@ const ComplaintParent = () => {
   };
 
   const { language: currentLanguage, loading } = useSelector(
-    (state: RootState) => state.language
+    (state: RootState) => state.language,
   );
 
   const filteredData = data?.data?.content?.filter((complaint: any) =>
     search.trim() === ""
       ? true
       : complaint.teacherName?.toLowerCase().includes(search.toLowerCase()) ||
-      complaint.studentName?.toLowerCase().includes(search.toLowerCase())
+        complaint.studentName?.toLowerCase().includes(search.toLowerCase()),
   );
   const displayedData = filteredData?.slice(0, visibleCount);
 
@@ -90,7 +90,7 @@ const ComplaintParent = () => {
     <>
       <BreadCrumbs breadcrumbs={breadcrumbs} />
       <Container>
-        <div className="-mt-2 -ml-1 flex items-center justify-between">
+        <div className="-ml-1 -mt-2 flex items-center justify-between">
           <h1 className="text-3xl font-semibold">
             {currentLanguage === "ar"
               ? "شكوى"
@@ -100,7 +100,7 @@ const ComplaintParent = () => {
           </h1>
         </div>
 
-        <div className="ml-4 my-4 flex flex-wrap gap-5 text-[20px] font-semibold max-[725px]:text-[15px]">
+        <div className="my-4 ml-4 flex flex-wrap gap-5 text-[20px] font-semibold max-[725px]:text-[15px]">
           <Link
             href="/organization-setting/complaint"
             className="text-primary underline"
@@ -113,7 +113,7 @@ const ComplaintParent = () => {
           </Link>
           <Link
             href="/organization-setting/complaint/parent"
-            className="hover:text-primary hover:underline text-secondary"
+            className="text-secondary hover:text-primary hover:underline"
           >
             {currentLanguage === "ar"
               ? "الوالد"
@@ -122,8 +122,8 @@ const ComplaintParent = () => {
                 : "Parent"}
           </Link>
         </div>
-        <div className="bg-bgPrimary rounded-xl">
-          <div className="flex flex-col md:flex-row justify-between items-center gap-4 px-4 py-4 rounded-lg">
+        <div className="rounded-xl bg-bgPrimary">
+          <div className="flex flex-col items-center justify-between gap-4 rounded-lg px-4 py-4 md:flex-row">
             <div
               dir={currentLanguage === "ar" ? "rtl" : "ltr"}
               className="relative w-full max-w-md"
@@ -133,9 +133,9 @@ const ComplaintParent = () => {
               </div>
               <div className="flex items-center gap-2">
                 <input
-                  onChange={(e) => setSearch(e.target.value)}
+                  onChange={e => setSearch(e.target.value)}
                   type="text"
-                  className="w-full border-borderPrimary bg-bgPrimary rounded-lg border-2 px-4 py-2 ps-11 text-lg outline-none"
+                  className="w-full rounded-lg border-2 border-borderPrimary bg-bgPrimary px-4 py-2 ps-11 text-lg outline-none"
                   placeholder={
                     currentLanguage === "ar"
                       ? "ابحث عن شكوى"
@@ -155,7 +155,7 @@ const ComplaintParent = () => {
               </div>
             </div>
           </div>
-          <div className="relative overflow-auto shadow-md sm:rounded-lg bg-bgPrimary">
+          <div className="relative overflow-auto bg-bgPrimary shadow-md sm:rounded-lg">
             <Table>
               <TableHeader>
                 <TableRow>
@@ -199,7 +199,10 @@ const ComplaintParent = () => {
               <TableBody>
                 {displayedData?.length === 0 ? (
                   <TableRow>
-                    <TableCell colSpan={6} className="text-center py-6 text-gray-500">
+                    <TableCell
+                      colSpan={6}
+                      className="py-6 text-center text-gray-500"
+                    >
                       {currentLanguage === "ar"
                         ? "لا توجد بيانات"
                         : currentLanguage === "fr"
@@ -228,7 +231,9 @@ const ComplaintParent = () => {
               </TableBody>
             </Table>
             {filteredData?.length > visibleCount && (
-              <SeeMoreButton onClick={() => setVisibleCount((prev) => prev + 10)} />
+              <SeeMoreButton
+                onClick={() => setVisibleCount(prev => prev + 10)}
+              />
             )}
           </div>
         </div>

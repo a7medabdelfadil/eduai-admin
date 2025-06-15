@@ -11,7 +11,14 @@ import { useSelector } from "react-redux";
 import { RootState } from "@/GlobalRedux/store";
 import { toast } from "react-toastify";
 import { BiTrash, BiSearchAlt } from "react-icons/bi";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/Table";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/Table";
 import BreadCrumbs from "@/components/BreadCrumbs";
 import Container from "@/components/Container";
 import { Skeleton } from "@/components/Skeleton";
@@ -19,35 +26,103 @@ import SeeMoreButton from "@/components/SeeMoreButton";
 
 const ArchiveEmployee = () => {
   const breadcrumbs = [
-    { nameEn: "Administration", nameAr: "الإدارة", nameFr: "Administration", href: "/" },
-    { nameEn: "Archive", nameAr: "الأرشيف", nameFr: "Archives", href: "/archive" },
-    { nameEn: "Employee", nameAr: "الموظف", nameFr: "Employé", href: "/archive/employee" },
+    {
+      nameEn: "Administration",
+      nameAr: "الإدارة",
+      nameFr: "Administration",
+      href: "/",
+    },
+    {
+      nameEn: "Archive",
+      nameAr: "الأرشيف",
+      nameFr: "Archives",
+      href: "/archive",
+    },
+    {
+      nameEn: "Employee",
+      nameAr: "الموظف",
+      nameFr: "Employé",
+      href: "/archive/employee",
+    },
   ];
 
-  const { language: currentLanguage, loading } = useSelector((state: RootState) => state.language);
+  const { language: currentLanguage, loading } = useSelector(
+    (state: RootState) => state.language,
+  );
   const [search, setSearch] = useState("");
   const { data, isLoading, refetch } = useGetAllEmployeesQuery({
-    archived: "true", page: 0,
+    archived: "true",
+    page: 0,
     size: 1000000,
   });
-  console.log("🚀 ~ ArchiveEmployee ~ data:", data)
+  console.log("🚀 ~ ArchiveEmployee ~ data:", data);
   const [deleteEmployees] = useDeleteEmployeesMutation();
 
   const translate = {
-    name: currentLanguage === "ar" ? "الاسم" : currentLanguage === "fr" ? "Nom" : "Name",
-    gender: currentLanguage === "ar" ? "الجنس" : currentLanguage === "fr" ? "Genre" : "Gender",
-    nationality: currentLanguage === "ar" ? "الجنسية" : currentLanguage === "fr" ? "Nationalité" : "Nationality",
-    email: currentLanguage === "ar" ? "البريد الإلكتروني" : currentLanguage === "fr" ? "Courriel" : "Email",
-    mobile: currentLanguage === "ar" ? "الجوال" : currentLanguage === "fr" ? "Mobile" : "Mobile",
-    view: currentLanguage === "ar" ? "عرض" : currentLanguage === "fr" ? "Voir" : "View",
-    action: currentLanguage === "ar" ? "الإجراء" : currentLanguage === "fr" ? "Action" : "Action",
-    unlock: currentLanguage === "ar" ? "إلغاء القفل" : currentLanguage === "fr" ? "Déverrouiller" : "Unlock",
-    noData: currentLanguage === "ar" ? "لا توجد بيانات" : currentLanguage === "fr" ? "Aucune donnée disponible" : "No data available",
-    result: currentLanguage === "ar" ? "نتيجة" : currentLanguage === "fr" ? "résultat(s)" : "Result(s)",
+    name:
+      currentLanguage === "ar"
+        ? "الاسم"
+        : currentLanguage === "fr"
+          ? "Nom"
+          : "Name",
+    gender:
+      currentLanguage === "ar"
+        ? "الجنس"
+        : currentLanguage === "fr"
+          ? "Genre"
+          : "Gender",
+    nationality:
+      currentLanguage === "ar"
+        ? "الجنسية"
+        : currentLanguage === "fr"
+          ? "Nationalité"
+          : "Nationality",
+    email:
+      currentLanguage === "ar"
+        ? "البريد الإلكتروني"
+        : currentLanguage === "fr"
+          ? "Courriel"
+          : "Email",
+    mobile:
+      currentLanguage === "ar"
+        ? "الجوال"
+        : currentLanguage === "fr"
+          ? "Mobile"
+          : "Mobile",
+    view:
+      currentLanguage === "ar"
+        ? "عرض"
+        : currentLanguage === "fr"
+          ? "Voir"
+          : "View",
+    action:
+      currentLanguage === "ar"
+        ? "الإجراء"
+        : currentLanguage === "fr"
+          ? "Action"
+          : "Action",
+    unlock:
+      currentLanguage === "ar"
+        ? "إلغاء القفل"
+        : currentLanguage === "fr"
+          ? "Déverrouiller"
+          : "Unlock",
+    noData:
+      currentLanguage === "ar"
+        ? "لا توجد بيانات"
+        : currentLanguage === "fr"
+          ? "Aucune donnée disponible"
+          : "No data available",
+    result:
+      currentLanguage === "ar"
+        ? "نتيجة"
+        : currentLanguage === "fr"
+          ? "résultat(s)"
+          : "Result(s)",
   };
 
   const filteredData = data?.data?.content?.filter((emp: any) =>
-    emp.name?.toLowerCase().includes(search.trim().toLowerCase())
+    emp.name?.toLowerCase().includes(search.trim().toLowerCase()),
   );
 
   const handleDelete = async (id: string) => {
@@ -63,12 +138,11 @@ const ArchiveEmployee = () => {
   const [visibleCount, setVisibleCount] = useState(20);
   const visibleData = filteredData?.slice(0, visibleCount);
 
-
   return (
     <>
       <BreadCrumbs breadcrumbs={breadcrumbs} />
       <Container>
-        <div className="mb-6 -mt-2 -ml-1 flex items-center justify-between">
+        <div className="-ml-1 -mt-2 mb-6 flex items-center justify-between">
           <h1 className="text-3xl font-semibold">
             {currentLanguage === "en"
               ? "All Employees"
@@ -80,10 +154,12 @@ const ArchiveEmployee = () => {
             {/* default */}
           </h1>
         </div>
-        <div className="bg-bgPrimary rounded-xl">
-
-          <div className="flex flex-col md:flex-row justify-between items-center gap-4 px-4 py-4">
-            <div dir={currentLanguage === "ar" ? "rtl" : "ltr"} className="relative w-full max-w-md">
+        <div className="rounded-xl bg-bgPrimary">
+          <div className="flex flex-col items-center justify-between gap-4 px-4 py-4 md:flex-row">
+            <div
+              dir={currentLanguage === "ar" ? "rtl" : "ltr"}
+              className="relative w-full max-w-md"
+            >
               <div className="pointer-events-none absolute inset-y-0 start-0 z-20 flex items-center ps-4">
                 <BiSearchAlt className="text-secondary" size={18} />
               </div>
@@ -91,13 +167,16 @@ const ArchiveEmployee = () => {
                 <input
                   onChange={e => setSearch(e.target.value)}
                   type="text"
-                  className="w-full border-borderPrimary bg-bgPrimary rounded-lg border-2 px-4 py-2 ps-11 text-lg outline-none"
+                  className="w-full rounded-lg border-2 border-borderPrimary bg-bgPrimary px-4 py-2 ps-11 text-lg outline-none"
                   placeholder={
-                    currentLanguage === "en" ? "Search" :
-                      currentLanguage === "ar" ? "بحث" : "Recherche"
+                    currentLanguage === "en"
+                      ? "Search"
+                      : currentLanguage === "ar"
+                        ? "بحث"
+                        : "Recherche"
                   }
                 />
-                <span className="text-sm text-primary whitespace-nowrap">
+                <span className="whitespace-nowrap text-sm text-primary">
                   {filteredData?.length ?? 0} {translate.result}
                 </span>
               </div>
@@ -105,7 +184,7 @@ const ArchiveEmployee = () => {
 
             <Link
               href="/add-new-employee"
-              className="whitespace-nowrap rounded-xl bg-primary px-4 py-2 text-[16px] font-semibold text-white hover:bg-hover hover:shadow-md transition"
+              className="whitespace-nowrap rounded-xl bg-primary px-4 py-2 text-[16px] font-semibold text-white transition hover:bg-hover hover:shadow-md"
             >
               {currentLanguage === "ar"
                 ? "+ إضافة موظف جديد"
@@ -115,7 +194,7 @@ const ArchiveEmployee = () => {
             </Link>
           </div>
 
-          <div className="relative overflow-auto shadow-md sm:rounded-lg bg-bgPrimary">
+          <div className="relative overflow-auto bg-bgPrimary shadow-md sm:rounded-lg">
             <Table>
               <TableHeader>
                 <TableRow>
@@ -153,7 +232,7 @@ const ArchiveEmployee = () => {
                         <div className="flex items-center gap-2">
                           <img
                             src={emp.picture || "/images/userr.png"}
-                            className="h-6 w-6 rounded-full object-cover border"
+                            className="h-6 w-6 rounded-full border object-cover"
                             alt={emp.name || "employee"}
                           />
                           <span>{emp.name}</span>
@@ -175,7 +254,7 @@ const ArchiveEmployee = () => {
                       <TableCell>
                         <button
                           onClick={() => handleDelete(emp.id)}
-                          className="text-error hover:text-red-800 transition"
+                          className="text-error transition hover:text-red-800"
                           title={translate.unlock}
                         >
                           <BiTrash size={20} />
@@ -185,14 +264,12 @@ const ArchiveEmployee = () => {
                   ))
                 )}
               </TableBody>
-
             </Table>
           </div>
         </div>
         {visibleCount < (filteredData?.length || 0) && (
           <SeeMoreButton onClick={() => setVisibleCount(prev => prev + 20)} />
         )}
-
       </Container>
     </>
   );

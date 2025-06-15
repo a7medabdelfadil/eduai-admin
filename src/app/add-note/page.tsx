@@ -73,8 +73,7 @@ const AddNote = () => {
               : "Notice Board"}
         </h1>
         <div className="mb-10">
-
-          <div className="mx-6 md:mx-auto my-6 grid h-full w-[90] md:w-[80%] items-center gap-3 rounded-xl bg-bgPrimary p-6">
+          <div className="mx-6 my-6 grid h-full w-[90] items-center gap-3 rounded-xl bg-bgPrimary p-6 md:mx-auto md:w-[80%]">
             <h1 className="text-2xl font-semibold">
               {currentLanguage === "ar"
                 ? "إضافة إعلان"
@@ -82,7 +81,10 @@ const AddNote = () => {
                   ? "Ajouter une annonce"
                   : "Add Notice"}
             </h1>
-            <form className="px-6 flex justify-center items-center w-full h-full" onSubmit={handleSubmit}>
+            <form
+              className="flex h-full w-full items-center justify-center px-6"
+              onSubmit={handleSubmit}
+            >
               <div className="grid h-full w-full gap-6">
                 <label
                   className="grid gap-2 text-[18px] font-semibold"
@@ -90,7 +92,7 @@ const AddNote = () => {
                 >
                   Title
                   <input
-                    className="mx-4 rounded-xl bg-bgPrimary border border-borderPrimary px-4 py-2 pb-28 outline-none"
+                    className="mx-4 rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-2 pb-28 outline-none"
                     placeholder={
                       currentLanguage === "en"
                         ? "Write title...."
@@ -130,7 +132,7 @@ const AddNote = () => {
                     <div className="flex w-full items-center justify-center">
                       <button
                         type="submit"
-                        className="mx-3 flex items-center gap-2 whitespace-nowrap rounded-xl bg-primary py-4 px-6 text-[18px] font-semibold text-white duration-300 ease-in hover:bg-hover hover:shadow-xl"
+                        className="mx-3 flex items-center gap-2 whitespace-nowrap rounded-xl bg-primary px-6 py-4 text-[18px] font-semibold text-white duration-300 ease-in hover:bg-hover hover:shadow-xl"
                       >
                         {currentLanguage === "ar"
                           ? "إضافة إعلان"
@@ -145,7 +147,6 @@ const AddNote = () => {
             </form>
           </div>
         </div>
-
       </Container>
     </>
   );

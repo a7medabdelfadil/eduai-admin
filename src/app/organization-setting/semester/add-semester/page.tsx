@@ -53,7 +53,8 @@ const AddSemester = () => {
       router.push("/organization-setting/semester");
     } catch (err) {
       toast.error(
-        (err as { data?: { message?: string } })?.data?.message || "An error occurred"
+        (err as { data?: { message?: string } })?.data?.message ||
+          "An error occurred",
       );
     }
   };
@@ -72,8 +73,23 @@ const AddSemester = () => {
     <>
       <BreadCrumbs breadcrumbs={breadcrumbs} />
       <Container>
-        <form onSubmit={handleSubmit(onSubmit)} className="flex items-center justify-center">
-          <div className="grid items-center justify-center gap-5 rounded-xl bg-bgPrimary p-10 sm:w-[500px] md:w-[600px] lg:w-[750px] xl:w-[1000px]">
+        <div className="-ml-1 -mt-2 mb-8 flex items-center justify-between">
+          <h1 className="text-3xl font-semibold">
+            {currentLanguage === "en"
+              ? "Add Semester"
+              : currentLanguage === "ar"
+                ? "إضافة فصل دراسي"
+                : currentLanguage === "fr"
+                  ? "Ajouter un semestre"
+                  : "Add Semester"}{" "}
+            {/* default */}
+          </h1>
+        </div>
+        <form
+          onSubmit={handleSubmit(onSubmit)}
+          className="flex h-full w-full items-center justify-center"
+        >
+          <div className="w-[90] rounded-xl bg-bgPrimary p-10 md:w-[80%]">
             <div className="flex items-center justify-start gap-2">
               <svg
                 className="h-6 w-6 font-bold text-secondary group-hover:text-primary"
@@ -105,7 +121,7 @@ const AddSemester = () => {
                     : "Semester Information"}
               </h1>
             </div>
-            <div className="grid grid-cols-2 gap-4 max-[1278px]:grid-cols-1">
+            <div className="grid grid-cols-2 gap-4 p-6 max-[1278px]:grid-cols-1">
               <label
                 htmlFor="season"
                 className="grid text-[18px] font-semibold"
@@ -117,7 +133,7 @@ const AddSemester = () => {
                     : "Season"}
                 <select
                   id="season"
-                  className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                   {...register("name", { required: true })}
                 >
                   <option value="">Select season</option>
@@ -145,7 +161,7 @@ const AddSemester = () => {
                 <input
                   id="code"
                   type="date"
-                  className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                   {...register("startDate", { required: true })}
                 />
                 {errors.startDate && (
@@ -168,7 +184,7 @@ const AddSemester = () => {
                 <input
                   id="about"
                   type="date"
-                  className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                   {...register("endDate", { required: true })}
                 />
                 {errors.endDate && (

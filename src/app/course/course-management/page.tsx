@@ -16,7 +16,14 @@ import { MdDelete } from "react-icons/md";
 import { FaEdit } from "react-icons/fa";
 import { TbDotsVertical } from "react-icons/tb";
 import { useRef, useEffect } from "react";
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/Dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/Dialog";
 import { toast } from "react-toastify";
 
 const CourseManagement = () => {
@@ -59,7 +66,10 @@ const CourseManagement = () => {
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
         setOpen(null);
       }
     };
@@ -69,7 +79,6 @@ const CourseManagement = () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
-
 
   if (loading || isLoading)
     return (
@@ -82,7 +91,7 @@ const CourseManagement = () => {
     <>
       <BreadCrumbs breadcrumbs={breadcrumbs} />
       <Container>
-        <div className="flex flex-col md:flex-row justify-between items-center gap-4 px-4 py-4 rounded-lg">
+        <div className="flex flex-col items-center justify-between gap-4 rounded-lg px-4 py-4 md:flex-row">
           {/* Search Input */}
           <div
             dir={currentLanguage === "ar" ? "rtl" : "ltr"}
@@ -95,14 +104,15 @@ const CourseManagement = () => {
               <input
                 onChange={e => setSearch(e.target.value)}
                 type="text"
-                className="w-full border-borderSecondary rounded-lg border-2 px-4 py-2 ps-11 text-lg outline-none"
+                className="border-borderSecondary w-full rounded-lg border-2 px-4 py-2 ps-11 text-lg outline-none"
                 placeholder={
                   currentLanguage === "en"
                     ? "Search"
                     : currentLanguage === "ar"
                       ? "بحث"
                       : "Recherche"
-                } />
+                }
+              />
             </div>
           </div>
 
@@ -118,7 +128,6 @@ const CourseManagement = () => {
                 : "+ Add New Course"}
           </Link>
         </div>
-
 
         <div className="grid gap-3 p-3 sm:grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
           {data?.data.content
@@ -137,34 +146,48 @@ const CourseManagement = () => {
                 key={course.id}
                 className="grid gap-2 rounded-lg bg-bgPrimary p-2"
               >
-                <div className={`grid h-[220px] rounded-xl ${index % 4 === 0 ? "bg-warning" : index % 4 === 1 ? "bg-info" : index % 4 === 2 ? "bg-success" : "bg-danger"} p-2 text-[25px] font-bold text-textPrimary`}>
+                <div
+                  className={`grid h-[220px] rounded-xl ${index % 4 === 0 ? "bg-warning" : index % 4 === 1 ? "bg-info" : index % 4 === 2 ? "bg-success" : "bg-danger"} p-2 text-[25px] font-bold text-textPrimary`}
+                >
                   <div className="relative flex justify-end">
-                    <TbDotsVertical onClick={() => toggleNavbar(index)} className="text-white mt-1 cursor-pointer" />
+                    <TbDotsVertical
+                      onClick={() => toggleNavbar(index)}
+                      className="mt-1 cursor-pointer text-white"
+                    />
 
                     {open === index && (
-                      <div ref={dropdownRef}
-                        className="absolute right-0 top-8 z-30 flex flex-col gap-1 rounded-md bg-bgPrimary p-2 shadow-md">
+                      <div
+                        ref={dropdownRef}
+                        className="absolute right-0 top-8 z-30 flex flex-col gap-1 rounded-md bg-bgPrimary p-2 shadow-md"
+                      >
                         <Link
                           href={`/course/course-management/${course.id}`}
                           className="flex items-center gap-1 px-2 py-1 text-sm hover:text-primary"
                         >
                           <FaEdit />
-                          {currentLanguage === "ar" ? "تعديل" : currentLanguage === "fr" ? "Modifier" : "Edit"}
+                          {currentLanguage === "ar"
+                            ? "تعديل"
+                            : currentLanguage === "fr"
+                              ? "Modifier"
+                              : "Edit"}
                         </Link>
                         <button
                           onClick={() => setSelectedCourseId(course.id)}
                           className="flex items-center gap-1 px-2 py-1 text-sm text-red-600 hover:text-red-800"
                         >
                           <MdDelete />
-                          {currentLanguage === "ar" ? "حذف" : currentLanguage === "fr" ? "Supprimer" : "Delete"}
+                          {currentLanguage === "ar"
+                            ? "حذف"
+                            : currentLanguage === "fr"
+                              ? "Supprimer"
+                              : "Delete"}
                         </button>
                       </div>
                     )}
                   </div>
 
-
                   <div className="flex justify-end text-end"></div>
-                  <div className="items-start mb-6 flex justify-center text-center">
+                  <div className="mb-6 flex items-start justify-center text-center">
                     <h1>{course.name}</h1>
                   </div>
                 </div>
@@ -187,7 +210,10 @@ const CourseManagement = () => {
             ))}
         </div>
       </Container>
-      <Dialog open={!!selectedCourseId} onOpenChange={() => setSelectedCourseId(null)}>
+      <Dialog
+        open={!!selectedCourseId}
+        onOpenChange={() => setSelectedCourseId(null)}
+      >
         <DialogContent>
           <DialogHeader>
             <DialogTitle>
@@ -210,7 +236,11 @@ const CourseManagement = () => {
               onClick={() => setSelectedCourseId(null)}
               className="rounded-md border px-4 py-2 text-sm"
             >
-              {currentLanguage === "ar" ? "إلغاء" : currentLanguage === "fr" ? "Annuler" : "Cancel"}
+              {currentLanguage === "ar"
+                ? "إلغاء"
+                : currentLanguage === "fr"
+                  ? "Annuler"
+                  : "Cancel"}
             </button>
             <button
               onClick={async () => {
@@ -224,7 +254,7 @@ const CourseManagement = () => {
                         ? "تم الحذف بنجاح"
                         : currentLanguage === "fr"
                           ? "Supprimé avec succès"
-                          : "Deleted successfully"
+                          : "Deleted successfully",
                     );
                   } catch (err) {
                     toast(
@@ -233,19 +263,22 @@ const CourseManagement = () => {
                         : currentLanguage === "fr"
                           ? "Échec de la suppression"
                           : "Failed to delete",
-                      { type: "error" }
+                      { type: "error" },
                     );
                   }
                 }
               }}
               className="rounded-md bg-red-600 px-4 py-2 text-sm text-white hover:bg-red-700"
             >
-              {currentLanguage === "ar" ? "حذف" : currentLanguage === "fr" ? "Supprimer" : "Delete"}
+              {currentLanguage === "ar"
+                ? "حذف"
+                : currentLanguage === "fr"
+                  ? "Supprimer"
+                  : "Delete"}
             </button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
-
     </>
   );
 };

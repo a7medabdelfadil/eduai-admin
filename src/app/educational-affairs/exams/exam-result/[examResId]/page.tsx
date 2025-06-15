@@ -67,7 +67,6 @@ const ExamRes = ({ params }: ParamsType) => {
   );
   const [search, setSearch] = useState("");
 
-
   const [deleteExames] = useDeleteExamResultMutation();
   type Exam = Record<string, any>;
 
@@ -88,30 +87,71 @@ const ExamRes = ({ params }: ParamsType) => {
 
   const translate = {
     searchPlaceholder:
-      currentLanguage === "ar" ? "ابحث عن الطالب" :
-        currentLanguage === "fr" ? "Rechercher un étudiant" :
-          "Search student",
+      currentLanguage === "ar"
+        ? "ابحث عن الطالب"
+        : currentLanguage === "fr"
+          ? "Rechercher un étudiant"
+          : "Search student",
     result:
-      currentLanguage === "ar" ? "نتيجة" :
-        currentLanguage === "fr" ? "résultat(s)" :
-          "Result(s)",
+      currentLanguage === "ar"
+        ? "نتيجة"
+        : currentLanguage === "fr"
+          ? "résultat(s)"
+          : "Result(s)",
     noData:
-      currentLanguage === "ar" ? "لا توجد بيانات" :
-        currentLanguage === "fr" ? "Aucune donnée" :
-          "No data available",
-    name: currentLanguage === "ar" ? "اسم الطالب" : currentLanguage === "fr" ? "Nom de l'étudiant" : "Student Name",
-    id: currentLanguage === "ar" ? "رقم الطالب" : currentLanguage === "fr" ? "ID de l'étudiant" : "Student ID",
-    status: currentLanguage === "ar" ? "الحالة" : currentLanguage === "fr" ? "Statut" : "Status",
-    score: currentLanguage === "ar" ? "الدرجة" : currentLanguage === "fr" ? "Note" : "Score",
-    scoreDate: currentLanguage === "ar" ? "تاريخ الدرجة" : currentLanguage === "fr" ? "Date de la note" : "Score Date",
-    action: currentLanguage === "ar" ? "الإجراء" : currentLanguage === "fr" ? "Action" : "Action",
-    delete: currentLanguage === "ar" ? "حذف" : currentLanguage === "fr" ? "Supprimer" : "Delete",
+      currentLanguage === "ar"
+        ? "لا توجد بيانات"
+        : currentLanguage === "fr"
+          ? "Aucune donnée"
+          : "No data available",
+    name:
+      currentLanguage === "ar"
+        ? "اسم الطالب"
+        : currentLanguage === "fr"
+          ? "Nom de l'étudiant"
+          : "Student Name",
+    id:
+      currentLanguage === "ar"
+        ? "رقم الطالب"
+        : currentLanguage === "fr"
+          ? "ID de l'étudiant"
+          : "Student ID",
+    status:
+      currentLanguage === "ar"
+        ? "الحالة"
+        : currentLanguage === "fr"
+          ? "Statut"
+          : "Status",
+    score:
+      currentLanguage === "ar"
+        ? "الدرجة"
+        : currentLanguage === "fr"
+          ? "Note"
+          : "Score",
+    scoreDate:
+      currentLanguage === "ar"
+        ? "تاريخ الدرجة"
+        : currentLanguage === "fr"
+          ? "Date de la note"
+          : "Score Date",
+    action:
+      currentLanguage === "ar"
+        ? "الإجراء"
+        : currentLanguage === "fr"
+          ? "Action"
+          : "Action",
+    delete:
+      currentLanguage === "ar"
+        ? "حذف"
+        : currentLanguage === "fr"
+          ? "Supprimer"
+          : "Delete",
   };
 
   const filteredData = data?.filter((exam: Exam) =>
     search.trim() === ""
       ? true
-      : exam.studentName?.toLowerCase()?.includes(search.trim().toLowerCase())
+      : exam.studentName?.toLowerCase()?.includes(search.trim().toLowerCase()),
   );
   const [visibleCount, setVisibleCount] = useState(20);
   const visibleData = filteredData?.slice(0, visibleCount);
@@ -120,7 +160,7 @@ const ExamRes = ({ params }: ParamsType) => {
     <>
       <BreadCrumbs breadcrumbs={breadcrumbs} />
       <Container>
-        <div className="mb-6 -mt-2 -ml-1 flex items-center justify-between">
+        <div className="-ml-1 -mt-2 mb-6 flex items-center justify-between">
           <h1 className="text-3xl font-semibold">
             {currentLanguage === "en"
               ? "Exam Result"
@@ -133,8 +173,7 @@ const ExamRes = ({ params }: ParamsType) => {
           </h1>
         </div>
 
-        <div className="bg-bgPrimary rounded-xl">
-
+        <div className="rounded-xl bg-bgPrimary">
           {/* Search Input */}
           <div className="p-4">
             <div
@@ -146,9 +185,9 @@ const ExamRes = ({ params }: ParamsType) => {
               </div>
               <div className="flex items-center gap-2">
                 <input
-                  onChange={(e) => setSearch(e.target.value)}
+                  onChange={e => setSearch(e.target.value)}
                   type="text"
-                  className="w-full border-borderPrimary bg-bgPrimary rounded-lg border-2 px-4 py-2 ps-11 text-lg outline-none"
+                  className="w-full rounded-lg border-2 border-borderPrimary bg-bgPrimary px-4 py-2 ps-11 text-lg outline-none"
                   placeholder={translate.searchPlaceholder}
                 />
                 <span className="min-w-[120px] text-primary">
@@ -157,7 +196,7 @@ const ExamRes = ({ params }: ParamsType) => {
               </div>
             </div>
           </div>
-          <div className="relative overflow-auto shadow-md sm:rounded-lg bg-bgPrimary">
+          <div className="relative overflow-auto bg-bgPrimary shadow-md sm:rounded-lg">
             <Table>
               <TableHeader>
                 <TableRow>
@@ -193,11 +232,13 @@ const ExamRes = ({ params }: ParamsType) => {
                       <TableCell>{exam.studentId}</TableCell>
                       <TableCell>{exam.status}</TableCell>
                       <TableCell>{exam.score}</TableCell>
-                      <TableCell>{formatTransactionDate(exam.scoreDate)}</TableCell>
+                      <TableCell>
+                        {formatTransactionDate(exam.scoreDate)}
+                      </TableCell>
                       <TableCell>
                         <button
                           onClick={() => handleDelete(exam.id)}
-                          className="text-error hover:text-red-800 font-semibold"
+                          className="font-semibold text-error hover:text-red-800"
                         >
                           {translate.delete}
                         </button>
@@ -209,7 +250,9 @@ const ExamRes = ({ params }: ParamsType) => {
             </Table>
 
             {visibleCount < (filteredData?.length || 0) && (
-              <SeeMoreButton onClick={() => setVisibleCount(prev => prev + 20)} />
+              <SeeMoreButton
+                onClick={() => setVisibleCount(prev => prev + 20)}
+              />
             )}
           </div>
         </div>

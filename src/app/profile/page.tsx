@@ -21,6 +21,7 @@ import SearchableSelect from "@/components/select";
 import PhoneNumberInput from "@/components/PhoneNumberInput";
 import { BaseSyntheticEvent } from "react";
 import { FaCamera } from "react-icons/fa";
+import Container from "@/components/Container";
 
 const Profile = () => {
   const [fileName, setFileName] = useState("");
@@ -106,8 +107,6 @@ const Profile = () => {
     }
   };
 
-  const booleanValue = useSelector((state: RootState) => state.boolean.value); // sidebar
-
   const { language: currentLanguage, loading } = useSelector(
     (state: RootState) => state.language,
   );
@@ -121,18 +120,7 @@ const Profile = () => {
 
   return (
     <>
-      <div
-        dir={currentLanguage === "ar" ? "rtl" : "ltr"}
-        className={` ${
-          currentLanguage === "ar"
-            ? booleanValue
-              ? "lg:mr-[100px]"
-              : "lg:mr-[270px]"
-            : booleanValue
-              ? "lg:ml-[100px]"
-              : "lg:ml-[270px]"
-        } mt-7`}
-      >
+      <Container>
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="grid h-full w-full rounded-xl bg-bgPrimary p-7">
             <div>
@@ -289,7 +277,7 @@ const Profile = () => {
                     <input
                       {...register("username")}
                       type="text"
-                      className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                      className="w-full rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                     />
                   </label>
                   <label className="grid text-[18px] font-semibold">
@@ -301,7 +289,7 @@ const Profile = () => {
                     <input
                       {...register("email")}
                       type="email"
-                      className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                      className="w-full rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                     />
                   </label>
                   <label className="grid text-[18px] font-semibold">
@@ -314,7 +302,7 @@ const Profile = () => {
                     <input
                       {...register("nid")}
                       type="text"
-                      className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                      className="w-full rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                     />
                   </label>
                   <label className="grid text-[18px] font-semibold">
@@ -327,7 +315,7 @@ const Profile = () => {
                     <input
                       {...register("about")}
                       type="text"
-                      className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                      className="w-full rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                     />
                   </label>
                   <label
@@ -342,7 +330,7 @@ const Profile = () => {
 
                     <select
                       id="gender"
-                      className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                      className="w-full rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                       {...register("gender", { required: true })}
                     >
                       <option selected value="">
@@ -388,7 +376,7 @@ const Profile = () => {
                         : "Your Nationality"}
                     <select
                       id="nationality"
-                      className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                      className="w-full rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                       {...register("nationality", { required: true })}
                     >
                       <option value="">
@@ -419,7 +407,7 @@ const Profile = () => {
                   </label>
                   <label
                     htmlFor="regionId"
-                    className="grid w-[400px] text-[18px] font-semibold max-[471px]:w-[350px]"
+                    className="grid w-full text-[18px] font-semibold max-[471px]:w-[350px]"
                   >
                     {currentLanguage === "en"
                       ? "Region Id"
@@ -458,7 +446,7 @@ const Profile = () => {
                     <input
                       id="name_en"
                       type="text"
-                      className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                      className="w-full rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                       {...register("name_en", { required: true })}
                     />
                     {errors.name_en && (
@@ -484,7 +472,7 @@ const Profile = () => {
                       defaultValue=""
                       id="qualification"
                       {...register("qualification", { required: true })}
-                      className="h-[55px] w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                      className="h-[55px] w-full rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                     >
                       <option selected value="">
                         {currentLanguage === "ar"
@@ -544,7 +532,7 @@ const Profile = () => {
                     <input
                       id="name_ar"
                       type="text"
-                      className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                      className="w-full rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                       {...register("name_ar", { required: true })}
                     />
                     {errors.name_ar && (
@@ -569,7 +557,7 @@ const Profile = () => {
                     <input
                       id="name_fr"
                       type="text"
-                      className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                      className="w-full rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                       {...register("name_fr", { required: true })}
                     />
                     {errors.name_fr && (
@@ -591,7 +579,7 @@ const Profile = () => {
                     <input
                       {...register("birthDate")}
                       type="date"
-                      className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                      className="w-full rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                     />
                   </label>
                 </div>
@@ -599,7 +587,7 @@ const Profile = () => {
             </div>
           </div>
         </form>
-      </div>
+      </Container>
     </>
   );
 };

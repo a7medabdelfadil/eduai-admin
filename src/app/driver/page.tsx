@@ -23,7 +23,7 @@ import {
   TableHead,
   TableBody,
   TableCell,
-} from "@/components/Table"
+} from "@/components/Table";
 import { Skeleton } from "@/components/Skeleton";
 import Container from "@/components/Container";
 import SeeMoreButton from "@/components/SeeMoreButton";
@@ -148,7 +148,9 @@ const Driver = () => {
   const [visibleCount, setVisibleCount] = useState(20);
   const visibleDrivers = data?.data.content
     ?.filter((driver: Driver) =>
-      search.trim() === "" ? true : driver.name.toLowerCase().includes(search.trim().toLowerCase())
+      search.trim() === ""
+        ? true
+        : driver.name.toLowerCase().includes(search.trim().toLowerCase()),
     )
     .slice(0, visibleCount);
 
@@ -156,7 +158,7 @@ const Driver = () => {
     <>
       <BreadCrumbs breadcrumbs={breadcrumbs} />
       <Container>
-        <div className="flex items-center justify-between">
+        <div className="-mt-6 flex items-center justify-between">
           <Text font="bold" size="3xl">
             {currentLanguage === "ar"
               ? "جميع السائقين"
@@ -207,7 +209,7 @@ const Driver = () => {
                   type="text"
                   id="icon"
                   name="icon"
-                  className="border-borderSecondary block w-full rounded-lg border-2 px-4 py-2 ps-11 text-lg outline-none disabled:pointer-events-none disabled:opacity-50 dark:border-borderPrimary"
+                  className="border-borderSecondary block w-full rounded-lg border-2 bg-bgPrimary px-4 py-2 ps-11 text-lg outline-none disabled:pointer-events-none disabled:opacity-50 dark:border-borderPrimary"
                   placeholder={
                     currentLanguage === "ar"
                       ? "ابحث عن أي شيء"
@@ -245,19 +247,38 @@ const Driver = () => {
             </Link>
           </div>
         </div>
-        <div className="-mt-4 relative overflow-auto shadow-md sm:rounded-lg bg-bgPrimary">
-
+        <div className="relative -mt-4 overflow-auto bg-bgPrimary shadow-md sm:rounded-lg">
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>{currentLanguage === "ar" ? "الاسم" : currentLanguage === "fr" ? "Nom" : "Name"}</TableHead>
-                <TableHead>{currentLanguage === "ar" ? "الرقم" : "ID"}</TableHead>
-                <TableHead>{currentLanguage === "ar" ? "الجنس" : "Genre"}</TableHead>
-                <TableHead>{currentLanguage === "ar" ? "الجنسية" : "Nationalité"}</TableHead>
-                <TableHead>{currentLanguage === "ar" ? "البريد الإلكتروني" : "Email"}</TableHead>
-                <TableHead>{currentLanguage === "ar" ? "الجوال" : "Mobile"}</TableHead>
-                <TableHead>{currentLanguage === "ar" ? "عرض" : "View"}</TableHead>
-                <TableHead>{currentLanguage === "ar" ? "الإجراء" : "Action"}</TableHead>
+                <TableHead>
+                  {currentLanguage === "ar"
+                    ? "الاسم"
+                    : currentLanguage === "fr"
+                      ? "Nom"
+                      : "Name"}
+                </TableHead>
+                <TableHead>
+                  {currentLanguage === "ar" ? "الرقم" : "ID"}
+                </TableHead>
+                <TableHead>
+                  {currentLanguage === "ar" ? "الجنس" : "Genre"}
+                </TableHead>
+                <TableHead>
+                  {currentLanguage === "ar" ? "الجنسية" : "Nationalité"}
+                </TableHead>
+                <TableHead>
+                  {currentLanguage === "ar" ? "البريد الإلكتروني" : "Email"}
+                </TableHead>
+                <TableHead>
+                  {currentLanguage === "ar" ? "الجوال" : "Mobile"}
+                </TableHead>
+                <TableHead>
+                  {currentLanguage === "ar" ? "عرض" : "View"}
+                </TableHead>
+                <TableHead>
+                  {currentLanguage === "ar" ? "الإجراء" : "Action"}
+                </TableHead>
               </TableRow>
             </TableHeader>
 
@@ -274,10 +295,17 @@ const Driver = () => {
                 ))
               ) : !data?.data.content.length ||
                 data?.data.content.filter((driver: Driver) =>
-                  search.trim() === "" ? true : driver.name.toLowerCase().includes(search.trim().toLowerCase())
+                  search.trim() === ""
+                    ? true
+                    : driver.name
+                        .toLowerCase()
+                        .includes(search.trim().toLowerCase()),
                 ).length === 0 ? (
                 <TableRow>
-                  <TableCell colSpan={8} className="text-center py-4 font-medium">
+                  <TableCell
+                    colSpan={8}
+                    className="py-4 text-center font-medium"
+                  >
                     {currentLanguage === "ar"
                       ? "لا توجد بيانات"
                       : currentLanguage === "fr"
@@ -291,7 +319,7 @@ const Driver = () => {
                     className="cursor-pointer"
                     data-index={index}
                     key={driver.id}
-                    onClick={(e) => {
+                    onClick={e => {
                       if ((e.target as HTMLElement).closest("a")) return;
                       setSelectedDriver(driver);
                       setShowModal(true);
@@ -304,7 +332,9 @@ const Driver = () => {
                           className="h-[25px] w-[25px] rounded-full"
                           alt="#"
                         />
-                        <p className="text-textPrimary">{String(driver.name)}</p>
+                        <p className="text-textPrimary">
+                          {String(driver.name)}
+                        </p>
                       </div>
                     </TableCell>
                     <TableCell>{driver.id}</TableCell>
@@ -317,7 +347,11 @@ const Driver = () => {
                         href={`/driver/view-driver/${driver.id}`}
                         className="text-primary hover:underline"
                       >
-                        {currentLanguage === "ar" ? "عرض" : currentLanguage === "fr" ? "Voir" : "View"}
+                        {currentLanguage === "ar"
+                          ? "عرض"
+                          : currentLanguage === "fr"
+                            ? "Voir"
+                            : "View"}
                       </Link>
                     </TableCell>
                     <TableCell>
@@ -325,7 +359,11 @@ const Driver = () => {
                         onClick={() => handleDelete(driver.id)}
                         className="rounded-lg bg-error px-2 py-1 font-semibold text-white shadow transition hover:scale-105"
                       >
-                        {currentLanguage === "ar" ? "قفل" : currentLanguage === "fr" ? "Verrouiller" : "Lock"}
+                        {currentLanguage === "ar"
+                          ? "قفل"
+                          : currentLanguage === "fr"
+                            ? "Verrouiller"
+                            : "Lock"}
                       </button>
                     </TableCell>
                   </TableRow>
@@ -337,9 +375,7 @@ const Driver = () => {
           {visibleCount < data?.data.content.length && (
             <SeeMoreButton onClick={() => setVisibleCount(prev => prev + 20)} />
           )}
-
         </div>
-
       </Container>
 
       {showModal && selectedDriver && (

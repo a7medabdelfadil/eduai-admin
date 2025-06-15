@@ -16,7 +16,7 @@ import {
   TableBody,
   TableRow,
   TableHead,
-  TableCell
+  TableCell,
 } from "@/components/Table";
 import { Skeleton } from "@/components/Skeleton";
 import SeeMoreButton from "@/components/SeeMoreButton";
@@ -68,7 +68,7 @@ const Lab = () => {
   const filteredData = data?.data.content?.filter((lab: any) =>
     search.trim() === ""
       ? true
-      : lab.labName?.toLowerCase().includes(search.toLowerCase())
+      : lab.labName?.toLowerCase().includes(search.toLowerCase()),
   );
 
   const displayedData = filteredData?.slice(0, visibleCount);
@@ -78,7 +78,7 @@ const Lab = () => {
     <>
       <BreadCrumbs breadcrumbs={breadcrumbs} />
       <Container>
-        <div className="mb-8 -mt-2 -ml-1 flex items-center justify-between">
+        <div className="-ml-1 -mt-2 mb-8 flex items-center justify-between">
           <h1 className="text-3xl font-semibold">
             {currentLanguage === "en"
               ? "Lab"
@@ -90,8 +90,8 @@ const Lab = () => {
             {/* default */}
           </h1>
         </div>
-        <div className="bg-bgPrimary rounded-xl">
-          <div className="flex flex-col md:flex-row justify-between items-center gap-4 px-4 py-4 rounded-lg">
+        <div className="rounded-xl bg-bgPrimary">
+          <div className="flex flex-col items-center justify-between gap-4 rounded-lg px-4 py-4 md:flex-row">
             {/* Search Input */}
             <div
               dir={currentLanguage === "ar" ? "rtl" : "ltr"}
@@ -104,15 +104,18 @@ const Lab = () => {
                 <input
                   onChange={e => setSearch(e.target.value)}
                   type="text"
-                  className="w-full border-borderPrimary bg-bgPrimary rounded-lg border-2 px-4 py-2 ps-11 text-lg outline-none"
-                  placeholder={currentLanguage === "ar"
-                    ? "بحث"
-                    : currentLanguage === "fr"
-                      ? "Recherche"
-                      : "Search"}
+                  className="w-full rounded-lg border-2 border-borderPrimary bg-bgPrimary px-4 py-2 ps-11 text-lg outline-none"
+                  placeholder={
+                    currentLanguage === "ar"
+                      ? "بحث"
+                      : currentLanguage === "fr"
+                        ? "Recherche"
+                        : "Search"
+                  }
                 />
                 <span className="min-w-[120px] text-primary">
-                  {filteredData?.length ?? 0} {currentLanguage === "ar"
+                  {filteredData?.length ?? 0}{" "}
+                  {currentLanguage === "ar"
                     ? "نتيجة"
                     : currentLanguage === "fr"
                       ? "résultat(s)"
@@ -132,34 +135,101 @@ const Lab = () => {
                   : "+ New Lab"}
             </Link>
           </div>
-          <div className="relative overflow-auto shadow-md sm:rounded-lg bg-bgPrimary">
+          <div className="relative overflow-auto bg-bgPrimary shadow-md sm:rounded-lg">
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>{currentLanguage === "ar" ? "اسم المختبر" : currentLanguage === "fr" ? "Nom du laboratoire" : "Lab Name"}</TableHead>
-                  <TableHead>{currentLanguage === "ar" ? "رقم المبنى" : currentLanguage === "fr" ? "Numéro du bâtiment" : "Building Number"}</TableHead>
-                  <TableHead>{currentLanguage === "ar" ? "الفئة" : currentLanguage === "fr" ? "Catégorie" : "Category"}</TableHead>
-                  <TableHead>{currentLanguage === "ar" ? "نوع المختبر" : currentLanguage === "fr" ? "Type de laboratoire" : "Lab Type"}</TableHead>
-                  <TableHead>{currentLanguage === "ar" ? "رقم الغرفة" : currentLanguage === "fr" ? "Numéro de la salle" : "Room Number"}</TableHead>
-                  <TableHead>{currentLanguage === "ar" ? "السعة القصوى" : currentLanguage === "fr" ? "Capacité maximale" : "Max Capacity"}</TableHead>
-                  <TableHead>{currentLanguage === "ar" ? "رقم الطابق" : currentLanguage === "fr" ? "Numéro du étage" : "Floor Number"}</TableHead>
-                  <TableHead>{currentLanguage === "ar" ? "النوع" : currentLanguage === "fr" ? "Type" : "Type"}</TableHead>
-                  <TableHead>{currentLanguage === "ar" ? "الحالة" : currentLanguage === "fr" ? "Statut" : "Status"}</TableHead>
-                  <TableHead>{currentLanguage === "ar" ? "الإجراء" : currentLanguage === "fr" ? "Action" : "Action"}</TableHead>
+                  <TableHead>
+                    {currentLanguage === "ar"
+                      ? "اسم المختبر"
+                      : currentLanguage === "fr"
+                        ? "Nom du laboratoire"
+                        : "Lab Name"}
+                  </TableHead>
+                  <TableHead>
+                    {currentLanguage === "ar"
+                      ? "رقم المبنى"
+                      : currentLanguage === "fr"
+                        ? "Numéro du bâtiment"
+                        : "Building Number"}
+                  </TableHead>
+                  <TableHead>
+                    {currentLanguage === "ar"
+                      ? "الفئة"
+                      : currentLanguage === "fr"
+                        ? "Catégorie"
+                        : "Category"}
+                  </TableHead>
+                  <TableHead>
+                    {currentLanguage === "ar"
+                      ? "نوع المختبر"
+                      : currentLanguage === "fr"
+                        ? "Type de laboratoire"
+                        : "Lab Type"}
+                  </TableHead>
+                  <TableHead>
+                    {currentLanguage === "ar"
+                      ? "رقم الغرفة"
+                      : currentLanguage === "fr"
+                        ? "Numéro de la salle"
+                        : "Room Number"}
+                  </TableHead>
+                  <TableHead>
+                    {currentLanguage === "ar"
+                      ? "السعة القصوى"
+                      : currentLanguage === "fr"
+                        ? "Capacité maximale"
+                        : "Max Capacity"}
+                  </TableHead>
+                  <TableHead>
+                    {currentLanguage === "ar"
+                      ? "رقم الطابق"
+                      : currentLanguage === "fr"
+                        ? "Numéro du étage"
+                        : "Floor Number"}
+                  </TableHead>
+                  <TableHead>
+                    {currentLanguage === "ar"
+                      ? "النوع"
+                      : currentLanguage === "fr"
+                        ? "Type"
+                        : "Type"}
+                  </TableHead>
+                  <TableHead>
+                    {currentLanguage === "ar"
+                      ? "الحالة"
+                      : currentLanguage === "fr"
+                        ? "Statut"
+                        : "Status"}
+                  </TableHead>
+                  <TableHead>
+                    {currentLanguage === "ar"
+                      ? "الإجراء"
+                      : currentLanguage === "fr"
+                        ? "Action"
+                        : "Action"}
+                  </TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
                 {isLoading ? (
                   [...Array(3)].map((_, i) => (
                     <TableRow key={i}>
-                      {Array(11).fill(0).map((_, j) => (
-                        <TableCell key={j}><Skeleton className="h-4 w-full" /></TableCell>
-                      ))}
+                      {Array(11)
+                        .fill(0)
+                        .map((_, j) => (
+                          <TableCell key={j}>
+                            <Skeleton className="h-4 w-full" />
+                          </TableCell>
+                        ))}
                     </TableRow>
                   ))
                 ) : displayedData?.length === 0 ? (
                   <TableRow>
-                    <TableCell colSpan={11} className="text-center py-6 text-gray-500">
+                    <TableCell
+                      colSpan={11}
+                      className="py-6 text-center text-gray-500"
+                    >
                       {currentLanguage === "ar"
                         ? "لا توجد بيانات"
                         : currentLanguage === "fr"
@@ -184,15 +254,27 @@ const Lab = () => {
                         <div className="flex items-center gap-3">
                           <button
                             onClick={() => handleDelete(lab.roomId)}
-                            className="text-red-500 hover:text-red-700 transition"
-                            title={currentLanguage === "ar" ? "حذف" : currentLanguage === "fr" ? "Supprimer" : "Delete"}
+                            className="text-red-500 transition hover:text-red-700"
+                            title={
+                              currentLanguage === "ar"
+                                ? "حذف"
+                                : currentLanguage === "fr"
+                                  ? "Supprimer"
+                                  : "Delete"
+                            }
                           >
                             <RiDeleteBin6Fill className="h-5 w-5" />
                           </button>
                           <Link
                             href={`/infrastructure/lab/${lab.roomId}`}
-                            className="text-blue-600 hover:text-blue-800 transition"
-                            title={currentLanguage === "ar" ? "تعديل" : currentLanguage === "fr" ? "Modifier" : "Edit"}
+                            className="text-blue-600 transition hover:text-blue-800"
+                            title={
+                              currentLanguage === "ar"
+                                ? "تعديل"
+                                : currentLanguage === "fr"
+                                  ? "Modifier"
+                                  : "Edit"
+                            }
                           >
                             <RiEdit2Fill className="h-5 w-5" />
                           </Link>

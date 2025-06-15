@@ -357,7 +357,7 @@ const ViewInvoice: React.FC<ViewInvoiceProps> = ({ params }) => {
             <p className="flex items-center justify-between gap-4 border-b border-borderPrimary text-[18px] font-semibold text-secondary">
               {translations[currentLanguage].paidAmount}:{" "}
               <p
-                className={`text-[18px] text-end ${
+                className={`text-end text-[18px] ${
                   theme == "dark" ? "text-white" : "text-black"
                 }`}
               >

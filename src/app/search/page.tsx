@@ -9,9 +9,10 @@ import {
 import Spinner from "@/components/spinner";
 import { useSelector } from "react-redux";
 import { RootState } from "@/GlobalRedux/store";
+import Container from "@/components/Container";
+import { Text } from "@/components/Text";
 
 const Search = () => {
-  const booleanValue = useSelector((state: RootState) => state.boolean.value);
   type Student = Record<string, any>;
   const { data, error, isLoading } = useGetAllStudentsQuery({
     archived: "false",
@@ -69,22 +70,19 @@ const Search = () => {
 
   return (
     <>
-      <div
-        className={`${
-          currentLanguage === "ar"
-            ? booleanValue
-              ? "lg:mr-[90px]"
-              : "lg:mr-[290px]"
-            : booleanValue
-              ? "lg:ml-[90px]"
-              : "lg:ml-[290px]"
-        } mt-12`}
-      >
-        <div className="flex h-full w-full justify-center overflow-auto p-2">
+      <Container>
+        <Text  font="bold" size="3xl">
+          {currentLanguage === "ar"
+            ? "بحث"
+            : currentLanguage === "fr"
+              ? "Recherche"
+              : "Search"}
+        </Text>
+        <div className="flex h-full w-full justify-center overflow-auto my-4">
           <div className="grid h-full w-full overflow-auto rounded-xl bg-bgPrimary">
             <div
               dir={currentLanguage === "ar" ? "rtl" : "ltr"}
-              className="flex h-[70px] items-center gap-7 overflow-auto rounded-t-xl bg-bgPrimary px-3 font-semibold"
+              className="flex h-[70px] items-center gap-7 overflow-auto rounded-t-xl bg-bgRowTable px-3 font-semibold"
             >
               <Link
                 className="text-primary underline underline-offset-4"
@@ -232,11 +230,10 @@ const Search = () => {
                             <div
                               onClick={() => handleClick(student.id)}
                               key={student.id}
-                              className={`flex w-full cursor-pointer items-center rounded-lg border border-borderPrimary px-2 py-1 hover:bg-bgSecondary ${
-                                selectedId === student.id
-                                  ? "bg-bgSecondary"
-                                  : ""
-                              }`}
+                              className={`flex w-full cursor-pointer items-center rounded-lg border border-borderPrimary px-2 py-1 hover:bg-bgSecondary ${selectedId === student.id
+                                ? "bg-bgSecondary"
+                                : ""
+                                }`}
                             >
                               <div>
                                 {student.picture == null ? (
@@ -433,7 +430,7 @@ const Search = () => {
             </div>
           </div>
         </div>
-      </div>
+      </Container>
     </>
   );
 };

@@ -17,7 +17,6 @@ const ViewParticipation: React.FC<ViewDriverProps> = ({ params }) => {
     params.participationID,
   );
 
-
   const { language: currentLanguage, loading } = useSelector(
     (state: RootState) => state.language,
   );

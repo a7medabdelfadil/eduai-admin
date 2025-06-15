@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import BreadCrumbs from "@/components/BreadCrumbs";
 import Spinner from "@/components/spinner";
 import { useGetAllGradeCourseQuery } from "@/features/Document-Management/certificatesApi";
@@ -37,11 +37,11 @@ const Course = ({ params }: ParamsType) => {
 
   const booleanValue = useSelector((state: RootState) => state.boolean.value);
   const { language: currentLanguage, loading } = useSelector(
-    (state: RootState) => state.language
+    (state: RootState) => state.language,
   );
   const { data, isLoading } = useGetAllGradeCourseQuery(params.courseId);
   const filteredData = data?.data?.filter((course: any) =>
-    course.studentName?.toLowerCase().includes(searchTerm.toLowerCase())
+    course.studentName?.toLowerCase().includes(searchTerm.toLowerCase()),
   );
 
   if (isLoading)
@@ -55,14 +55,15 @@ const Course = ({ params }: ParamsType) => {
       <BreadCrumbs breadcrumbs={breadcrumbs} />
       <div
         dir={currentLanguage === "ar" ? "rtl" : "ltr"}
-        className={`${currentLanguage === "ar"
-          ? booleanValue
-            ? "lg:mr-[100px]"
-            : "lg:mr-[270px]"
-          : booleanValue
-            ? "lg:ml-[100px]"
-            : "lg:ml-[270px]"
-          } relative mx-3 mt-10 h-screen overflow-x-auto bg-transparent sm:rounded-lg`}
+        className={`${
+          currentLanguage === "ar"
+            ? booleanValue
+              ? "lg:mr-[100px]"
+              : "lg:mr-[270px]"
+            : booleanValue
+              ? "lg:ml-[100px]"
+              : "lg:ml-[270px]"
+        } relative mx-3 mt-10 h-screen overflow-x-auto bg-transparent sm:rounded-lg`}
       >
         <div className="flex justify-between text-center max-[502px]:grid max-[502px]:justify-center">
           <div className="mb-3">
@@ -88,7 +89,7 @@ const Course = ({ params }: ParamsType) => {
                 </svg>
               </div>
               <input
-                onChange={(e) => setSearchTerm(e.target.value)}
+                onChange={e => setSearchTerm(e.target.value)}
                 value={searchTerm}
                 type="text"
                 id="icon"
@@ -130,63 +131,90 @@ const Course = ({ params }: ParamsType) => {
                     ? "Nom du cours"
                     : "Course Name"}
               </th>
-              <th scope="col" className="whitespace-nowrap px-6 py-3 text-center">
+              <th
+                scope="col"
+                className="whitespace-nowrap px-6 py-3 text-center"
+              >
                 {currentLanguage === "ar"
                   ? "المعامل"
                   : currentLanguage === "fr"
                     ? "Coefficient"
                     : "Coefficient"}
               </th>
-              <th scope="col" className="whitespace-nowrap px-6 py-3 text-center">
+              <th
+                scope="col"
+                className="whitespace-nowrap px-6 py-3 text-center"
+              >
                 {currentLanguage === "ar"
                   ? "الامتحان الأول"
                   : currentLanguage === "fr"
                     ? "Premier examen"
                     : "First Exam Score"}
               </th>
-              <th scope="col" className="whitespace-nowrap px-6 py-3 text-center">
+              <th
+                scope="col"
+                className="whitespace-nowrap px-6 py-3 text-center"
+              >
                 {currentLanguage === "ar"
                   ? "الامتحان الثاني"
                   : currentLanguage === "fr"
                     ? "Deuxième examen"
                     : "Second Exam Score"}
               </th>
-              <th scope="col" className="whitespace-nowrap px-6 py-3 text-center">
+              <th
+                scope="col"
+                className="whitespace-nowrap px-6 py-3 text-center"
+              >
                 {currentLanguage === "ar"
                   ? "الامتحان الثالث"
                   : currentLanguage === "fr"
                     ? "Troisième examen"
                     : "Third Exam Score"}
               </th>
-              <th scope="col" className="whitespace-nowrap px-6 py-3 text-center">
+              <th
+                scope="col"
+                className="whitespace-nowrap px-6 py-3 text-center"
+              >
                 {currentLanguage === "ar"
                   ? "الامتحان الرابع"
                   : currentLanguage === "fr"
                     ? "Quatrième examen"
                     : "Fourth Exam Score"}
               </th>
-              <th scope="col" className="whitespace-nowrap px-6 py-3 text-center">
+              <th
+                scope="col"
+                className="whitespace-nowrap px-6 py-3 text-center"
+              >
                 {currentLanguage === "ar"
                   ? "الأنشطة المتكاملة"
                   : currentLanguage === "fr"
                     ? "Activités intégrées"
                     : "Integrated Activities"}
               </th>
-              <th scope="col" className="whitespace-nowrap px-6 py-3 text-center">
+              <th
+                scope="col"
+                className="whitespace-nowrap px-6 py-3 text-center"
+              >
                 {currentLanguage === "ar"
                   ? "النقاط"
                   : currentLanguage === "fr"
                     ? "Points"
                     : "Points"}
               </th>
-              <th scope="col" className="whitespace-nowrap px-6 py-3 text-center">
+              <th
+                scope="col"
+                className="whitespace-nowrap px-6 py-3 text-center"
+              >
                 {currentLanguage === "ar"
                   ? "التقييم المستمر"
                   : currentLanguage === "fr"
                     ? "Évaluation continue"
                     : "Continuous Assessment"}
               </th>
-              <th scope="col" className="whitespace-nowrap px-6 py-3 text-center">
+              <th
+                scope="col"
+                className="whitespace-nowrap px-6 py-3 text-center"
+              >
                 {currentLanguage === "ar"
                   ? "المعدل التراكمي"
                   : currentLanguage === "fr"
@@ -238,7 +266,6 @@ const Course = ({ params }: ParamsType) => {
                 <td className="whitespace-nowrap px-6 py-4 text-center">
                   {course.courseGradeReportDTO.gpa || "-"}
                 </td>
-
               </tr>
             ))}
           </tbody>
@@ -255,6 +282,6 @@ const Course = ({ params }: ParamsType) => {
       </div>
     </>
   );
-}
+};
 
 export default Course;

@@ -28,9 +28,24 @@ import SeeMoreButton from "@/components/SeeMoreButton";
 
 const ProfessionalDevelopment = () => {
   const breadcrumbs = [
-    { nameEn: "Administration", nameAr: "الإدارة", nameFr: "Administration", href: "/" },
-    { nameEn: "Document Management", nameAr: "إدارة المستندات", nameFr: "Gestion des documents", href: "/document-management" },
-    { nameEn: "Professional Development", nameAr: "التطوير المهني", nameFr: "Développement professionnel", href: "/document-management/certificate/professional-development" },
+    {
+      nameEn: "Administration",
+      nameAr: "الإدارة",
+      nameFr: "Administration",
+      href: "/",
+    },
+    {
+      nameEn: "Document Management",
+      nameAr: "إدارة المستندات",
+      nameFr: "Gestion des documents",
+      href: "/document-management",
+    },
+    {
+      nameEn: "Professional Development",
+      nameAr: "التطوير المهني",
+      nameFr: "Développement professionnel",
+      href: "/document-management/certificate/professional-development",
+    },
   ];
 
   type Professional = Record<string, any>;
@@ -99,15 +114,17 @@ const ProfessionalDevelopment = () => {
           : "Delete",
   };
 
-  const filteredData = data?.data?.content?.filter((professional: Professional) =>
-    search.trim() === ""
-      ? true
-      : professional.userName?.toLowerCase()?.includes(search.trim().toLowerCase())
+  const filteredData = data?.data?.content?.filter(
+    (professional: Professional) =>
+      search.trim() === ""
+        ? true
+        : professional.userName
+            ?.toLowerCase()
+            ?.includes(search.trim().toLowerCase()),
   );
 
   const [visibleCount, setVisibleCount] = useState(20);
   const visibleData = filteredData?.slice(0, visibleCount);
-
 
   const handleDelete = async (id: string) => {
     try {
@@ -124,31 +141,61 @@ const ProfessionalDevelopment = () => {
       <BreadCrumbs breadcrumbs={breadcrumbs} />
       <Container>
         <div className="justify-left mb-6 ml-4 flex flex-wrap gap-5 text-[20px] font-semibold max-[725px]:text-[15px]">
-          <Link href="/document-management/certificate" className="hover:text-blue-500 hover:underline">
-            {currentLanguage === "ar" ? "إكمال" : currentLanguage === "fr" ? "Achèvement" : "Completion"}
+          <Link
+            href="/document-management/certificate"
+            className="hover:text-blue-500 hover:underline"
+          >
+            {currentLanguage === "ar"
+              ? "إكمال"
+              : currentLanguage === "fr"
+                ? "Achèvement"
+                : "Completion"}
           </Link>
-          <Link href="/document-management/certificate/achievement" className="hover:text-blue-500 hover:underline">
-            {currentLanguage === "ar" ? "إنجاز" : currentLanguage === "fr" ? "Réussite" : "Achievement"}
+          <Link
+            href="/document-management/certificate/achievement"
+            className="hover:text-blue-500 hover:underline"
+          >
+            {currentLanguage === "ar"
+              ? "إنجاز"
+              : currentLanguage === "fr"
+                ? "Réussite"
+                : "Achievement"}
           </Link>
-          <Link href="/document-management/certificate/participation" className="hover:text-blue-500 hover:underline">
-            {currentLanguage === "ar" ? "مشاركة" : currentLanguage === "fr" ? "Participation" : "Participation"}
+          <Link
+            href="/document-management/certificate/participation"
+            className="hover:text-blue-500 hover:underline"
+          >
+            {currentLanguage === "ar"
+              ? "مشاركة"
+              : currentLanguage === "fr"
+                ? "Participation"
+                : "Participation"}
           </Link>
-          <Link href="/document-management/certificate/professional-development" className="text-blue-500 underline">
-            {currentLanguage === "ar" ? "تطوير مهني" : currentLanguage === "fr" ? "Développement Professionnel" : "Professional Development"}
+          <Link
+            href="/document-management/certificate/professional-development"
+            className="text-blue-500 underline"
+          >
+            {currentLanguage === "ar"
+              ? "تطوير مهني"
+              : currentLanguage === "fr"
+                ? "Développement Professionnel"
+                : "Professional Development"}
           </Link>
         </div>
-        <div className="bg-bgPrimary rounded-xl mb-6">
-
-          <div className="flex flex-col md:flex-row justify-between items-center gap-4 px-4 py-4 rounded-lg">
-            <div dir={currentLanguage === "ar" ? "rtl" : "ltr"} className="relative w-full max-w-md">
+        <div className="mb-6 rounded-xl bg-bgPrimary">
+          <div className="flex flex-col items-center justify-between gap-4 rounded-lg px-4 py-4 md:flex-row">
+            <div
+              dir={currentLanguage === "ar" ? "rtl" : "ltr"}
+              className="relative w-full max-w-md"
+            >
               <div className="pointer-events-none absolute inset-y-0 start-0 z-20 flex items-center ps-4">
                 <BiSearchAlt className="text-secondary" size={18} />
               </div>
               <div className="flex items-center gap-2">
                 <input
-                  onChange={(e) => setSearch(e.target.value)}
+                  onChange={e => setSearch(e.target.value)}
                   type="text"
-                  className="w-full border-borderPrimary bg-bgPrimary rounded-lg border-2 px-4 py-2 ps-11 text-lg outline-none"
+                  className="w-full rounded-lg border-2 border-borderPrimary bg-bgPrimary px-4 py-2 ps-11 text-lg outline-none"
                   placeholder={translate.searchPlaceholder}
                 />
                 <span className="min-w-[120px] text-primary">
@@ -169,7 +216,7 @@ const ProfessionalDevelopment = () => {
             </Link>
           </div>
 
-          <div className="relative overflow-auto shadow-md sm:rounded-lg bg-bgPrimary">
+          <div className="relative overflow-auto bg-bgPrimary shadow-md sm:rounded-lg">
             <Table>
               <TableHeader>
                 <TableRow>
@@ -199,34 +246,37 @@ const ProfessionalDevelopment = () => {
                     </TableCell>
                   </TableRow>
                 ) : (
-                  visibleData.map((professional: Professional, index: number) => (
-                    <TableRow key={professional.id} data-index={index}>
-                      <TableCell>{professional.userName}</TableCell>
-                      <TableCell>{professional.type}</TableCell>
-                      <TableCell>{professional.userId}</TableCell>
-                      <TableCell>{professional.issueDate}</TableCell>
-                      <TableCell className="flex items-center gap-2">
-                        <Link
-                          href={`/document-management/certificate/professional-development/${professional.id}`}
-                          className="font-medium text-blue-600 hover:underline"
-                          title="View"
-                        >
-                          <img src="/images/print.png" alt="#" />
-                        </Link>
-                        <RiDeleteBin6Fill
-                          className="text-2xl text-red-600 cursor-pointer hover:text-red-800"
-                          onClick={() => handleDelete(professional.id)}
-                        />
-                      </TableCell>
-                    </TableRow>
-                  ))
+                  visibleData.map(
+                    (professional: Professional, index: number) => (
+                      <TableRow key={professional.id} data-index={index}>
+                        <TableCell>{professional.userName}</TableCell>
+                        <TableCell>{professional.type}</TableCell>
+                        <TableCell>{professional.userId}</TableCell>
+                        <TableCell>{professional.issueDate}</TableCell>
+                        <TableCell className="flex items-center gap-2">
+                          <Link
+                            href={`/document-management/certificate/professional-development/${professional.id}`}
+                            className="font-medium text-blue-600 hover:underline"
+                            title="View"
+                          >
+                            <img src="/images/print.png" alt="#" />
+                          </Link>
+                          <RiDeleteBin6Fill
+                            className="cursor-pointer text-2xl text-red-600 hover:text-red-800"
+                            onClick={() => handleDelete(professional.id)}
+                          />
+                        </TableCell>
+                      </TableRow>
+                    ),
+                  )
                 )}
               </TableBody>
             </Table>
             {visibleCount < (filteredData?.length || 0) && (
-              <SeeMoreButton onClick={() => setVisibleCount(prev => prev + 20)} />
+              <SeeMoreButton
+                onClick={() => setVisibleCount(prev => prev + 20)}
+              />
             )}
-
           </div>
         </div>
       </Container>

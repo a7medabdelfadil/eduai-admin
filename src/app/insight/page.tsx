@@ -1,6 +1,15 @@
 "use client";
 
-import { AwaitedReactNode, JSXElementConstructor, Key, ReactElement, ReactNode, ReactPortal, useEffect, useState } from "react";
+import {
+  AwaitedReactNode,
+  JSXElementConstructor,
+  Key,
+  ReactElement,
+  ReactNode,
+  ReactPortal,
+  useEffect,
+  useState,
+} from "react";
 import {
   Bar,
   BarChart,
@@ -12,12 +21,7 @@ import {
   Legend,
   YAxis,
 } from "recharts";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   ChartContainer,
   ChartTooltip,
@@ -28,7 +32,11 @@ import { useSelector } from "react-redux";
 import { RootState } from "@/GlobalRedux/store";
 import BreadCrumbs from "@/components/BreadCrumbs";
 import Spinner from "@/components/spinner";
-import { useAverageGradesAtSchoolQuery, useAverageAttendanceQuery, useTopStudentsInClassQuery } from "@/features/Acadimic/scheduleApi";
+import {
+  useAverageGradesAtSchoolQuery,
+  useAverageAttendanceQuery,
+  useTopStudentsInClassQuery,
+} from "@/features/Acadimic/scheduleApi";
 import { useGetAllClasssQuery } from "@/features/Infrastructure/classApi";
 
 const chartConfig = {
@@ -42,18 +50,22 @@ const chartConfig2 = {
 };
 
 function InsightPage() {
-  const {data, isLoading} = useAverageGradesAtSchoolQuery(null);
-  const {data: averageAttendance, isLoading: isAverage} = useAverageAttendanceQuery(null);
+  const { data, isLoading } = useAverageGradesAtSchoolQuery(null);
+  const { data: averageAttendance, isLoading: isAverage } =
+    useAverageAttendanceQuery(null);
   const [classroomId, setClassroomId] = useState<string | null>(null);
   const { data: classes, isLoading: isClassing } = useGetAllClasssQuery(null);
-  const {data: strugglingStudents, isLoading: isStudentsLoading} = useTopStudentsInClassQuery({
-    "classRoom": classroomId
-  }, {
-    skip: classroomId === null
-  });
+  const { data: strugglingStudents, isLoading: isStudentsLoading } =
+    useTopStudentsInClassQuery(
+      {
+        classRoom: classroomId,
+      },
+      {
+        skip: classroomId === null,
+      },
+    );
   console.log(classroomId);
-  
-  
+
   const booleanValue = useSelector((state: RootState) => state.boolean.value);
   const { language: currentLanguage, loading } = useSelector(
     (state: RootState) => state.language,
@@ -78,13 +90,15 @@ function InsightPage() {
   ];
 
   // Transform averageAttendance data for the chart
-  const transformedAttendanceData = averageAttendance ? Object.keys(averageAttendance[0].MonthsAttendance).map(month => ({
-    month,
-    KINDERGARTEN: averageAttendance[0].MonthsAttendance[month],
-    PRIMARY: averageAttendance[1].MonthsAttendance[month],
-    PREPARATORY: averageAttendance[2].MonthsAttendance[month],
-    SECONDARY: averageAttendance[3].MonthsAttendance[month],
-  })) : [];
+  const transformedAttendanceData = averageAttendance
+    ? Object.keys(averageAttendance[0].MonthsAttendance).map(month => ({
+        month,
+        KINDERGARTEN: averageAttendance[0].MonthsAttendance[month],
+        PRIMARY: averageAttendance[1].MonthsAttendance[month],
+        PREPARATORY: averageAttendance[2].MonthsAttendance[month],
+        SECONDARY: averageAttendance[3].MonthsAttendance[month],
+      }))
+    : [];
 
   interface Student {
     studentName: string;
@@ -93,13 +107,14 @@ function InsightPage() {
   }
 
   // Transform struggling students data for the chart
-  const chartData3 = strugglingStudents && classroomId 
-    ? strugglingStudents.map((student: Student) => ({
-        name: student.studentName,
-        grade: student.averageGrade,
-        attendance: student.attendanceRate
-      })) 
-    : [];
+  const chartData3 =
+    strugglingStudents && classroomId
+      ? strugglingStudents.map((student: Student) => ({
+          name: student.studentName,
+          grade: student.averageGrade,
+          attendance: student.attendanceRate,
+        }))
+      : [];
 
   const [isMounted, setIsMounted] = useState(false);
   useEffect(() => {
@@ -239,7 +254,10 @@ function InsightPage() {
               </CardHeader>
               <CardContent>
                 <ChartContainer config={chartConfig2}>
-                  <LineChart data={transformedAttendanceData} margin={{ left: 12, right: 12 }}>
+                  <LineChart
+                    data={transformedAttendanceData}
+                    margin={{ left: 12, right: 12 }}
+                  >
                     <CartesianGrid vertical={false} />
                     <XAxis
                       dataKey="month"
@@ -305,14 +323,19 @@ function InsightPage() {
                   <select
                     className="mx-3 rounded-lg border border-borderPrimary bg-bgPrimary px-4 py-2 shadow-sm outline-none"
                     value={classroomId || ""}
-                    onChange={(e) => setClassroomId(e.target.value || null)}
+                    onChange={e => setClassroomId(e.target.value || null)}
                   >
                     <option value="">Select Class</option>
-                    {classes?.data?.content?.map((classroom: { roomId: string; classroomName: string }) => (
-                      <option key={classroom.roomId} value={classroom.roomId}>
-                        {classroom.classroomName}
-                      </option>
-                    ))}
+                    {classes?.data?.content?.map(
+                      (classroom: {
+                        roomId: string;
+                        classroomName: string;
+                      }) => (
+                        <option key={classroom.roomId} value={classroom.roomId}>
+                          {classroom.classroomName}
+                        </option>
+                      ),
+                    )}
                   </select>
                 </div>
                 {classroomId ? (

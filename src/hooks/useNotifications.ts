@@ -1,14 +1,16 @@
-import { useState, useEffect, useRef } from 'react';
-import { Client, IMessage } from '@stomp/stompjs';
-import Cookies from 'js-cookie';
-import { baseUrlStock } from '@/components/BaseURL';
+import { useState, useEffect, useRef } from "react";
+import { Client, IMessage } from "@stomp/stompjs";
+import Cookies from "js-cookie";
+import { baseUrlStock } from "@/components/BaseURL";
 
 interface NotificationsHookResult {
   notificationsCount: number;
   isConnected: boolean;
 }
 
-export const useNotificationsWebSocket = (userId: string | null): NotificationsHookResult => {
+export const useNotificationsWebSocket = (
+  userId: string | null,
+): NotificationsHookResult => {
   const [notificationsCount, setNotificationsCount] = useState<number>(0);
   const [isConnected, setIsConnected] = useState<boolean>(false);
   const stompClientRef = useRef<Client | null>(null);
@@ -17,13 +19,13 @@ export const useNotificationsWebSocket = (userId: string | null): NotificationsH
 
   // Preload the notification sound
   useEffect(() => {
-    audioRef.current = new Audio('/sounds/notifi.mp3'); // Ensure this path is correct in your public folder
-    audioRef.current.preload = 'auto';
+    audioRef.current = new Audio("/sounds/notifi.mp3"); // Ensure this path is correct in your public folder
+    audioRef.current.preload = "auto";
   }, []);
 
   useEffect(() => {
     // Validate token and userId before connection
-    const token = Cookies.get('token');
+    const token = Cookies.get("token");
     if (!token || !userId) {
       return;
     }
@@ -32,7 +34,7 @@ export const useNotificationsWebSocket = (userId: string | null): NotificationsH
     const stompClient = new Client({
       brokerURL: `${baseUrlStock}ws?token=${token}`,
       debug: function (str) {
-        console.log('[STOMP Notifications Debug]', str);
+        console.log("[STOMP Notifications Debug]", str);
       },
       reconnectDelay: 5000,
       heartbeatIncoming: 4000,
@@ -41,45 +43,51 @@ export const useNotificationsWebSocket = (userId: string | null): NotificationsH
 
     // Connection success handler
     stompClient.onConnect = () => {
-      console.log('WebSocket Notifications Connected Successfully');
+      console.log("WebSocket Notifications Connected Successfully");
       setIsConnected(true);
 
       // Subscribe to user-specific notifications count channel
-      stompClient.subscribe(`/user/${userId}/notifications-count`, (message: IMessage) => {
-        try {
-          // Parse the notification count from the message
-          const count = parseInt(message.body, 10);
-          
-          // Check if count has increased
-          if (count > previousCountRef.current) {
-            // Play notification sound
-            if (audioRef.current) {
-              audioRef.current.play().catch(error => {
-                console.error('Error playing notification sound:', error);
-              });
-            }
-          }
+      stompClient.subscribe(
+        `/user/${userId}/notifications-count`,
+        (message: IMessage) => {
+          try {
+            // Parse the notification count from the message
+            const count = parseInt(message.body, 10);
 
-          // Update notifications count, ensuring it's not negative
-          setNotificationsCount(Math.max(0, count));
-          
-          // Update previous count reference
-          previousCountRef.current = count;
-        } catch (parseError) {
-          console.error('Error parsing notifications count:', parseError);
-        }
-      });
+            // Check if count has increased
+            if (count > previousCountRef.current) {
+              // Play notification sound
+              if (audioRef.current) {
+                audioRef.current.play().catch(error => {
+                  console.error("Error playing notification sound:", error);
+                });
+              }
+            }
+
+            // Update notifications count, ensuring it's not negative
+            setNotificationsCount(Math.max(0, count));
+
+            // Update previous count reference
+            previousCountRef.current = count;
+          } catch (parseError) {
+            console.error("Error parsing notifications count:", parseError);
+          }
+        },
+      );
     };
 
     // Error handling
     stompClient.onStompError = frame => {
-      console.error('Broker reported notifications error:', frame.headers['message']);
-      console.error('Details:', frame.body);
+      console.error(
+        "Broker reported notifications error:",
+        frame.headers["message"],
+      );
+      console.error("Details:", frame.body);
       setIsConnected(false);
     };
 
     stompClient.onWebSocketError = event => {
-      console.error('WebSocket notifications connection error:', event);
+      console.error("WebSocket notifications connection error:", event);
       setIsConnected(false);
     };
 
@@ -97,6 +105,6 @@ export const useNotificationsWebSocket = (userId: string | null): NotificationsH
 
   return {
     notificationsCount,
-    isConnected
+    isConnected,
   };
 };

@@ -25,7 +25,7 @@ jest.mock("react-icons/md", () => ({
 }));
 
 // Create helper variables for our mocks.
-const mockedUseSelector = (useSelector as unknown) as jest.Mock;
+const mockedUseSelector = useSelector as unknown as jest.Mock;
 const mockedUsePathname = usePathname as jest.Mock;
 
 describe("BreadCrumbs Component", () => {
@@ -52,11 +52,11 @@ describe("BreadCrumbs Component", () => {
 
   test("renders breadcrumbs in English with active link styling", () => {
     // Set up Redux state: boolean.value is true and language is 'en'
-    mockedUseSelector.mockImplementation((callback) =>
+    mockedUseSelector.mockImplementation(callback =>
       callback({
         boolean: { value: true },
         language: { language: "en" },
-      })
+      }),
     );
     // Set the current pathname so that the first breadcrumb ("/home") is active.
     mockedUsePathname.mockReturnValue("/home");
@@ -93,11 +93,11 @@ describe("BreadCrumbs Component", () => {
 
   test("renders breadcrumbs in Arabic with active link styling", () => {
     // Set up Redux state: boolean.value is false and language is 'ar'
-    mockedUseSelector.mockImplementation((callback) =>
+    mockedUseSelector.mockImplementation(callback =>
       callback({
         boolean: { value: false },
         language: { language: "ar" },
-      })
+      }),
     );
     // Set the current pathname so that the second breadcrumb ("/about") is active.
     mockedUsePathname.mockReturnValue("/about");
@@ -134,11 +134,11 @@ describe("BreadCrumbs Component", () => {
 
   test("renders breadcrumbs in French", () => {
     // Set up Redux state: boolean.value is true and language is 'fr'
-    mockedUseSelector.mockImplementation((callback) =>
+    mockedUseSelector.mockImplementation(callback =>
       callback({
         boolean: { value: true },
         language: { language: "fr" },
-      })
+      }),
     );
     // Set the current pathname so that the second breadcrumb ("/about") is active.
     mockedUsePathname.mockReturnValue("/about");

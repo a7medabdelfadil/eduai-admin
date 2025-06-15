@@ -18,7 +18,6 @@ const ViewCertificate: React.FC<ViewDriverProps> = ({ params }) => {
     params.certificateID,
   );
 
-
   const { language: currentLanguage, loading } = useSelector(
     (state: RootState) => state.language,
   );

@@ -134,7 +134,6 @@ const EditStudent = ({ params }: { params: Params }) => {
     }
   };
 
-
   if (loading || isStudent)
     return (
       <div className="flex h-screen w-full items-center justify-center">
@@ -146,7 +145,7 @@ const EditStudent = ({ params }: { params: Params }) => {
     <>
       <BreadCrumbs breadcrumbs={breadcrumbs} />
       <Container>
-        <div className="mb-8 -mt-2 -ml-1 flex items-center justify-between">
+        <div className="-ml-1 -mt-2 mb-8 flex items-center justify-between">
           <h1 className="text-3xl font-semibold">
             {currentLanguage === "en"
               ? "Edit Student"
@@ -158,9 +157,12 @@ const EditStudent = ({ params }: { params: Params }) => {
             {/* default */}
           </h1>
         </div>
-        <form className="flex h-full w-full items-center justify-center" onSubmit={handleSubmit(onSubmit)}>
-          <div className="rounded-xl bg-bgPrimary p-10 w-[90] md:w-[80%]">
-            <div className="p-6 grid grid-cols-2 gap-4 max-[1278px]:grid-cols-1">
+        <form
+          className="flex h-full w-full items-center justify-center"
+          onSubmit={handleSubmit(onSubmit)}
+        >
+          <div className="w-[90] rounded-xl bg-bgPrimary p-10 md:w-[80%]">
+            <div className="grid grid-cols-2 gap-4 p-6 max-[1278px]:grid-cols-1">
               {/* Email */}
               <label htmlFor="email" className="grid text-[18px] font-semibold">
                 {currentLanguage === "ar"
@@ -412,10 +414,9 @@ const EditStudent = ({ params }: { params: Params }) => {
               </label>
             </div>
             <div className="flex justify-center text-center">
-
               <button
                 type="submit"
-                className="mt-5 w-fit px-4 rounded-lg bg-primary py-3 text-[18px] font-semibold text-white transition-all duration-200 hover:bg-blue-700"
+                className="mt-5 w-fit rounded-lg bg-primary px-4 py-3 text-[18px] font-semibold text-white transition-all duration-200 hover:bg-blue-700"
                 disabled={isLoading}
               >
                 {isLoading ? "Updating..." : "Update Student"}

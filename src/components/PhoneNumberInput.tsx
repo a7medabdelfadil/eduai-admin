@@ -75,7 +75,7 @@ const PhoneNumberInput: React.FC<PhoneNumberInputProps> = ({
           inputMode="numeric"
           pattern="[0-9]*"
           placeholder={getTranslation("phoneNumber")}
-          className="flex-1 bg-bgPrimary rounded-xl border-none outline-none"
+          className="flex-1 rounded-xl border-none bg-bgPrimary outline-none"
           {...register("number", {
             required: true,
             onChange: e => {

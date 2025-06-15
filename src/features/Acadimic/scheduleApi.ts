@@ -33,12 +33,11 @@ export const scheduleApi = createApi({
     }),
     //
     averageAttendance: builder.query({
-      query: () =>
-        `/api/v1/aiInsights/average-attendance-at-school`,
+      query: () => `/api/v1/aiInsights/average-attendance-at-school`,
     }),
     //
     topStudentsInClass: builder.query({
-      query: ({classRoom}) =>
+      query: ({ classRoom }) =>
         `/api/v1/ai-insights/top-student-in-classroom?classroom-id=${classRoom}`,
     }),
     //

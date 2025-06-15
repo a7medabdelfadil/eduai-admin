@@ -85,16 +85,20 @@ const Chat = () => {
         setLocalChats(prevChats => {
           const updatedChats = [...data.data.content];
           return updatedChats.map(newChat => {
-            const existingChat = prevChats.find(c => c.chatId === newChat.chatId);
+            const existingChat = prevChats.find(
+              c => c.chatId === newChat.chatId,
+            );
             return existingChat
-              ? { ...newChat, numberOfNewMessages: existingChat.numberOfNewMessages }
+              ? {
+                  ...newChat,
+                  numberOfNewMessages: existingChat.numberOfNewMessages,
+                }
               : newChat;
           });
         });
       }
     }
   }, [data]);
-
 
   const handleChatUpdate = useCallback(
     (update: ChatData) => {
@@ -142,7 +146,7 @@ const Chat = () => {
           numberOfNewMessages: isActiveChat
             ? 0
             : (updatedChats[existingChatIndex].numberOfNewMessages || 0) +
-            (update.numberOfNewMessages || 1),
+              (update.numberOfNewMessages || 1),
           targetUser: {
             ...updatedChats[existingChatIndex].targetUser,
             ...(update.targetUser || {}),
@@ -213,7 +217,6 @@ const Chat = () => {
     }
   };
 
-
   const onSubmit = async (formData: any) => {
     setCreating(true);
     try {
@@ -222,11 +225,13 @@ const Chat = () => {
       );
 
       if (existingChat) {
-        toast.info(getTranslation(
-          "Chat already exists",
-          "المحادثة موجودة بالفعل",
-          "La discussion existe déjà"
-        ));
+        toast.info(
+          getTranslation(
+            "Chat already exists",
+            "المحادثة موجودة بالفعل",
+            "La discussion existe déjà",
+          ),
+        );
         setUserId(existingChat.chatId);
         setUserName(existingChat.targetUser.name);
         setUserRole(existingChat.targetUser.Role);
@@ -238,11 +243,13 @@ const Chat = () => {
       const result = await createChat(formData).unwrap();
 
       setModalOpen(false);
-      toast.success(getTranslation(
-        "Chat created successfully",
-        "تم إنشاء المحادثة بنجاح",
-        "Discussion créée avec succès"
-      ));
+      toast.success(
+        getTranslation(
+          "Chat created successfully",
+          "تم إنشاء المحادثة بنجاح",
+          "Discussion créée avec succès",
+        ),
+      );
 
       if (result?.data) {
         handleChatUpdate({
@@ -260,17 +267,17 @@ const Chat = () => {
 
       regetusers();
     } catch (err: any) {
-      toast.error(getTranslation(
-        "Failed to create chat",
-        "فشل في إنشاء المحادثة",
-        "Échec de la création de la discussion"
-      ));
+      toast.error(
+        getTranslation(
+          "Failed to create chat",
+          "فشل في إنشاء المحادثة",
+          "Échec de la création de la discussion",
+        ),
+      );
     } finally {
       setCreating(false);
     }
   };
-
-
 
   const handleOpenModal = () => {
     setModalOpen(true);
@@ -339,7 +346,7 @@ const Chat = () => {
       <BreadCrumbs breadcrumbs={breadcrumbs} />
 
       <Container>
-        <div className="mb-4 -mt-2 -ml-1 flex items-center justify-between">
+        <div className="-ml-1 -mt-2 mb-4 flex items-center justify-between">
           <h1 className="text-3xl font-semibold">
             {currentLanguage === "en"
               ? "Reported Chat"
@@ -353,15 +360,15 @@ const Chat = () => {
         </div>
         <div
           dir={currentLanguage === "ar" ? "rtl" : "ltr"}
-          className="min-[1180px]:flex w-full bg-bgPrimary justify-between gap-10 rounded-xl p-6"
+          className="w-full justify-between gap-10 rounded-xl bg-bgPrimary p-6 min-[1180px]:flex"
         >
-          <div className="max-[1180px]:h-fit h-[700px] max-[1180px]:w-full w-[40%] mb-6 overflow-y-auto rounded-xl bg-bgPrimary">
+          <div className="mb-6 h-[700px] w-[40%] overflow-y-auto rounded-xl bg-bgPrimary max-[1180px]:h-fit max-[1180px]:w-full">
             <div className="flex-1 overflow-y-auto">
               {isLoading ? (
                 <Spinner />
               ) : (
                 <>
-                  <div className="mt-6 flex justify-between items-center">
+                  <div className="mt-6 flex items-center justify-between">
                     {/* Search Input */}
                     <div
                       dir={currentLanguage === "ar" ? "rtl" : "ltr"}
@@ -374,13 +381,13 @@ const Chat = () => {
                         <input
                           onChange={e => setSearch(e.target.value)}
                           type="text"
-                          className={`w-full bg-bgPrimary border-borderPrimary ${currentLanguage == "ar" ? "ml-4" : "mr-4"} rounded-xl border-2 px-4 py-2 ps-11 text-lg outline-none`}
+                          className={`w-full border-borderPrimary bg-bgPrimary ${currentLanguage == "ar" ? "ml-4" : "mr-4"} rounded-xl border-2 px-4 py-2 ps-11 text-lg outline-none`}
                           placeholder={getTranslation(
                             "Search",
                             "بحث",
                             "Recherche",
-                          )} />
-
+                          )}
+                        />
                       </div>
                     </div>
 
@@ -422,15 +429,16 @@ const Chat = () => {
                         return search.toLocaleLowerCase() === ""
                           ? true
                           : chat.targetUser.name
-                            .toLocaleLowerCase()
-                            .includes(search.toLocaleLowerCase());
+                              .toLocaleLowerCase()
+                              .includes(search.toLocaleLowerCase());
                       })
                       .map((chat: ChatData) => (
                         <div
                           key={chat.chatId}
                           onClick={() => handleChatClick(chat)}
-                          className={`flex w-full cursor-pointer items-center border-b border-borderPrimary px-2 py-2 hover:bg-bgSecondary ${userId === chat.chatId ? "bg-bgSecondary" : ""
-                            }`}
+                          className={`flex w-full cursor-pointer items-center border-b border-borderPrimary px-2 py-2 hover:bg-bgSecondary ${
+                            userId === chat.chatId ? "bg-bgSecondary" : ""
+                          }`}
                         >
                           <div className="flex-shrink-0">
                             <img
@@ -444,7 +452,7 @@ const Chat = () => {
                             />
                           </div>
 
-                          <div className="ml-4 flex-1 min-w-0">
+                          <div className="ml-4 min-w-0 flex-1">
                             <div className="flex items-center justify-between">
                               <p className="truncate font-semibold">
                                 {chat.targetUser.name}
@@ -453,12 +461,12 @@ const Chat = () => {
                                 </span>
                               </p>
                               {chat.numberOfNewMessages > 0 && (
-                                <span className="ml-2 rounded-full bg-primary px-2 text-white text-sm">
+                                <span className="ml-2 rounded-full bg-primary px-2 text-sm text-white">
                                   {chat.numberOfNewMessages}
                                 </span>
                               )}
                             </div>
-                            <p className="mt-1 text-sm text-secondary line-clamp-2">
+                            <p className="mt-1 line-clamp-2 text-sm text-secondary">
                               {chat.lastMessage}
                             </p>
                           </div>
@@ -482,7 +490,6 @@ const Chat = () => {
                             </svg>
                           </button>
                         </div>
-
                       ))}
                     {localChats.length === 0 && !isLoading && (
                       <div className="mt-10 text-center text-textSecondary">
@@ -510,7 +517,7 @@ const Chat = () => {
               )}
             </div>
           </div>
-          <div className="flex max-[1180px]:w-full h-[700px] w-[60%] rounded-xl bg-bgSecondary">
+          <div className="flex h-[700px] w-[60%] rounded-xl bg-bgSecondary max-[1180px]:w-full">
             {userId == "" ? (
               <div className="flex h-full w-full items-center justify-center">
                 <div>
@@ -569,15 +576,15 @@ const Chat = () => {
               >
                 {creating
                   ? getTranslation(
-                    "Adding...",
-                    "يتم الإضافة...",
-                    "Ajout en cours...",
-                  )
+                      "Adding...",
+                      "يتم الإضافة...",
+                      "Ajout en cours...",
+                    )
                   : getTranslation(
-                    "Add Chat",
-                    "إضافة دردشة",
-                    "Ajouter un Chat",
-                  )}
+                      "Add Chat",
+                      "إضافة دردشة",
+                      "Ajouter un Chat",
+                    )}
               </button>
             </form>
           )}

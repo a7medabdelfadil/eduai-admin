@@ -24,8 +24,16 @@ const staticDays = [
 ];
 
 const timeSlots = [
-  "07:00", "08:00", "09:00", "10:00", "11:00",
-  "12:00", "13:00", "14:00", "15:00", "16:00"
+  "07:00",
+  "08:00",
+  "09:00",
+  "10:00",
+  "11:00",
+  "12:00",
+  "13:00",
+  "14:00",
+  "15:00",
+  "16:00",
 ];
 
 const START_TIME = "07:00";
@@ -99,12 +107,19 @@ const TimeTable = ({
     setDropdownOpenId(dropdownOpenId === id ? null : id);
   };
 
-  const findOverlappingEvents = (currentEvent: Schedule, dayEvents: Schedule[]) => {
-    return dayEvents.filter(event => 
-      event.id !== currentEvent.id &&
-      ((event.startTime >= currentEvent.startTime && event.startTime < currentEvent.endTime) ||
-       (event.endTime > currentEvent.startTime && event.endTime <= currentEvent.endTime) ||
-       (event.startTime <= currentEvent.startTime && event.endTime >= currentEvent.endTime))
+  const findOverlappingEvents = (
+    currentEvent: Schedule,
+    dayEvents: Schedule[],
+  ) => {
+    return dayEvents.filter(
+      event =>
+        event.id !== currentEvent.id &&
+        ((event.startTime >= currentEvent.startTime &&
+          event.startTime < currentEvent.endTime) ||
+          (event.endTime > currentEvent.startTime &&
+            event.endTime <= currentEvent.endTime) ||
+          (event.startTime <= currentEvent.startTime &&
+            event.endTime >= currentEvent.endTime)),
     );
   };
 
@@ -118,7 +133,9 @@ const TimeTable = ({
       className="mb-20 grid w-full overflow-x-auto"
     >
       <div className="grid w-full overflow-x-auto">
-        <div className={`mx-3 rounded-xl bg-bgPrimary p-6 ${booleanValue ? "w-[1750px]" : "w-[1570px]"} overflow-hidden`}>
+        <div
+          className={`mx-3 rounded-xl bg-bgPrimary p-6 ${booleanValue ? "w-[1750px]" : "w-[1570px]"} overflow-hidden`}
+        >
           {/* Day headers */}
           <div className="flex justify-between">
             <div className="w-1/12"></div>
@@ -162,7 +179,7 @@ const TimeTable = ({
               {/* Days columns with events */}
               {staticDays.map(day => {
                 const dayEvents = scheduleData.filter(event =>
-                  event.day.toUpperCase().startsWith(day.name.toUpperCase())
+                  event.day.toUpperCase().startsWith(day.name.toUpperCase()),
                 );
 
                 return (
@@ -172,20 +189,30 @@ const TimeTable = ({
                   >
                     {dayEvents.filter(isEventVisible).map(event => {
                       const top = timeToPosition(event.startTime);
-                      const height = calculateHeight(event.startTime, event.endTime);
-                      const overlappingEvents = findOverlappingEvents(event, dayEvents.filter(isEventVisible));
+                      const height = calculateHeight(
+                        event.startTime,
+                        event.endTime,
+                      );
+                      const overlappingEvents = findOverlappingEvents(
+                        event,
+                        dayEvents.filter(isEventVisible),
+                      );
                       const hasOverlap = overlappingEvents.length > 0;
 
                       return (
                         <React.Fragment key={event.id}>
                           <div
                             className={`absolute left-0 right-0 overflow-auto rounded-lg border-l-4 border-primary bg-thead p-4 text-primary shadow-lg transition-all duration-200 ${
-                              hasOverlap ? 'hover:z-40 hover:scale-105' : ''
-                            } ${hoveredEvent === event.id ? 'z-50 scale-105' : ''}`}
-                            style={{ 
-                              top: `${top}%`, 
+                              hasOverlap ? "hover:z-40 hover:scale-105" : ""
+                            } ${hoveredEvent === event.id ? "z-50 scale-105" : ""}`}
+                            style={{
+                              top: `${top}%`,
                               height: `${height}%`,
-                              opacity: hoveredEvent === null || hoveredEvent === event.id ? 1 : 0.5
+                              opacity:
+                                hoveredEvent === null ||
+                                hoveredEvent === event.id
+                                  ? 1
+                                  : 0.5,
                             }}
                             onMouseEnter={() => setHoveredEvent(event.id)}
                             onMouseLeave={() => setHoveredEvent(null)}
@@ -217,12 +244,17 @@ const TimeTable = ({
                             <div className="font-bold">{event.courseName}</div>
                             <div className="text-sm">{`${event.startTime} - ${event.endTime}`}</div>
                             <div className="text-xs">{event.classroomName}</div>
-                            
+
                             {hasOverlap && hoveredEvent === event.id && (
                               <div className="absolute left-full top-0 mt-2 w-48 rounded-lg bg-bgPrimary p-2 shadow-lg">
-                                <div className="text-sm font-semibold">Overlapping Schedules:</div>
+                                <div className="text-sm font-semibold">
+                                  Overlapping Schedules:
+                                </div>
                                 {overlappingEvents.map(overlap => (
-                                  <div key={overlap.id} className="mt-1 text-xs">
+                                  <div
+                                    key={overlap.id}
+                                    className="mt-1 text-xs"
+                                  >
                                     <div>{overlap.courseName}</div>
                                     <div>{`${overlap.startTime} - ${overlap.endTime}`}</div>
                                   </div>
@@ -244,7 +276,7 @@ const TimeTable = ({
                                 className="block w-full px-4 py-2 text-left text-red-600"
                               >
                                 <svg
-                                  className="h-5 w-5 mr-2"
+                                  className="mr-2 h-5 w-5"
                                   fill="none"
                                   viewBox="0 0 24 24"
                                   stroke="currentColor"
@@ -262,7 +294,7 @@ const TimeTable = ({
                                 className="block w-full px-4 py-2 text-left"
                               >
                                 <svg
-                                  className="h-5 w-5 mr-2"
+                                  className="mr-2 h-5 w-5"
                                   viewBox="0 0 24 24"
                                   strokeWidth="2"
                                   stroke="currentColor"

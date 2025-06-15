@@ -35,7 +35,7 @@ const textVariants = cva("text-textPrimary", {
       muted: "text-textMuted",
       warning: "text-warning",
       error: "text-error",
-      success: "text-success"
+      success: "text-success",
     },
   },
   defaultVariants: {
@@ -50,11 +50,21 @@ type TextProps = {
   size?: VariantProps<typeof textVariants>["size"];
   color?: VariantProps<typeof textVariants>["color"];
   className?: string;
-  children: React.ReactNode; 
+  children: React.ReactNode;
 };
 
 const Text = forwardRef<HTMLParagraphElement, TextProps>(
-  ({ className, font = "default", color = "default", size = "default", children, ...props }, ref) => {
+  (
+    {
+      className,
+      font = "default",
+      color = "default",
+      size = "default",
+      children,
+      ...props
+    },
+    ref,
+  ) => {
     return (
       <p
         ref={ref}
@@ -64,7 +74,7 @@ const Text = forwardRef<HTMLParagraphElement, TextProps>(
         {children}
       </p>
     );
-  }
+  },
 );
 
 Text.displayName = "Text";

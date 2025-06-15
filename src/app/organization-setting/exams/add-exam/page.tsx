@@ -119,7 +119,7 @@ const AddExam = () => {
     <>
       <BreadCrumbs breadcrumbs={breadcrumbs} />
       <Container>
-        <div className="mb-8 -mt-2 -ml-1 flex items-center justify-between">
+        <div className="-ml-1 -mt-2 mb-8 flex items-center justify-between">
           <h1 className="text-3xl font-semibold">
             {currentLanguage === "en"
               ? "Add Exam"
@@ -131,8 +131,11 @@ const AddExam = () => {
             {/* default */}
           </h1>
         </div>
-        <form className="flex h-full w-full items-center justify-center" onSubmit={handleSubmit(onSubmit)}>
-          <div className="rounded-xl bg-bgPrimary p-10 w-[90] md:w-[80%]">
+        <form
+          className="flex h-full w-full items-center justify-center"
+          onSubmit={handleSubmit(onSubmit)}
+        >
+          <div className="w-[90] rounded-xl bg-bgPrimary p-10 md:w-[80%]">
             <div className="flex items-center justify-start gap-2">
               <svg
                 className="h-6 w-6 font-bold text-secondary group-hover:text-hover"
@@ -164,7 +167,7 @@ const AddExam = () => {
               </h1>
             </div>
 
-            <div className="p-6 grid grid-cols-2 gap-4 max-[1278px]:grid-cols-1">
+            <div className="grid grid-cols-2 gap-4 p-6 max-[1278px]:grid-cols-1">
               <label
                 htmlFor="examName"
                 className="grid text-[18px] font-semibold"
@@ -177,7 +180,7 @@ const AddExam = () => {
                 <input
                   id="examName"
                   type="text"
-                  className="w-full bg-bgPrimary rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                   placeholder={
                     currentLanguage === "ar"
                       ? "أدخل اسم الامتحان"
@@ -210,7 +213,7 @@ const AddExam = () => {
                 <input
                   id="examGrade"
                   type="number"
-                  className="w-full bg-bgPrimary rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                   placeholder={
                     currentLanguage === "ar"
                       ? "أدخل درجة الامتحان"
@@ -243,7 +246,7 @@ const AddExam = () => {
                 <input
                   id="passingGrade"
                   type="number"
-                  className="w-full bg-bgPrimary rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                   placeholder={
                     currentLanguage === "ar"
                       ? "أدخل درجة النجاح"
@@ -275,7 +278,7 @@ const AddExam = () => {
                     : "Study Level"}
                 <select
                   id="studyLevel"
-                  className="w-full bg-bgPrimary rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                   {...register("studyLevel", { required: true })}
                 >
                   <option value="">
@@ -315,7 +318,7 @@ const AddExam = () => {
                     : "Legal Type"}
                 <select
                   id="legalType"
-                  className="w-full bg-bgPrimary rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                   {...register("legalType", { required: true })}
                 >
                   <option value="">

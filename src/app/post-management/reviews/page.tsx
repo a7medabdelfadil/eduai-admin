@@ -3,9 +3,9 @@
 import Link from "next/link";
 import { useSelector } from "react-redux";
 import { RootState } from "@/GlobalRedux/store";
-import Soon from "@/components/soon";
 import BreadCrumbs from "@/components/BreadCrumbs";
 import Spinner from "@/components/spinner";
+import Container from "@/components/Container";
 
 const Reviews = () => {
   const breadcrumbs = [
@@ -41,20 +41,8 @@ const Reviews = () => {
     );
   return (
     <>
-      {/* <Soon /> */}
       <BreadCrumbs breadcrumbs={breadcrumbs} />
-      <div
-        dir={currentLanguage === "ar" ? "rtl" : "ltr"}
-        className={`${
-          currentLanguage === "ar"
-            ? booleanValue
-              ? "lg:mr-[100px]"
-              : "lg:mr-[270px]"
-            : booleanValue
-              ? "lg:ml-[100px]"
-              : "lg:ml-[270px]"
-        } relative mx-3 mt-10 h-screen overflow-x-auto bg-transparent sm:rounded-lg`}
-      >
+      <Container>
         <div className="justify-left mb-[40px] ml-4 mt-[20px] flex gap-5 text-[23px] font-semibold">
           <Link href="/post-management">
             {currentLanguage === "ar"
@@ -305,7 +293,7 @@ const Reviews = () => {
             </table>
           </div>
         </div>
-      </div>
+      </Container>
     </>
   );
 };

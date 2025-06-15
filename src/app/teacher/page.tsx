@@ -1,13 +1,11 @@
 /* eslint-disable @next/next/no-img-element */
 "use client";
-import Pagination from "@/components/pagination";
-import Spinner from "@/components/spinner";
 import {
   useDeleteTeachersMutation,
   useGetAllTeachersQuery,
 } from "@/features/User-Management/teacherApi";
 import Link from "next/link";
-import { useState, useEffect, SetStateAction, useRef } from "react";
+import { useState, useRef } from "react";
 import { RootState } from "@/GlobalRedux/store";
 import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
@@ -20,6 +18,18 @@ import { Text } from "@/components/Text";
 import { BiSearchAlt } from "react-icons/bi";
 import { HiDownload } from "react-icons/hi";
 import { MdEdit } from "react-icons/md";
+import Container from "@/components/Container";
+import {
+  Table,
+  TableHeader,
+  TableRow,
+  TableHead,
+  TableBody,
+  TableCell,
+} from "@/components/Table";
+import { Skeleton } from "@/components/Skeleton";
+import SeeMoreButton from "@/components/SeeMoreButton";
+import { BiShow, BiLock } from "react-icons/bi";
 
 const Teacher = () => {
   const breadcrumbs = [
@@ -43,31 +53,16 @@ const Teacher = () => {
     },
   ];
   const [selectedTeacher, setSelectedTeacher] = useState<Teacher | null>(null);
-  console.log("👾 ~ Teacher ~ selectedTeacher:", selectedTeacher);
   const [showModal, setShowModal] = useState(false);
 
-  const booleanValue = useSelector((state: RootState) => state.boolean.value);
-
   type Teacher = Record<string, any>;
-  const [currentPage, setCurrentPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(10);
   const [search, setSearch] = useState("");
   const { data, error, isLoading, refetch } = useGetAllTeachersQuery({
     archived: "false",
-    page: currentPage,
-    size: rowsPerPage,
+    page: 0,
+    size: 1000000,
   });
-  const [selectAll, setSelectAll] = useState(false);
-
-  const onPageChange = (page: SetStateAction<number>) => {
-    setCurrentPage(page);
-  };
-  const onElementChange = (ele: SetStateAction<number>) => {
-    setRowsPerPage(ele);
-    setCurrentPage(0);
-  };
-
-  const [deleteTeachers] = useDeleteTeachersMutation();
+  const [deleteTeachers, { isLoading: isDeleting }] = useDeleteTeachersMutation();
 
   const handleDelete = async (id: string) => {
     try {
@@ -139,47 +134,6 @@ const Teacher = () => {
       setIsLoadingDownload(false); // End loading regardless of success or failure
     }
   };
-
-  const handleSelectAll = () => {
-    setSelectAll(!selectAll);
-    const checkboxes = document.querySelectorAll<HTMLInputElement>(
-      'input[type="checkbox"]:not(#checkbox-all-search)',
-    );
-    checkboxes.forEach(checkbox => {
-      checkbox.checked = !selectAll;
-    });
-  };
-
-  useEffect(() => {
-    const handleOtherCheckboxes = () => {
-      const allCheckboxes = document.querySelectorAll<HTMLInputElement>(
-        'input[type="checkbox"]:not(#checkbox-all-search)',
-      );
-      const allChecked = Array.from(allCheckboxes).every(
-        checkbox => checkbox.checked,
-      );
-      const selectAllCheckbox = document.getElementById(
-        "checkbox-all-search",
-      ) as HTMLInputElement | null;
-      if (selectAllCheckbox) {
-        selectAllCheckbox.checked = allChecked;
-        setSelectAll(allChecked);
-      }
-    };
-
-    const otherCheckboxes = document.querySelectorAll<HTMLInputElement>(
-      'input[type="checkbox"]:not(#checkbox-all-search)',
-    );
-    otherCheckboxes.forEach(checkbox => {
-      checkbox.addEventListener("change", handleOtherCheckboxes);
-    });
-
-    return () => {
-      otherCheckboxes.forEach(checkbox => {
-        checkbox.removeEventListener("change", handleOtherCheckboxes);
-      });
-    };
-  }, []);
 
   const { language: currentLanguage, loading } = useSelector(
     (state: RootState) => state.language,
@@ -275,29 +229,31 @@ const Teacher = () => {
     if (!date) return "N/A";
     return new Date(date).toLocaleDateString("en-GB");
   };
+  const translate = {
+    fullName: currentLanguage === "ar" ? "الاسم الكامل" : currentLanguage === "fr" ? "Nom complet" : "Full Name",
+    id: currentLanguage === "ar" ? "رقم" : currentLanguage === "fr" ? "ID" : "ID",
+    gender: currentLanguage === "ar" ? "الجنس" : currentLanguage === "fr" ? "Genre" : "Gender",
+    nationality: currentLanguage === "ar" ? "الجنسية" : currentLanguage === "fr" ? "Nationalité" : "Nationality",
+    email: currentLanguage === "ar" ? "البريد الإلكتروني" : currentLanguage === "fr" ? "Email" : "Email",
+    mobile: currentLanguage === "ar" ? "الجوال" : currentLanguage === "fr" ? "Téléphone" : "Mobile",
+    view: currentLanguage === "ar" ? "عرض" : currentLanguage === "fr" ? "Voir" : "View",
+    lock: currentLanguage === "ar" ? "قفل" : currentLanguage === "fr" ? "Verrouiller" : "Lock",
+    action: currentLanguage === "ar" ? "الإجراء" : currentLanguage === "fr" ? "Action" : "Action",
+    noData: currentLanguage === "ar" ? "لا توجد بيانات" : currentLanguage === "fr" ? "Aucune donnée disponible" : "No data available",
+  };
 
-  if (loading || isLoading)
-    return (
-      <div className="flex h-screen w-full items-center justify-center">
-        <Spinner />
-      </div>
-    );
+  const filteredData = data?.data.content.filter((teacher: Teacher) =>
+    search.trim() === "" ? true : teacher.name.toLowerCase().includes(search.toLowerCase())
+  ) || [];
+
+  const [visibleCount, setVisibleCount] = useState(20);
+  const visibleData = filteredData.slice(0, visibleCount);
+
   return (
     <>
       <BreadCrumbs breadcrumbs={breadcrumbs} />
-      <div
-        dir={currentLanguage === "ar" ? "rtl" : "ltr"}
-        className={`${
-          currentLanguage === "ar"
-            ? booleanValue
-              ? "lg:mr-[100px]"
-              : "lg:mr-[270px]"
-            : booleanValue
-              ? "lg:ml-[100px]"
-              : "lg:ml-[270px]"
-        } justify-left mb-4 ml-4 mt-5 flex flex-col text-[20px] font-medium`}
-      >
-        <div className="flex items-center justify-between">
+      <Container>
+        <div className="-mt-6 flex items-center justify-between">
           <Text font="bold" size="3xl">
             {currentLanguage === "ar"
               ? "جميع المعلمين"
@@ -305,7 +261,7 @@ const Teacher = () => {
                 ? "Tous les enseignants"
                 : "All Teacher"}
           </Text>
-          <div className="flex gap-4">
+          <div className="flex">
             <button
               onClick={handleOpenModal}
               className="mx-3 mb-5 flex w-[190px] justify-center whitespace-nowrap rounded-xl border border-primary bg-bgPrimary px-4 py-2 text-[18px] font-semibold text-primary duration-300 ease-in hover:shadow-xl"
@@ -336,8 +292,8 @@ const Teacher = () => {
             <button
               onClick={() =>
                 handleExport({
-                  size: rowsPerPage,
-                  page: currentPage,
+                  size: 0,
+                  page: 1000000,
                   archived: false,
                   graduated: false,
                 })
@@ -377,7 +333,7 @@ const Teacher = () => {
                   type="text"
                   id="icon"
                   name="icon"
-                  className="border-borderSecondary block w-full rounded-lg border-2 px-4 py-2 ps-11 text-lg outline-none disabled:pointer-events-none disabled:opacity-50 dark:border-borderPrimary"
+                  className="border-borderSecondary block w-full rounded-lg border-2 bg-bgPrimary px-4 py-2 ps-11 text-lg outline-none disabled:pointer-events-none disabled:opacity-50 dark:border-borderPrimary"
                   placeholder={
                     currentLanguage === "ar"
                       ? "ابحث عن أي شيء"
@@ -388,13 +344,13 @@ const Teacher = () => {
                 />
                 <span className="min-w-[120px] text-primary">
                   {
-                    data?.data.content.filter((teacher: Teacher) => {
-                      return search.toLocaleLowerCase() === ""
-                        ? teacher
-                        : teacher.name.toLocaleLowerCase().includes(search);
-                    }).length
+                    filteredData.length
                   }{" "}
-                  Result(s)
+                  {currentLanguage === "ar"
+                    ? "نتيجة"
+                    : currentLanguage === "fr"
+                      ? "résultat(s)"
+                      : "Result(s)"}
                 </span>
               </div>
             </div>
@@ -402,7 +358,7 @@ const Teacher = () => {
           <div className="flex justify-center">
             <Link
               href="/add-new-teacher"
-              className="mx-3 mb-5 w-fit whitespace-nowrap rounded-xl bg-primary p-4 text-[18px] font-semibold text-white duration-300 ease-in hover:bg-hover hover:shadow-xl"
+              className="whitespace-nowrap rounded-xl bg-primary px-4 py-2 text-[16px] font-semibold text-white transition hover:bg-hover hover:shadow-md"
             >
               {currentLanguage === "en"
                 ? "+ Add new Teacher"
@@ -414,183 +370,90 @@ const Teacher = () => {
             </Link>
           </div>
         </div>
-        <div className="relative overflow-auto shadow-md sm:rounded-lg">
-          <table className="w-full overflow-x-auto text-left text-sm text-textSecondary rtl:text-right">
-            <thead className="bg-thead text-xs uppercase text-textPrimary">
-              <tr>
-                <th scope="col" className="p-4">
-                  <div className="flex items-center">
-                    {/* Add event listener for select all checkbox */}
-                    <input
-                      id="checkbox-all-search"
-                      type="checkbox"
-                      className="-gray-800 h-4 w-4 rounded border-borderPrimary bg-bgPrimary text-blue-600 focus:ring-2 focus:ring-hover"
-                      onChange={handleSelectAll}
-                    />
-                  </div>
-                </th>
-                <th scope="col" className="whitespace-nowrap px-6 py-1">
-                {currentLanguage === "ar"
-                    ? "الاسم الكامل"
-                    : currentLanguage === "fr"
-                      ? "Nom complet"
-                      : "Full Name"}
-                </th>
-                <th scope="col" className="whitespace-nowrap px-6 py-1">
-                  {currentLanguage === "en"
-                    ? "ID"
-                    : currentLanguage === "ar"
-                      ? "رقم"
-                      : "ID"}
-                </th>
-                <th scope="col" className="whitespace-nowrap px-6 py-1">
-                  {currentLanguage === "en"
-                    ? "Gender"
-                    : currentLanguage === "ar"
-                      ? "الجنس"
-                      : "Genre"}
-                </th>
-                <th scope="col" className="whitespace-nowrap px-6 py-1">
-                  {currentLanguage === "en"
-                    ? "Nationality"
-                    : currentLanguage === "ar"
-                      ? "الجنسية"
-                      : "Nationalité"}
-                </th>
-                <th scope="col" className="whitespace-nowrap px-6 py-1">
-                  {currentLanguage === "en"
-                    ? "Email"
-                    : currentLanguage === "ar"
-                      ? "البريد الإلكتروني"
-                      : "Email"}
-                </th>
-                <th scope="col" className="whitespace-nowrap px-6 py-1">
-                  {currentLanguage === "en"
-                    ? "Mobile"
-                    : currentLanguage === "ar"
-                      ? "الجوال"
-                      : "Mobile"}
-                </th>
-                <th scope="col" className="whitespace-nowrap px-6 py-1">
-                  {currentLanguage === "en"
-                    ? "View"
-                    : currentLanguage === "ar"
-                      ? "عرض"
-                      : "Voir"}
-                </th>
-                <th scope="col" className="whitespace-nowrap px-6 py-1">
-                  {currentLanguage === "en"
-                    ? "Action"
-                    : currentLanguage === "ar"
-                      ? "الإجراء"
-                      : "Action"}
-                </th>
-              </tr>
-            </thead>
+        <div className="relative overflow-auto shadow-md sm:rounded-lg -mt-2 bg-bgPrimary">
 
-            <tbody>
-              {data?.data.content
-                .filter((teacher: Teacher) => {
-                  return search.toLocaleLowerCase() === ""
-                    ? teacher
-                    : teacher.name.toLocaleLowerCase().includes(search);
-                })
-                .map((teacher: Teacher, index: number) => (
-                  <tr
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>{translate.fullName}</TableHead>
+                <TableHead>{translate.id}</TableHead>
+                <TableHead>{translate.gender}</TableHead>
+                <TableHead>{translate.nationality}</TableHead>
+                <TableHead>{translate.email}</TableHead>
+                <TableHead>{translate.mobile}</TableHead>
+                <TableHead>{translate.action}</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {isLoading ? (
+                [...Array(3)].map((_, i) => (
+                  <TableRow key={i}>
+                    {Array.from({ length: 7 }).map((_, j) => (
+                      <TableCell key={j}><Skeleton className="h-4 w-24" /></TableCell>
+                    ))}
+                  </TableRow>
+                ))
+              ) : visibleData.length === 0 ? (
+                <TableRow>
+                  <TableCell colSpan={7} className="text-center font-medium">{translate.noData}</TableCell>
+                </TableRow>
+              ) : (
+                visibleData.map((teacher: Teacher, index: number) => (
+                  <TableRow
+                    className="cursor-pointer"
                     key={teacher.id}
-                    onClick={() => {
+                    data-index={index}
+                    onClick={(e) => {
+                      if ((e.target as HTMLElement).closest("a")) return;
                       setSelectedTeacher(teacher);
                       setShowModal(true);
                     }}
-                    className={`cursor-pointer border-b border-borderPrimary text-textPrimary ${
-                      index % 2 === 0 ? "bg-bgRowTable" : "bg-bgPrimary"
-                    }`}
                   >
-                    <td className="w-4 p-4">
-                      <div className="flex items-center">
-                        <input
-                          id="checkbox-table-search-1"
-                          type="checkbox"
-                          className="h-4 w-4 rounded border-gray-300 bg-gray-100 text-blue-600 focus:ring-2 focus:ring-blue-500"
-                        />
-                      </div>
-                    </td>
-                    <th
-                      scope="row"
-                      className="whitespace-nowrap px-6 py-1 align-middle font-medium"
-                    >
-                      <div className="flex items-center gap-2">
-                        <div className="w-[50px]">
-                          <img
-                            src={teacher.picture ?? "/images/userr.png"}
-                            className="mx-2 h-[25px] w-[25px] rounded-full"
-                            alt="#"
-                          />
-                        </div>
-                        <p className="text-textPrimary">
-                          {String(teacher.name)}
-                        </p>
-                      </div>
-                    </th>
-                    <td className="whitespace-nowrap px-6 py-1">
-                      {teacher.id}
-                    </td>
-                    <td className="whitespace-nowrap px-6 py-1">
-                      {teacher.gender}
-                    </td>
-                    <td className="whitespace-nowrap px-6 py-1">
-                      {teacher.nationality}
-                    </td>
-                    <td className="whitespace-nowrap px-6 py-1">
-                      {teacher.email}
-                    </td>
-                    <td className="whitespace-nowrap px-6 py-1">
-                      {teacher.number}
-                    </td>
-                    <td className="whitespace-nowrap px-6 py-1">
+                    <TableCell className="flex items-center gap-2">
+                      <img
+                        src={teacher.picture ?? "/images/userr.png"}
+                        className="mx-2 h-[25px] w-[25px] rounded-full"
+                        alt="#"
+                      />
+                      <p>{teacher.name}</p>
+                    </TableCell>
+                    <TableCell>{teacher.id}</TableCell>
+                    <TableCell>{teacher.gender}</TableCell>
+                    <TableCell>{teacher.nationality}</TableCell>
+                    <TableCell>{teacher.email}</TableCell>
+                    <TableCell>{teacher.number}</TableCell>
+                    <TableCell className="flex items-center gap-3">
                       <Link
                         href={`/teacher/view-teacher/${teacher.id}`}
-                        className="font-medium text-blue-600 hover:underline"
+                        className="text-primary hover:text-primaryHover transition"
+                        title={translate.view}
+                        onClick={(e) => e.stopPropagation()}
                       >
-                        {currentLanguage === "en"
-                          ? "View"
-                          : currentLanguage === "ar"
-                            ? "عرض"
-                            : "Voir"}
+                        <BiShow size={20} />
                       </Link>
-                    </td>
-                    <td className="whitespace-nowrap px-6 py-1">
                       <button
-                        onClick={() => handleDelete(teacher.id)}
-                        className="rounded-lg bg-error px-2 py-1 font-semibold text-white shadow-lg delay-150 duration-300 ease-in-out hover:-translate-y-1 hover:scale-110"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleDelete(teacher.id);
+                        }}
+                        className="text-error hover:text-red-800 transition"
+                        title={translate.lock}
+                        disabled={isDeleting}
                       >
-                        {currentLanguage === "en"
-                          ? "Lock"
-                          : currentLanguage === "ar"
-                            ? "قفل"
-                            : "Verrouiller"}
+                        <BiLock size={20} />
                       </button>
-                    </td>
-                  </tr>
-                ))}
-            </tbody>
-          </table>
-          {(data?.data.content.length == 0 || data == null) && (
-            <div className="flex w-full justify-center py-3 text-center text-[18px] font-semibold">
-              There is No Data
-            </div>
+                    </TableCell>
+                  </TableRow>
+                ))
+              )}
+            </TableBody>
+          </Table>
+
+          {visibleCount < filteredData.length && (
+            <SeeMoreButton onClick={() => setVisibleCount(prev => prev + 20)} />
           )}
         </div>
-        <div className="relative overflow-auto">
-          <Pagination
-            totalPages={data?.data.totalPages}
-            elementsPerPage={rowsPerPage}
-            onChangeElementsPerPage={onElementChange}
-            currentPage={currentPage}
-            onChangePage={onPageChange}
-          />
-        </div>
-      </div>
+      </Container>
       <Modal isOpen={isModalOpen} onClose={handleCloseModal}>
         <h1 className="text-lg font-semibold">Upload File</h1>
         <p className="mb-4 font-light text-secondary">
