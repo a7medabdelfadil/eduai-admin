@@ -113,7 +113,7 @@ const Activity = () => {
         <div className="justify-left mb-5 ml-4 flex gap-5 text-[20px] font-semibold">
           <Link
             className="text-secondary hover:text-blue-500 hover:underline"
-            href="/financial-management"
+            href="/financial-management/payment"
           >
             {currentLanguage === "en"
               ? "Tuition"

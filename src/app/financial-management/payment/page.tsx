@@ -181,7 +181,7 @@ const Payment = () => {
         </div>
         <div className="justify-left mb-5 ml-4 flex gap-5 text-[20px] font-semibold">
           <Link
-            href="/financial-management"
+            href="/financial-management/payment"
             className="text-blue-500 underline"
           >
             {currentLanguage === "en"
