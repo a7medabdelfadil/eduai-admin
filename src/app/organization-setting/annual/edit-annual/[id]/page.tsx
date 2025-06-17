@@ -1,51 +1,61 @@
 "use client";
 import BreadCrumbs from "@/components/BreadCrumbs";
 import Spinner from "@/components/spinner";
+import Container from "@/components/Container";
+import { useRouter, useParams } from "next/navigation";
 import { RootState } from "@/GlobalRedux/store";
 import { useSelector } from "react-redux";
 import { useForm } from "react-hook-form";
-import { useCreateAnnualLeaveMutation } from "@/features/Organization-Setteings/annualApi";
-import Container from "@/components/Container";
 import { toast } from "react-toastify";
-import { useRouter } from "next/navigation";
+import {
+  useGetAnnualLeaveByIdQuery,
+  useUpdateAnnualLeaveMutation,
+} from "@/features/Organization-Setteings/annualApi";
+import { useEffect } from "react";
 
-const AddNewAnnual = () => {
-  const breadcrumbs = [
-    { nameEn: "Administration", nameAr: "الإدارة", nameFr: "Administration", href: "/" },
-    { nameEn: "Organization Settings", nameAr: "إعدادات المنظمة", nameFr: "Paramètres org", href: "/organization-setting" },
-    { nameEn: "Annual Leave", nameAr: "إجازة سنوية", nameFr: "Congé annuel", href: "/organization-setting/annual" },
-    { nameEn: "Add Annual Leave", nameAr: "إضافة أجازة سنوية", nameFr: "Ajouter un congé annuel", href: "/organization-setting/annual/add-new-annual" },
-  ];
-
+const EditAnnualLeave = () => {
+  const { id } = useParams();
   const router = useRouter();
-  const { register, handleSubmit, formState: { errors } } = useForm();
-  const { language: currentLanguage, loading } = useSelector((state: RootState) => state.language);
-  const booleanValue = useSelector((state: RootState) => state.boolean.value);
-  const [createAnnualLeave] = useCreateAnnualLeaveMutation();
 
-  const onSubmit = async (data: any) => {
+  const { language: currentLanguage } = useSelector((state: RootState) => state.language);
+
+  const { data, isLoading, isError } = useGetAnnualLeaveByIdQuery(id);
+  const [updateAnnualLeave] = useUpdateAnnualLeaveMutation();
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    reset,
+  } = useForm();
+
+  // fill form once data is loaded
+  useEffect(() => {
+    if (data?.data) {
+      reset({
+        title: data.data.title,
+        description: data.data.description,
+        startDate: data.data.startDate,
+        endDate: data.data.endDate,
+      });
+    }
+  }, [data, reset]);
+
+  const onSubmit = async (formData: any) => {
     try {
-      const payload = {
-        title: data.title,
-        description: data.description,
-        startDate: data.startDate,
-        endDate: data.endDate,
-      };
-      await createAnnualLeave(payload).unwrap();
+      await updateAnnualLeave({ id, formData }).unwrap();
       toast.success(
         currentLanguage === "ar"
-          ? "تم إنشاء الإجازة بنجاح!"
+          ? "تم تحديث الإجازة بنجاح!"
           : currentLanguage === "fr"
-            ? "Congé créé avec succès !"
-            : "Leave created successfully!"
+            ? "Le congé a été mis à jour avec succès !"
+            : "Annual leave updated successfully!"
       );
       router.push("/organization-setting/annual");
-    } catch (err) {
-      const errorObj = err as { data?: { message?: string }; message?: string };
-
+    } catch (error) {
       const errorMessage =
-        errorObj?.data?.message ||
-        errorObj?.message ||
+        (error as any)?.data?.message ||
+        (error as any)?.message ||
         (currentLanguage === "ar"
           ? "حدث خطأ أثناء العملية."
           : currentLanguage === "fr"
@@ -55,13 +65,32 @@ const AddNewAnnual = () => {
     }
   };
 
-  if (loading) {
+  if (isLoading) {
     return (
       <div className="flex h-screen w-full items-center justify-center">
         <Spinner />
       </div>
     );
   }
+
+  if (isError) {
+    return (
+      <div className="text-center text-red-500">
+        {currentLanguage === "ar"
+          ? "فشل في تحميل بيانات الإجازة"
+          : currentLanguage === "fr"
+            ? "Échec du chargement des données du congé"
+            : "Failed to load annual leave data"}
+      </div>
+    );
+  }
+
+  const breadcrumbs = [
+    { nameEn: "Administration", nameAr: "الإدارة", nameFr: "Administration", href: "/" },
+    { nameEn: "Organization Settings", nameAr: "إعدادات المنظمة", nameFr: "Paramètres org", href: "/organization-setting" },
+    { nameEn: "Annual Leave", nameAr: "إجازة سنوية", nameFr: "Congé annuel", href: "/organization-setting/annual" },
+    { nameEn: "Edit Annual Leave", nameAr: "تعديل إجازة سنوية", nameFr: "Modifier un congé annuel", href: `/organization-setting/annual/edit-annual/${id}` },
+  ];
 
   return (
     <>
@@ -70,12 +99,12 @@ const AddNewAnnual = () => {
         <div className="-ml-1 -mt-2 mb-8 flex items-center justify-between">
           <h1 className="text-3xl font-semibold">
             {currentLanguage === "en"
-              ? "Add Annual Leave"
+              ? "Edit Annual Leave"
               : currentLanguage === "ar"
-                ? "إضافة أجازة سنوية"
+                ? "إضافة إجازة سنوية جديدة"
                 : currentLanguage === "fr"
-                  ? "Ajouter un congé annuel"
-                  : "Add Annual Leave"}
+                  ? "Modifier un congé annuel"
+                  : "Edit Annual Leave"}
           </h1>
         </div>
 
@@ -97,13 +126,12 @@ const AddNewAnnual = () => {
                 {currentLanguage === "ar"
                   ? "إضافة إجازة سنوية جديدة"
                   : currentLanguage === "fr"
-                    ? "Ajouter un nouveau congé annuel"
-                    : "Add New Annual Leave"}
+                    ? "Modifier un congé annuel"
+                    : "Edit Annual Leave"}
               </h1>
             </div>
 
             <div className="p-6 grid grid-cols-2 gap-4 max-[1278px]:grid-cols-1">
-
               {/* Title */}
               <label htmlFor="title" className="grid text-[18px] font-semibold">
                 {currentLanguage === "ar" ? "عنوان الإجازة" : currentLanguage === "fr" ? "Titre du congé" : "Leave Title"}
@@ -130,9 +158,7 @@ const AddNewAnnual = () => {
                         : "Enter title"
                   }
                 />
-                {typeof errors.title?.message === "string" && (
-                  <span className="text-red-500 text-sm">{errors.title.message}</span>
-                )}
+                {errors.title?.message && <span className="text-red-500 text-sm">{String(errors.title.message)}</span>}
               </label>
 
               {/* Description */}
@@ -161,9 +187,7 @@ const AddNewAnnual = () => {
                         : "Enter description"
                   }
                 />
-                {typeof errors.description?.message === "string" && (
-                  <span className="text-red-500 text-sm">{errors.description.message}</span>
-                )}
+                {errors.description && <span className="text-red-500 text-sm">{String(errors.description?.message)}</span>}
               </label>
 
               {/* Start Date */}
@@ -185,9 +209,7 @@ const AddNewAnnual = () => {
                   })}
                   className="w-full rounded-xl border border-borderPrimary px-4 py-3 outline-none"
                 />
-                {typeof errors.startDate?.message === "string" && (
-                  <span className="text-red-500 text-sm">{errors.startDate.message}</span>
-                )}
+                {errors.startDate && <span className="text-red-500 text-sm">{String(errors.startDate.message)}</span>}
               </label>
 
               {/* End Date */}
@@ -209,15 +231,13 @@ const AddNewAnnual = () => {
                   })}
                   className="w-full rounded-xl border border-borderPrimary px-4 py-3 outline-none"
                 />
-                {typeof errors.endDate?.message === "string" && (
-                  <span className="text-red-500 text-sm">{errors.endDate.message}</span>
-                )}
+                {errors.endDate && <span className="text-red-500 text-sm">{String(errors.endDate.message)}</span>}
               </label>
             </div>
 
             <div className="flex justify-center text-center mt-4">
               <button type="submit" className="w-fit rounded-xl bg-primary px-6 py-2 text-[18px] text-white hover:bg-hover hover:shadow-xl">
-                {currentLanguage === "ar" ? "حفظ" : currentLanguage === "fr" ? "Sauvegarder" : "Save"}
+                {currentLanguage === "ar" ? "تحديث" : currentLanguage === "fr" ? "Mettre à jour" : "Update"}
               </button>
             </div>
           </div>
@@ -227,4 +247,4 @@ const AddNewAnnual = () => {
   );
 };
 
-export default AddNewAnnual;
+export default EditAnnualLeave;

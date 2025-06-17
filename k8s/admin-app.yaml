@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: admin
-        image: expotechx/admin:48c39
+        image: expotechx/admin:e2f1d
         ports:
         - containerPort: 3000
         # resources:
@@ -29,6 +29,8 @@ spec:
         # env:
         # - name: NEXT_PUBLIC_API_URL
         #   value: "http://57.152.16.89:8092"
+      imagePullSecrets:
+      - name: regcred
 ---
 
 apiVersion: v1

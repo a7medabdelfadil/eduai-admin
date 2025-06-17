@@ -27,7 +27,7 @@ const Card: React.FC<CardProps> = ({
   return (
     <div
       dir={currentLanguage === "ar" ? "rtl" : "ltr"}
-      className="h-[250px] w-[300px] overflow-hidden rounded-xl bg-white shadow-md transition-transform duration-200 ease-in hover:scale-105"
+      className="h-[250px] w-[275px] overflow-hidden rounded-xl bg-bgPrimary shadow-md transition-transform duration-200 ease-in hover:scale-105"
     >
       <Link href={href} className="flex h-full flex-col justify-between">
         <div className="mt-6 flex flex-col items-center justify-center pt-6">

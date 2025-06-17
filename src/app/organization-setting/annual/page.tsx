@@ -1,10 +1,33 @@
 "use client";
 import Link from "next/link";
-import { useState, useEffect } from "react"; // Import useState and useEffect hooks
+import { useState } from "react"; // Import useState and useEffect hooks
 import BreadCrumbs from "@/components/BreadCrumbs";
 import { useSelector } from "react-redux";
 import { RootState } from "@/GlobalRedux/store";
-import Spinner from "@/components/spinner";
+import Container from "@/components/Container";
+import { BiSearchAlt } from "react-icons/bi";
+import { useDeleteAnnualLeaveMutation, useGetAllAnnualLeavesQuery } from "@/features/Organization-Setteings/annualApi";
+import {
+  Table,
+  TableHeader,
+  TableBody,
+  TableRow,
+  TableHead,
+  TableCell,
+} from "@/components/Table";
+import { Skeleton } from "@/components/Skeleton";
+import SeeMoreButton from "@/components/SeeMoreButton";
+import { FiEdit2 } from "react-icons/fi";
+import { RiDeleteBin6Fill } from "react-icons/ri";
+import { toast } from "react-toastify";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/Dialog";
 
 const Annual = () => {
   const breadcrumbs = [
@@ -28,125 +51,94 @@ const Annual = () => {
     },
   ];
 
-  const booleanValue = useSelector((state: RootState) => state.boolean.value); // sidebar
-
-  const [selectAll, setSelectAll] = useState(false); // State to track whether select all checkbox is checked
   const [search, setSearch] = useState("");
-
-  // Function to handle click on select all checkbox
-  const handleSelectAll = () => {
-    setSelectAll(!selectAll); // Toggle select all state
-    const checkboxes = document.querySelectorAll<HTMLInputElement>(
-      'input[type="checkbox"]:not(#checkbox-all-search)',
-    ); // Select all checkboxes except select all checkbox
-    checkboxes.forEach(checkbox => {
-      checkbox.checked = !selectAll; // Set checked state of each checkbox based on select all state
-    });
-  };
-
-  useEffect(() => {
-    // Function to handle click on other checkboxes
-    const handleOtherCheckboxes = () => {
-      const allCheckboxes = document.querySelectorAll<HTMLInputElement>(
-        'input[type="checkbox"]:not(#checkbox-all-search)',
-      );
-      const allChecked = Array.from(allCheckboxes).every(
-        checkbox => checkbox.checked,
-      );
-      const selectAllCheckbox = document.getElementById(
-        "checkbox-all-search",
-      ) as HTMLInputElement | null;
-      if (selectAllCheckbox) {
-        selectAllCheckbox.checked = allChecked;
-        setSelectAll(allChecked);
-      }
-    };
-
-    // Add event listeners to other checkboxes
-    const otherCheckboxes = document.querySelectorAll<HTMLInputElement>(
-      'input[type="checkbox"]:not(#checkbox-all-search)',
-    );
-    otherCheckboxes.forEach(checkbox => {
-      checkbox.addEventListener("change", handleOtherCheckboxes);
-    });
-
-    return () => {
-      // Remove event listeners when component unmounts
-      otherCheckboxes.forEach(checkbox => {
-        checkbox.removeEventListener("change", handleOtherCheckboxes);
-      });
-    };
-  }, []);
+  const [visibleCount, setVisibleCount] = useState(10);
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [selectedId, setSelectedId] = useState<string | null>(null);
+  const [deleteAnnualLeave, { isLoading: isDeleting }] = useDeleteAnnualLeaveMutation();
 
   const { language: currentLanguage, loading } = useSelector(
     (state: RootState) => state.language,
   );
-
-  if (loading)
-    return (
-      <div className="flex h-screen w-full items-center justify-center">
-        <Spinner />
-      </div>
+  const handleDelete = (id: string) => {
+    setSelectedId(id);
+    setDeleteDialogOpen(true);
+  };
+  const confirmDelete = async () => {
+    if (!selectedId) return;
+    try {
+      await deleteAnnualLeave(selectedId).unwrap();
+      setDeleteDialogOpen(false);
+      setSelectedId(null);
+      await refetch();
+       toast.success(
+      currentLanguage === "ar"
+        ? "تم حذف الإجازة بنجاح"
+        : currentLanguage === "fr"
+          ? "Le congé a été supprimé avec succès"
+          : "Annual leave deleted successfully"
     );
+    } catch (error) {
+      toast.error(`${error instanceof Error ? error.message : String(error)}`);
+    }
+  };
+
+const { data, error, isLoading, refetch } = useGetAllAnnualLeavesQuery({});
+  const filteredData = data?.data.content.filter((item: any) =>
+    search.trim() === "" ? true : item.title.toLowerCase().includes(search.toLowerCase())
+  );
+
+  const displayedData = filteredData?.slice(0, visibleCount);
 
   return (
     <>
       <BreadCrumbs breadcrumbs={breadcrumbs} />
-      <div
-        dir={currentLanguage === "ar" ? "rtl" : "ltr"}
-        className={`${
-          currentLanguage === "ar"
-            ? booleanValue
-              ? "lg:mr-[100px]"
-              : "lg:mr-[270px]"
-            : booleanValue
-              ? "lg:ml-[100px]"
-              : "lg:ml-[270px]"
-        } relative mx-3 mt-10 h-screen overflow-x-auto bg-transparent sm:rounded-lg`}
-      >
-        <div className="flex justify-between text-center max-[502px]:grid max-[502px]:justify-center">
-          <div className="mb-3">
-            <label htmlFor="icon" className="sr-only">
-              Search
-            </label>
-            <div className="relative min-w-72 md:min-w-80">
+      <Container>
+        <div className="-ml-1 -mt-2 mb-8 flex items-center justify-between">
+          <h1 className="text-3xl font-semibold">
+            {currentLanguage === "ar"
+              ? "إجازة سنوية"
+              : currentLanguage === "fr"
+                ? "Congé annuel"
+                : "Annual Leave"}
+          </h1>
+        </div>
+        <div className="bg-bgPrimary rounded-xl">
+
+          <div className="flex flex-col items-center justify-between gap-4 rounded-lg px-4 py-4 md:flex-row">
+            <div
+              dir={currentLanguage === "ar" ? "rtl" : "ltr"}
+              className="relative w-full max-w-md"
+            >
               <div className="pointer-events-none absolute inset-y-0 start-0 z-20 flex items-center ps-4">
-                <svg
-                  className="size-4 flex-shrink-0 text-textSecondary"
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                >
-                  <circle cx="11" cy="11" r="8" />
-                  <path d="m21 21-4.3-4.3" />
-                </svg>
+                <BiSearchAlt className="text-secondary" size={18} />
               </div>
-              <input
-                onChange={e => setSearch(e.target.value)}
-                type="text"
-                id="icon"
-                name="icon"
-                className="block w-full rounded-lg border-2 border-borderPrimary px-4 py-2 ps-11 text-sm outline-none focus:border-blue-500 focus:ring-blue-500 disabled:pointer-events-none disabled:opacity-50"
-                placeholder={
-                  currentLanguage === "en"
-                    ? "Search"
-                    : currentLanguage === "ar"
-                      ? "بحث"
-                      : "Recherche"
-                }
-              />
+              <div className="flex items-center gap-2">
+                <input
+                  onChange={e => setSearch(e.target.value)}
+                  type="text"
+                  className="w-full rounded-lg border-2 border-borderPrimary bg-bgPrimary px-4 py-2 ps-11 text-lg outline-none"
+                  placeholder={
+                    currentLanguage === "ar"
+                      ? "ابحث عن شكوى"
+                      : currentLanguage === "fr"
+                        ? "Rechercher une plainte"
+                        : "Search complaint"
+                  }
+                />
+                <span className="min-w-[120px] text-primary">
+                  {filteredData?.length ?? 0}{" "}
+                  {currentLanguage === "ar"
+                    ? "نتيجة"
+                    : currentLanguage === "fr"
+                      ? "résultat(s)"
+                      : "Result(s)"}
+                </span>
+              </div>
             </div>
-          </div>
-          <div className="flex justify-center">
             <Link
               href="/organization-setting/annual/add-new-annual"
-              className="mx-3 mb-5 whitespace-nowrap rounded-xl bg-primary px-4 py-2 text-[18px] font-semibold text-white duration-300 ease-in hover:bg-hover hover:shadow-xl"
+              className="mx-3 whitespace-nowrap rounded-xl bg-primary px-4 py-2 text-[18px] font-semibold text-white duration-300 ease-in hover:bg-hover hover:shadow-xl"
             >
               {currentLanguage === "ar"
                 ? "إضافة إجازة سنوية جديدة"
@@ -155,108 +147,147 @@ const Annual = () => {
                   : "Add New Annual Leave"}
             </Link>
           </div>
+
+
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>
+                  {currentLanguage === "ar"
+                    ? "الإجازة"
+                    : currentLanguage === "fr"
+                      ? "Congé"
+                      : "Leave Title"}
+                </TableHead>
+                <TableHead>
+                  {currentLanguage === "ar"
+                    ? "الوصف"
+                    : currentLanguage === "fr"
+                      ? "Description"
+                      : "Description"}
+                </TableHead>
+                <TableHead>
+                  {currentLanguage === "ar"
+                    ? "تاريخ البداية"
+                    : currentLanguage === "fr"
+                      ? "Début"
+                      : "Start Date"}
+                </TableHead>
+                <TableHead>
+                  {currentLanguage === "ar"
+                    ? "تاريخ النهاية"
+                    : currentLanguage === "fr"
+                      ? "Fin"
+                      : "End Date"}
+                </TableHead>
+                <TableHead>
+                  {currentLanguage === "ar"
+                    ? "الإجراء"
+                    : currentLanguage === "fr"
+                      ? "Action"
+                      : "Action"}
+                </TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {isLoading ? (
+                [...Array(3)].map((_, i) => (
+                  <TableRow key={i}>
+                    {Array(5)
+                      .fill(0)
+                      .map((_, j) => (
+                        <TableCell key={j}>
+                          <Skeleton className="h-4 w-full" />
+                        </TableCell>
+                      ))}
+                  </TableRow>
+                ))
+              ) : displayedData?.length === 0 ? (
+                <TableRow>
+                  <TableCell colSpan={5} className="py-6 text-center text-gray-500">
+                    {currentLanguage === "ar"
+                      ? "لا توجد بيانات"
+                      : currentLanguage === "fr"
+                        ? "Aucune donnée"
+                        : "No data available"}
+                  </TableCell>
+                </TableRow>
+              ) : (
+                displayedData.map((item: any, index: number) => (
+                  <TableRow key={item.annualLeaveId} data-index={index}>
+                    <TableCell className="font-medium text-textSecondary">{item.title}</TableCell>
+                    <TableCell>{item.description}</TableCell>
+                    <TableCell>{item.startDate}</TableCell>
+                    <TableCell>{item.endDate}</TableCell>
+                    <TableCell className="flex items-center gap-4">
+                      <Link href={`/organization-setting/annual/edit-annual/${item.annualLeaveId}`}>
+                        <FiEdit2 className="text-blue-600 hover:scale-110 transition" size={18} />
+                      </Link>
+                      <button onClick={() => handleDelete(item.annualLeaveId)}>
+                        <RiDeleteBin6Fill className="text-error hover:scale-110 transition" size={20} />
+                      </button>
+
+                    </TableCell>
+                  </TableRow>
+                ))
+              )}
+            </TableBody>
+          </Table>
+
+          {filteredData?.length > visibleCount && (
+            <SeeMoreButton onClick={() => setVisibleCount(prev => prev + 10)} />
+          )}
+
+
+
         </div>
-        <table className="w-full overflow-x-auto text-left text-sm text-gray-500 rtl:text-right">
-          <thead className="bg-thead text-xs uppercase text-textPrimary">
-            <tr>
-              <th scope="col" className="p-4">
-                <div className="flex items-center">
-                  {/* Add event listener for select all checkbox */}
-                  <input
-                    id="checkbox-all-search"
-                    type="checkbox"
-                    className="-gray-800 h-4 w-4 rounded border-gray-300 bg-gray-100 text-blue-600 focus:ring-2 focus:ring-blue-500"
-                    onChange={handleSelectAll}
-                  />
-                </div>
-              </th>
-              <th scope="col" className="whitespace-nowrap px-6 py-3">
-                {currentLanguage === "ar"
-                  ? "إجازة سنوية"
+
+      </Container>
+      <Dialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>
+              {currentLanguage === "ar"
+                ? "تأكيد الحذف"
+                : currentLanguage === "fr"
+                  ? "Confirmer la suppression"
+                  : "Confirm Deletion"}
+            </DialogTitle>
+            <DialogDescription>
+              {currentLanguage === "ar"
+                ? "هل أنت متأكد أنك تريد حذف هذه الإجازة؟"
+                : currentLanguage === "fr"
+                  ? "Êtes-vous sûr de vouloir supprimer ce congé ?"
+                  : "Are you sure you want to delete this leave?"}
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter>
+            <button
+              onClick={() => setDeleteDialogOpen(false)}
+              className="rounded-md border px-4 py-2 text-sm"
+            >
+              {currentLanguage === "ar" ? "إلغاء" : currentLanguage === "fr" ? "Annuler" : "Cancel"}
+            </button>
+            <button
+              onClick={confirmDelete}
+              disabled={isDeleting}
+              className="rounded-md bg-error px-4 py-2 text-sm text-white hover:bg-red-700"
+            >
+              {isDeleting
+                ? currentLanguage === "ar"
+                  ? "جاري الحذف..."
                   : currentLanguage === "fr"
-                    ? "Congé annuel"
-                    : "Annual Leave"}
-              </th>
-              <th scope="col" className="whitespace-nowrap px-6 py-3">
-                {currentLanguage === "ar"
-                  ? "حالة الإجازة"
+                    ? "Suppression..."
+                    : "Deleting..."
+                : currentLanguage === "ar"
+                  ? "تأكيد الحذف"
                   : currentLanguage === "fr"
-                    ? "Statut du congé"
-                    : "Leave Status"}
-              </th>
-              <th scope="col" className="whitespace-nowrap px-6 py-3">
-                {currentLanguage === "ar"
-                  ? "الإجراء"
-                  : currentLanguage === "fr"
-                    ? "Action"
-                    : "Action"}
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr className="border-b border-borderPrimary bg-bgPrimary hover:bg-bgSecondary">
-              <td className="w-4 p-4">
-                <div className="flex items-center">
-                  <input
-                    id="checkbox-table-search-1"
-                    type="checkbox"
-                    className="h-4 w-4 rounded border-gray-300 bg-gray-100 text-blue-600 focus:ring-2 focus:ring-blue-500"
-                  />
-                </div>
-              </td>
-              <th
-                scope="row"
-                className="flex items-center whitespace-nowrap px-6 py-4 font-medium text-textSecondary"
-              >
-                Nahda
-              </th>
-              <td className="whitespace-nowrap px-6 py-4">This is text</td>
-              <td className="whitespace-nowrap px-6 py-4">
-                <Link
-                  href="/organization-setting/annual/edit-annual"
-                  className="font-medium text-blue-600 hover:underline"
-                >
-                  {currentLanguage === "ar"
-                    ? "تعديل"
-                    : currentLanguage === "fr"
-                      ? "Modifier"
-                      : "Edit"}
-                </Link>
-              </td>
-            </tr>
-            <tr className="border-b border-borderPrimary bg-bgPrimary hover:bg-bgSecondary">
-              <td className="w-4 p-4">
-                <div className="flex items-center">
-                  <input
-                    id="checkbox-table-search-1"
-                    type="checkbox"
-                    className="h-4 w-4 rounded border-gray-300 bg-gray-100 text-blue-600 focus:ring-2 focus:ring-blue-500"
-                  />
-                </div>
-              </td>
-              <th
-                scope="row"
-                className="flex items-center whitespace-nowrap px-6 py-4 font-medium text-textSecondary"
-              >
-                Nahda
-              </th>
-              <td className="whitespace-nowrap px-6 py-4">This is text</td>
-              <td className="whitespace-nowrap px-6 py-4">
-                <Link
-                  href="/organization-setting/annual/edit-annual"
-                  className="font-medium text-blue-600 hover:underline"
-                >
-                  {currentLanguage === "ar"
-                    ? "تعديل"
-                    : currentLanguage === "fr"
-                      ? "Modifier"
-                      : "Edit"}
-                </Link>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+                    ? "Confirmer"
+                    : "Confirm"}
+            </button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </>
   );
 };
