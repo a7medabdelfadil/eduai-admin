@@ -130,7 +130,7 @@ const Library = () => {
 
             <Link
               href="/infrastructure/library/add-library"
-              className="whitespace-nowrap rounded-xl bg-primary px-4 py-2 text-[16px] font-semibold text-white transition hover:bg-hover hover:shadow-md"
+              className="whitespace-nowrap w-fit self-end rounded-xl bg-primary px-4 py-2 text-[16px] font-semibold text-white transition hover:bg-hover hover:shadow-md"
             >
               {currentLanguage === "en"
                 ? "Add Library Room"

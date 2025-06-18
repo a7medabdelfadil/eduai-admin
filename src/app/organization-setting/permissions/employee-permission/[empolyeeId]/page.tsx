@@ -142,15 +142,14 @@ const Permissions: React.FC<employeeIdProps> = ({ params }) => {
       <BreadCrumbs breadcrumbs={breadcrumbs} />
       <div
         dir={currentLanguage === "ar" ? "rtl" : "ltr"}
-        className={` ${
-          currentLanguage === "ar"
+        className={` ${currentLanguage === "ar"
             ? booleanValue
               ? "lg:mr-[100px]"
               : "lg:mr-[270px]"
             : booleanValue
               ? "lg:ml-[100px]"
               : "lg:ml-[270px]"
-        } mx-3 mt-[40px]`}
+          } mx-3 mt-[40px]`}
       >
         <div className="rounded-xl bg-bgPrimary pb-5">
           <div className="flex justify-between rounded-t-xl bg-thead px-10 py-4 text-[18px] font-semibold">
@@ -163,6 +162,7 @@ const Permissions: React.FC<employeeIdProps> = ({ params }) => {
                 <div key={index}>
                   <div className="mb-4 flex items-center gap-2">
                     <button
+                    className="flex gap-1"
                       onClick={() => toggleCategory(categoryData.category)}
                     >
                       {!openCategories[categoryData.category] && (
@@ -197,13 +197,14 @@ const Permissions: React.FC<employeeIdProps> = ({ params }) => {
                           <polyline points="6 9 12 15 18 9" />
                         </svg>
                       )}
+                      <label
+                        htmlFor={`checkbox-all-${index}`}
+                        className="cursor-pointer"
+                      >
+                        {formatPermission(categoryData.category)}
+                      </label>
                     </button>
-                    <label
-                      htmlFor={`checkbox-all-${index}`}
-                      className="cursor-pointer"
-                    >
-                      {formatPermission(categoryData.category)}
-                    </label>
+
                   </div>
                   {openCategories[categoryData.category] && (
                     <div className="ml-10 grid gap-4">

@@ -13,6 +13,7 @@ import { FaCloudUploadAlt } from "react-icons/fa";
 import { useGetAllStudentsQuery } from "@/features/User-Management/studentApi";
 import { useGetAllsubjectsQuery } from "@/features/signupApi";
 import Container from "@/components/Container";
+import { useRouter } from "next/navigation";
 
 const AddNewAchievement = () => {
   const breadcrumbs = [
@@ -52,7 +53,7 @@ const AddNewAchievement = () => {
   } = useForm();
   const [createCertificate, { isLoading }] = useCreateAchievementsMutation();
   const [fileName, setFileName] = useState("");
-
+  const router = useRouter();
   const handleFileChange = (event: any) => {
     const file = event.target.files[0];
     if (file) {
@@ -75,14 +76,17 @@ const AddNewAchievement = () => {
         stage: formData.stage,
         issueDate: formData.issueDate,
         subject: formData.subject,
+        achievement: formData.achievement,
       }),
     );
+
 
     data.append("file", formData.endDate[0]); // Assuming 'endDate' is the file input
 
     try {
       await createCertificate(data).unwrap();
       toast.success("Certificate created successfully");
+      router.push('/document-management/certificate/achievement');
     } catch (error: any) {
       const errorMessage =
         error?.data?.message ??
@@ -103,7 +107,7 @@ const AddNewAchievement = () => {
     (state: RootState) => state.language,
   );
 
-  if (loading)
+  if (loading || isSubjectsLoading || isStudentsLoading)
     return (
       <div className="flex h-screen w-full items-center justify-center">
         <Spinner />
@@ -284,7 +288,7 @@ const AddNewAchievement = () => {
                   <select
                     id="subject"
                     {...register("subject", { required: true })}
-                    className="h-full w-full rounded-xl border px-4 py-3 text-[18px] outline-none max-[458px]:w-[350px]"
+                    className="h-full w-full bg-bgPrimary rounded-xl border border-borderPrimary px-4 py-3 text-[18px] outline-none max-[458px]:w-[350px]"
                   >
                     <option value="">
                       {currentLanguage === "en"
@@ -305,6 +309,31 @@ const AddNewAchievement = () => {
                 )}
 
                 {errors.subject && (
+                  <span className="text-error">
+                    {currentLanguage === "ar"
+                      ? "هذا الحقل مطلوب"
+                      : currentLanguage === "fr"
+                        ? "Ce champ est requis"
+                        : "This field is required"}
+                  </span>
+                )}
+              </label>
+              <label
+                htmlFor="achievement"
+                className="grid text-[18px] font-semibold"
+              >
+                {currentLanguage === "ar"
+                  ? "الإنجاز"
+                  : currentLanguage === "fr"
+                    ? "Réalisation"
+                    : "Achievement"}
+                <input
+                  id="achievement"
+                  type="text"
+                  className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  {...register("achievement", { required: true })}
+                />
+                {errors.achievement && (
                   <span className="text-error">
                     {currentLanguage === "ar"
                       ? "هذا الحقل مطلوب"

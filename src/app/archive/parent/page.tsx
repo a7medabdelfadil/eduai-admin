@@ -158,8 +158,9 @@ const Parent = () => {
             {/* default */}
           </h1>
         </div>
-        <div className="rounded-xl bg-bgPrimary">
-          <div className="flex flex-col items-center justify-between gap-4 px-4 py-4 md:flex-row">
+        <div className="rounded-xl bg-bgPrimary max-w-screen overflow-x-hidden">
+
+          <div className="flex flex-col md:items-center md:justify-between gap-4 rounded-lg px-4 py-4 md:flex-row">
             <div
               dir={currentLanguage === "ar" ? "rtl" : "ltr"}
               className="relative w-full max-w-md"

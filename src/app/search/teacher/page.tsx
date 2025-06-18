@@ -69,7 +69,7 @@ const TeacherSearch = () => {
   return (
     <>
       <Container>
-        <Text  font="bold" size="3xl">
+        <Text font="bold" size="3xl">
           {currentLanguage === "ar"
             ? "بحث"
             : currentLanguage === "fr"
@@ -197,7 +197,7 @@ const TeacherSearch = () => {
                         type="text"
                         id="icon"
                         name="icon"
-                        className="block w-full rounded-lg border-2 border-borderPrimary px-4 py-2 ps-11 text-sm outline-none focus:border-blue-500 focus:ring-blue-500 disabled:pointer-events-none disabled:opacity-50"
+                        className="block w-full rounded-lg border-2 border-borderPrimary bg-bgPrimary px-4 py-2 ps-11 text-sm outline-none focus:border-blue-500 focus:ring-blue-500 disabled:pointer-events-none disabled:opacity-50"
                         placeholder={
                           currentLanguage === "en"
                             ? "Search"
@@ -230,11 +230,10 @@ const TeacherSearch = () => {
                             <div
                               onClick={() => handleClick(teacher.id)}
                               key={teacher.id}
-                              className={`flex w-full cursor-pointer items-center rounded-lg border border-borderPrimary px-2 py-1 hover:bg-bgSecondary ${
-                                selectedId === teacher.id
+                              className={`flex w-full cursor-pointer items-center rounded-lg border border-borderPrimary px-2 py-1 hover:bg-bgSecondary ${selectedId === teacher.id
                                   ? "bg-bgSecondary"
                                   : ""
-                              }`}
+                                }`}
                             >
                               <div>
                                 {teacher.picture == null ? (

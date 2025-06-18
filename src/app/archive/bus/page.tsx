@@ -170,8 +170,8 @@ const Bus = () => {
             {/* default */}
           </h1>
         </div>
-        <div className="rounded-xl bg-bgPrimary">
-          <div className="flex flex-col items-center justify-between gap-4 rounded-lg px-4 py-4 md:flex-row">
+        <div className="rounded-xl bg-bgPrimary max-w-screen overflow-x-hidden">
+          <div className="flex flex-col md:items-center md:justify-between gap-4 rounded-lg px-4 py-4 md:flex-row">
             {/* Search Input */}
             <div
               dir={currentLanguage === "ar" ? "rtl" : "ltr"}
@@ -196,7 +196,7 @@ const Bus = () => {
             {/* Add New Bus Button */}
             <Link
               href="/add-new-bus"
-              className="whitespace-nowrap rounded-xl bg-primary px-4 py-2 text-[16px] font-semibold text-white transition hover:bg-hover hover:shadow-md"
+              className="whitespace-nowrap w-fit self-end rounded-xl bg-primary px-4 py-2 text-[16px] font-semibold text-white transition hover:bg-hover hover:shadow-md"
             >
               {currentLanguage === "ar"
                 ? "+ إضافة حافلة جديدة"
@@ -206,7 +206,9 @@ const Bus = () => {
             </Link>
           </div>
 
-          <div className="relative overflow-auto bg-bgPrimary shadow-md sm:rounded-lg">
+          <div className="relative shadow-md sm:rounded-lg bg-bgPrimary">
+            {/* <div className="overflow-x-auto"> */}
+
             <Table>
               <TableHeader>
                 <TableRow>
@@ -273,6 +275,7 @@ const Bus = () => {
                 onClick={() => setVisibleCount(prev => prev + 20)}
               />
             )}
+            {/* </div> */}
           </div>
         </div>
       </Container>

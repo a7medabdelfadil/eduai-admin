@@ -173,7 +173,8 @@ const ExamRes = ({ params }: ParamsType) => {
           </h1>
         </div>
 
-        <div className="rounded-xl bg-bgPrimary">
+        <div className="rounded-xl bg-bgPrimary max-w-screen overflow-x-hidden">
+
           {/* Search Input */}
           <div className="p-4">
             <div

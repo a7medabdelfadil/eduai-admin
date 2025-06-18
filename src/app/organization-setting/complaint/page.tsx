@@ -75,7 +75,7 @@ const ComplaintParent = () => {
     search.trim() === ""
       ? true
       : complaint.teacherName?.toLowerCase().includes(search.toLowerCase()) ||
-        complaint.studentName?.toLowerCase().includes(search.toLowerCase()),
+      complaint.studentName?.toLowerCase().includes(search.toLowerCase()),
   );
 
   const displayedData = filteredData?.slice(0, visibleCount);
@@ -116,7 +116,8 @@ const ComplaintParent = () => {
                 : "Parent"}
           </Link>
         </div>
-        <div className="rounded-xl bg-bgPrimary">
+        <div className="rounded-xl bg-bgPrimary max-w-screen overflow-x-hidden">
+
           <div className="flex flex-col items-center justify-between gap-4 rounded-lg px-4 py-4 md:flex-row">
             <div
               dir={currentLanguage === "ar" ? "rtl" : "ltr"}

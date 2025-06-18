@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import Spinner from "@/components/spinner";
-import { useCreateProfessionalsMutation } from "@/features/Document-Management/professionalApi";
+import { useCreateProfessionalsMutation, useGetTypesOfCertificatesQuery } from "@/features/Document-Management/professionalApi";
 import { toast } from "react-toastify";
 import { useSelector } from "react-redux";
 import { RootState } from "@/GlobalRedux/store";
@@ -11,6 +11,7 @@ import BreadCrumbs from "@/components/BreadCrumbs";
 import { FaCloudUploadAlt } from "react-icons/fa";
 import { useGetAllStudentsQuery } from "@/features/User-Management/studentApi";
 import Container from "@/components/Container";
+import { useRouter } from "next/navigation";
 
 const AddNewProfessional = () => {
   const breadcrumbs = [
@@ -40,7 +41,7 @@ const AddNewProfessional = () => {
     },
   ];
 
-  const booleanValue = useSelector((state: RootState) => state.boolean.value);
+  const { data: certificateTypesResponse, isLoading: isTypesLoading } = useGetTypesOfCertificatesQuery(null);
   const {
     register,
     handleSubmit,
@@ -55,7 +56,7 @@ const AddNewProfessional = () => {
     });
   const [createCertificate, { isLoading }] = useCreateProfessionalsMutation();
   const [fileName, setFileName] = useState("");
-
+  const router = useRouter();
   const handleFileChange = (event: any) => {
     const file = event.target.files[0];
     if (file) {
@@ -79,6 +80,7 @@ const AddNewProfessional = () => {
     try {
       await createCertificate(data).unwrap();
       toast.success("Certificate created successfully");
+      router.push('/document-management/certificate/professional-development')
     } catch (err) {
       toast.error("Failed to create Certificate");
     }
@@ -102,12 +104,13 @@ const AddNewProfessional = () => {
         <div className="-ml-1 -mt-2 mb-8 flex items-center justify-between">
           <h1 className="text-3xl font-semibold">
             {currentLanguage === "en"
-              ? "Add Achievement Certificates"
+              ? "Add Professionals Certificates"
               : currentLanguage === "ar"
-                ? "إضافة شهادات الإنجاز"
+                ? "إضافة شهادات المهنيين"
                 : currentLanguage === "fr"
-                  ? "Ajouter des certificats de réussite"
-                  : "Add Achievement Certificates"}{" "}
+                  ? "Ajouter des certificats professionnels"
+                  : "Add Professionals Certificates"}
+
             {/* default */}
           </h1>
         </div>
@@ -159,7 +162,7 @@ const AddNewProfessional = () => {
                 <select
                   id="userId"
                   {...register("userId", { required: true })}
-                  className="h-full w-full rounded-xl border px-4 py-3 text-[18px] outline-none max-[458px]:w-[350px]"
+                  className="h-full w-full bg-bgPrimary rounded-xl border border-borderPrimary px-4 py-3 text-[18px] outline-none max-[458px]:w-[350px]"
                 >
                   <option value="">
                     {currentLanguage === "en"
@@ -172,12 +175,12 @@ const AddNewProfessional = () => {
                     (student: {
                       id: string | null | undefined;
                       name:
-                        | string
-                        | number
-                        | bigint
-                        | boolean
-                        | null
-                        | undefined;
+                      | string
+                      | number
+                      | bigint
+                      | boolean
+                      | null
+                      | undefined;
                     }) => (
                       <option key={student.id} value={student.id ?? ""}>
                         {String(student.name)}
@@ -201,12 +204,30 @@ const AddNewProfessional = () => {
                   : currentLanguage === "fr"
                     ? "Type"
                     : "Type"}
-                <input
-                  id="type"
-                  type="text"
-                  className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
-                  {...register("type", { required: true })}
-                />
+                {isTypesLoading ? (
+                  <Spinner />
+                ) : (
+                  <select
+                    id="type"
+                    {...register("type", { required: true })}
+                    className="h-full w-full bg-bgPrimary rounded-xl border border-borderPrimary px-4 py-3 text-[18px] outline-none max-[458px]:w-[350px]"
+                  >
+                    <option value="">
+                      {currentLanguage === "en"
+                        ? "Select Type"
+                        : currentLanguage === "ar"
+                          ? "اختر النوع"
+                          : "Sélectionner le type"}
+                    </option>
+                    {certificateTypesResponse?.data &&
+                      Object.entries(certificateTypesResponse.data).map(([key, label]) => (
+                        <option key={key} value={key}>
+                          {String(label)}
+                        </option>
+                      ))}
+                  </select>
+                )}
+
                 {errors.type && (
                   <span className="text-error">
                     {currentLanguage === "ar"

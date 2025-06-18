@@ -70,7 +70,7 @@ const ViewStudent: React.FC<ViewStudentProps> = ({ params }) => {
                       : "All Exam Result"}
                 </h1>
               </div>
-              <div className="relative overflow-auto shadow-md sm:rounded-lg">
+              <div className="relative overflow-auto shadow-md sm:rounded-lg bg-bgPrimary">
                 <table className="w-full overflow-x-auto text-left text-sm text-gray-500 rtl:text-right">
                   <thead className="bg-thead text-xs uppercase text-textPrimary">
                     <tr>

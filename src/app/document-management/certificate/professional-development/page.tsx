@@ -140,6 +140,18 @@ const ProfessionalDevelopment = () => {
     <>
       <BreadCrumbs breadcrumbs={breadcrumbs} />
       <Container>
+         <div className="-ml-1 -mt-2 mb-6 flex items-center justify-between">
+          <h1 className="text-3xl font-semibold">
+            {currentLanguage === "en"
+              ? "Certificates"
+              : currentLanguage === "ar"
+                ? "الشهادات"
+                : currentLanguage === "fr"
+                  ? "Paramètres org"
+                  : "Certificates"}{" "}
+            {/* default */}
+          </h1>
+        </div>
         <div className="justify-left mb-6 ml-4 flex flex-wrap gap-5 text-[20px] font-semibold max-[725px]:text-[15px]">
           <Link
             href="/document-management/certificate"

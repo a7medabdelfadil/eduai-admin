@@ -12,6 +12,7 @@ import { useState } from "react";
 import { FaCloudUploadAlt } from "react-icons/fa";
 import { useGetAllStudentsQuery } from "@/features/User-Management/studentApi";
 import Container from "@/components/Container";
+import { useRouter } from "next/navigation";
 
 const AddNewParticipation = () => {
   const breadcrumbs = [
@@ -49,6 +50,7 @@ const AddNewParticipation = () => {
   } = useForm();
   const [createCertificate, { isLoading }] = useCreateParticipationsMutation();
   const [fileName, setFileName] = useState("");
+  const router = useRouter();
 
   const handleFileChange = (event: any) => {
     const file = event.target.files[0];
@@ -80,6 +82,8 @@ const AddNewParticipation = () => {
     try {
       await createCertificate(data).unwrap();
       toast.success("Certificate created successfully");
+      router.push('/document-management/certificate/participation')
+
     } catch (err) {
       toast.error("Failed to create Certificate");
     }
@@ -160,7 +164,7 @@ const AddNewParticipation = () => {
                 <select
                   id="userId"
                   {...register("userId", { required: true })}
-                  className="h-full w-full rounded-xl border px-4 py-3 text-[18px] outline-none max-[458px]:w-[350px]"
+                  className="h-full w-full bg-bgPrimary rounded-xl border border-borderPrimary px-4 py-3 text-[18px] outline-none max-[458px]:w-[350px]"
                 >
                   <option value="">
                     {currentLanguage === "en"
@@ -173,12 +177,12 @@ const AddNewParticipation = () => {
                     (student: {
                       id: string | null | undefined;
                       name:
-                        | string
-                        | number
-                        | bigint
-                        | boolean
-                        | null
-                        | undefined;
+                      | string
+                      | number
+                      | bigint
+                      | boolean
+                      | null
+                      | undefined;
                     }) => (
                       <option key={student.id} value={student.id ?? ""}>
                         {String(student.name)}

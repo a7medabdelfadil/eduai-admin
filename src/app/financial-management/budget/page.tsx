@@ -342,7 +342,7 @@ const Budget = () => {
           </div>
         </div>
         <div className="grid w-full rounded-xl bg-bgPrimary p-5">
-          <div className="relative overflow-auto shadow-md sm:rounded-lg">
+          <div className="relative overflow-auto shadow-md sm:rounded-lg bg-bgPrimary">
             <table className="w-full overflow-x-auto text-left text-sm text-textSecondary rtl:text-right">
               <thead className="bg-thead text-xs uppercase text-textPrimary">
                 <tr>

@@ -261,7 +261,7 @@ const Employee = () => {
             </h1>
           </div>
           <div className="flex items-center justify-between self-end">
-            <div className="flex gap-4">
+            <div className="flex flex-col md:flex-row gap-4">
               <button
                 onClick={handleOpenModal}
                 className="mx-3 mb-5 flex w-[190px] justify-center whitespace-nowrap rounded-xl border border-primary bg-bgPrimary px-4 py-2 text-[18px] font-semibold text-primary duration-300 ease-in hover:shadow-xl"
@@ -305,217 +305,220 @@ const Employee = () => {
             </div>
           </div>
         </div>
-        <div className="flex justify-between rounded-t-xl bg-bgPrimary p-4 text-center max-[502px]:grid max-[502px]:justify-center">
-          <div className="mb-3">
-            <label htmlFor="icon" className="sr-only">
-              Search
-            </label>
-            <div className="relative min-w-72 md:min-w-80">
-              <div className="pointer-events-none absolute inset-y-0 start-0 z-20 flex items-center ps-4">
-                <BiSearchAlt className="text-secondary" size={18} />
-              </div>
-              <div className="flex items-center gap-2">
-                <input
-                  onChange={e => setSearch(e.target.value)}
-                  type="text"
-                  id="icon"
-                  name="icon"
-                  className="border-borderSecondary block w-full rounded-lg border-2 bg-bgPrimary px-4 py-2 ps-11 text-lg outline-none disabled:pointer-events-none disabled:opacity-50 dark:border-borderPrimary"
-                  placeholder={
-                    currentLanguage === "ar"
-                      ? "ابحث عن أي شيء"
-                      : currentLanguage === "fr"
-                        ? "Rechercher n'importe quoi"
-                        : "Search anything"
-                  }
-                />
-                <span className="min-w-[120px] text-primary">
-                  {
-                    data?.data.content.filter((employee: Employee) => {
-                      return search.toLocaleLowerCase() === ""
-                        ? employee
-                        : employee.name.toLocaleLowerCase().includes(search);
-                    }).length
-                  }{" "}
-                  Result(s)
-                </span>
+        <div className="rounded-xl bg-bgPrimary max-w-screen overflow-x-hidden">
+
+          <div className="flex justify-between rounded-t-xl bg-bgPrimary p-4 text-center max-[502px]:grid max-[502px]:justify-center">
+            <div className="mb-3">
+              <label htmlFor="icon" className="sr-only">
+                Search
+              </label>
+              <div className="relative min-w-72 md:min-w-80">
+                <div className="pointer-events-none absolute inset-y-0 start-0 z-20 flex items-center ps-4">
+                  <BiSearchAlt className="text-secondary" size={18} />
+                </div>
+                <div className="flex items-center gap-2">
+                  <input
+                    onChange={e => setSearch(e.target.value)}
+                    type="text"
+                    id="icon"
+                    name="icon"
+                    className="border-borderSecondary block w-full rounded-lg border-2 bg-bgPrimary px-4 py-2 ps-11 text-lg outline-none disabled:pointer-events-none disabled:opacity-50 dark:border-borderPrimary"
+                    placeholder={
+                      currentLanguage === "ar"
+                        ? "ابحث عن أي شيء"
+                        : currentLanguage === "fr"
+                          ? "Rechercher n'importe quoi"
+                          : "Search anything"
+                    }
+                  />
+                  <span className="min-w-[120px] text-primary">
+                    {
+                      data?.data.content.filter((employee: Employee) => {
+                        return search.toLocaleLowerCase() === ""
+                          ? employee
+                          : employee.name.toLocaleLowerCase().includes(search);
+                      }).length
+                    }{" "}
+                    Result(s)
+                  </span>
+                </div>
               </div>
             </div>
-          </div>
 
-          <div className="flex justify-center">
-            <Link
-              href="/add-new-employee"
-              className="mx-3 mb-5 w-fit whitespace-nowrap rounded-xl bg-primary px-4 py-2 text-[18px] font-semibold text-white duration-300 ease-in hover:bg-[#4a5cc5] hover:shadow-xl"
-            >
-              {currentLanguage === "en"
-                ? "+ New Employee"
-                : currentLanguage === "ar"
-                  ? "+ موظف جديد"
-                  : "+ Nouvel Employé"}
-            </Link>
+            <div className="flex justify-center">
+              <Link
+                href="/add-new-employee"
+                className="mx-3 mb-5 w-fit self-end whitespace-nowrap rounded-xl bg-primary px-4 py-2 text-[18px] font-semibold text-white duration-300 ease-in hover:bg-[#4a5cc5] hover:shadow-xl"
+              >
+                {currentLanguage === "en"
+                  ? "+ New Employee"
+                  : currentLanguage === "ar"
+                    ? "+ موظف جديد"
+                    : "+ Nouvel Employé"}
+              </Link>
+            </div>
           </div>
-        </div>
-        <div className="relative -mt-4 overflow-auto bg-bgPrimary shadow-md sm:rounded-lg">
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>
-                  {currentLanguage === "ar"
-                    ? "الاسم الكامل"
-                    : currentLanguage === "fr"
-                      ? "Nom complet"
-                      : "Full Name"}
-                </TableHead>
-                <TableHead>
-                  {currentLanguage === "ar" ? "الرقم" : "ID"}
-                </TableHead>
-                <TableHead>
-                  {currentLanguage === "ar"
-                    ? "الجنس"
-                    : currentLanguage === "fr"
-                      ? "Genre"
-                      : "Gender"}
-                </TableHead>
-                <TableHead>
-                  {currentLanguage === "ar"
-                    ? "الجنسية"
-                    : currentLanguage === "fr"
-                      ? "Nationalité"
-                      : "Nationality"}
-                </TableHead>
-                <TableHead>
-                  {currentLanguage === "ar"
-                    ? "البريد الإلكتروني"
-                    : currentLanguage === "fr"
-                      ? "Courriel"
-                      : "Email"}
-                </TableHead>
-                <TableHead>
-                  {currentLanguage === "ar"
-                    ? "الهاتف المحمول"
-                    : currentLanguage === "fr"
-                      ? "Téléphone"
-                      : "Mobile"}
-                </TableHead>
-                <TableHead>
-                  {currentLanguage === "ar"
-                    ? "عرض"
-                    : currentLanguage === "fr"
-                      ? "Voir"
-                      : "View"}
-                </TableHead>
-                <TableHead>
-                  {currentLanguage === "ar"
-                    ? "الإجراء"
-                    : currentLanguage === "fr"
-                      ? "Action"
-                      : "Action"}
-                </TableHead>
-              </TableRow>
-            </TableHeader>
-
-            <TableBody>
-              {isLoading ? (
-                [...Array(3)].map((_, i) => (
-                  <TableRow key={i}>
-                    {Array.from({ length: 8 }).map((_, j) => (
-                      <TableCell key={j}>
-                        <Skeleton className="h-4 w-24" />
-                      </TableCell>
-                    ))}
-                  </TableRow>
-                ))
-              ) : !visibleData || visibleData.length === 0 ? (
+          <div className="relative -mt-4 overflow-auto bg-bgPrimary shadow-md sm:rounded-lg">
+            <Table>
+              <TableHeader>
                 <TableRow>
-                  <TableCell
-                    colSpan={8}
-                    className="py-6 text-center font-medium"
-                  >
+                  <TableHead>
                     {currentLanguage === "ar"
-                      ? "لا توجد بيانات"
+                      ? "الاسم الكامل"
                       : currentLanguage === "fr"
-                        ? "Aucune donnée disponible"
-                        : "No data available"}
-                  </TableCell>
+                        ? "Nom complet"
+                        : "Full Name"}
+                  </TableHead>
+                  <TableHead>
+                    {currentLanguage === "ar" ? "الرقم" : "ID"}
+                  </TableHead>
+                  <TableHead>
+                    {currentLanguage === "ar"
+                      ? "الجنس"
+                      : currentLanguage === "fr"
+                        ? "Genre"
+                        : "Gender"}
+                  </TableHead>
+                  <TableHead>
+                    {currentLanguage === "ar"
+                      ? "الجنسية"
+                      : currentLanguage === "fr"
+                        ? "Nationalité"
+                        : "Nationality"}
+                  </TableHead>
+                  <TableHead>
+                    {currentLanguage === "ar"
+                      ? "البريد الإلكتروني"
+                      : currentLanguage === "fr"
+                        ? "Courriel"
+                        : "Email"}
+                  </TableHead>
+                  <TableHead>
+                    {currentLanguage === "ar"
+                      ? "الهاتف المحمول"
+                      : currentLanguage === "fr"
+                        ? "Téléphone"
+                        : "Mobile"}
+                  </TableHead>
+                  <TableHead>
+                    {currentLanguage === "ar"
+                      ? "عرض"
+                      : currentLanguage === "fr"
+                        ? "Voir"
+                        : "View"}
+                  </TableHead>
+                  <TableHead>
+                    {currentLanguage === "ar"
+                      ? "الإجراء"
+                      : currentLanguage === "fr"
+                        ? "Action"
+                        : "Action"}
+                  </TableHead>
                 </TableRow>
-              ) : (
-                visibleData
-                  .filter((employee: Employee) =>
-                    search.trim() === ""
-                      ? true
-                      : employee.name
-                          ?.toLowerCase()
-                          .includes(search.trim().toLowerCase()),
-                  )
-                  .map((employee: Employee, index: number) => (
-                    <TableRow
-                      className="cursor-pointer"
-                      data-index={index}
-                      key={employee.id}
-                      onClick={e => {
-                        if ((e.target as HTMLElement).closest("a")) return;
-                        setSelectedEmployee(employee);
-                        setShowModal(true);
-                      }}
-                    >
-                      <TableCell>
-                        <div className="flex items-center gap-2">
-                          <div className="w-[50px]">
-                            <img
-                              src={employee.picture ?? "/images/userr.png"}
-                              className="mx-2 h-[25px] w-[25px] rounded-full"
-                              alt="#"
-                            />
-                          </div>
-                          <p className="text-textPrimary">
-                            {String(employee.name)}
-                          </p>
-                        </div>
-                      </TableCell>
-                      <TableCell>{employee.id}</TableCell>
-                      <TableCell>{employee.gender}</TableCell>
-                      <TableCell>{employee.nationality}</TableCell>
-                      <TableCell>{employee.email}</TableCell>
-                      <TableCell>{employee.number || "-"} </TableCell>
-                      <TableCell>
-                        <Link
-                          href={`/employee/view-employee/${employee.id}`}
-                          className="font-medium text-blue-600 hover:underline"
-                        >
-                          {currentLanguage === "en"
-                            ? "View"
-                            : currentLanguage === "ar"
-                              ? "عرض"
-                              : "Voir"}
-                        </Link>
-                      </TableCell>
-                      <TableCell>
-                        <button
-                          onClick={() => handleDelete(employee.id)}
-                          disabled={employee.role === "Admin"}
-                          className={`rounded-lg px-2 py-1 font-semibold text-white shadow-lg delay-150 duration-300 ease-in-out ${
-                            employee.role === "Admin"
-                              ? "cursor-not-allowed bg-red-800"
-                              : "bg-error hover:-translate-y-1 hover:scale-110"
-                          }`}
-                        >
-                          {currentLanguage === "en"
-                            ? "Lock"
-                            : currentLanguage === "ar"
-                              ? "قفل"
-                              : "Verrouiller"}
-                        </button>
-                      </TableCell>
+              </TableHeader>
+
+              <TableBody>
+                {isLoading ? (
+                  [...Array(3)].map((_, i) => (
+                    <TableRow key={i}>
+                      {Array.from({ length: 8 }).map((_, j) => (
+                        <TableCell key={j}>
+                          <Skeleton className="h-4 w-24" />
+                        </TableCell>
+                      ))}
                     </TableRow>
                   ))
-              )}
-            </TableBody>
-          </Table>
-          {visibleCount < filteredData.length && (
-            <SeeMoreButton onClick={() => setVisibleCount(prev => prev + 20)} />
-          )}
+                ) : !visibleData || visibleData.length === 0 ? (
+                  <TableRow>
+                    <TableCell
+                      colSpan={8}
+                      className="py-6 text-center font-medium"
+                    >
+                      {currentLanguage === "ar"
+                        ? "لا توجد بيانات"
+                        : currentLanguage === "fr"
+                          ? "Aucune donnée disponible"
+                          : "No data available"}
+                    </TableCell>
+                  </TableRow>
+                ) : (
+                  visibleData
+                    .filter((employee: Employee) =>
+                      search.trim() === ""
+                        ? true
+                        : employee.name
+                          ?.toLowerCase()
+                          .includes(search.trim().toLowerCase()),
+                    )
+                    .map((employee: Employee, index: number) => (
+                      <TableRow
+                        className="cursor-pointer"
+                        data-index={index}
+                        key={employee.id}
+                        onClick={e => {
+                          if ((e.target as HTMLElement).closest("a")) return;
+                          setSelectedEmployee(employee);
+                          setShowModal(true);
+                        }}
+                      >
+                        <TableCell>
+                          <div className="flex items-center gap-2">
+                            <div className="w-[50px]">
+                              <img
+                                src={employee.picture ?? "/images/userr.png"}
+                                className="mx-2 h-[25px] w-[25px] rounded-full"
+                                alt="#"
+                              />
+                            </div>
+                            <p className="text-textPrimary">
+                              {String(employee.name)}
+                            </p>
+                          </div>
+                        </TableCell>
+                        <TableCell>{employee.id}</TableCell>
+                        <TableCell>{employee.gender}</TableCell>
+                        <TableCell>{employee.nationality}</TableCell>
+                        <TableCell>{employee.email}</TableCell>
+                        <TableCell>{employee.number || "-"} </TableCell>
+                        <TableCell>
+                          <Link
+                            href={`/employee/view-employee/${employee.id}`}
+                            className="font-medium text-blue-600 hover:underline"
+                          >
+                            {currentLanguage === "en"
+                              ? "View"
+                              : currentLanguage === "ar"
+                                ? "عرض"
+                                : "Voir"}
+                          </Link>
+                        </TableCell>
+                        <TableCell>
+                          <button
+                            onClick={() => handleDelete(employee.id)}
+                            disabled={employee.role === "Admin"}
+                            className={`rounded-lg px-2 py-1 font-semibold text-white shadow-lg delay-150 duration-300 ease-in-out ${employee.role === "Admin"
+                                ? "cursor-not-allowed bg-red-800"
+                                : "bg-error hover:-translate-y-1 hover:scale-110"
+                              }`}
+                          >
+                            {currentLanguage === "en"
+                              ? "Lock"
+                              : currentLanguage === "ar"
+                                ? "قفل"
+                                : "Verrouiller"}
+                          </button>
+                        </TableCell>
+                      </TableRow>
+                    ))
+                )}
+              </TableBody>
+            </Table>
+            {visibleCount < filteredData.length && (
+              <SeeMoreButton onClick={() => setVisibleCount(prev => prev + 20)} />
+            )}
+          </div>
         </div>
+
       </Container>
       <Modal isOpen={isModalOpen} onClose={handleCloseModal}>
         <h1 className="text-lg font-semibold">Upload File</h1>
