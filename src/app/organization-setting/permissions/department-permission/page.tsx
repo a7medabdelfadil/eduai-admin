@@ -222,7 +222,7 @@ const DepartmentPermission = () => {
                   <TableHead>{translate.admin}</TableHead>
                   <TableHead>{translate.comm}</TableHead>
                   <TableHead>{translate.ops}</TableHead>
-                  <TableHead>{translate.action}</TableHead>
+                  <TableHead>{translate.edit}</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -267,15 +267,6 @@ const DepartmentPermission = () => {
                         >
                           <BiEditAlt size={20} />
                         </Link>
-                        <button
-                          className="text-error transition hover:text-red-800"
-                          title={translate.del}
-                          onClick={() => {
-                            console.log("Delete", item.id);
-                          }}
-                        >
-                          <BiTrash size={20} />
-                        </button>
                       </TableCell>
                     </TableRow>
                   ))

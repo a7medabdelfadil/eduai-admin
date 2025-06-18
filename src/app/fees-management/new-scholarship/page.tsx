@@ -10,6 +10,7 @@ import BreadCrumbs from "@/components/BreadCrumbs";
 import { RootState } from "@/GlobalRedux/store";
 import { useSelector } from "react-redux";
 import { useGetAllStudentsQuery } from "@/features/User-Management/studentApi";
+import Container from "@/components/Container";
 
 // Define a Zod schema that matches your API's expected data structure
 const scholarshipSchema = z.object({
@@ -93,7 +94,7 @@ const NewScholarship = () => {
     } catch (err) {
       toast.error(
         (err as { data?: { message?: string } })?.data?.message ||
-          "An error occurred",
+        "An error occurred",
       );
     }
   };
@@ -112,20 +113,21 @@ const NewScholarship = () => {
   return (
     <>
       <BreadCrumbs breadcrumbs={breadcrumbs} />
-      <div
-        dir={currentLanguage === "ar" ? "rtl" : "ltr"}
-        className={`${
-          currentLanguage === "ar"
-            ? booleanValue
-              ? "lg:mr-[100px]"
-              : "lg:mr-[270px]"
-            : booleanValue
-              ? "lg:ml-[100px]"
-              : "lg:ml-[270px]"
-        } mx-3 mt-[40px] grid h-[850px] items-center justify-center`}
-      >
-        <form onSubmit={handleSubmit(onSubmit)} encType="multipart/form-data">
-          <div className="grid items-center justify-center gap-5 rounded-xl bg-bgPrimary p-10 sm:w-[500px] md:w-[600px] lg:w-[750px] xl:w-[1000px]">
+      <Container>
+        <div className="-ml-1 -mt-2 mb-8 flex items-center justify-between">
+          <h1 className="text-3xl font-semibold">
+            {currentLanguage === "en"
+              ? "Add scholarship"
+              : currentLanguage === "ar"
+                ? "إضافة منحة دراسية"
+                : currentLanguage === "fr"
+                  ? "Ajouter des Bourse d'étude"
+                  : "Add scholarship"}{" "}
+            {/* default */}
+          </h1>
+        </div>
+        <form className="flex h-full w-full items-center justify-center" onSubmit={handleSubmit(onSubmit)} encType="multipart/form-data">
+          <div className="w-[90] rounded-xl bg-bgPrimary p-10 md:w-[80%]">
             <div className="flex items-center justify-start gap-2">
               <h1 className="text-[22px] font-semibold">
                 {currentLanguage === "en"
@@ -135,7 +137,7 @@ const NewScholarship = () => {
                     : "Informations sur la bourse"}
               </h1>
             </div>
-            <div className="grid grid-cols-2 gap-4 max-[1278px]:grid-cols-1">
+            <div className="p-6 grid grid-cols-2 gap-4 max-[1278px]:grid-cols-1">
               {/* Student ID Field */}
               <label
                 htmlFor="studentId"
@@ -150,7 +152,7 @@ const NewScholarship = () => {
                 <select
                   id="studentId"
                   {...register("studentId")}
-                  className="h-full w-[400px] rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 text-[18px] text-textPrimary outline-none max-[458px]:w-[350px]"
+                  className="h-full w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 text-[18px] text-textPrimary outline-none max-[458px]:w-[350px]"
                 >
                   <option value="">
                     {currentLanguage === "en"
@@ -163,12 +165,12 @@ const NewScholarship = () => {
                     (student: {
                       id: string | null | undefined;
                       name:
-                        | string
-                        | number
-                        | bigint
-                        | boolean
-                        | null
-                        | undefined;
+                      | string
+                      | number
+                      | bigint
+                      | boolean
+                      | null
+                      | undefined;
                     }) => (
                       <option key={student.id} value={student.id ?? ""}>
                         {String(student.name)}
@@ -195,7 +197,7 @@ const NewScholarship = () => {
                   id="scholarshipName"
                   {...register("scholarshipName")}
                   type="text"
-                  className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                 />
                 {errors.scholarshipName && (
                   <span className="text-error">
@@ -217,7 +219,7 @@ const NewScholarship = () => {
 
                 <select
                   id="scholarshipType"
-                  className="w-[400px] rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 text-textPrimary outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 text-textPrimary outline-none max-[471px]:w-[350px]"
                   {...register("scholarshipType", { required: true })}
                 >
                   <option value="">
@@ -257,7 +259,7 @@ const NewScholarship = () => {
                   id="startDate"
                   {...register("startDate")}
                   type="date"
-                  className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                 />
                 {errors.startDate && (
                   <span className="text-error">{errors.startDate.message}</span>
@@ -278,7 +280,7 @@ const NewScholarship = () => {
                   id="expirationDate"
                   {...register("expirationDate")}
                   type="date"
-                  className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                 />
                 {errors.expirationDate && (
                   <span className="text-error">
@@ -379,7 +381,7 @@ const NewScholarship = () => {
                   id="file"
                   {...register("file")}
                   type="file"
-                  className="w-[400px] rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                 />
                 {errors.file && (
                   <span className="text-error">{errors.file.message}</span>
@@ -404,7 +406,7 @@ const NewScholarship = () => {
             </div>
           </div>
         </form>
-      </div>
+      </Container>
     </>
   );
 };

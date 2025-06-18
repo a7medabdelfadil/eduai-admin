@@ -132,16 +132,6 @@ const Disciplinary = () => {
           </Link>
           <Link
             className="hover:text-blue-500 hover:underline"
-            href="/document-management/other/financial"
-          >
-            {currentLanguage === "ar"
-              ? "المساعدات المالية"
-              : currentLanguage === "fr"
-                ? "Aide financière"
-                : "Financial Aid"}
-          </Link>
-          <Link
-            className="hover:text-blue-500 hover:underline"
             href="/document-management/other/legal"
           >
             {currentLanguage === "ar"

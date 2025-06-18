@@ -37,7 +37,6 @@ import Container from "@/components/Container";
 import { Text } from "@/components/Text";
 import { BiSearchAlt } from "react-icons/bi";
 import { toast } from "react-toastify";
-import { MdEdit } from "react-icons/md";
 
 const Legal = () => {
   const breadcrumbs = [
@@ -165,16 +164,7 @@ const Legal = () => {
                 ? "Dossiers disciplinaires"
                 : "Disciplinary Records"}
           </Link>
-          <Link
-            className="hover:text-blue-500 hover:underline"
-            href="/document-management/other/financial"
-          >
-            {currentLanguage === "ar"
-              ? "المساعدات المالية"
-              : currentLanguage === "fr"
-                ? "Aide financière"
-                : "Financial Aid"}
-          </Link>
+        
           <Link
             className="text-blue-500 underline"
             href="/document-management/other/legal"
@@ -430,7 +420,7 @@ const Legal = () => {
         <div className={`${folderId ? "block" : "invisible"} mb-6 px-10`}>
           <button
             onClick={() => router.push("/document-management/other/legal")}
-            className="flex items-center gap-2 rounded bg-bgPrimary px-4 py-2 text-sm text-gray-700 transition hover:bg-bgSecondary"
+            className="flex items-center gap-2 rounded bg-bgPrimary px-4 py-2 text-sm text-textSecondary transition hover:bg-bgSecondary"
           >
             {currentLanguage !== "ar" && <FaArrowLeft />}
 

@@ -33,9 +33,9 @@ const AttendCard: React.FC<CardProps> = ({
             <p className="mt-2 text-[17px] font-semibold text-secondary">
               {title}
             </p>
-            <p className="text-[22px] font-bold text-textPrimary">{number}</p>
+            <p className="text-[22px] font-bold text-textPrimary">{description}</p>
             <p className="text-sm font-semibold">
-              <span className="text-red-700">{description}</span>{" "}
+              <span className="text-red-700">{number}</span>{" "}
               {currentLanguage === "en"
                 ? "Absence today"
                 : currentLanguage === "ar"
