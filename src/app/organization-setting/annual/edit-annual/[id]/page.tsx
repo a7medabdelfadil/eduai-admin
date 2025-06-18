@@ -22,27 +22,32 @@ const EditAnnualLeave = () => {
   const { data, isLoading, isError } = useGetAnnualLeaveByIdQuery(id);
   const [updateAnnualLeave] = useUpdateAnnualLeaveMutation();
 
+
+
   const {
     register,
     handleSubmit,
+    watch,
     formState: { errors },
     reset,
   } = useForm();
 
-  // fill form once data is loaded
-  useEffect(() => {
-    if (data?.data) {
-      reset({
-        title: data.data.title,
-        description: data.data.description,
-        startDate: data.data.startDate,
-        endDate: data.data.endDate,
-      });
-    }
-  }, [data, reset]);
+  const startDate = watch("startDate");
+  const endDate = watch("endDate");
 
   const onSubmit = async (formData: any) => {
     try {
+      if (new Date(formData.endDate) < new Date(formData.startDate)) {
+        toast.error(
+          currentLanguage === "ar"
+            ? "تاريخ الانتهاء لا يمكن أن يكون قبل تاريخ البداية"
+            : currentLanguage === "fr"
+              ? "La date de fin ne peut pas être antérieure à la date de début"
+              : "End date cannot be earlier than start date"
+        );
+        return;
+      }
+
       await updateAnnualLeave({ id, formData }).unwrap();
       toast.success(
         currentLanguage === "ar"
@@ -61,9 +66,21 @@ const EditAnnualLeave = () => {
           : currentLanguage === "fr"
             ? "Une erreur s'est produite."
             : "An error occurred.");
-
+      toast.error(errorMessage);
     }
   };
+
+  // fill form once data is loaded
+  useEffect(() => {
+    if (data?.data) {
+      reset({
+        title: data.data.title,
+        description: data.data.description,
+        startDate: data.data.startDate,
+        endDate: data.data.endDate,
+      });
+    }
+  }, [data, reset]);
 
   if (isLoading) {
     return (

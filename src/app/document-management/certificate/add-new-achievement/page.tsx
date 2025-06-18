@@ -42,7 +42,6 @@ const AddNewAchievement = () => {
     },
   ];
 
-  const booleanValue = useSelector((state: RootState) => state.boolean.value);
   const { data: subjectsResponse, isLoading: isSubjectsLoading } =
     useGetAllsubjectsQuery(null);
 
@@ -84,9 +83,21 @@ const AddNewAchievement = () => {
     try {
       await createCertificate(data).unwrap();
       toast.success("Certificate created successfully");
-    } catch (err) {
-      toast.error("Failed to create Certificate");
+    } catch (error: any) {
+      const errorMessage =
+        error?.data?.message ??
+        (error instanceof Error ? error.message : "Something went wrong");
+
+      toast.error(
+        currentLanguage === "ar"
+          ? `فشل الحذف: ${errorMessage}`
+          : currentLanguage === "fr"
+            ? `Échec de la suppression : ${errorMessage}`
+            : `Delete failed: ${errorMessage}`
+      );
     }
+
+
   };
   const { language: currentLanguage, loading } = useSelector(
     (state: RootState) => state.language,
@@ -177,12 +188,12 @@ const AddNewAchievement = () => {
                     (student: {
                       id: string | null | undefined;
                       name:
-                        | string
-                        | number
-                        | bigint
-                        | boolean
-                        | null
-                        | undefined;
+                      | string
+                      | number
+                      | bigint
+                      | boolean
+                      | null
+                      | undefined;
                     }) => (
                       <option key={student.id} value={student.id ?? ""}>
                         {String(student.name)}

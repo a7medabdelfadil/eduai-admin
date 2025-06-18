@@ -77,7 +77,7 @@ const Infrastructure = () => {
               : "Number of class, add new class and edit a class", // Default to English
     },
     {
-      href: "/book",
+      href: "/infrastructure/library",
       icon: <FaBookOpen size={30} />,
       title:
         currentLanguage === "en"
@@ -95,26 +95,6 @@ const Infrastructure = () => {
             : currentLanguage === "fr"
               ? "Nombre de livres, ajouter un nouveau livre et modifier un livre"
               : "Number of book, add new book and edit a book", // Default to English
-    },
-    {
-      href: "/rooms",
-      icon: <FaDoorOpen size={30} />,
-      title:
-        currentLanguage === "en"
-          ? "Room"
-          : currentLanguage === "ar"
-            ? "القاعات"
-            : currentLanguage === "fr"
-              ? "Salles"
-              : "Room", // Default to English
-      description:
-        currentLanguage === "en"
-          ? "Number of class room, add new class room and edit a class room"
-          : currentLanguage === "ar"
-            ? "عدد القاعات الدراسية، إضافة قاعة دراسية جديدة وتعديل قاعة دراسية"
-            : currentLanguage === "fr"
-              ? "Nombre de salles de classe, ajouter une nouvelle salle de classe et modifier une salle de classe"
-              : "Number of class room, add new class room and edit a class room", // Default to English
     },
     {
       href: "/camera",

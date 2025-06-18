@@ -18,19 +18,33 @@ const AddNewAnnual = () => {
   ];
 
   const router = useRouter();
-  const { register, handleSubmit, formState: { errors } } = useForm();
   const { language: currentLanguage, loading } = useSelector((state: RootState) => state.language);
   const booleanValue = useSelector((state: RootState) => state.boolean.value);
   const [createAnnualLeave] = useCreateAnnualLeaveMutation();
+  const { register, handleSubmit, watch, formState: { errors } } = useForm();
+  const startDate = watch("startDate");
+  const endDate = watch("endDate");
 
   const onSubmit = async (data: any) => {
     try {
+      if (new Date(data.endDate) < new Date(data.startDate)) {
+        toast.error(
+          currentLanguage === "ar"
+            ? "تاريخ الانتهاء لا يمكن أن يكون قبل تاريخ البداية"
+            : currentLanguage === "fr"
+              ? "La date de fin ne peut pas être antérieure à la date de début"
+              : "End date cannot be earlier than start date"
+        );
+        return;
+      }
+
       const payload = {
         title: data.title,
         description: data.description,
         startDate: data.startDate,
         endDate: data.endDate,
       };
+
       await createAnnualLeave(payload).unwrap();
       toast.success(
         currentLanguage === "ar"
@@ -42,7 +56,6 @@ const AddNewAnnual = () => {
       router.push("/organization-setting/annual");
     } catch (err) {
       const errorObj = err as { data?: { message?: string }; message?: string };
-
       const errorMessage =
         errorObj?.data?.message ||
         errorObj?.message ||
@@ -51,7 +64,7 @@ const AddNewAnnual = () => {
           : currentLanguage === "fr"
             ? "Une erreur s'est produite."
             : "An error occurred.");
-
+      toast.error(errorMessage);
     }
   };
 
@@ -197,16 +210,16 @@ const AddNewAnnual = () => {
                   id="endDate"
                   type="date"
                   {...register("endDate", {
-                    required: {
-                      value: true,
-                      message:
-                        currentLanguage === "ar"
-                          ? "تاريخ الانتهاء مطلوب"
-                          : currentLanguage === "fr"
-                            ? "La date de fin est requise"
-                            : "End date is required",
-                    },
+                    required: { value: true, message: "..." },
+                    validate: value =>
+                      new Date(value) >= new Date(startDate) ||
+                      (currentLanguage === "ar"
+                        ? "تاريخ الانتهاء يجب أن يكون بعد تاريخ البداية"
+                        : currentLanguage === "fr"
+                          ? "La date de fin doit être postérieure à la date de début"
+                          : "End date must be after start date")
                   })}
+
                   className="w-full rounded-xl border border-borderPrimary px-4 py-3 outline-none"
                 />
                 {typeof errors.endDate?.message === "string" && (
