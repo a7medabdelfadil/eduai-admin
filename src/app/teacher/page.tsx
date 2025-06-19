@@ -62,7 +62,8 @@ const Teacher = () => {
     page: 0,
     size: 1000000,
   });
-  const [deleteTeachers, { isLoading: isDeleting }] = useDeleteTeachersMutation();
+  const [deleteTeachers, { isLoading: isDeleting }] =
+    useDeleteTeachersMutation();
 
   const handleDelete = async (id: string) => {
     try {
@@ -230,21 +231,70 @@ const Teacher = () => {
     return new Date(date).toLocaleDateString("en-GB");
   };
   const translate = {
-    fullName: currentLanguage === "ar" ? "الاسم الكامل" : currentLanguage === "fr" ? "Nom complet" : "Full Name",
-    id: currentLanguage === "ar" ? "رقم" : currentLanguage === "fr" ? "ID" : "ID",
-    gender: currentLanguage === "ar" ? "الجنس" : currentLanguage === "fr" ? "Genre" : "Gender",
-    nationality: currentLanguage === "ar" ? "الجنسية" : currentLanguage === "fr" ? "Nationalité" : "Nationality",
-    email: currentLanguage === "ar" ? "البريد الإلكتروني" : currentLanguage === "fr" ? "Email" : "Email",
-    mobile: currentLanguage === "ar" ? "الجوال" : currentLanguage === "fr" ? "Téléphone" : "Mobile",
-    view: currentLanguage === "ar" ? "عرض" : currentLanguage === "fr" ? "Voir" : "View",
-    lock: currentLanguage === "ar" ? "قفل" : currentLanguage === "fr" ? "Verrouiller" : "Lock",
-    action: currentLanguage === "ar" ? "الإجراء" : currentLanguage === "fr" ? "Action" : "Action",
-    noData: currentLanguage === "ar" ? "لا توجد بيانات" : currentLanguage === "fr" ? "Aucune donnée disponible" : "No data available",
+    fullName:
+      currentLanguage === "ar"
+        ? "الاسم الكامل"
+        : currentLanguage === "fr"
+          ? "Nom complet"
+          : "Full Name",
+    id:
+      currentLanguage === "ar" ? "رقم" : currentLanguage === "fr" ? "ID" : "ID",
+    gender:
+      currentLanguage === "ar"
+        ? "الجنس"
+        : currentLanguage === "fr"
+          ? "Genre"
+          : "Gender",
+    nationality:
+      currentLanguage === "ar"
+        ? "الجنسية"
+        : currentLanguage === "fr"
+          ? "Nationalité"
+          : "Nationality",
+    email:
+      currentLanguage === "ar"
+        ? "البريد الإلكتروني"
+        : currentLanguage === "fr"
+          ? "Email"
+          : "Email",
+    mobile:
+      currentLanguage === "ar"
+        ? "الجوال"
+        : currentLanguage === "fr"
+          ? "Téléphone"
+          : "Mobile",
+    view:
+      currentLanguage === "ar"
+        ? "عرض"
+        : currentLanguage === "fr"
+          ? "Voir"
+          : "View",
+    lock:
+      currentLanguage === "ar"
+        ? "قفل"
+        : currentLanguage === "fr"
+          ? "Verrouiller"
+          : "Lock",
+    action:
+      currentLanguage === "ar"
+        ? "الإجراء"
+        : currentLanguage === "fr"
+          ? "Action"
+          : "Action",
+    noData:
+      currentLanguage === "ar"
+        ? "لا توجد بيانات"
+        : currentLanguage === "fr"
+          ? "Aucune donnée disponible"
+          : "No data available",
   };
 
-  const filteredData = data?.data.content.filter((teacher: Teacher) =>
-    search.trim() === "" ? true : teacher.name.toLowerCase().includes(search.toLowerCase())
-  ) || [];
+  const filteredData =
+    data?.data.content.filter((teacher: Teacher) =>
+      search.trim() === ""
+        ? true
+        : teacher.name.toLowerCase().includes(search.toLowerCase()),
+    ) || [];
 
   const [visibleCount, setVisibleCount] = useState(20);
   const visibleData = filteredData.slice(0, visibleCount);
@@ -343,9 +393,7 @@ const Teacher = () => {
                   }
                 />
                 <span className="min-w-[120px] text-primary">
-                  {
-                    filteredData.length
-                  }{" "}
+                  {filteredData.length}{" "}
                   {currentLanguage === "ar"
                     ? "نتيجة"
                     : currentLanguage === "fr"
@@ -358,7 +406,7 @@ const Teacher = () => {
           <div className="flex justify-center">
             <Link
               href="/add-new-teacher"
-              className="whitespace-nowrap w-fit self-end rounded-xl bg-primary px-4 py-2 text-[16px] font-semibold text-white transition hover:bg-hover hover:shadow-md"
+              className="w-fit self-end whitespace-nowrap rounded-xl bg-primary px-4 py-2 text-[16px] font-semibold text-white transition hover:bg-hover hover:shadow-md"
             >
               {currentLanguage === "en"
                 ? "+ Add new Teacher"
@@ -370,8 +418,7 @@ const Teacher = () => {
             </Link>
           </div>
         </div>
-        <div className="relative overflow-auto shadow-md sm:rounded-lg -mt-2 bg-bgPrimary">
-
+        <div className="relative -mt-2 overflow-auto bg-bgPrimary shadow-md sm:rounded-lg">
           <Table>
             <TableHeader>
               <TableRow>
@@ -389,13 +436,17 @@ const Teacher = () => {
                 [...Array(3)].map((_, i) => (
                   <TableRow key={i}>
                     {Array.from({ length: 7 }).map((_, j) => (
-                      <TableCell key={j}><Skeleton className="h-4 w-24" /></TableCell>
+                      <TableCell key={j}>
+                        <Skeleton className="h-4 w-24" />
+                      </TableCell>
                     ))}
                   </TableRow>
                 ))
               ) : visibleData.length === 0 ? (
                 <TableRow>
-                  <TableCell colSpan={7} className="text-center font-medium">{translate.noData}</TableCell>
+                  <TableCell colSpan={7} className="text-center font-medium">
+                    {translate.noData}
+                  </TableCell>
                 </TableRow>
               ) : (
                 visibleData.map((teacher: Teacher, index: number) => (
@@ -403,7 +454,7 @@ const Teacher = () => {
                     className="cursor-pointer"
                     key={teacher.id}
                     data-index={index}
-                    onClick={(e) => {
+                    onClick={e => {
                       if ((e.target as HTMLElement).closest("a")) return;
                       setSelectedTeacher(teacher);
                       setShowModal(true);
@@ -425,18 +476,18 @@ const Teacher = () => {
                     <TableCell className="flex items-center gap-3">
                       <Link
                         href={`/teacher/view-teacher/${teacher.id}`}
-                        className="text-primary hover:text-primaryHover transition"
+                        className="hover:text-primaryHover text-primary transition"
                         title={translate.view}
-                        onClick={(e) => e.stopPropagation()}
+                        onClick={e => e.stopPropagation()}
                       >
                         <BiShow size={20} />
                       </Link>
                       <button
-                        onClick={(e) => {
+                        onClick={e => {
                           e.stopPropagation();
                           handleDelete(teacher.id);
                         }}
-                        className="text-error hover:text-red-800 transition"
+                        className="text-error transition hover:text-red-800"
                         title={translate.lock}
                         disabled={isDeleting}
                       >

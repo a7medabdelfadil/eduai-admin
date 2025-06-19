@@ -76,7 +76,7 @@ const TeacherSearch = () => {
               ? "Recherche"
               : "Search"}
         </Text>
-        <div className="flex h-full w-full justify-center overflow-auto my-4">
+        <div className="my-4 flex h-full w-full justify-center overflow-auto">
           <div className="grid h-full w-full overflow-auto rounded-xl bg-bgPrimary">
             {/* Navigation Links */}
             <div
@@ -230,10 +230,11 @@ const TeacherSearch = () => {
                             <div
                               onClick={() => handleClick(teacher.id)}
                               key={teacher.id}
-                              className={`flex w-full cursor-pointer items-center rounded-lg border border-borderPrimary px-2 py-1 hover:bg-bgSecondary ${selectedId === teacher.id
+                              className={`flex w-full cursor-pointer items-center rounded-lg border border-borderPrimary px-2 py-1 hover:bg-bgSecondary ${
+                                selectedId === teacher.id
                                   ? "bg-bgSecondary"
                                   : ""
-                                }`}
+                              }`}
                             >
                               <div>
                                 {teacher.picture == null ? (

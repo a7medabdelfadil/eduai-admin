@@ -32,10 +32,10 @@ const AddDisciplinaryRecordForm = () => {
       href: "/document-management",
     },
     {
-      nameEn: "Other Official Documents",
-      nameAr: "وثائق رسمية أخرى",
-      nameFr: "Autres documents officiels",
-      href: "/document-management/other",
+      nameEn: "Disciplinary Records",
+      nameAr: "السجلات التأديبية",
+      nameFr: "Dossiers disciplinaires",
+      href: "/document-management/other/disciplinary",
     },
     {
       nameEn: "Add Disciplinary Record",

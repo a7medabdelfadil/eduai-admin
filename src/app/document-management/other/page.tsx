@@ -101,7 +101,7 @@ const Card = () => {
                 ? "Dossiers disciplinaires"
                 : "Disciplinary Records"}
           </Link>
-         
+
           <Link
             className="hover:text-blue-500 hover:underline"
             href="/document-management/other/legal"
@@ -157,7 +157,7 @@ const Card = () => {
             </label>
             <select
               id="roleSelect"
-              className="rounded-md border bg-bgPrimary border-borderPrimary px-3 py-1 text-sm"
+              className="rounded-md border border-borderPrimary bg-bgPrimary px-3 py-1 text-sm"
               value={selectedRole}
               onChange={e => setSelectedRole(e.target.value)}
             >

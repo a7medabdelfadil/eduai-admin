@@ -139,22 +139,75 @@ const Worker = () => {
     (state: RootState) => state.language,
   );
 
-
   const translate = {
-    fullName: currentLanguage === "ar" ? "الاسم الكامل" : currentLanguage === "fr" ? "Nom complet" : "Full Name",
-    id: currentLanguage === "ar" ? "الرقم" : currentLanguage === "fr" ? "ID" : "ID",
-    gender: currentLanguage === "ar" ? "الجنس" : currentLanguage === "fr" ? "Genre" : "Gender",
-    nationality: currentLanguage === "ar" ? "الجنسية" : currentLanguage === "fr" ? "Nationalité" : "Nationality",
-    email: currentLanguage === "ar" ? "البريد الإلكتروني" : currentLanguage === "fr" ? "Email" : "Email",
-    mobile: currentLanguage === "ar" ? "الموبايل" : currentLanguage === "fr" ? "Mobile" : "Mobile",
-    view: currentLanguage === "ar" ? "عرض" : currentLanguage === "fr" ? "Voir" : "View",
-    lock: currentLanguage === "ar" ? "قفل" : currentLanguage === "fr" ? "Verrouiller" : "Lock",
-    action: currentLanguage === "ar" ? "الإجراء" : currentLanguage === "fr" ? "Action" : "Action",
-    noData: currentLanguage === "ar" ? "لا توجد بيانات" : currentLanguage === "fr" ? "Aucune donnée disponible" : "No data available",
+    fullName:
+      currentLanguage === "ar"
+        ? "الاسم الكامل"
+        : currentLanguage === "fr"
+          ? "Nom complet"
+          : "Full Name",
+    id:
+      currentLanguage === "ar"
+        ? "الرقم"
+        : currentLanguage === "fr"
+          ? "ID"
+          : "ID",
+    gender:
+      currentLanguage === "ar"
+        ? "الجنس"
+        : currentLanguage === "fr"
+          ? "Genre"
+          : "Gender",
+    nationality:
+      currentLanguage === "ar"
+        ? "الجنسية"
+        : currentLanguage === "fr"
+          ? "Nationalité"
+          : "Nationality",
+    email:
+      currentLanguage === "ar"
+        ? "البريد الإلكتروني"
+        : currentLanguage === "fr"
+          ? "Email"
+          : "Email",
+    mobile:
+      currentLanguage === "ar"
+        ? "الموبايل"
+        : currentLanguage === "fr"
+          ? "Mobile"
+          : "Mobile",
+    view:
+      currentLanguage === "ar"
+        ? "عرض"
+        : currentLanguage === "fr"
+          ? "Voir"
+          : "View",
+    lock:
+      currentLanguage === "ar"
+        ? "قفل"
+        : currentLanguage === "fr"
+          ? "Verrouiller"
+          : "Lock",
+    action:
+      currentLanguage === "ar"
+        ? "الإجراء"
+        : currentLanguage === "fr"
+          ? "Action"
+          : "Action",
+    noData:
+      currentLanguage === "ar"
+        ? "لا توجد بيانات"
+        : currentLanguage === "fr"
+          ? "Aucune donnée disponible"
+          : "No data available",
   };
-  const filteredData = data?.data?.content?.filter((worker: any) => {
-    return search.trim() === "" || worker.name?.toLowerCase()?.includes(search.toLowerCase());
-  }) || [];
+  const filteredData =
+    data?.data?.content?.filter((worker: any) => {
+      return (
+        search.trim() === "" ||
+        worker.name?.toLowerCase()?.includes(search.toLowerCase())
+      );
+    }) || [];
 
   const visibleData = filteredData.slice(0, visibleCount);
 
@@ -236,10 +289,7 @@ const Worker = () => {
                   }
                 />
                 <span className="min-w-[120px] text-primary">
-                  {
-                    filteredData.length
-                  }{" "}
-                  Result(s)
+                  {filteredData.length} Result(s)
                 </span>
               </div>
             </div>
@@ -259,8 +309,7 @@ const Worker = () => {
             </Link>
           </div>
         </div>
-        <div className="relative overflow-auto shadow-md sm:rounded-lg -mt-4 bg-bgPrimary">
-
+        <div className="relative -mt-4 overflow-auto bg-bgPrimary shadow-md sm:rounded-lg">
           <Table>
             <TableHeader>
               <TableRow>
@@ -294,7 +343,7 @@ const Worker = () => {
                 visibleData.map((worker: Worker, index: number) => (
                   <TableRow
                     key={worker.id}
-                    onClick={(e) => {
+                    onClick={e => {
                       if ((e.target as HTMLElement).closest("a")) return;
                       setSelectedWorker(worker);
                       setShowModal(true);
@@ -317,18 +366,18 @@ const Worker = () => {
                     <TableCell className="flex items-center gap-3">
                       <Link
                         href={`/worker/view-worker/${worker.id}`}
-                        className="text-primary hover:text-primaryHover transition"
+                        className="hover:text-primaryHover text-primary transition"
                         title={translate.view}
-                        onClick={(e) => e.stopPropagation()}
+                        onClick={e => e.stopPropagation()}
                       >
                         <BiShow size={20} />
                       </Link>
                       <button
-                        onClick={(e) => {
+                        onClick={e => {
                           e.stopPropagation();
                           handleDelete(worker.id);
                         }}
-                        className="text-error hover:text-red-800 transition"
+                        className="text-error transition hover:text-red-800"
                         title={translate.lock}
                         disabled={isDeleting}
                       >
@@ -344,7 +393,6 @@ const Worker = () => {
           {visibleCount < filteredData.length && (
             <SeeMoreButton onClick={() => setVisibleCount(prev => prev + 20)} />
           )}
-
         </div>
       </Container>
       {showModal && selectedWorker && (

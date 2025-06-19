@@ -31,7 +31,7 @@ export const professionalApi = createApi({
       query: () =>
         "/api/v1/management/certificate/professional-development/all?size=1000000&page=0",
     }),
-    
+
     //
     deleteProfessionals: builder.mutation({
       query: id => ({
@@ -61,8 +61,7 @@ export const professionalApi = createApi({
       }),
     }),
     getTypesOfCertificates: builder.query({
-      query: () =>
-        "/api/v1/public/enumeration/certificate-type",
+      query: () => "/api/v1/public/enumeration/certificate-type",
     }),
   }),
 });
@@ -73,5 +72,5 @@ export const {
   useCreateProfessionalsMutation,
   useGetProfessionalByIdQuery,
   useUpdateProfessionalsMutation,
-  useGetTypesOfCertificatesQuery
+  useGetTypesOfCertificatesQuery,
 } = professionalApi;

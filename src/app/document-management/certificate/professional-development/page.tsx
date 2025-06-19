@@ -12,7 +12,7 @@ import { RootState } from "@/GlobalRedux/store";
 import { toast } from "react-toastify";
 import BreadCrumbs from "@/components/BreadCrumbs";
 import Container from "@/components/Container";
-import { BiSearchAlt } from "react-icons/bi";
+import { BiSearchAlt, BiTrash } from "react-icons/bi";
 import {
   Table,
   TableBody,
@@ -23,7 +23,6 @@ import {
 } from "@/components/Table";
 import { Skeleton } from "@/components/Skeleton";
 import { MdDelete } from "react-icons/md";
-import { RiDeleteBin6Fill } from "react-icons/ri";
 import SeeMoreButton from "@/components/SeeMoreButton";
 
 const ProfessionalDevelopment = () => {
@@ -140,7 +139,7 @@ const ProfessionalDevelopment = () => {
     <>
       <BreadCrumbs breadcrumbs={breadcrumbs} />
       <Container>
-         <div className="-ml-1 -mt-2 mb-6 flex items-center justify-between">
+        <div className="-ml-1 -mt-2 mb-6 flex items-center justify-between">
           <h1 className="text-3xl font-semibold">
             {currentLanguage === "en"
               ? "Certificates"
@@ -273,7 +272,7 @@ const ProfessionalDevelopment = () => {
                           >
                             <img src="/images/print.png" alt="#" />
                           </Link>
-                          <RiDeleteBin6Fill
+                          <BiTrash
                             className="cursor-pointer text-2xl text-red-600 hover:text-red-800"
                             onClick={() => handleDelete(professional.id)}
                           />

@@ -164,7 +164,7 @@ const Legal = () => {
                 ? "Dossiers disciplinaires"
                 : "Disciplinary Records"}
           </Link>
-        
+
           <Link
             className="text-blue-500 underline"
             href="/document-management/other/legal"

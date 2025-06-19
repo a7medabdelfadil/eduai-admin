@@ -117,7 +117,7 @@ const Infrastructure = () => {
               : "Security cameras", // Default to English
     },
     {
-      href: "/infrastructure/store",
+      href: "/infrastructure/store/digital-resource",
       icon: <FaStore size={30} />,
       title:
         currentLanguage === "en"

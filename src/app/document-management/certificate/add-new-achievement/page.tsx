@@ -80,13 +80,12 @@ const AddNewAchievement = () => {
       }),
     );
 
-
     data.append("file", formData.endDate[0]); // Assuming 'endDate' is the file input
 
     try {
       await createCertificate(data).unwrap();
       toast.success("Certificate created successfully");
-      router.push('/document-management/certificate/achievement');
+      router.push("/document-management/certificate/achievement");
     } catch (error: any) {
       const errorMessage =
         error?.data?.message ??
@@ -97,11 +96,9 @@ const AddNewAchievement = () => {
           ? `فشل الحذف: ${errorMessage}`
           : currentLanguage === "fr"
             ? `Échec de la suppression : ${errorMessage}`
-            : `Delete failed: ${errorMessage}`
+            : `Delete failed: ${errorMessage}`,
       );
     }
-
-
   };
   const { language: currentLanguage, loading } = useSelector(
     (state: RootState) => state.language,
@@ -179,7 +176,7 @@ const AddNewAchievement = () => {
                 <select
                   id="studentId"
                   {...register("studentId")}
-                  className="h-full w-full rounded-xl border border-borderPrimary px-4 py-3 text-[18px] bg-bgPrimary outline-none max-[458px]:w-[350px]"
+                  className="h-full w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 text-[18px] outline-none max-[458px]:w-[350px]"
                 >
                   <option value="">
                     {currentLanguage === "en"
@@ -192,12 +189,12 @@ const AddNewAchievement = () => {
                     (student: {
                       id: string | null | undefined;
                       name:
-                      | string
-                      | number
-                      | bigint
-                      | boolean
-                      | null
-                      | undefined;
+                        | string
+                        | number
+                        | bigint
+                        | boolean
+                        | null
+                        | undefined;
                     }) => (
                       <option key={student.id} value={student.id ?? ""}>
                         {String(student.name)}
@@ -288,7 +285,7 @@ const AddNewAchievement = () => {
                   <select
                     id="subject"
                     {...register("subject", { required: true })}
-                    className="h-full w-full bg-bgPrimary rounded-xl border border-borderPrimary px-4 py-3 text-[18px] outline-none max-[458px]:w-[350px]"
+                    className="h-full w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 text-[18px] outline-none max-[458px]:w-[350px]"
                   >
                     <option value="">
                       {currentLanguage === "en"

@@ -78,7 +78,7 @@ const EmployeeSearch = () => {
               ? "Recherche"
               : "Search"}
         </Text>
-        <div className="flex h-full w-full justify-center overflow-auto my-4">
+        <div className="my-4 flex h-full w-full justify-center overflow-auto">
           <div className="grid h-full w-full overflow-auto rounded-xl bg-bgPrimary">
             <div
               dir={currentLanguage === "ar" ? "rtl" : "ltr"}
@@ -230,10 +230,11 @@ const EmployeeSearch = () => {
                             <div
                               onClick={() => handleClick(employee.id)}
                               key={employee.id}
-                              className={`flex w-full cursor-pointer items-center rounded-lg border border-borderPrimary px-2 py-1 hover:bg-bgSecondary ${selectedId === employee.id
-                                ? "bg-bgSecondary"
-                                : ""
-                                }`}
+                              className={`flex w-full cursor-pointer items-center rounded-lg border border-borderPrimary px-2 py-1 hover:bg-bgSecondary ${
+                                selectedId === employee.id
+                                  ? "bg-bgSecondary"
+                                  : ""
+                              }`}
                             >
                               <div>
                                 {employee.picture == null ? (

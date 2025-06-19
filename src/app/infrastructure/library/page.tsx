@@ -56,22 +56,82 @@ const Library = () => {
   ];
 
   const { language: currentLanguage, loading } = useSelector(
-    (state: RootState) => state.language
+    (state: RootState) => state.language,
   );
 
   const translate = {
-    roomNumber: currentLanguage === "ar" ? "رقم القاعة" : currentLanguage === "fr" ? "Numéro de salle" : "Room Number",
-    buildingNumber: currentLanguage === "ar" ? "رقم المبنى" : currentLanguage === "fr" ? "Bâtiment" : "Building",
-    floorNumber: currentLanguage === "ar" ? "الطابق" : currentLanguage === "fr" ? "Étage" : "Floor",
-    maxCapacity: currentLanguage === "ar" ? "السعة" : currentLanguage === "fr" ? "Capacité" : "Capacity",
-    category: currentLanguage === "ar" ? "الفئة" : currentLanguage === "fr" ? "Catégorie" : "Category",
-    status: currentLanguage === "ar" ? "الحالة" : currentLanguage === "fr" ? "Statut" : "Status",
-    action: currentLanguage === "ar" ? "الإجراء" : currentLanguage === "fr" ? "Action" : "Action",
-    searchPlaceholder: currentLanguage === "ar" ? "بحث عن قاعة" : currentLanguage === "fr" ? "Rechercher une salle" : "Search Room",
-    noData: currentLanguage === "ar" ? "لا توجد بيانات" : currentLanguage === "fr" ? "Aucune donnée disponible" : "No data available",
-    result: currentLanguage === "ar" ? "نتيجة" : currentLanguage === "fr" ? "résultat(s)" : "Result(s)",
-    edit: currentLanguage === "ar" ? "تعديل" : currentLanguage === "fr" ? "Modifier" : "Edit",
-    delete: currentLanguage === "ar" ? "حذف" : currentLanguage === "fr" ? "Supprimer" : "Delete",
+    roomNumber:
+      currentLanguage === "ar"
+        ? "رقم القاعة"
+        : currentLanguage === "fr"
+          ? "Numéro de salle"
+          : "Room Number",
+    buildingNumber:
+      currentLanguage === "ar"
+        ? "رقم المبنى"
+        : currentLanguage === "fr"
+          ? "Bâtiment"
+          : "Building",
+    floorNumber:
+      currentLanguage === "ar"
+        ? "الطابق"
+        : currentLanguage === "fr"
+          ? "Étage"
+          : "Floor",
+    maxCapacity:
+      currentLanguage === "ar"
+        ? "السعة"
+        : currentLanguage === "fr"
+          ? "Capacité"
+          : "Capacity",
+    category:
+      currentLanguage === "ar"
+        ? "الفئة"
+        : currentLanguage === "fr"
+          ? "Catégorie"
+          : "Category",
+    status:
+      currentLanguage === "ar"
+        ? "الحالة"
+        : currentLanguage === "fr"
+          ? "Statut"
+          : "Status",
+    action:
+      currentLanguage === "ar"
+        ? "الإجراء"
+        : currentLanguage === "fr"
+          ? "Action"
+          : "Action",
+    searchPlaceholder:
+      currentLanguage === "ar"
+        ? "بحث عن قاعة"
+        : currentLanguage === "fr"
+          ? "Rechercher une salle"
+          : "Search Room",
+    noData:
+      currentLanguage === "ar"
+        ? "لا توجد بيانات"
+        : currentLanguage === "fr"
+          ? "Aucune donnée disponible"
+          : "No data available",
+    result:
+      currentLanguage === "ar"
+        ? "نتيجة"
+        : currentLanguage === "fr"
+          ? "résultat(s)"
+          : "Result(s)",
+    edit:
+      currentLanguage === "ar"
+        ? "تعديل"
+        : currentLanguage === "fr"
+          ? "Modifier"
+          : "Edit",
+    delete:
+      currentLanguage === "ar"
+        ? "حذف"
+        : currentLanguage === "fr"
+          ? "Supprimer"
+          : "Delete",
   };
 
   const { data, isLoading, refetch } = useGetAllRoomsQuery(undefined);
@@ -80,7 +140,7 @@ const Library = () => {
   const [visibleCount, setVisibleCount] = useState(20);
 
   const filteredData = data?.data?.filter((room: any) =>
-    room.roomNumber?.toLowerCase().includes(search.trim().toLowerCase())
+    room.roomNumber?.toLowerCase().includes(search.trim().toLowerCase()),
   );
   const visibleData = filteredData?.slice(0, visibleCount);
 
@@ -109,15 +169,18 @@ const Library = () => {
             {/* default */}
           </h1>
         </div>
-        <div className="bg-bgPrimary rounded-xl">
-          <div className="p-4 flex flex-col items-center justify-between gap-4 md:flex-row">
-            <div dir={currentLanguage === "ar" ? "rtl" : "ltr"} className="relative w-full max-w-md">
+        <div className="max-w-screen overflow-x-hidden rounded-xl bg-bgPrimary">
+          <div className="flex flex-col items-center justify-between gap-4 p-4 md:flex-row">
+            <div
+              dir={currentLanguage === "ar" ? "rtl" : "ltr"}
+              className="relative w-full max-w-md"
+            >
               <div className="pointer-events-none absolute inset-y-0 start-0 z-20 flex items-center ps-4">
                 <BiSearchAlt className="text-secondary" size={18} />
               </div>
               <div className="flex items-center gap-2">
                 <input
-                  onChange={(e) => setSearch(e.target.value)}
+                  onChange={e => setSearch(e.target.value)}
                   type="text"
                   className="w-full rounded-lg border-2 border-borderPrimary bg-bgPrimary px-4 py-2 ps-11 text-lg outline-none"
                   placeholder={translate.searchPlaceholder}
@@ -130,7 +193,7 @@ const Library = () => {
 
             <Link
               href="/infrastructure/library/add-library"
-              className="whitespace-nowrap w-fit self-end rounded-xl bg-primary px-4 py-2 text-[16px] font-semibold text-white transition hover:bg-hover hover:shadow-md"
+              className="w-fit self-end whitespace-nowrap rounded-xl bg-primary px-4 py-2 text-[16px] font-semibold text-white transition hover:bg-hover hover:shadow-md"
             >
               {currentLanguage === "en"
                 ? "Add Library Room"
@@ -139,10 +202,9 @@ const Library = () => {
                   : currentLanguage === "fr"
                     ? "Ajouter une salle de bibliothèque"
                     : "Add Library Room"}
-
             </Link>
           </div>
-          <div className="relative overflow-auto shadow-md sm:rounded-lg bg-bgPrimary">
+          <div className="relative overflow-auto bg-bgPrimary shadow-md sm:rounded-lg">
             <Table>
               <TableHeader>
                 <TableRow>
@@ -191,7 +253,10 @@ const Library = () => {
                         </Link>
                         <Dialog>
                           <DialogTrigger asChild>
-                            <button className="text-error transition hover:text-red-800" title={translate.delete}>
+                            <button
+                              className="text-error transition hover:text-red-800"
+                              title={translate.delete}
+                            >
                               <BiTrash size={20} />
                             </button>
                           </DialogTrigger>
@@ -214,8 +279,12 @@ const Library = () => {
                             </DialogHeader>
                             <DialogFooter>
                               <DialogClose asChild>
-                                <button className="rounded bg-borderPrimary px-4 py-2 font-medium text-white transition hover:bg-borderDark">
-                                  {currentLanguage === "ar" ? "إلغاء" : currentLanguage === "fr" ? "Annuler" : "Cancel"}
+                                <button className="hover:bg-borderDark rounded bg-borderPrimary px-4 py-2 font-medium text-white transition">
+                                  {currentLanguage === "ar"
+                                    ? "إلغاء"
+                                    : currentLanguage === "fr"
+                                      ? "Annuler"
+                                      : "Cancel"}
                                 </button>
                               </DialogClose>
                               <button
@@ -225,12 +294,19 @@ const Library = () => {
                                     toast.success("Room deleted successfully");
                                     refetch();
                                   } catch (err: any) {
-                                    toast.error(err?.data?.message || "Failed to delete room");
+                                    toast.error(
+                                      err?.data?.message ||
+                                      "Failed to delete room",
+                                    );
                                   }
                                 }}
                                 className="rounded bg-error px-4 py-2 font-medium text-white transition hover:bg-red-700"
                               >
-                                {currentLanguage === "ar" ? "حذف" : currentLanguage === "fr" ? "Supprimer" : "Delete"}
+                                {currentLanguage === "ar"
+                                  ? "حذف"
+                                  : currentLanguage === "fr"
+                                    ? "Supprimer"
+                                    : "Delete"}
                               </button>
                             </DialogFooter>
                           </DialogContent>
@@ -242,7 +318,9 @@ const Library = () => {
               </TableBody>
             </Table>
             {visibleCount < (filteredData?.length || 0) && (
-              <SeeMoreButton onClick={() => setVisibleCount((prev) => prev + 20)} />
+              <SeeMoreButton
+                onClick={() => setVisibleCount(prev => prev + 20)}
+              />
             )}
           </div>
         </div>

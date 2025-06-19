@@ -177,8 +177,7 @@ const Activity = () => {
             {/* Default to English */}
           </Link>
         </div>
-        <div className="rounded-xl bg-bgPrimary max-w-screen overflow-x-hidden">
-
+        <div className="max-w-screen overflow-x-hidden rounded-xl bg-bgPrimary">
           <div className="flex justify-between p-4 text-center max-[502px]:grid max-[502px]:justify-center">
             <div className="mb-3">
               <div className="relative min-w-72 md:min-w-80">

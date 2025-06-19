@@ -68,9 +68,9 @@ const Archive = () => {
       key: "Grades",
     },
     {
-      href: "/course/resource",
+      href: "/archive/store/digital-resource",
       icon: <FaBoxOpen size={40} />,
-      key: "Resource",
+      key: "Resource Management",
     },
     {
       href: "/financial-management",

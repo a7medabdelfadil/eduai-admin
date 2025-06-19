@@ -19,8 +19,8 @@ import {
   TableHead,
   TableCell,
 } from "@/components/Table";
-import { RiDeleteBin6Fill, RiEdit2Fill } from "react-icons/ri";
-import { BiSearchAlt } from "react-icons/bi";
+import { RiEdit2Fill } from "react-icons/ri";
+import { BiSearchAlt, BiTrash } from "react-icons/bi";
 import { Skeleton } from "@/components/Skeleton";
 import SeeMoreButton from "@/components/SeeMoreButton";
 
@@ -179,8 +179,7 @@ const FeesManagement = () => {
             {/* Default to English */}
           </Link>
         </div>
-        <div className="rounded-xl bg-bgPrimary max-w-screen overflow-x-hidden">
-
+        <div className="max-w-screen overflow-x-hidden rounded-xl bg-bgPrimary">
           <div className="flex flex-col items-center justify-between gap-4 rounded-lg px-4 py-4 md:flex-row">
             {/* Search Input */}
             <div
@@ -296,7 +295,7 @@ const FeesManagement = () => {
                       <TableCell>
                         <div className="flex items-center justify-center gap-3">
                           <button onClick={() => handleDelete(invoice.id)}>
-                            <RiDeleteBin6Fill className="h-4 w-4 text-red-500" />
+                            <BiTrash className="h-4 w-4 text-red-500" />
                           </button>
                           <Link
                             href={`/financial-management/taxes/${invoice.id}`}

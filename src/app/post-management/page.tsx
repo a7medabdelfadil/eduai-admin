@@ -189,7 +189,7 @@ const PostManagment = () => {
                 : "News"}
           </Link>
         </div>
-        <div className="bg-bgPrimary rounded-xl">
+        <div className="max-w-screen overflow-x-hidden rounded-xl bg-bgPrimary">
           <div className="flex flex-col items-center justify-between gap-4 rounded-lg px-4 py-4 md:flex-row">
             {/* Search Input */}
             <div
@@ -314,11 +314,12 @@ const PostManagment = () => {
             </Table>
 
             {visibleCount < filteredData?.length && (
-              <SeeMoreButton onClick={() => setVisibleCount(prev => prev + 20)} />
+              <SeeMoreButton
+                onClick={() => setVisibleCount(prev => prev + 20)}
+              />
             )}
           </div>
         </div>
-
       </Container>
     </>
   );

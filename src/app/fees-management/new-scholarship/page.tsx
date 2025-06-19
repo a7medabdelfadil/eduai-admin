@@ -94,7 +94,7 @@ const NewScholarship = () => {
     } catch (err) {
       toast.error(
         (err as { data?: { message?: string } })?.data?.message ||
-        "An error occurred",
+          "An error occurred",
       );
     }
   };
@@ -126,7 +126,11 @@ const NewScholarship = () => {
             {/* default */}
           </h1>
         </div>
-        <form className="flex h-full w-full items-center justify-center" onSubmit={handleSubmit(onSubmit)} encType="multipart/form-data">
+        <form
+          className="flex h-full w-full items-center justify-center"
+          onSubmit={handleSubmit(onSubmit)}
+          encType="multipart/form-data"
+        >
           <div className="w-[90] rounded-xl bg-bgPrimary p-10 md:w-[80%]">
             <div className="flex items-center justify-start gap-2">
               <h1 className="text-[22px] font-semibold">
@@ -137,7 +141,7 @@ const NewScholarship = () => {
                     : "Informations sur la bourse"}
               </h1>
             </div>
-            <div className="p-6 grid grid-cols-2 gap-4 max-[1278px]:grid-cols-1">
+            <div className="grid grid-cols-2 gap-4 p-6 max-[1278px]:grid-cols-1">
               {/* Student ID Field */}
               <label
                 htmlFor="studentId"
@@ -165,12 +169,12 @@ const NewScholarship = () => {
                     (student: {
                       id: string | null | undefined;
                       name:
-                      | string
-                      | number
-                      | bigint
-                      | boolean
-                      | null
-                      | undefined;
+                        | string
+                        | number
+                        | bigint
+                        | boolean
+                        | null
+                        | undefined;
                     }) => (
                       <option key={student.id} value={student.id ?? ""}>
                         {String(student.name)}

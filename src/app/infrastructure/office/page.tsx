@@ -20,10 +20,10 @@ import {
   TableHead,
   TableCell,
 } from "@/components/Table";
-import { RiDeleteBin6Fill, RiEdit2Fill } from "react-icons/ri";
+import { RiEdit2Fill } from "react-icons/ri";
 import { Skeleton } from "@/components/Skeleton";
 import SeeMoreButton from "@/components/SeeMoreButton";
-import { BiSearchAlt } from "react-icons/bi";
+import { BiSearchAlt, BiTrash } from "react-icons/bi";
 
 const Office = () => {
   const breadcrumbs = [
@@ -94,8 +94,7 @@ const Office = () => {
             {/* default */}
           </h1>
         </div>
-        <div className="rounded-xl bg-bgPrimary max-w-screen overflow-x-hidden">
-
+        <div className="max-w-screen overflow-x-hidden rounded-xl bg-bgPrimary">
           <div className="flex flex-col items-center justify-between gap-4 rounded-lg px-4 py-4 md:flex-row">
             {/* Search Input */}
             <div
@@ -204,7 +203,7 @@ const Office = () => {
                           title={t("Delete", "حذف", "Supprimer")}
                           className="text-red-500 hover:text-red-700"
                         >
-                          <RiDeleteBin6Fill className="h-5 w-5" />
+                          <BiTrash className="h-5 w-5" />
                         </button>
                       </TableCell>
                       <TableCell>

@@ -46,7 +46,7 @@ const Attendance = () => {
 
   const { data: employeedata, isLoading: isLoadingE } =
     useGetEmployeeAttendenceQuery(null);
-  console.log("🚀 ~ Attendance ~ employeedata:", employeedata)
+  console.log("🚀 ~ Attendance ~ employeedata:", employeedata);
   const { data: driverCount, isLoading: isCount } =
     useGetDriversCountQuery(null);
   const { data: driverAttend, isLoading: isAttend } =
@@ -57,7 +57,7 @@ const Attendance = () => {
     useGetWorkerAttendenceQuery(null);
   const { data: employeeCount, isLoading: isECount } =
     useGetAllEmployeesQuery(null);
-  console.log("🚀 ~ Attendance ~ employeeCount:", employeeCount)
+  console.log("🚀 ~ Attendance ~ employeeCount:", employeeCount);
   const { data: studentCount, isLoading: isSCount } =
     useGetAllStudentsQuery(null);
   const { data: students, isLoading: isStudents } =

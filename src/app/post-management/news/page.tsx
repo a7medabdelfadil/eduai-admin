@@ -122,7 +122,7 @@ const News = () => {
         like: "true",
       }).unwrap();
       void refetch();
-    } catch (err) { }
+    } catch (err) {}
   };
   const DeleteLike = async (id: string) => {
     try {
@@ -131,7 +131,7 @@ const News = () => {
         like: "false",
       }).unwrap();
       void refetch();
-    } catch (err) { }
+    } catch (err) {}
   };
 
   const formatTransactionDate = (dateString: string | number | Date) => {
@@ -162,7 +162,7 @@ const News = () => {
               : "News"}
         </Text>
 
-        <div className="grid h-full w-full items-center justify-center gap-4 bg-bgPrimary my-6 rounded-xl p-9 max-[505px]:p-2">
+        <div className="my-6 grid h-full w-full items-center justify-center gap-4 rounded-xl bg-bgPrimary p-9 max-[505px]:p-2">
           {data?.data.content.map((post: Post, index: number) => (
             <div
               key={post.id}
@@ -306,21 +306,21 @@ const News = () => {
                   ))}
                 </div>
               </div>
-              <div className="mb-3 mt-2 gap-1 flex items-center justify-between font-semibold">
+              <div className="mb-3 mt-2 flex items-center justify-between gap-1 font-semibold">
                 <div className="flex items-center">
-                  {currentLanguage == "ar"? (
+                  {currentLanguage == "ar" ? (
                     <>
                       <p className="text-textSecondary">{post.likesCount}</p>
-                      <div className="w-[22px] ml-1 h-[22px] rounded-full bg-gradient-to-b from-[#33bfff] to-[#0066ff] flex items-center justify-center">
-                        <FaThumbsUp className="text-white text-[12px]" />
+                      <div className="ml-1 flex h-[22px] w-[22px] items-center justify-center rounded-full bg-gradient-to-b from-[#33bfff] to-[#0066ff]">
+                        <FaThumbsUp className="text-[12px] text-white" />
                       </div>
                     </>
                   ) : (
                     <>
-                      <div className="w-[22px] mr-1 h-[22px] rounded-full bg-gradient-to-b from-[#33bfff] to-[#0066ff] flex items-center justify-center">
-                        <FaThumbsUp className="text-white text-[12px]" />
+                      <div className="mr-1 flex h-[22px] w-[22px] items-center justify-center rounded-full bg-gradient-to-b from-[#33bfff] to-[#0066ff]">
+                        <FaThumbsUp className="text-[12px] text-white" />
                       </div>
-                       <p className="text-textSecondary">{post.likesCount}</p>
+                      <p className="text-textSecondary">{post.likesCount}</p>
                     </>
                   )}
                 </div>
@@ -347,12 +347,9 @@ const News = () => {
                     onClick={() =>
                       !post.isLiked ? PutLike(post.id) : DeleteLike(post.id)
                     }
-                    className={`flex gap-2 ${post.isLiked && "text-primary" }`}
+                    className={`flex gap-2 ${post.isLiked && "text-primary"}`}
                   >
-                      <FaThumbsUp
-                        size={20}
-                        className="mx-[10px]"
-                      />
+                    <FaThumbsUp size={20} className="mx-[10px]" />
                     {currentLanguage === "ar"
                       ? "إعجاب"
                       : currentLanguage === "fr"
@@ -446,7 +443,6 @@ const News = () => {
             </div>
           ))}
         </div>
-
       </Container>
     </>
   );

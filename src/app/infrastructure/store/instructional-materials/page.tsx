@@ -1,12 +1,46 @@
 "use client";
-import Link from "next/link";
-import { useState, useEffect } from "react"; // Import useState and useEffect hooks
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/Table";
+import { Skeleton } from "@/components/Skeleton";
+import SeeMoreButton from "@/components/SeeMoreButton";
 import BreadCrumbs from "@/components/BreadCrumbs";
+import Container from "@/components/Container";
+import Link from "next/link";
+import {
+  BiEditAlt,
+  BiSearchAlt,
+  BiTrash,
+  BiPlus,
+  BiMinus,
+} from "react-icons/bi";
 import { useSelector } from "react-redux";
 import { RootState } from "@/GlobalRedux/store";
-import Spinner from "@/components/spinner";
+import {
+  useGetAllResourcesQuery,
+  useDeleteResourceMutation,
+  useAddItemsToResourceMutation,
+  usePullItemsFromResourceMutation,
+} from "@/features/Infrastructure/storeApi";
+import { useState } from "react";
+import { toast } from "react-toastify";
+import {
+  Dialog,
+  DialogTrigger,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogFooter,
+  DialogClose,
+} from "@/components/Dialog";
 
-const instructionalMaterials = () => {
+const Store = () => {
   const breadcrumbs = [
     {
       nameEn: "Administration",
@@ -22,89 +56,162 @@ const instructionalMaterials = () => {
     },
     {
       nameEn: "Instructional Materials",
-      nameAr: "المواد التعليمية",
-      nameFr: "Matériel didactique",
-      href: "/infrastructure/instructional-materials",
+      nameAr: "مواد تعليمية",
+      nameFr: "Matériaux pédagogiques",
+      href: "/infrastructure/store/instructional-materials",
     },
   ];
 
-  const booleanValue = useSelector((state: RootState) => state.boolean.value); // sidebar
-
-  const [selectAll, setSelectAll] = useState(false); // State to track whether select all checkbox is checked
-  const [search, setSearch] = useState("");
-
-  // Function to handle click on select all checkbox
-  const handleSelectAll = () => {
-    setSelectAll(!selectAll); // Toggle select all state
-    const checkboxes = document.querySelectorAll<HTMLInputElement>(
-      'input[type="checkbox"]:not(#checkbox-all-search)',
-    ); // Select all checkboxes except select all checkbox
-    checkboxes.forEach(checkbox => {
-      checkbox.checked = !selectAll; // Set checked state of each checkbox based on select all state
-    });
-  };
-
-  useEffect(() => {
-    // Function to handle click on other checkboxes
-    const handleOtherCheckboxes = () => {
-      const allCheckboxes = document.querySelectorAll<HTMLInputElement>(
-        'input[type="checkbox"]:not(#checkbox-all-search)',
-      );
-      const allChecked = Array.from(allCheckboxes).every(
-        checkbox => checkbox.checked,
-      );
-      const selectAllCheckbox = document.getElementById(
-        "checkbox-all-search",
-      ) as HTMLInputElement | null;
-      if (selectAllCheckbox) {
-        selectAllCheckbox.checked = allChecked;
-        setSelectAll(allChecked);
-      }
-    };
-
-    // Add event listeners to other checkboxes
-    const otherCheckboxes = document.querySelectorAll<HTMLInputElement>(
-      'input[type="checkbox"]:not(#checkbox-all-search)',
-    );
-    otherCheckboxes.forEach(checkbox => {
-      checkbox.addEventListener("change", handleOtherCheckboxes);
-    });
-
-    return () => {
-      // Remove event listeners when component unmounts
-      otherCheckboxes.forEach(checkbox => {
-        checkbox.removeEventListener("change", handleOtherCheckboxes);
-      });
-    };
-  }, []);
-
-  const { language: currentLanguage, loading } = useSelector(
+  const { language: currentLanguage } = useSelector(
     (state: RootState) => state.language,
   );
 
-  if (loading)
-    return (
-      <div className="flex h-screen w-full items-center justify-center">
-        <Spinner />
-      </div>
-    );
+  const { data, isLoading, refetch } = useGetAllResourcesQuery({
+    resourceType: "INSTRUCTIONAL_MATERIALS",
+    archive: false,
+  });
+  const [deleteResource] = useDeleteResourceMutation();
+  const [addItems] = useAddItemsToResourceMutation();
+  const [pullItems] = usePullItemsFromResourceMutation();
+  const [search, setSearch] = useState("");
+  const [visibleCount, setVisibleCount] = useState(20);
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [selectedId, setSelectedId] = useState<number | null>(null);
+
+  const [quantityDialogOpen, setQuantityDialogOpen] = useState(false);
+  const [quantity, setQuantity] = useState(1);
+  const [controlMode, setControlMode] = useState<"add" | "pull" | null>(null);
+  const [targetId, setTargetId] = useState<number | null>(null);
+
+  const translate = {
+    name:
+      currentLanguage === "ar"
+        ? "الاسم"
+        : currentLanguage === "fr"
+          ? "Nom"
+          : "Name",
+    totalCount:
+      currentLanguage === "ar"
+        ? "العدد الإجمالي"
+        : currentLanguage === "fr"
+          ? "Nombre total"
+          : "Total Count",
+    lastAdded:
+      currentLanguage === "ar"
+        ? "آخر إضافة"
+        : currentLanguage === "fr"
+          ? "Dernière addition"
+          : "Last Added",
+    lastPulled:
+      currentLanguage === "ar"
+        ? "آخر سحب"
+        : currentLanguage === "fr"
+          ? "Dernier retrait"
+          : "Last Pulled",
+    updatedAt:
+      currentLanguage === "ar"
+        ? "آخر تحديث"
+        : currentLanguage === "fr"
+          ? "Dernière mise à jour"
+          : "Last Update",
+    status:
+      currentLanguage === "ar"
+        ? "الحالة"
+        : currentLanguage === "fr"
+          ? "Statut"
+          : "Status",
+    action:
+      currentLanguage === "ar"
+        ? "الإجراء"
+        : currentLanguage === "fr"
+          ? "Action"
+          : "Action",
+    control:
+      currentLanguage === "ar"
+        ? "تحكم"
+        : currentLanguage === "fr"
+          ? "Contrôle"
+          : "Control",
+    searchPlaceholder:
+      currentLanguage === "ar"
+        ? "بحث عن مورد"
+        : currentLanguage === "fr"
+          ? "Rechercher une ressource"
+          : "Search resource",
+    noData:
+      currentLanguage === "ar"
+        ? "لا توجد بيانات"
+        : currentLanguage === "fr"
+          ? "Aucune donnée disponible"
+          : "No data available",
+    edit:
+      currentLanguage === "ar"
+        ? "تعديل"
+        : currentLanguage === "fr"
+          ? "Modifier"
+          : "Edit",
+    delete:
+      currentLanguage === "ar"
+        ? "حذف"
+        : currentLanguage === "fr"
+          ? "Supprimer"
+          : "Delete",
+    result:
+      currentLanguage === "ar"
+        ? "النتائج"
+        : currentLanguage === "fr"
+          ? "Résultat(s)"
+          : "Result(s)",
+    confirmDelete:
+      currentLanguage === "ar"
+        ? "تأكيد الحذف"
+        : currentLanguage === "fr"
+          ? "Confirmer la suppression"
+          : "Confirm Deletion",
+    confirmDeleteMsg:
+      currentLanguage === "ar"
+        ? "هل أنت متأكد أنك تريد حذف هذا المورد؟"
+        : currentLanguage === "fr"
+          ? "Êtes-vous sûr de vouloir supprimer cette ressource ?"
+          : "Are you sure you want to delete this resource?",
+    cancel:
+      currentLanguage === "ar"
+        ? "إلغاء"
+        : currentLanguage === "fr"
+          ? "Annuler"
+          : "Cancel",
+  };
+
+  const filtered = data?.data?.filter((item: any) =>
+    item.name?.toLowerCase().includes(search.trim().toLowerCase()),
+  );
+  const visibleData = filtered?.slice(0, visibleCount);
+
+  const formatDate = (date: string) =>
+    new Date(date).toLocaleDateString("en-EG", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    });
 
   return (
     <>
       <BreadCrumbs breadcrumbs={breadcrumbs} />
-      <div
-        dir={currentLanguage === "ar" ? "rtl" : "ltr"}
-        className={`${currentLanguage === "ar"
-            ? booleanValue
-              ? "lg:mr-[100px]"
-              : "lg:mr-[270px]"
-            : booleanValue
-              ? "lg:ml-[100px]"
-              : "lg:ml-[270px]"
-          } relative mx-3 mt-10 h-screen overflow-x-auto bg-transparent sm:rounded-lg`}
-      >
-        <div className="flex h-[70px] items-center gap-7 overflow-auto rounded-t-xl px-3 font-semibold">
-          <Link className="underline-offset-4" href="/infrastructure/store">
+      <Container>
+        <div className="-ml-1 -mt-2 mb-6 flex items-center justify-between">
+          <h1 className="text-3xl font-semibold">
+            {currentLanguage === "ar"
+              ? "المواد التعليمية"
+              : currentLanguage === "fr"
+                ? "Matériel didactique"
+                : "Instructional Materials"}
+            {/* default */}
+          </h1>
+        </div>
+        <div className="flex max-w-screen flex-wrap mb-4 items-center gap-7 overflow-auto rounded-t-xl px-3 font-semibold">
+          <Link
+            className="underline-offset-4 hover:text-primary hover:underline"
+            href="/infrastructure/store/digital-resource">
             {currentLanguage === "ar"
               ? "الموارد الرقمية"
               : currentLanguage === "fr"
@@ -135,7 +242,7 @@ const instructionalMaterials = () => {
             {/* Default to English */}
           </Link>
           <Link
-            className="text-primary underline underline-offset-4 hover:text-primary hover:underline"
+            className="text-primary underline underline-offset-4"
             href="/infrastructure/store/instructional-materials"
           >
             {currentLanguage === "ar"
@@ -158,197 +265,249 @@ const instructionalMaterials = () => {
             {/* Default to English */}
           </Link>
         </div>
-        <div className="flex justify-between text-center max-[502px]:grid max-[502px]:justify-center">
-          <div className="mb-3">
-            <label htmlFor="icon" className="sr-only">
-              Search
-            </label>
-            <div className="relative min-w-72 md:min-w-80">
-              <div className="pointer-events-none absolute inset-y-0 start-0 z-20 flex items-center ps-4">
-                <svg
-                  className="size-4 flex-shrink-0 text-textSecondary"
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                >
-                  <circle cx="11" cy="11" r="8" />
-                  <path d="m21 21-4.3-4.3" />
-                </svg>
-              </div>
-              <input
-                onChange={e => setSearch(e.target.value)}
-                type="text"
-                id="icon"
-                name="icon"
-                className="block w-full rounded-lg border-2 border-borderPrimary bg-bgPrimary px-4 py-2 ps-11 text-sm outline-none focus:border-blue-500 focus:ring-blue-500 disabled:pointer-events-none disabled:opacity-50"
-                placeholder={
-                  currentLanguage === "en"
-                    ? "Search"
-                    : currentLanguage === "ar"
-                      ? "بحث"
-                      : "Recherche"
-                }
-              />
-            </div>
-          </div>
-          <div className="flex justify-center">
-            <Link
-              href="/infrastructure/store/add-store"
-              className="mx-3 mb-5 whitespace-nowrap rounded-xl bg-primary px-4 py-2 text-[18px] font-semibold text-white duration-300 ease-in hover:bg-hover hover:shadow-xl"
+        <div className="max-w-screen overflow-x-hidden rounded-xl bg-bgPrimary">
+          <div className="flex flex-col gap-4 rounded-lg px-4 py-4 md:flex-row md:items-center md:justify-between">
+            <div
+              dir={currentLanguage === "ar" ? "rtl" : "ltr"}
+              className="relative w-full max-w-md"
             >
-              {currentLanguage === "ar"
-                ? "إضافة متجر"
-                : currentLanguage === "fr"
-                  ? "Ajouter un magasin"
-                  : "Add Store"}
+              <div className="pointer-events-none absolute inset-y-0 start-0 z-20 flex items-center ps-4">
+                <BiSearchAlt className="text-secondary" size={18} />
+              </div>
+              <div className="flex items-center gap-2">
+                <input
+                  onChange={e => setSearch(e.target.value)}
+                  type="text"
+                  className="w-full rounded-lg border-2 border-borderPrimary bg-bgPrimary px-4 py-2 ps-11 text-lg outline-none"
+                  placeholder={translate.searchPlaceholder}
+                />
+                <span className="whitespace-nowrap text-sm text-primary">
+                  {filtered?.length ?? 0} {translate.result}
+                </span>
+              </div>
+            </div>
+            <Link
+              href="/infrastructure/store/instructional-materials/add-instructional"
+              className="whitespace-nowrap w-fit self-end rounded-xl bg-primary px-4 py-2 text-[16px] font-semibold text-white transition hover:bg-hover hover:shadow-md"
+            >
+              {currentLanguage === "en"
+                ? "Add Instructional Resource"
+                : currentLanguage === "ar"
+                  ? "إضافة مورد تعليمي"
+                  : currentLanguage === "fr"
+                    ? "Ajouter une ressource pédagogique"
+                    : "Add Instructional Resource"}
             </Link>
           </div>
+          <div className="relative overflow-auto bg-bgPrimary shadow-md sm:rounded-lg">
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>{translate.name}</TableHead>
+                  <TableHead>{translate.totalCount}</TableHead>
+                  <TableHead>{translate.lastAdded}</TableHead>
+                  <TableHead>{translate.lastPulled}</TableHead>
+                  <TableHead>{translate.updatedAt}</TableHead>
+                  <TableHead>{translate.status}</TableHead>
+                  <TableHead>{translate.action}</TableHead>
+                  <TableHead>{translate.control}</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {isLoading ? (
+                  [...Array(3)].map((_, i) => (
+                    <TableRow key={i}>
+                      {Array.from({ length: 8 }).map((_, j) => (
+                        <TableCell key={j}>
+                          <Skeleton className="h-4 w-24" />
+                        </TableCell>
+                      ))}
+                    </TableRow>
+                  ))
+                ) : !filtered || filtered.length === 0 ? (
+                  <TableRow>
+                    <TableCell colSpan={8} className="text-center font-medium">
+                      {translate.noData}
+                    </TableCell>
+                  </TableRow>
+                ) : (
+                  visibleData.map((item: any, index: number) => (
+                    <TableRow key={index} data-index={index}>
+                      <TableCell>{item.name}</TableCell>
+                      <TableCell>{item.totalCount}</TableCell>
+                      <TableCell>{item.lastAddedNumber}</TableCell>
+                      <TableCell>{item.lastPulledNumber}</TableCell>
+                      <TableCell>{formatDate(item.updatedDate)}</TableCell>
+                      <TableCell>{item.status}</TableCell>
+                      <TableCell className="flex items-center gap-3">
+                        <Link
+                          href={`/infrastructure/store/instructional-materials/edit-instructional/${item.id}`}
+                          className="text-primary transition hover:text-hover"
+                          title={translate.edit}
+                        >
+                          <BiEditAlt size={20} />
+                        </Link>
+                        <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
+                          <DialogTrigger asChild>
+                            <button
+                              className="text-error transition hover:text-red-800"
+                              title={translate.delete}
+                              onClick={() => setSelectedId(item.id)}
+                            >
+                              <BiTrash size={20} />
+                            </button>
+                          </DialogTrigger>
+                          <DialogContent>
+                            <DialogHeader>
+                              <DialogTitle>
+                                {translate.confirmDelete}
+                              </DialogTitle>
+                              <DialogDescription>
+                                {translate.confirmDeleteMsg}
+                              </DialogDescription>
+                            </DialogHeader>
+                            <DialogFooter>
+                              <DialogClose asChild>
+                                <button className="hover:bg-borderDark rounded bg-borderPrimary px-4 py-2 font-medium text-white transition">
+                                  {translate.cancel}
+                                </button>
+                              </DialogClose>
+                              <button
+                                onClick={async () => {
+                                  try {
+                                    await deleteResource(selectedId).unwrap();
+                                    toast.success(
+                                      "Resource deleted successfully",
+                                    );
+                                    setDialogOpen(false);
+                                    refetch();
+                                  } catch (err: any) {
+                                    toast.error(
+                                      err?.data?.message ||
+                                      "Failed to delete resource",
+                                    );
+                                  }
+                                }}
+                                className="rounded bg-error px-4 py-2 font-medium text-white transition hover:bg-red-700"
+                              >
+                                {translate.delete}
+                              </button>
+                            </DialogFooter>
+                          </DialogContent>
+                        </Dialog>
+                      </TableCell>
+                      <TableCell>
+                        <div className="flex gap-2">
+
+                          <button
+                            onClick={() => {
+                              setControlMode("add");
+                              setTargetId(item.id);
+                              setQuantityDialogOpen(true);
+                            }}
+                            className={`rounded bg-success px-2 py-1 text-white hover:bg-green-700`}
+                            title="Add"
+                          >
+                            <BiPlus size={18} />
+                          </button>
+                          <button
+                            onClick={() => {
+                              setControlMode("pull");
+                              setTargetId(item.id);
+                              setQuantityDialogOpen(true);
+                            }}
+                            className={`rounded bg-yellow-500 px-2 py-1 text-white hover:bg-yellow-600`}
+                            title="Pull"
+                          >
+                            <BiMinus size={18} />
+                          </button>
+                        </div>
+
+                      </TableCell>
+                    </TableRow>
+                  ))
+                )}
+              </TableBody>
+            </Table>
+            {visibleCount < (filtered?.length || 0) && (
+              <SeeMoreButton
+                onClick={() => setVisibleCount(prev => prev + 20)}
+              />
+            )}
+          </div>
         </div>
-        <table className="w-full overflow-x-auto text-left text-sm text-gray-500 rtl:text-right">
-          <thead className="bg-thead text-xs uppercase text-textPrimary">
-            <tr>
-              <th scope="col" className="p-4">
-                <div className="flex items-center">
-                  {/* Add event listener for select all checkbox */}
-                  <input
-                    id="checkbox-all-search"
-                    type="checkbox"
-                    className="-gray-800 h-4 w-4 rounded border-gray-300 bg-gray-100 text-blue-600 focus:ring-2 focus:ring-blue-500"
-                    onChange={handleSelectAll}
-                  />
-                </div>
-              </th>
-              <th scope="col" className="whitespace-nowrap px-6 py-3">
-                {currentLanguage === "ar"
-                  ? "الاسم"
-                  : currentLanguage === "fr"
-                    ? "Nom"
-                    : "Name"}
-              </th>
-              <th scope="col" className="whitespace-nowrap px-6 py-3">
-                {currentLanguage === "ar"
-                  ? "العدد الإجمالي"
-                  : currentLanguage === "fr"
-                    ? "Nombre total"
-                    : "Total Number"}
-              </th>
-              <th scope="col" className="whitespace-nowrap px-6 py-3">
-                {currentLanguage === "ar"
-                  ? "عدد الإضافات الأخيرة"
-                  : currentLanguage === "fr"
-                    ? "Nombre des dernières additions"
-                    : "Number of latest Addition"}
-              </th>
-              <th scope="col" className="whitespace-nowrap px-6 py-3">
-                {currentLanguage === "ar"
-                  ? "عدد السحوبات الأخيرة"
-                  : currentLanguage === "fr"
-                    ? "Nombre des derniers tirages"
-                    : "Number of latest pulling"}
-              </th>
-              <th scope="col" className="whitespace-nowrap px-6 py-3">
-                {currentLanguage === "ar"
-                  ? "آخر تحديث"
-                  : currentLanguage === "fr"
-                    ? "Dernière mise à jour"
-                    : "Last update"}
-              </th>
-              <th scope="col" className="whitespace-nowrap px-6 py-3">
-                {currentLanguage === "ar"
-                  ? "الحالة"
-                  : currentLanguage === "fr"
-                    ? "Statut"
-                    : "Status"}
-              </th>
-              <th scope="col" className="whitespace-nowrap px-6 py-3">
-                {currentLanguage === "ar"
-                  ? "الإجراء"
-                  : currentLanguage === "fr"
-                    ? "Action"
-                    : "Action"}
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr className="border-b border-borderPrimary bg-bgPrimary hover:bg-bgSecondary">
-              <td className="w-4 p-4">
-                <div className="flex items-center">
-                  <input
-                    id="checkbox-table-search-1"
-                    type="checkbox"
-                    className="h-4 w-4 rounded border-gray-300 bg-gray-100 text-blue-600 focus:ring-2 focus:ring-blue-500"
-                  />
-                </div>
-              </td>
-              <th
-                scope="row"
-                className="flex items-center whitespace-nowrap px-6 py-4 font-medium text-textSecondary"
-              >
-                Nahda
-              </th>
-              <td className="whitespace-nowrap px-6 py-4">This is text</td>
-              <td className="whitespace-nowrap px-6 py-4">This is text</td>
-              <td className="whitespace-nowrap px-6 py-4">This is text</td>
-              <td className="whitespace-nowrap px-6 py-4">This is text</td>
-              <td className="whitespace-nowrap px-6 py-4">This is text</td>
-              <td className="whitespace-nowrap px-6 py-4">
-                <Link
-                  href="/infrastructure/store/edit-store"
-                  className="font-medium text-blue-600 hover:underline"
-                >
-                  {currentLanguage === "ar"
-                    ? "تعديل"
-                    : currentLanguage === "fr"
-                      ? "Modifier"
-                      : "Edit"}
-                </Link>
-              </td>
-            </tr>
-            <tr className="border-b border-borderPrimary bg-bgPrimary hover:bg-bgSecondary">
-              <td className="w-4 p-4">
-                <div className="flex items-center">
-                  <input
-                    id="checkbox-table-search-1"
-                    type="checkbox"
-                    className="h-4 w-4 rounded border-gray-300 bg-gray-100 text-blue-600 focus:ring-2 focus:ring-blue-500"
-                  />
-                </div>
-              </td>
-              <th
-                scope="row"
-                className="flex items-center whitespace-nowrap px-6 py-4 font-medium text-textSecondary"
-              >
-                Nahda
-              </th>
-              <td className="whitespace-nowrap px-6 py-4">This is text</td>
-              <td className="whitespace-nowrap px-6 py-4">This is text</td>
-              <td className="whitespace-nowrap px-6 py-4">This is text</td>
-              <td className="whitespace-nowrap px-6 py-4">This is text</td>
-              <td className="whitespace-nowrap px-6 py-4">This is text</td>
-              <td className="whitespace-nowrap px-6 py-4">
-                <Link
-                  href="/infrastructure/store/edit-store"
-                  className="font-medium text-blue-600 hover:underline"
-                >
-                  {currentLanguage === "ar"
-                    ? "تعديل"
-                    : currentLanguage === "fr"
-                      ? "Modifier"
-                      : "Edit"}
-                </Link>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+      </Container>
+
+      {/* Quantity Dialog */}
+      <Dialog open={quantityDialogOpen} onOpenChange={setQuantityDialogOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>
+              {controlMode === "add"
+                ? currentLanguage === "ar"
+                  ? "إضافة كمية"
+                  : "Add Quantity"
+                : currentLanguage === "ar"
+                  ? "سحب كمية"
+                  : "Pull Quantity"}
+            </DialogTitle>
+            <DialogDescription>
+              {currentLanguage === "ar"
+                ? "أدخل العدد المطلوب"
+                : currentLanguage === "fr"
+                  ? "Entrez le nombre souhaité"
+                  : "Enter the desired number"}
+            </DialogDescription>
+          </DialogHeader>
+          <input
+            type="number"
+            value={quantity}
+            min={1}
+            onChange={e => setQuantity(Number(e.target.value))}
+            className="mt-4 w-full rounded-lg border border-borderPrimary bg-bgPrimary px-3 py-2 outline-none"
+          />
+          <DialogFooter>
+            <DialogClose asChild>
+              <button className="hover:bg-borderDark rounded bg-borderPrimary px-4 py-2 font-medium text-white transition">
+                {translate.cancel}
+              </button>
+            </DialogClose>
+            <button
+              className="rounded bg-primary px-4 py-2 font-medium text-white hover:bg-hover"
+              onClick={async () => {
+                try {
+                  if (controlMode === "add")
+                    await addItems({
+                      id: targetId!,
+                      number: quantity,
+                    }).unwrap();
+                  if (controlMode === "pull")
+                    await pullItems({
+                      id: targetId!,
+                      number: quantity,
+                    }).unwrap();
+                  toast.success("Updated successfully");
+                  refetch();
+                  setQuantityDialogOpen(false);
+                  setQuantity(1);
+                } catch (err: any) {
+                  toast.error(err?.data?.message || "Operation failed");
+                }
+              }}
+            >
+              {controlMode === "add"
+                ? currentLanguage === "ar"
+                  ? "تأكيد الإضافة"
+                  : "Confirm Add"
+                : currentLanguage === "ar"
+                  ? "تأكيد السحب"
+                  : "Confirm Pull"}
+            </button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </>
   );
 };
 
-export default instructionalMaterials;
+export default Store;

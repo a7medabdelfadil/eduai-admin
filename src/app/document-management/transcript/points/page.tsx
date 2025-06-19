@@ -95,14 +95,15 @@ const Points = () => {
       <BreadCrumbs breadcrumbs={breadcrumbs} />
       <div
         dir={currentLanguage === "ar" ? "rtl" : "ltr"}
-        className={`${currentLanguage === "ar"
+        className={`${
+          currentLanguage === "ar"
             ? booleanValue
               ? "lg:mr-[100px]"
               : "lg:mr-[270px]"
             : booleanValue
               ? "lg:ml-[100px]"
               : "lg:ml-[270px]"
-          } justify-left mb-4 ml-4 mt-5 flex gap-5 text-[20px] font-medium`}
+        } justify-left mb-4 ml-4 mt-5 flex gap-5 text-[20px] font-medium`}
       >
         <Link href="/document-management/transcript">
           {currentLanguage === "ar"
@@ -124,14 +125,15 @@ const Points = () => {
       </div>
       <div
         dir={currentLanguage === "ar" ? "rtl" : "ltr"}
-        className={`${currentLanguage === "ar"
+        className={`${
+          currentLanguage === "ar"
             ? booleanValue
               ? "lg:mr-[100px]"
               : "lg:mr-[270px]"
             : booleanValue
               ? "lg:ml-[100px]"
               : "lg:ml-[270px]"
-          } relative mx-3 mt-10 overflow-x-auto bg-transparent sm:rounded-lg`}
+        } relative mx-3 mt-10 overflow-x-auto bg-transparent sm:rounded-lg`}
       >
         <div className="flex justify-between text-center max-[502px]:grid max-[502px]:justify-center">
           <div className="mb-3">

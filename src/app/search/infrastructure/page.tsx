@@ -29,7 +29,7 @@ const InfrastructureSearch = () => {
               ? "Recherche"
               : "Search"}
         </Text>
-        <div className="flex h-full w-full justify-center overflow-auto my-4">
+        <div className="my-4 flex h-full w-full justify-center overflow-auto">
           <div className="grid h-full w-full overflow-auto rounded-xl bg-bgPrimary">
             <div
               dir={currentLanguage === "ar" ? "rtl" : "ltr"}

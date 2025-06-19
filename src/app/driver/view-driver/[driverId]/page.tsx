@@ -73,7 +73,7 @@ const ViewDriver: React.FC<ViewDriverProps> = ({ params }) => {
               <img src="/images/bus 1.png" alt="#" />
             </div>
             <div className="grid w-[500px] rounded-xl bg-bgPrimary p-5 max-[1342px]:w-full">
-              <div className="relative overflow-auto shadow-md sm:rounded-lg bg-bgPrimary">
+              <div className="relative overflow-auto bg-bgPrimary shadow-md sm:rounded-lg">
                 <table className="w-full overflow-x-auto text-left text-sm text-textSecondary rtl:text-right">
                   <thead className="bg-thead text-xs uppercase text-textPrimary">
                     <tr>

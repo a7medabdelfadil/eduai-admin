@@ -30,10 +30,9 @@ import {
 } from "@/components/Dialog";
 import { toast } from "react-toastify";
 import { useState } from "react";
-import { RiDeleteBin6Fill } from "react-icons/ri";
 import Container from "@/components/Container";
 import { Text } from "@/components/Text";
-import { BiSearchAlt } from "react-icons/bi";
+import { BiSearchAlt, BiTrash } from "react-icons/bi";
 import SeeMoreButton from "@/components/SeeMoreButton";
 
 const Disciplinary = () => {
@@ -72,6 +71,7 @@ const Disciplinary = () => {
     isError,
     refetch,
   } = useGetAllDisciplinaryRecordsQuery(null);
+    console.log("🚀 ~ Disciplinary ~ disciplinaryData:", disciplinaryData)
 
   const { language: currentLanguage, loading } = useSelector(
     (state: RootState) => state.language,
@@ -188,7 +188,7 @@ const Disciplinary = () => {
             </Link>
           </div>
         </div>
-        <div className="relative overflow-auto bg-bgPrimary shadow-md sm:rounded-lg">
+        <div className="relative overflow-auto -mt-4 bg-bgPrimary shadow-md sm:rounded-lg">
           <Table>
             <TableHeader>
               <TableRow className="text-textPrimary">
@@ -279,7 +279,7 @@ const Disciplinary = () => {
                 <TableRow>
                   <TableCell
                     colSpan={8}
-                    className="py-4 text-center text-gray-500"
+                    className="py-4 text-center text-secondary"
                   >
                     {currentLanguage === "ar"
                       ? "لا توجد سجلات"
@@ -331,7 +331,7 @@ const Disciplinary = () => {
                             onClick={() => setOpenDialogId(record.recordId)}
                             className="text-red-600 hover:text-red-800"
                           >
-                            <RiDeleteBin6Fill size={24} />
+                            <BiTrash size={24} />
                           </button>
                         </DialogTrigger>
                         <DialogContent>

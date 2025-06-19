@@ -21,8 +21,8 @@ import {
 import { Skeleton } from "@/components/Skeleton";
 import SeeMoreButton from "@/components/SeeMoreButton";
 import Container from "@/components/Container";
-import { BiSearchAlt } from "react-icons/bi";
-import { RiDeleteBin6Fill, RiEdit2Fill } from "react-icons/ri";
+import { BiSearchAlt, BiTrash } from "react-icons/bi";
+import { RiEdit2Fill } from "react-icons/ri";
 
 const Lab = () => {
   const breadcrumbs = [
@@ -90,8 +90,7 @@ const Lab = () => {
             {/* default */}
           </h1>
         </div>
-        <div className="rounded-xl bg-bgPrimary max-w-screen overflow-x-hidden">
-
+        <div className="max-w-screen overflow-x-hidden rounded-xl bg-bgPrimary">
           <div className="flex flex-col items-center justify-between gap-4 rounded-lg px-4 py-4 md:flex-row">
             {/* Search Input */}
             <div
@@ -264,7 +263,7 @@ const Lab = () => {
                                   : "Delete"
                             }
                           >
-                            <RiDeleteBin6Fill className="h-5 w-5" />
+                            <BiTrash className="h-5 w-5" />
                           </button>
                           <Link
                             href={`/infrastructure/lab/${lab.roomId}`}

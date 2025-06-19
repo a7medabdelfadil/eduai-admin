@@ -261,7 +261,7 @@ const Employee = () => {
             </h1>
           </div>
           <div className="flex items-center justify-between self-end">
-            <div className="flex flex-col md:flex-row gap-4">
+            <div className="flex flex-col gap-4 md:flex-row">
               <button
                 onClick={handleOpenModal}
                 className="mx-3 mb-5 flex w-[190px] justify-center whitespace-nowrap rounded-xl border border-primary bg-bgPrimary px-4 py-2 text-[18px] font-semibold text-primary duration-300 ease-in hover:shadow-xl"
@@ -305,8 +305,7 @@ const Employee = () => {
             </div>
           </div>
         </div>
-        <div className="rounded-xl bg-bgPrimary max-w-screen overflow-x-hidden">
-
+        <div className="max-w-screen overflow-x-hidden rounded-xl bg-bgPrimary">
           <div className="flex justify-between rounded-t-xl bg-bgPrimary p-4 text-center max-[502px]:grid max-[502px]:justify-center">
             <div className="mb-3">
               <label htmlFor="icon" className="sr-only">
@@ -447,8 +446,8 @@ const Employee = () => {
                       search.trim() === ""
                         ? true
                         : employee.name
-                          ?.toLowerCase()
-                          .includes(search.trim().toLowerCase()),
+                            ?.toLowerCase()
+                            .includes(search.trim().toLowerCase()),
                     )
                     .map((employee: Employee, index: number) => (
                       <TableRow
@@ -496,10 +495,11 @@ const Employee = () => {
                           <button
                             onClick={() => handleDelete(employee.id)}
                             disabled={employee.role === "Admin"}
-                            className={`rounded-lg px-2 py-1 font-semibold text-white shadow-lg delay-150 duration-300 ease-in-out ${employee.role === "Admin"
+                            className={`rounded-lg px-2 py-1 font-semibold text-white shadow-lg delay-150 duration-300 ease-in-out ${
+                              employee.role === "Admin"
                                 ? "cursor-not-allowed bg-red-800"
                                 : "bg-error hover:-translate-y-1 hover:scale-110"
-                              }`}
+                            }`}
                           >
                             {currentLanguage === "en"
                               ? "Lock"
@@ -514,11 +514,12 @@ const Employee = () => {
               </TableBody>
             </Table>
             {visibleCount < filteredData.length && (
-              <SeeMoreButton onClick={() => setVisibleCount(prev => prev + 20)} />
+              <SeeMoreButton
+                onClick={() => setVisibleCount(prev => prev + 20)}
+              />
             )}
           </div>
         </div>
-
       </Container>
       <Modal isOpen={isModalOpen} onClose={handleCloseModal}>
         <h1 className="text-lg font-semibold">Upload File</h1>

@@ -12,7 +12,7 @@ import {
   useDeleteComplainsMutation,
 } from "@/features/Organization-Setteings/complainApi";
 import Container from "@/components/Container";
-import { BiSearchAlt } from "react-icons/bi";
+import { BiSearchAlt, BiTrash } from "react-icons/bi";
 import {
   Table,
   TableHeader,
@@ -23,7 +23,6 @@ import {
 } from "@/components/Table";
 import { Skeleton } from "@/components/Skeleton";
 import SeeMoreButton from "@/components/SeeMoreButton";
-import { RiDeleteBin6Fill } from "react-icons/ri";
 
 const ComplaintParent = () => {
   const breadcrumbs = [
@@ -75,7 +74,7 @@ const ComplaintParent = () => {
     search.trim() === ""
       ? true
       : complaint.teacherName?.toLowerCase().includes(search.toLowerCase()) ||
-      complaint.studentName?.toLowerCase().includes(search.toLowerCase()),
+        complaint.studentName?.toLowerCase().includes(search.toLowerCase()),
   );
   const displayedData = filteredData?.slice(0, visibleCount);
 
@@ -122,8 +121,7 @@ const ComplaintParent = () => {
                 : "Parent"}
           </Link>
         </div>
-        <div className="rounded-xl bg-bgPrimary max-w-screen overflow-x-hidden">
-
+        <div className="max-w-screen overflow-x-hidden rounded-xl bg-bgPrimary">
           <div className="flex flex-col items-center justify-between gap-4 rounded-lg px-4 py-4 md:flex-row">
             <div
               dir={currentLanguage === "ar" ? "rtl" : "ltr"}
@@ -223,7 +221,7 @@ const ComplaintParent = () => {
                           disabled={isDeleting}
                           onClick={() => handleDelete(Department.id)}
                         >
-                          <RiDeleteBin6Fill className="text-error" size={20} />
+                          <BiTrash className="text-error" size={20} />
                         </button>
                       </TableCell>
                     </TableRow>

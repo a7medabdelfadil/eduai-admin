@@ -45,6 +45,8 @@ import { disciplinaryApi } from "@/features/Document-Management/disciplinaryApi"
 import { otherOfficialDocumentsApi } from "@/features/Document-Management/otherOfficialDocumentsApi";
 import { annualApi } from "@/features/Organization-Setteings/annualApi";
 import { roomApi } from "@/features/Infrastructure/roomApi";
+import { storeApi } from "@/features/Infrastructure/storeApi";
+import { budgetApi } from "@/features/Financial/budgetApi";
 
 export const store = configureStore({
   reducer: {
@@ -93,6 +95,8 @@ export const store = configureStore({
     [otherOfficialDocumentsApi.reducerPath]: otherOfficialDocumentsApi.reducer,
     [annualApi.reducerPath]: annualApi.reducer,
     [roomApi.reducerPath]: roomApi.reducer,
+    [storeApi.reducerPath]: storeApi.reducer,
+    [budgetApi.reducerPath]: budgetApi.reducer,
     [activityApi.reducerPath]: activityApi.reducer,
   },
   middleware: getDefaultMiddleware =>
@@ -139,6 +143,8 @@ export const store = configureStore({
       .concat(otherOfficialDocumentsApi.middleware)
       .concat(annualApi.middleware)
       .concat(roomApi.middleware)
+      .concat(storeApi.middleware)
+      .concat(budgetApi.middleware)
       .concat(activityApi.middleware),
 });
 

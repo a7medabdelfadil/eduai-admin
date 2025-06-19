@@ -17,12 +17,12 @@ const EditAnnualLeave = () => {
   const { id } = useParams();
   const router = useRouter();
 
-  const { language: currentLanguage } = useSelector((state: RootState) => state.language);
+  const { language: currentLanguage } = useSelector(
+    (state: RootState) => state.language,
+  );
 
   const { data, isLoading, isError } = useGetAnnualLeaveByIdQuery(id);
   const [updateAnnualLeave] = useUpdateAnnualLeaveMutation();
-
-
 
   const {
     register,
@@ -43,7 +43,7 @@ const EditAnnualLeave = () => {
             ? "تاريخ الانتهاء لا يمكن أن يكون قبل تاريخ البداية"
             : currentLanguage === "fr"
               ? "La date de fin ne peut pas être antérieure à la date de début"
-              : "End date cannot be earlier than start date"
+              : "End date cannot be earlier than start date",
         );
         return;
       }
@@ -54,7 +54,7 @@ const EditAnnualLeave = () => {
           ? "تم تحديث الإجازة بنجاح!"
           : currentLanguage === "fr"
             ? "Le congé a été mis à jour avec succès !"
-            : "Annual leave updated successfully!"
+            : "Annual leave updated successfully!",
       );
       router.push("/organization-setting/annual");
     } catch (error) {
@@ -103,10 +103,30 @@ const EditAnnualLeave = () => {
   }
 
   const breadcrumbs = [
-    { nameEn: "Administration", nameAr: "الإدارة", nameFr: "Administration", href: "/" },
-    { nameEn: "Organization Settings", nameAr: "إعدادات المنظمة", nameFr: "Paramètres org", href: "/organization-setting" },
-    { nameEn: "Annual Leave", nameAr: "إجازة سنوية", nameFr: "Congé annuel", href: "/organization-setting/annual" },
-    { nameEn: "Edit Annual Leave", nameAr: "تعديل إجازة سنوية", nameFr: "Modifier un congé annuel", href: `/organization-setting/annual/edit-annual/${id}` },
+    {
+      nameEn: "Administration",
+      nameAr: "الإدارة",
+      nameFr: "Administration",
+      href: "/",
+    },
+    {
+      nameEn: "Organization Settings",
+      nameAr: "إعدادات المنظمة",
+      nameFr: "Paramètres org",
+      href: "/organization-setting",
+    },
+    {
+      nameEn: "Annual Leave",
+      nameAr: "إجازة سنوية",
+      nameFr: "Congé annuel",
+      href: "/organization-setting/annual",
+    },
+    {
+      nameEn: "Edit Annual Leave",
+      nameAr: "تعديل إجازة سنوية",
+      nameFr: "Modifier un congé annuel",
+      href: `/organization-setting/annual/edit-annual/${id}`,
+    },
   ];
 
   return (
@@ -125,10 +145,23 @@ const EditAnnualLeave = () => {
           </h1>
         </div>
 
-        <form onSubmit={handleSubmit(onSubmit)} className="flex h-full w-full items-center justify-center">
+        <form
+          onSubmit={handleSubmit(onSubmit)}
+          className="flex h-full w-full items-center justify-center"
+        >
           <div className="w-[90] rounded-xl bg-bgPrimary p-10 md:w-[80%]">
-            <div className="flex items-center justify-start gap-2 mb-6">
-              <svg className="h-6 w-6 font-bold text-secondary group-hover:text-hover" width="24" height="24" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" fill="none" strokeLinecap="round" strokeLinejoin="round">
+            <div className="mb-6 flex items-center justify-start gap-2">
+              <svg
+                className="h-6 w-6 font-bold text-secondary group-hover:text-hover"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                strokeWidth="2"
+                stroke="currentColor"
+                fill="none"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
                 <path stroke="none" d="M0 0h24v24H0z" />
                 <line x1="3" y1="21" x2="21" y2="21" />
                 <line x1="3" y1="10" x2="21" y2="10" />
@@ -148,10 +181,14 @@ const EditAnnualLeave = () => {
               </h1>
             </div>
 
-            <div className="p-6 grid grid-cols-2 gap-4 max-[1278px]:grid-cols-1">
+            <div className="grid grid-cols-2 gap-4 p-6 max-[1278px]:grid-cols-1">
               {/* Title */}
               <label htmlFor="title" className="grid text-[18px] font-semibold">
-                {currentLanguage === "ar" ? "عنوان الإجازة" : currentLanguage === "fr" ? "Titre du congé" : "Leave Title"}
+                {currentLanguage === "ar"
+                  ? "عنوان الإجازة"
+                  : currentLanguage === "fr"
+                    ? "Titre du congé"
+                    : "Leave Title"}
                 <input
                   id="title"
                   type="text"
@@ -175,12 +212,23 @@ const EditAnnualLeave = () => {
                         : "Enter title"
                   }
                 />
-                {errors.title?.message && <span className="text-red-500 text-sm">{String(errors.title.message)}</span>}
+                {errors.title?.message && (
+                  <span className="text-sm text-red-500">
+                    {String(errors.title.message)}
+                  </span>
+                )}
               </label>
 
               {/* Description */}
-              <label htmlFor="description" className="grid text-[18px] font-semibold">
-                {currentLanguage === "ar" ? "الوصف" : currentLanguage === "fr" ? "Description" : "Description"}
+              <label
+                htmlFor="description"
+                className="grid text-[18px] font-semibold"
+              >
+                {currentLanguage === "ar"
+                  ? "الوصف"
+                  : currentLanguage === "fr"
+                    ? "Description"
+                    : "Description"}
                 <input
                   id="description"
                   type="text"
@@ -204,12 +252,23 @@ const EditAnnualLeave = () => {
                         : "Enter description"
                   }
                 />
-                {errors.description && <span className="text-red-500 text-sm">{String(errors.description?.message)}</span>}
+                {errors.description && (
+                  <span className="text-sm text-red-500">
+                    {String(errors.description?.message)}
+                  </span>
+                )}
               </label>
 
               {/* Start Date */}
-              <label htmlFor="startDate" className="grid text-[18px] font-semibold">
-                {currentLanguage === "ar" ? "تاريخ البداية" : currentLanguage === "fr" ? "Date de début" : "Start Date"}
+              <label
+                htmlFor="startDate"
+                className="grid text-[18px] font-semibold"
+              >
+                {currentLanguage === "ar"
+                  ? "تاريخ البداية"
+                  : currentLanguage === "fr"
+                    ? "Date de début"
+                    : "Start Date"}
                 <input
                   id="startDate"
                   type="date"
@@ -226,12 +285,23 @@ const EditAnnualLeave = () => {
                   })}
                   className="w-full rounded-xl border border-borderPrimary px-4 py-3 outline-none"
                 />
-                {errors.startDate && <span className="text-red-500 text-sm">{String(errors.startDate.message)}</span>}
+                {errors.startDate && (
+                  <span className="text-sm text-red-500">
+                    {String(errors.startDate.message)}
+                  </span>
+                )}
               </label>
 
               {/* End Date */}
-              <label htmlFor="endDate" className="grid text-[18px] font-semibold">
-                {currentLanguage === "ar" ? "تاريخ الانتهاء" : currentLanguage === "fr" ? "Date de fin" : "End Date"}
+              <label
+                htmlFor="endDate"
+                className="grid text-[18px] font-semibold"
+              >
+                {currentLanguage === "ar"
+                  ? "تاريخ الانتهاء"
+                  : currentLanguage === "fr"
+                    ? "Date de fin"
+                    : "End Date"}
                 <input
                   id="endDate"
                   type="date"
@@ -248,13 +318,24 @@ const EditAnnualLeave = () => {
                   })}
                   className="w-full rounded-xl border border-borderPrimary px-4 py-3 outline-none"
                 />
-                {errors.endDate && <span className="text-red-500 text-sm">{String(errors.endDate.message)}</span>}
+                {errors.endDate && (
+                  <span className="text-sm text-red-500">
+                    {String(errors.endDate.message)}
+                  </span>
+                )}
               </label>
             </div>
 
-            <div className="flex justify-center text-center mt-4">
-              <button type="submit" className="w-fit rounded-xl bg-primary px-6 py-2 text-[18px] text-white hover:bg-hover hover:shadow-xl">
-                {currentLanguage === "ar" ? "تحديث" : currentLanguage === "fr" ? "Mettre à jour" : "Update"}
+            <div className="mt-4 flex justify-center text-center">
+              <button
+                type="submit"
+                className="w-fit rounded-xl bg-primary px-6 py-2 text-[18px] text-white hover:bg-hover hover:shadow-xl"
+              >
+                {currentLanguage === "ar"
+                  ? "تحديث"
+                  : currentLanguage === "fr"
+                    ? "Mettre à jour"
+                    : "Update"}
               </button>
             </div>
           </div>

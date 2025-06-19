@@ -21,8 +21,7 @@ import {
 } from "@/components/Table";
 import { MdDelete } from "react-icons/md";
 import { Skeleton } from "@/components/Skeleton";
-import { BiSearchAlt } from "react-icons/bi";
-import { RiDeleteBin6Fill } from "react-icons/ri";
+import { BiSearchAlt, BiTrash } from "react-icons/bi";
 import SeeMoreButton from "@/components/SeeMoreButton";
 
 const Certificate = () => {
@@ -261,7 +260,7 @@ const Certificate = () => {
                         >
                           <img src="/images/print.png" alt="#" />
                         </Link>
-                        <RiDeleteBin6Fill
+                        <BiTrash
                           className="cursor-pointer text-2xl text-red-600 hover:text-red-800"
                           onClick={() => handleDelete(certificate.id)}
                         />

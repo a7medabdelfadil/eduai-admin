@@ -205,14 +205,15 @@ const EmployeeAttendance = () => {
       <BreadCrumbs breadcrumbs={breadcrumbs} />
       <div
         dir={currentLanguage === "ar" ? "rtl" : "ltr"}
-        className={`${currentLanguage === "ar"
+        className={`${
+          currentLanguage === "ar"
             ? booleanValue
               ? "lg:mr-[100px]"
               : "lg:mr-[270px]"
             : booleanValue
               ? "lg:ml-[100px]"
               : "lg:ml-[270px]"
-          } relative mx-3 mt-10 h-screen overflow-x-auto bg-transparent sm:rounded-lg`}
+        } relative mx-3 mt-10 h-screen overflow-x-auto bg-transparent sm:rounded-lg`}
       >
         <div className="flex justify-between text-center max-[502px]:grid max-[502px]:justify-center">
           <div className="mb-3">
@@ -301,17 +302,18 @@ const EmployeeAttendance = () => {
                   {["P", "A", "L"].map(label => (
                     <label
                       key={label}
-                      className={`flex h-[55px] w-[55px] cursor-pointer items-center justify-center rounded-full border border-borderPrimary p-5 text-center text-[24px] font-semibold ${selectedStates[index] === label ||
-                          (label === "P" && employee.status === "PRESENT") ||
-                          (label === "L" && employee.status === "LEAVE") ||
-                          (label === "A" && employee.status === "ABSENT")
+                      className={`flex h-[55px] w-[55px] cursor-pointer items-center justify-center rounded-full border border-borderPrimary p-5 text-center text-[24px] font-semibold ${
+                        selectedStates[index] === label ||
+                        (label === "P" && employee.status === "PRESENT") ||
+                        (label === "L" && employee.status === "LEAVE") ||
+                        (label === "A" && employee.status === "ABSENT")
                           ? label === "P"
                             ? "bg-success text-blackOrWhite"
                             : label === "A"
                               ? "bg-error text-blackOrWhite"
                               : "bg-warning text-blackOrWhite"
                           : "bg-bgSecondary"
-                        } `}
+                      } `}
                     >
                       <input
                         type="checkbox"

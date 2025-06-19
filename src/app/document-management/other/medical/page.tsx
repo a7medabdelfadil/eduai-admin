@@ -105,7 +105,7 @@ const Medical = () => {
                 ? "Dossiers disciplinaires"
                 : "Disciplinary Records"}
           </Link>
-         
+
           <Link
             className="hover:text-blue-500 hover:underline"
             href="/document-management/other/legal"
@@ -117,8 +117,7 @@ const Medical = () => {
                 : "Legal Documents"}
           </Link>
         </div>
-        <div className="rounded-xl bg-bgPrimary max-w-screen overflow-x-hidden">
-
+        <div className="max-w-screen overflow-x-hidden rounded-xl bg-bgPrimary">
           <div className="flex items-center justify-between text-center max-[502px]:grid max-[502px]:justify-center">
             <div className="flex justify-between rounded-t-xl bg-bgPrimary p-4 text-center max-[502px]:grid max-[502px]:justify-center">
               <div className="mb-3">

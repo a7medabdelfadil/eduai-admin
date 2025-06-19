@@ -251,16 +251,17 @@ const OrganizationSettings = () => {
       <BreadCrumbs breadcrumbs={breadcrumbs} />
       <div
         dir={currentLanguage === "ar" ? "rtl" : "ltr"}
-        className={`${currentLanguage === "ar"
+        className={`${
+          currentLanguage === "ar"
             ? booleanValue
               ? "lg:mr-[40px]"
               : "lg:mr-[290px]"
             : booleanValue
               ? "lg:ml-[40px]"
               : "lg:ml-[290px]"
-          } my-12 grid justify-center`}
+        } my-12 grid justify-center`}
       >
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-10 xl:grid-cols-3 2xl:grid-cols-4">
+        <div className="grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
           {settings.map((item, index) => (
             <Card
               key={index}

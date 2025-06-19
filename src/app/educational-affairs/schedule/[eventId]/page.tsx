@@ -107,8 +107,8 @@ const UpdateEvent = ({ params }: Props) => {
       const { startTime, endTime, day } = eventData.data;
       setIsFormChanged(
         watchedValues.startTime !== startTime ||
-        watchedValues.endTime !== endTime ||
-        watchedValues.day !== day,
+          watchedValues.endTime !== endTime ||
+          watchedValues.day !== day,
       );
     }
   }, [watchedValues, eventData]);
@@ -159,14 +159,15 @@ const UpdateEvent = ({ params }: Props) => {
       <BreadCrumbs breadcrumbs={breadcrumbs} />
       <div
         dir={currentLanguage === "ar" ? "rtl" : "ltr"}
-        className={`${currentLanguage === "ar"
+        className={`${
+          currentLanguage === "ar"
             ? booleanValue
               ? "lg:mr-[100px]"
               : "lg:mr-[270px]"
             : booleanValue
               ? "lg:ml-[100px]"
               : "lg:ml-[270px]"
-          } mx-[5px] mt-[40px] grid h-[500px] items-center justify-center`}
+        } mx-[5px] mt-[40px] grid h-[500px] items-center justify-center`}
       >
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="grid h-auto items-center justify-center gap-5 rounded-xl bg-bgPrimary p-10 sm:w-[500px] md:w-[600px] lg:w-[750px] xl:h-auto xl:w-[1000px]">
@@ -316,10 +317,11 @@ const UpdateEvent = ({ params }: Props) => {
               ) : (
                 <button
                   type="submit"
-                  className={`w-fit rounded-xl px-4 py-2 text-[18px] text-white duration-300 ease-in ${isFormChanged
+                  className={`w-fit rounded-xl px-4 py-2 text-[18px] text-white duration-300 ease-in ${
+                    isFormChanged
                       ? "bg-primary hover:bg-hover hover:shadow-xl"
                       : "cursor-not-allowed bg-gray-500"
-                    }`}
+                  }`}
                   disabled={!isFormChanged}
                 >
                   {currentLanguage === "en"

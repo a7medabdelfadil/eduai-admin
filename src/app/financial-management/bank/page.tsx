@@ -374,9 +374,7 @@ const Bank = () => {
                               ? "اسم البنك"
                               : "Nom de la Banque"}
                         </h1>
-                        <p className="ml-3 font-semibold">
-                          {bank.bankName}
-                        </p>
+                        <p className="ml-3 font-semibold">{bank.bankName}</p>
                       </div>
                       <div>
                         <h1 className="text-[18px] font-semibold text-[#526484]">

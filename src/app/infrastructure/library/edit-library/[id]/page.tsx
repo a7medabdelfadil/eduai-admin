@@ -7,7 +7,10 @@ import { useSelector } from "react-redux";
 import { RootState } from "@/GlobalRedux/store";
 import BreadCrumbs from "@/components/BreadCrumbs";
 import Container from "@/components/Container";
-import { useGetRoomByIdQuery, useUpdateRoomMutation } from "@/features/Infrastructure/roomApi";
+import {
+  useGetRoomByIdQuery,
+  useUpdateRoomMutation,
+} from "@/features/Infrastructure/roomApi";
 import { useParams, useRouter } from "next/navigation";
 
 const EditLibrary = () => {
@@ -25,7 +28,7 @@ const EditLibrary = () => {
   } = useForm();
 
   const { language: currentLanguage, loading } = useSelector(
-    (state: RootState) => state.language
+    (state: RootState) => state.language,
   );
 
   useEffect(() => {
@@ -100,10 +103,10 @@ const EditLibrary = () => {
             {currentLanguage === "en"
               ? "Edit Room"
               : currentLanguage === "ar"
-              ? "تعديل الغرفة"
-              : currentLanguage === "fr"
-              ? "Modifier la salle"
-              : "Edit Room"}
+                ? "تعديل الغرفة"
+                : currentLanguage === "fr"
+                  ? "Modifier la salle"
+                  : "Edit Room"}
           </h1>
         </div>
         <form
@@ -141,15 +144,19 @@ const EditLibrary = () => {
                   labelFr: "Capacité maximale",
                   type: "number",
                 },
-              ].map((field) => (
-                <label key={field.id} htmlFor={field.id} className="grid text-[18px] font-semibold">
+              ].map(field => (
+                <label
+                  key={field.id}
+                  htmlFor={field.id}
+                  className="grid text-[18px] font-semibold"
+                >
                   {currentLanguage === "en"
                     ? field.labelEn
                     : currentLanguage === "ar"
-                    ? field.labelAr
-                    : currentLanguage === "fr"
-                    ? field.labelFr
-                    : field.labelEn}
+                      ? field.labelAr
+                      : currentLanguage === "fr"
+                        ? field.labelFr
+                        : field.labelEn}
                   <input
                     id={field.id}
                     {...register(field.id, { required: true })}
@@ -161,10 +168,10 @@ const EditLibrary = () => {
                       {currentLanguage === "en"
                         ? "This field is required"
                         : currentLanguage === "ar"
-                        ? "هذا الحقل مطلوب"
-                        : currentLanguage === "fr"
-                        ? "Ce champ est requis"
-                        : "This field is required"}
+                          ? "هذا الحقل مطلوب"
+                          : currentLanguage === "fr"
+                            ? "Ce champ est requis"
+                            : "This field is required"}
                     </span>
                   )}
                 </label>
@@ -175,18 +182,24 @@ const EditLibrary = () => {
                 {currentLanguage === "en"
                   ? "Status"
                   : currentLanguage === "ar"
-                  ? "الحالة"
-                  : currentLanguage === "fr"
-                  ? "Statut"
-                  : "Status"}
-                <div className="flex gap-6 mt-2">
+                    ? "الحالة"
+                    : currentLanguage === "fr"
+                      ? "Statut"
+                      : "Status"}
+                <div className="mt-2 flex gap-6">
                   <label className="flex items-center gap-2">
                     <input
                       type="radio"
                       value="AVAILABLE"
                       {...register("status", { required: true })}
                     />
-                    <span>{currentLanguage === "en" ? "Available" : currentLanguage === "ar" ? "متاحة" : "Disponible"}</span>
+                    <span>
+                      {currentLanguage === "en"
+                        ? "Available"
+                        : currentLanguage === "ar"
+                          ? "متاحة"
+                          : "Disponible"}
+                    </span>
                   </label>
                   <label className="flex items-center gap-2">
                     <input
@@ -194,7 +207,13 @@ const EditLibrary = () => {
                       value="UNAVAILABLE"
                       {...register("status", { required: true })}
                     />
-                    <span>{currentLanguage === "en" ? "Unavailable" : currentLanguage === "ar" ? "غير متاحة" : "Indisponible"}</span>
+                    <span>
+                      {currentLanguage === "en"
+                        ? "Unavailable"
+                        : currentLanguage === "ar"
+                          ? "غير متاحة"
+                          : "Indisponible"}
+                    </span>
                   </label>
                 </div>
                 {errors.status && (
@@ -202,13 +221,13 @@ const EditLibrary = () => {
                     {currentLanguage === "en"
                       ? "Please select a status"
                       : currentLanguage === "ar"
-                      ? "يرجى اختيار الحالة"
-                      : "Veuillez sélectionner un statut"}
+                        ? "يرجى اختيار الحالة"
+                        : "Veuillez sélectionner un statut"}
                   </span>
                 )}
               </div>
             </div>
-            <div className="flex justify-center text-center mt-6">
+            <div className="mt-6 flex justify-center text-center">
               {isUpdating ? (
                 <Spinner />
               ) : (
@@ -219,10 +238,10 @@ const EditLibrary = () => {
                   {currentLanguage === "en"
                     ? "Update Room"
                     : currentLanguage === "ar"
-                    ? "تحديث الغرفة"
-                    : currentLanguage === "fr"
-                    ? "Mettre à jour"
-                    : "Update Room"}
+                      ? "تحديث الغرفة"
+                      : currentLanguage === "fr"
+                        ? "Mettre à jour"
+                        : "Update Room"}
                 </button>
               )}
             </div>

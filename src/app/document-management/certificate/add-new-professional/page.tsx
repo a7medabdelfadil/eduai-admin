@@ -3,7 +3,10 @@
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import Spinner from "@/components/spinner";
-import { useCreateProfessionalsMutation, useGetTypesOfCertificatesQuery } from "@/features/Document-Management/professionalApi";
+import {
+  useCreateProfessionalsMutation,
+  useGetTypesOfCertificatesQuery,
+} from "@/features/Document-Management/professionalApi";
 import { toast } from "react-toastify";
 import { useSelector } from "react-redux";
 import { RootState } from "@/GlobalRedux/store";
@@ -41,7 +44,8 @@ const AddNewProfessional = () => {
     },
   ];
 
-  const { data: certificateTypesResponse, isLoading: isTypesLoading } = useGetTypesOfCertificatesQuery(null);
+  const { data: certificateTypesResponse, isLoading: isTypesLoading } =
+    useGetTypesOfCertificatesQuery(null);
   const {
     register,
     handleSubmit,
@@ -80,7 +84,7 @@ const AddNewProfessional = () => {
     try {
       await createCertificate(data).unwrap();
       toast.success("Certificate created successfully");
-      router.push('/document-management/certificate/professional-development')
+      router.push("/document-management/certificate/professional-development");
     } catch (err) {
       toast.error("Failed to create Certificate");
     }
@@ -162,7 +166,7 @@ const AddNewProfessional = () => {
                 <select
                   id="userId"
                   {...register("userId", { required: true })}
-                  className="h-full w-full bg-bgPrimary rounded-xl border border-borderPrimary px-4 py-3 text-[18px] outline-none max-[458px]:w-[350px]"
+                  className="h-full w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 text-[18px] outline-none max-[458px]:w-[350px]"
                 >
                   <option value="">
                     {currentLanguage === "en"
@@ -175,12 +179,12 @@ const AddNewProfessional = () => {
                     (student: {
                       id: string | null | undefined;
                       name:
-                      | string
-                      | number
-                      | bigint
-                      | boolean
-                      | null
-                      | undefined;
+                        | string
+                        | number
+                        | bigint
+                        | boolean
+                        | null
+                        | undefined;
                     }) => (
                       <option key={student.id} value={student.id ?? ""}>
                         {String(student.name)}
@@ -210,7 +214,7 @@ const AddNewProfessional = () => {
                   <select
                     id="type"
                     {...register("type", { required: true })}
-                    className="h-full w-full bg-bgPrimary rounded-xl border border-borderPrimary px-4 py-3 text-[18px] outline-none max-[458px]:w-[350px]"
+                    className="h-full w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 text-[18px] outline-none max-[458px]:w-[350px]"
                   >
                     <option value="">
                       {currentLanguage === "en"
@@ -220,11 +224,13 @@ const AddNewProfessional = () => {
                           : "Sélectionner le type"}
                     </option>
                     {certificateTypesResponse?.data &&
-                      Object.entries(certificateTypesResponse.data).map(([key, label]) => (
-                        <option key={key} value={key}>
-                          {String(label)}
-                        </option>
-                      ))}
+                      Object.entries(certificateTypesResponse.data).map(
+                        ([key, label]) => (
+                          <option key={key} value={key}>
+                            {String(label)}
+                          </option>
+                        ),
+                      )}
                   </select>
                 )}
 

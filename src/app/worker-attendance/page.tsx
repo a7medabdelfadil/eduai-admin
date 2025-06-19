@@ -117,11 +117,12 @@ const WorkerAttendance = () => {
     (state: RootState) => state.language,
   );
 
-  const filteredEmployees = data?.data.content.filter((employee: Employee) =>
-    search.trim() === ""
-      ? true
-      : employee.userFullName?.toLowerCase()?.includes(search.toLowerCase())
-  ) || [];
+  const filteredEmployees =
+    data?.data.content.filter((employee: Employee) =>
+      search.trim() === ""
+        ? true
+        : employee.userFullName?.toLowerCase()?.includes(search.toLowerCase()),
+    ) || [];
 
   if (loading || isLoading)
     return (
@@ -136,7 +137,7 @@ const WorkerAttendance = () => {
         {/* Search Input */}
         <div
           dir={currentLanguage === "ar" ? "rtl" : "ltr"}
-          className="relative w-full max-w-md mb-4"
+          className="relative mb-4 w-full max-w-md"
         >
           <div className="pointer-events-none absolute inset-y-0 start-0 z-20 flex items-center ps-4">
             <BiSearchAlt className="text-secondary" size={18} />
@@ -146,14 +147,17 @@ const WorkerAttendance = () => {
               onChange={e => setSearch(e.target.value)}
               type="text"
               className="w-full rounded-lg border-2 border-borderPrimary bg-bgPrimary px-4 py-2 ps-11 text-lg outline-none"
-              placeholder={currentLanguage === "ar"
-                ? "بحث"
-                : currentLanguage === "fr"
-                  ? "Rechercher"
-                  : "Search"}
+              placeholder={
+                currentLanguage === "ar"
+                  ? "بحث"
+                  : currentLanguage === "fr"
+                    ? "Rechercher"
+                    : "Search"
+              }
             />
             <span className="min-w-[120px] text-primary">
-              {filteredEmployees?.length ?? 0} {currentLanguage === "ar"
+              {filteredEmployees?.length ?? 0}{" "}
+              {currentLanguage === "ar"
                 ? "نتيجة"
                 : currentLanguage === "fr"
                   ? "résultat(s)"
@@ -163,79 +167,80 @@ const WorkerAttendance = () => {
         </div>
         <div className="flex flex-wrap justify-center gap-4">
           {filteredEmployees?.map((employee: Employee, index: number) => (
-              <div
-                key={index}
-                className="grid h-[320px] w-[300px] items-center justify-center rounded-xl bg-bgPrimary shadow-lg"
-              >
-                <div className="grid items-center justify-center gap-2 whitespace-nowrap px-6 py-4 font-medium text-gray-900">
-                  <div className="grid w-[120px] items-center justify-center text-center">
-                    <div className="flex justify-center">
-                      {employee.picture == null ? (
-                        <img
-                          src="/images/userr.png"
-                          className="h-[100px] w-[100px] rounded-full"
-                          alt="#"
-                        />
-                      ) : (
-                        <img
-                          src={employee.picture}
-                          className="h-[100px] w-[100px] rounded-full"
-                          alt="#"
-                        />
-                      )}
-                    </div>
-                    <p className="mt-4 text-[22px] text-textPrimary">
-                      {" "}
-                      {employee.userFullName}{" "}
-                    </p>
-                    <p className="whitespace-nowrap font-semibold text-secondary">
-                      {currentLanguage === "ar"
-                        ? "العامل"
-                        : currentLanguage === "fr"
-                          ? "Ouvrier"
-                          : "Worker"}
-                      : {employee.userId}
-                    </p>
+            <div
+              key={index}
+              className="grid h-[320px] w-[300px] items-center justify-center rounded-xl bg-bgPrimary shadow-lg"
+            >
+              <div className="grid items-center justify-center gap-2 whitespace-nowrap px-6 py-4 font-medium text-gray-900">
+                <div className="grid w-[120px] items-center justify-center text-center">
+                  <div className="flex justify-center">
+                    {employee.picture == null ? (
+                      <img
+                        src="/images/userr.png"
+                        className="h-[100px] w-[100px] rounded-full"
+                        alt="#"
+                      />
+                    ) : (
+                      <img
+                        src={employee.picture}
+                        className="h-[100px] w-[100px] rounded-full"
+                        alt="#"
+                      />
+                    )}
                   </div>
+                  <p className="mt-4 text-[22px] text-textPrimary">
+                    {" "}
+                    {employee.userFullName}{" "}
+                  </p>
+                  <p className="whitespace-nowrap font-semibold text-secondary">
+                    {currentLanguage === "ar"
+                      ? "العامل"
+                      : currentLanguage === "fr"
+                        ? "Ouvrier"
+                        : "Worker"}
+                    : {employee.userId}
+                  </p>
                 </div>
-                <div className="flex items-center justify-center gap-4 text-center">
-                  {["P", "A", "L"].map(label => (
-                    <label
-                      key={label}
-                      className={`flex h-[55px] w-[55px] cursor-pointer items-center justify-center rounded-full border border-borderPrimary p-5 text-center text-[24px] font-semibold ${selectedStates[index] === label ||
-                        (label === "P" && employee.status === "PRESENT") ||
-                        (label === "L" && employee.status === "LEAVE") ||
-                        (label === "A" && employee.status === "ABSENT")
+              </div>
+              <div className="flex items-center justify-center gap-4 text-center">
+                {["P", "A", "L"].map(label => (
+                  <label
+                    key={label}
+                    className={`flex h-[55px] w-[55px] cursor-pointer items-center justify-center rounded-full border border-borderPrimary p-5 text-center text-[24px] font-semibold ${
+                      selectedStates[index] === label ||
+                      (label === "P" && employee.status === "PRESENT") ||
+                      (label === "L" && employee.status === "LEAVE") ||
+                      (label === "A" && employee.status === "ABSENT")
                         ? label === "P"
                           ? "bg-success text-blackOrWhite"
                           : label === "A"
                             ? "bg-error text-blackOrWhite"
                             : "bg-warning text-blackOrWhite"
                         : "bg-bgSecondary"
-                        } `}
-                    >
-                      <input
-                        type="checkbox"
-                        className="hidden"
-                        checked={selectedStates[index] === label}
-                        onChange={() =>
-                          handleSelect(
-                            label,
-                            index,
-                            employee.userId,
-                            employee.status,
-                            employee.attendanceId,
-                            employee.checkInTime,
-                            employee.checkOutTime,
-                          )
-                        }
-                      />
-                      {label}
-                    </label>
-                  ))}
-                </div>
+                    } `}
+                  >
+                    <input
+                      type="checkbox"
+                      className="hidden"
+                      checked={selectedStates[index] === label}
+                      onChange={() =>
+                        handleSelect(
+                          label,
+                          index,
+                          employee.userId,
+                          employee.status,
+                          employee.attendanceId,
+                          employee.checkInTime,
+                          employee.checkOutTime,
+                        )
+                      }
+                    />
+                    {label}
+                  </label>
+                ))}
               </div>
-            ))}
+            </div>
+          ))}
           {(data?.data.content.length == 0 || data == null) && (
             <div className="flex w-full justify-center py-3 text-center text-[18px] font-semibold">
               {currentLanguage === "ar"

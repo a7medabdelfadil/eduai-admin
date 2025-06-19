@@ -64,7 +64,7 @@ const Password = () => {
             <div className="grid w-full gap-2">
               <form onSubmit={handleSubmit(onSubmit)}>
                 <div className="w-full">
-                  <div className="w-full grid grid-cols-2 gap-4 max-[1278px]:grid-cols-1">
+                  <div className="grid w-full grid-cols-2 gap-4 max-[1278px]:grid-cols-1">
                     <label
                       htmlFor="password"
                       className="grid text-[18px] font-semibold"

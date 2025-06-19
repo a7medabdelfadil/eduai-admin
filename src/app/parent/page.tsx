@@ -384,14 +384,12 @@ const Parent = () => {
                   }
                 />
                 <span className="min-w-[120px] text-primary">
-                  {
-                    filteredData.length
-                  }{" "}
+                  {filteredData.length}{" "}
                   {currentLanguage === "ar"
-                  ? "نتيجة"
-                  : currentLanguage === "fr"
-                  ? "résultat(s)"
-                  : "Result(s)"}
+                    ? "نتيجة"
+                    : currentLanguage === "fr"
+                      ? "résultat(s)"
+                      : "Result(s)"}
                 </span>
               </div>
             </div>

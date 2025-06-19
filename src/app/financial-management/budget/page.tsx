@@ -7,7 +7,18 @@ import { RootState } from "@/GlobalRedux/store";
 import BreadCrumbs from "@/components/BreadCrumbs";
 import Spinner from "@/components/spinner";
 import Container from "@/components/Container";
-
+import { useGetAllInvoicesQuery } from "@/features/Financial/feesApi";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/Table";
+import { Skeleton } from "@/components/Skeleton";
+import SeeMoreButton from "@/components/SeeMoreButton";
+import { useGetBudgetSummaryQuery } from "@/features/Financial/budgetApi";
 const ReactApexChart = dynamic(() => import("react-apexcharts"), {
   ssr: false,
 });
@@ -110,18 +121,45 @@ const Budget = () => {
       href: "/financial-management/budget",
     },
   ];
+  const { data: budgetData, isLoading: isData, isError } = useGetBudgetSummaryQuery(null);
 
-  const booleanValue = useSelector((state: RootState) => state.boolean.value);
-  const { language: currentLanguage, loading } = useSelector(
+  const { language: currentLanguage } = useSelector(
     (state: RootState) => state.language,
   );
+  const translate = {
+    searchPlaceholder:
+      currentLanguage === "ar"
+        ? "ابحث عن الفاتورة"
+        : currentLanguage === "fr"
+          ? "Rechercher une facture"
+          : "Search invoice",
+    result:
+      currentLanguage === "ar"
+        ? "نتيجة"
+        : currentLanguage === "fr"
+          ? "résultat(s)"
+          : "Result(s)",
+    noData:
+      currentLanguage === "ar"
+        ? "لا توجد بيانات"
+        : currentLanguage === "fr"
+          ? "Aucune donnée disponible"
+          : "No data available",
+  };
+  const { data, isLoading, refetch } = useGetAllInvoicesQuery(null);
+  const formatTransactionDate = (dateString: string | number | Date) => {
+    if (!dateString) return "No transaction date";
+    const formatter = new Intl.DateTimeFormat("en-EG", {
+      timeZone: "Asia/Riyadh",
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    });
+    return formatter.format(new Date(dateString));
+  };
 
-  if (loading)
-    return (
-      <div className="flex h-screen w-full items-center justify-center">
-        <Spinner />
-      </div>
-    );
+  const [visibleCount, setVisibleCount] = useState(20);
+  const visibleData = data?.data?.content?.slice(0, visibleCount);
 
   return (
     <>
@@ -140,57 +178,29 @@ const Budget = () => {
             {/* default */}
           </h1>
         </div>
-        <div className="mb-5 flex justify-center gap-2 max-[840px]:grid">
-          <div className="grid gap-16 max-[840px]:flex max-[840px]:gap-2">
-            <div className="flex h-[80px] w-[201px] items-center justify-between gap-2 rounded-xl bg-bgPrimary p-2 shadow-xl max-[840px]:w-[170px] max-[576px]:h-[100px]">
+        <div className="mb-5 flex justify-center gap-4 max-[840px]:grid">
+          {/* Total Earning */}
+          <div className="grid gap-4 max-[840px]:flex max-[840px]:gap-2">
+            <div className="flex h-[120px] w-[240px] items-center justify-between gap-3 rounded-xl bg-bgPrimary p-4 shadow-xl max-[840px]:w-[200px] max-[576px]:h-[110px]">
               <div>
-                <img src="/images/earnning.png" alt="#" />
+                <img src="/images/earnning.png" alt="#" className="h-14 w-14" />
               </div>
               <div>
-                <p className="text-[12px] text-gray-400">
+                <p className="text-[15px] text-gray-400">
                   {currentLanguage === "en"
                     ? "Total Earning"
                     : currentLanguage === "ar"
                       ? "إجمالي الأرباح"
                       : "Gains totaux"}
                 </p>
-                <h1 className="text-[17px] font-semibold">12.130K</h1>
-                <h1 className="text-[10px] text-gray-400">
-                  {" "}
-                  <span className="font-semibold text-success">4.63%</span>{" "}
-                  {currentLanguage === "en"
-                    ? "vs. last Year"
-                    : currentLanguage === "ar"
-                      ? "مقارنة بالسنة الماضية"
-                      : "vs. l'année dernière"}
-                </h1>
-              </div>
-            </div>
-            <div className="flex h-[80px] w-[201px] items-center justify-between gap-2 rounded-xl bg-bgPrimary p-2 shadow-xl max-[840px]:w-[170px] max-[576px]:h-[100px]">
-              <div>
-                <img src="/images/spending.png" alt="#" />
-              </div>
-              <div>
-                <p className="text-[12px] text-gray-400">
-                  {currentLanguage === "en"
-                    ? "Total Spending"
-                    : currentLanguage === "ar"
-                      ? "إجمالي الإنفاق"
-                      : "Dépenses totales"}
-                </p>
-                <h1 className="text-[17px] font-semibold">12.130K</h1>
-                <h1 className="text-[10px] text-gray-400">
-                  {" "}
-                  <span className="font-semibold text-error">4.63%</span>
-                  {currentLanguage === "en"
-                    ? "vs. last Year"
-                    : currentLanguage === "ar"
-                      ? "مقارنة بالسنة الماضية"
-                      : "vs. l'année dernière"}
+                <h1 className="text-[22px] font-semibold">
+                  {budgetData?.data?.totalEarning}
                 </h1>
               </div>
             </div>
           </div>
+
+          {/* MasterCard Card */}
           <div className="grid gap-2">
             <div className="relative m-auto h-56 w-96 transform rounded-xl bg-red-100 text-white shadow-2xl transition-transform max-[840px]:w-[340px]">
               <img
@@ -200,15 +210,19 @@ const Budget = () => {
               />
               <div className="absolute top-8 w-full px-8">
                 <div className="flex justify-between">
-                  <div className="">
+                  <div>
                     <h1 className="font-light">
                       {currentLanguage === "en"
-                        ? "Name"
+                        ? "Current Balance"
                         : currentLanguage === "ar"
-                          ? "الاسم"
-                          : "Nom"}
+                          ? "الرصيد الحالي"
+                          : currentLanguage === "fr"
+                            ? "Solde actuel"
+                            : "Current Balance"}
+
                     </h1>
-                    <p className="font-medium tracking-widest">Mostapha Taha</p>
+                    <p className="font-medium tracking-wider">{budgetData?.data?.balance}
+                    </p>
                   </div>
                   <img
                     className="h-14 w-14"
@@ -230,7 +244,7 @@ const Budget = () => {
                 </div>
                 <div className="pr-6 pt-6">
                   <div className="flex justify-between">
-                    <div className="">
+                    <div>
                       <h1 className="text-xs font-light">
                         {currentLanguage === "en"
                           ? "Valid"
@@ -238,11 +252,9 @@ const Budget = () => {
                             ? "صالح"
                             : "Valide"}
                       </h1>
-                      <p className="text-sm font-medium tracking-wider">
-                        11/15
-                      </p>
+                      <p className="text-sm font-medium tracking-wider">11/15</p>
                     </div>
-                    <div className="">
+                    <div>
                       <h1 className="text-xs font-light">
                         {currentLanguage === "en"
                           ? "Expiry"
@@ -250,11 +262,9 @@ const Budget = () => {
                             ? "انتهاء"
                             : "Expiration"}
                       </h1>
-                      <p className="text-sm font-medium tracking-wider">
-                        03/25
-                      </p>
+                      <p className="text-sm font-medium tracking-wider">03/25</p>
                     </div>
-                    <div className="">
+                    <div>
                       <h1 className="text-xs font-light">
                         {currentLanguage === "en"
                           ? "CVV"
@@ -262,61 +272,30 @@ const Budget = () => {
                             ? "رمز الأمان"
                             : "CVV"}
                       </h1>
-                      <p className="tracking-more-wider text-sm font-bold">
-                        ···
-                      </p>
+                      <p className="tracking-more-wider text-sm font-bold">···</p>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-          <div className="grid gap-16 max-[840px]:flex max-[840px]:gap-2">
-            <div className="flex h-[80px] w-[201px] items-center justify-between gap-2 rounded-xl bg-bgPrimary p-2 shadow-xl max-[840px]:w-[170px] max-[576px]:h-[100px]">
+
+          {/* Total Spending */}
+          <div className="grid gap-4 max-[840px]:flex max-[840px]:gap-2">
+            <div className="flex h-[120px] w-[240px] items-center justify-between gap-3 rounded-xl bg-bgPrimary p-4 shadow-xl max-[840px]:w-[200px] max-[576px]:h-[110px]">
               <div>
-                <img src="/images/earnning.png" alt="#" />
+                <img src="/images/spending.png" alt="#" className="h-14 w-14" />
               </div>
               <div>
-                <p className="text-[12px] text-gray-400">
-                  {currentLanguage === "en"
-                    ? "Total Earning"
-                    : currentLanguage === "ar"
-                      ? "إجمالي الأرباح"
-                      : "Gains totaux"}
-                </p>
-                <h1 className="text-[17px] font-semibold">12.130K</h1>
-                <h1 className="text-[10px] text-gray-400">
-                  {" "}
-                  <span className="font-semibold text-success">4.63%</span>{" "}
-                  {currentLanguage === "en"
-                    ? "vs. last Year"
-                    : currentLanguage === "ar"
-                      ? "مقارنة بالسنة الماضية"
-                      : "vs. l'année dernière"}
-                </h1>
-              </div>
-            </div>
-            <div className="flex h-[80px] w-[201px] items-center justify-between gap-2 rounded-xl bg-bgPrimary p-2 shadow-xl max-[840px]:w-[170px] max-[576px]:h-[100px]">
-              <div>
-                <img src="/images/spending.png" alt="#" />
-              </div>
-              <div>
-                <p className="text-[12px] text-gray-400">
+                <p className="text-[15px] text-gray-400">
                   {currentLanguage === "en"
                     ? "Total Spending"
                     : currentLanguage === "ar"
                       ? "إجمالي الإنفاق"
                       : "Dépenses totales"}
                 </p>
-                <h1 className="text-[17px] font-semibold">12.130K</h1>
-                <h1 className="text-[10px] text-gray-400">
-                  {" "}
-                  <span className="font-semibold text-error">4.63%</span>
-                  {currentLanguage === "en"
-                    ? "vs. last Year"
-                    : currentLanguage === "ar"
-                      ? "مقارنة بالسنة الماضية"
-                      : "vs. l'année dernière"}
+                <h1 className="text-[22px] font-semibold">
+                  {budgetData?.data?.totalSpending}
                 </h1>
               </div>
             </div>
@@ -342,66 +321,106 @@ const Budget = () => {
           </div>
         </div>
         <div className="grid w-full rounded-xl bg-bgPrimary p-5">
-          <div className="relative overflow-auto shadow-md sm:rounded-lg bg-bgPrimary">
-            <table className="w-full overflow-x-auto text-left text-sm text-textSecondary rtl:text-right">
-              <thead className="bg-thead text-xs uppercase text-textPrimary">
-                <tr>
-                  <th scope="col" className="whitespace-nowrap px-6 py-3">
+          <div className="relative overflow-auto bg-bgPrimary shadow-md sm:rounded-lg">
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>
                     {currentLanguage === "en"
-                      ? "Full Name"
+                      ? "Name"
                       : currentLanguage === "ar"
-                        ? "الاسم الكامل"
-                        : "Nom complet"}
-                  </th>
-                  <th scope="col" className="whitespace-nowrap px-6 py-3">
+                        ? "الاسم"
+                        : "Nom"}
+                  </TableHead>
+                  <TableHead>
                     {currentLanguage === "en"
-                      ? "ID"
+                      ? "Paid Amount"
                       : currentLanguage === "ar"
-                        ? "الرقم التعريفي"
-                        : "ID"}
-                  </th>
-                  <th scope="col" className="whitespace-nowrap px-6 py-3">
+                        ? "المبلغ المدفوع"
+                        : "Montant Payé"}
+                  </TableHead>
+                  <TableHead>
                     {currentLanguage === "en"
-                      ? "Address"
+                      ? "Total Fees Amount"
                       : currentLanguage === "ar"
-                        ? "العنوان"
-                        : "Adresse"}
-                  </th>
-                  <th scope="col" className="whitespace-nowrap px-6 py-3">
+                        ? "إجمالي مبلغ الرسوم"
+                        : "Montant Total des Frais"}
+                  </TableHead>
+                  <TableHead>
+                    {currentLanguage === "en"
+                      ? "Invoice Date"
+                      : currentLanguage === "ar"
+                        ? "تاريخ الفاتورة"
+                        : "Date de la Facture"}
+                  </TableHead>
+                  <TableHead>
                     {currentLanguage === "en"
                       ? "Status"
                       : currentLanguage === "ar"
                         ? "الحالة"
                         : "Statut"}
-                  </th>
-                </tr>
-              </thead>
+                  </TableHead>
+                  <TableHead>
+                    {currentLanguage === "en"
+                      ? "Discount"
+                      : currentLanguage === "ar"
+                        ? "الخصم"
+                        : "Réduction"}
+                  </TableHead>
+                </TableRow>
+              </TableHeader>
 
-              <tbody>
-                <tr className="border-b border-borderPrimary bg-bgPrimary hover:bg-bgSecondary">
-                  <th
-                    scope="row"
-                    className="whitespace-nowrap px-6 py-4 font-medium text-textSecondary"
-                  >
-                    Nahda
-                  </th>
-                  <td className="whitespace-nowrap px-6 py-4">C45121</td>
-                  <td className="whitespace-nowrap px-6 py-4">This is text</td>
-                  <td className="whitespace-nowrap px-6 py-4">kdsk</td>
-                </tr>
-                <tr className="border-b border-borderPrimary bg-bgPrimary hover:bg-bgSecondary">
-                  <th
-                    scope="row"
-                    className="whitespace-nowrap px-6 py-4 font-medium text-textSecondary"
-                  >
-                    Nahda
-                  </th>
-                  <td className="whitespace-nowrap px-6 py-4">C45121</td>
-                  <td className="whitespace-nowrap px-6 py-4">This is text</td>
-                  <td className="whitespace-nowrap px-6 py-4">sdsdd</td>
-                </tr>
-              </tbody>
-            </table>
+              <TableBody>
+                {isLoading ? (
+                  [...Array(3)].map((_, i) => (
+                    <TableRow key={i}>
+                      {Array.from({ length: 7 }).map((_, j) => (
+                        <TableCell key={j}>
+                          <Skeleton className="h-4 w-24" />
+                        </TableCell>
+                      ))}
+                    </TableRow>
+                  ))
+                ) : !data?.data?.content?.length ? (
+                  <TableRow>
+                    <TableCell colSpan={7} className="text-center font-medium">
+                      {translate.noData}
+                    </TableCell>
+                  </TableRow>
+                ) : (
+                  visibleData.map((invoice: any, index: number) => (
+                    <TableRow key={index} data-index={index}>
+                      <TableCell>{invoice.billedToName}</TableCell>
+                      <TableCell>{invoice.paidAmount}</TableCell>
+                      <TableCell>{invoice.totalFeesAmount}</TableCell>
+                      <TableCell>
+                        {formatTransactionDate(invoice.creationDate)}
+                      </TableCell>
+                      <TableCell>
+                        {invoice.paymentStatus === "NOT_FULLY_PAID" ? (
+                          <div className="flex items-center gap-2 font-semibold text-error">
+                            <div className="h-2.5 w-2.5 rounded-full bg-error"></div>{" "}
+                            Unpaid
+                          </div>
+                        ) : (
+                          <div className="flex items-center gap-2 font-semibold text-primary">
+                            <div className="h-2.5 w-2.5 rounded-full bg-primary"></div>{" "}
+                            Paid
+                          </div>
+                        )}
+                      </TableCell>
+                      <TableCell>{invoice.discountAmount}</TableCell>
+
+                    </TableRow>
+                  ))
+                )}
+              </TableBody>
+            </Table>
+            {visibleCount < (data?.length || 0) && (
+              <SeeMoreButton
+                onClick={() => setVisibleCount(prev => prev + 20)}
+              />
+            )}
           </div>
         </div>
       </Container>

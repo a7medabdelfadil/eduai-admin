@@ -5,8 +5,11 @@ import BreadCrumbs from "@/components/BreadCrumbs";
 import { useSelector } from "react-redux";
 import { RootState } from "@/GlobalRedux/store";
 import Container from "@/components/Container";
-import { BiSearchAlt } from "react-icons/bi";
-import { useDeleteAnnualLeaveMutation, useGetAllAnnualLeavesQuery } from "@/features/Organization-Setteings/annualApi";
+import { BiSearchAlt, BiTrash } from "react-icons/bi";
+import {
+  useDeleteAnnualLeaveMutation,
+  useGetAllAnnualLeavesQuery,
+} from "@/features/Organization-Setteings/annualApi";
 import {
   Table,
   TableHeader,
@@ -18,7 +21,6 @@ import {
 import { Skeleton } from "@/components/Skeleton";
 import SeeMoreButton from "@/components/SeeMoreButton";
 import { FiEdit2 } from "react-icons/fi";
-import { RiDeleteBin6Fill } from "react-icons/ri";
 import { toast } from "react-toastify";
 import {
   Dialog,
@@ -55,7 +57,8 @@ const Annual = () => {
   const [visibleCount, setVisibleCount] = useState(10);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [selectedId, setSelectedId] = useState<string | null>(null);
-  const [deleteAnnualLeave, { isLoading: isDeleting }] = useDeleteAnnualLeaveMutation();
+  const [deleteAnnualLeave, { isLoading: isDeleting }] =
+    useDeleteAnnualLeaveMutation();
 
   const { language: currentLanguage, loading } = useSelector(
     (state: RootState) => state.language,
@@ -71,21 +74,23 @@ const Annual = () => {
       setDeleteDialogOpen(false);
       setSelectedId(null);
       await refetch();
-       toast.success(
-      currentLanguage === "ar"
-        ? "تم حذف الإجازة بنجاح"
-        : currentLanguage === "fr"
-          ? "Le congé a été supprimé avec succès"
-          : "Annual leave deleted successfully"
-    );
+      toast.success(
+        currentLanguage === "ar"
+          ? "تم حذف الإجازة بنجاح"
+          : currentLanguage === "fr"
+            ? "Le congé a été supprimé avec succès"
+            : "Annual leave deleted successfully",
+      );
     } catch (error) {
       toast.error(`${error instanceof Error ? error.message : String(error)}`);
     }
   };
 
-const { data, error, isLoading, refetch } = useGetAllAnnualLeavesQuery({});
+  const { data, error, isLoading, refetch } = useGetAllAnnualLeavesQuery({});
   const filteredData = data?.data.content.filter((item: any) =>
-    search.trim() === "" ? true : item.title.toLowerCase().includes(search.toLowerCase())
+    search.trim() === ""
+      ? true
+      : item.title.toLowerCase().includes(search.toLowerCase()),
   );
 
   const displayedData = filteredData?.slice(0, visibleCount);
@@ -103,8 +108,7 @@ const { data, error, isLoading, refetch } = useGetAllAnnualLeavesQuery({});
                 : "Annual Leave"}
           </h1>
         </div>
-        <div className="bg-bgPrimary rounded-xl">
-
+        <div className="max-w-screen overflow-x-hidden rounded-xl bg-bgPrimary">
           <div className="flex flex-col items-center justify-between gap-4 rounded-lg px-4 py-4 md:flex-row">
             <div
               dir={currentLanguage === "ar" ? "rtl" : "ltr"}
@@ -147,7 +151,6 @@ const { data, error, isLoading, refetch } = useGetAllAnnualLeavesQuery({});
                   : "Add New Annual Leave"}
             </Link>
           </div>
-
 
           <Table>
             <TableHeader>
@@ -204,7 +207,10 @@ const { data, error, isLoading, refetch } = useGetAllAnnualLeavesQuery({});
                 ))
               ) : displayedData?.length === 0 ? (
                 <TableRow>
-                  <TableCell colSpan={5} className="py-6 text-center text-gray-500">
+                  <TableCell
+                    colSpan={5}
+                    className="py-6 text-center text-gray-500"
+                  >
                     {currentLanguage === "ar"
                       ? "لا توجد بيانات"
                       : currentLanguage === "fr"
@@ -215,18 +221,27 @@ const { data, error, isLoading, refetch } = useGetAllAnnualLeavesQuery({});
               ) : (
                 displayedData.map((item: any, index: number) => (
                   <TableRow key={item.annualLeaveId} data-index={index}>
-                    <TableCell className="font-medium text-textSecondary">{item.title}</TableCell>
+                    <TableCell className="font-medium text-textSecondary">
+                      {item.title}
+                    </TableCell>
                     <TableCell>{item.description}</TableCell>
                     <TableCell>{item.startDate}</TableCell>
                     <TableCell>{item.endDate}</TableCell>
                     <TableCell className="flex items-center gap-4">
-                      <Link href={`/organization-setting/annual/edit-annual/${item.annualLeaveId}`}>
-                        <FiEdit2 className="text-blue-600 hover:scale-110 transition" size={18} />
+                      <Link
+                        href={`/organization-setting/annual/edit-annual/${item.annualLeaveId}`}
+                      >
+                        <FiEdit2
+                          className="text-blue-600 transition hover:scale-110"
+                          size={18}
+                        />
                       </Link>
                       <button onClick={() => handleDelete(item.annualLeaveId)}>
-                        <RiDeleteBin6Fill className="text-error hover:scale-110 transition" size={20} />
+                        <BiTrash
+                          className="text-error transition hover:scale-110"
+                          size={20}
+                        />
                       </button>
-
                     </TableCell>
                   </TableRow>
                 ))
@@ -237,11 +252,7 @@ const { data, error, isLoading, refetch } = useGetAllAnnualLeavesQuery({});
           {filteredData?.length > visibleCount && (
             <SeeMoreButton onClick={() => setVisibleCount(prev => prev + 10)} />
           )}
-
-
-
         </div>
-
       </Container>
       <Dialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
         <DialogContent>
@@ -266,7 +277,11 @@ const { data, error, isLoading, refetch } = useGetAllAnnualLeavesQuery({});
               onClick={() => setDeleteDialogOpen(false)}
               className="rounded-md border px-4 py-2 text-sm"
             >
-              {currentLanguage === "ar" ? "إلغاء" : currentLanguage === "fr" ? "Annuler" : "Cancel"}
+              {currentLanguage === "ar"
+                ? "إلغاء"
+                : currentLanguage === "fr"
+                  ? "Annuler"
+                  : "Cancel"}
             </button>
             <button
               onClick={confirmDelete}
