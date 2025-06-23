@@ -30,15 +30,15 @@ import {
 } from "@/components/Dialog";
 import { toast } from "react-toastify";
 
-const Uniform = () => {
+const Tuition = () => {
   const breadcrumbs = [
     { nameEn: "Administration", nameAr: "الإدارة", nameFr: "Administration", href: "/" },
     { nameEn: "Financial Management", nameAr: "الإدارة المالية", nameFr: "Gestion financière", href: "/financial-management" },
-    { nameEn: "Uniform", nameAr: "الزي الرسمي", nameFr: "Uniforme", href: "/financial-management/uniform" },
+    { nameEn: "Tuition", nameAr: "الرسوم الدراسية", nameFr: "Frais de scolarité", href: "/financial-management/tuition" },
   ];
 
   const { language: currentLanguage } = useSelector((state: RootState) => state.language);
-  const { data, isLoading, refetch } = useGetFeesItemsByTypeQuery("UNIFORM");
+  const { data, isLoading, refetch } = useGetFeesItemsByTypeQuery("TUITION");
   const [deleteFeesItem] = useDeleteFeesItemMutation();
   const [search, setSearch] = useState("");
   const [visibleCount, setVisibleCount] = useState(20);
@@ -78,7 +78,7 @@ const Uniform = () => {
           </h1>
         </div>
         <div className="justify-left mb-5 ml-4 flex gap-5 text-[20px] font-semibold">
-          <Link className="text-secondary hover:text-blue-500 hover:underline" href="/financial-management/tuition">
+          <Link className="text-blue-500 underline" href="/financial-management/tuition">
             {translate("Tuition", "الرسوم الدراسية", "Frais de scolarité")}
           </Link>
           <Link className="text-secondary hover:text-blue-500 hover:underline" href="/financial-management/activity">
@@ -87,7 +87,7 @@ const Uniform = () => {
           <Link className="text-secondary hover:text-blue-500 hover:underline" href="/financial-management/transport">
             {translate("Transport", "النقل", "Transport")}
           </Link>
-          <Link className="text-blue-500 underline" href="/financial-management/uniform">
+          <Link className="text-secondary hover:text-blue-500 hover:underline" href="/financial-management/uniform">
             {translate("Uniform", "الزي الرسمي", "Uniforme")}
           </Link>
           <Link className="text-secondary hover:text-blue-500 hover:underline" href="/financial-management/material">
@@ -114,17 +114,10 @@ const Uniform = () => {
             </div>
 
             <Link
-              href="/financial-management/uniform/add-uniform"
+              href="/financial-management/tuition/add-tuition"
               className="mx-3 w-fit self-end whitespace-nowrap rounded-xl bg-primary px-4 py-2 text-[18px] font-semibold text-white hover:bg-hover hover:shadow-xl"
             >
-              {currentLanguage === "en"
-                ? "Add Uniform"
-                : currentLanguage === "ar"
-                  ? "إضافة زي مدرسي"
-                  : currentLanguage === "fr"
-                    ? "Ajouter un uniforme"
-                    : "Add Uniform"}
-
+              {translate("Add Tuition", "إضافة رسوم دراسية", "Ajouter des frais de scolarité")}
             </Link>
           </div>
 
@@ -162,7 +155,7 @@ const Uniform = () => {
                       <TableCell>{item.cost}</TableCell>
                       <TableCell>{item.about || "-"}</TableCell>
                       <TableCell className="flex items-center gap-4">
-                        <Link href={`/financial-management/uniform/edit-uniform/${item.feesItemId}`}
+                        <Link href={`/financial-management/tuition/edit-tuition/${item.feesItemId}`}
                           className="text-primary hover:text-blue-600">
                           <BiEditAlt size={20} />
                         </Link>
@@ -218,4 +211,4 @@ const Uniform = () => {
   );
 };
 
-export default Uniform;
+export default Tuition;

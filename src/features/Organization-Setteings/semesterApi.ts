@@ -42,7 +42,7 @@ export const semesterApi = createApi({
     deleteSemesters: builder.mutation({
       query: id => ({
         url: `/api/v1/management/semester/${id}`,
-        method: "PUT",
+        method: "DELETE",
       }),
     }),
     //

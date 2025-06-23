@@ -47,6 +47,8 @@ import { annualApi } from "@/features/Organization-Setteings/annualApi";
 import { roomApi } from "@/features/Infrastructure/roomApi";
 import { storeApi } from "@/features/Infrastructure/storeApi";
 import { budgetApi } from "@/features/Financial/budgetApi";
+import { paymentApi } from "@/features/Financial/paymentApi";
+import { transportApi } from "@/features/Financial/transportApi";
 
 export const store = configureStore({
   reducer: {
@@ -97,6 +99,8 @@ export const store = configureStore({
     [roomApi.reducerPath]: roomApi.reducer,
     [storeApi.reducerPath]: storeApi.reducer,
     [budgetApi.reducerPath]: budgetApi.reducer,
+    [paymentApi.reducerPath]: paymentApi.reducer,
+    [transportApi.reducerPath]: transportApi.reducer,
     [activityApi.reducerPath]: activityApi.reducer,
   },
   middleware: getDefaultMiddleware =>
@@ -145,6 +149,8 @@ export const store = configureStore({
       .concat(roomApi.middleware)
       .concat(storeApi.middleware)
       .concat(budgetApi.middleware)
+      .concat(paymentApi.middleware)
+      .concat(transportApi.middleware)
       .concat(activityApi.middleware),
 });
 

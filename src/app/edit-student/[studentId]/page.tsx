@@ -13,10 +13,10 @@ import {
 } from "@/features/signupApi";
 import { useForm, Controller } from "react-hook-form";
 import { useSelector } from "react-redux";
-import { toast } from "react-toastify";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Container from "@/components/Container";
+import { toast } from "react-toastify";
 
 interface Params {
   studentId: string;
@@ -99,7 +99,6 @@ const EditStudent = ({ params }: { params: Params }) => {
       setNameFr(studentData.name_fr);
       setAbout(studentData.about);
       setBirthDate(studentData.birthDate);
-      console.log("👾 ~ useEffect ~ studentData:", studentData);
     }
   }, [data]);
 
@@ -127,8 +126,16 @@ const EditStudent = ({ params }: { params: Params }) => {
 
     try {
       await updateSudent({ id: params.studentId, formData }).unwrap();
-      toast.success("Student Updated successfully");
-      router.back();
+      toast.success(
+        currentLanguage === "en"
+          ? "Student updated successfully"
+          : currentLanguage === "ar"
+            ? "تم تحديث الطالب بنجاح"
+            : currentLanguage === "fr"
+              ? "Étudiant mis à jour avec succès"
+              : "Student updated successfully"
+      );
+      router.push('/student');
     } catch (err: any) {
       toast.error(err?.data?.message || "Update failed");
     }

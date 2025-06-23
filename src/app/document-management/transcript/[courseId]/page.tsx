@@ -1,5 +1,7 @@
 "use client";
 import BreadCrumbs from "@/components/BreadCrumbs";
+import Container from "@/components/Container";
+import GradeReportCard from "@/components/GradeReportCard";
 import Spinner from "@/components/spinner";
 import { useGetAllGradeCourseQuery } from "@/features/Document-Management/certificatesApi";
 import { RootState } from "@/GlobalRedux/store";
@@ -35,36 +37,19 @@ const Course = ({ params }: ParamsType) => {
   ];
   const [searchTerm, setSearchTerm] = useState("");
 
-  const booleanValue = useSelector((state: RootState) => state.boolean.value);
   const { language: currentLanguage, loading } = useSelector(
     (state: RootState) => state.language,
   );
   const { data, isLoading } = useGetAllGradeCourseQuery(params.courseId);
+  console.log("🚀 ~ Course ~ data:", data)
   const filteredData = data?.data?.filter((course: any) =>
     course.studentName?.toLowerCase().includes(searchTerm.toLowerCase()),
   );
 
-  if (isLoading)
-    return (
-      <div className="flex h-screen w-full items-center justify-center">
-        <Spinner />
-      </div>
-    );
   return (
     <>
       <BreadCrumbs breadcrumbs={breadcrumbs} />
-      <div
-        dir={currentLanguage === "ar" ? "rtl" : "ltr"}
-        className={`${
-          currentLanguage === "ar"
-            ? booleanValue
-              ? "lg:mr-[100px]"
-              : "lg:mr-[270px]"
-            : booleanValue
-              ? "lg:ml-[100px]"
-              : "lg:ml-[270px]"
-        } relative mx-3 mt-10 h-screen overflow-x-auto bg-transparent sm:rounded-lg`}
-      >
+      <Container>
         <div className="flex justify-between text-center max-[502px]:grid max-[502px]:justify-center">
           <div className="mb-3">
             <label htmlFor="icon" className="sr-only">
@@ -107,179 +92,22 @@ const Course = ({ params }: ParamsType) => {
           </div>
         </div>
 
-        <table className="w-full overflow-x-auto text-left text-sm text-gray-500 rtl:text-right">
-          <thead className="bg-thead text-xs uppercase text-textPrimary">
-            <tr>
-              <th scope="col" className="whitespace-nowrap px-6 py-3">
-                {currentLanguage === "ar"
-                  ? "اسم الطالب"
-                  : currentLanguage === "fr"
-                    ? "Nom de l'étudiant"
-                    : "Student Name"}
-              </th>
-              <th scope="col" className="whitespace-nowrap px-6 py-3">
-                {currentLanguage === "ar"
-                  ? "اسم الصف"
-                  : currentLanguage === "fr"
-                    ? "Nom de la classe"
-                    : "Class Name"}
-              </th>
-              <th scope="col" className="whitespace-nowrap px-6 py-3">
-                {currentLanguage === "ar"
-                  ? "اسم الدورة"
-                  : currentLanguage === "fr"
-                    ? "Nom du cours"
-                    : "Course Name"}
-              </th>
-              <th
-                scope="col"
-                className="whitespace-nowrap px-6 py-3 text-center"
-              >
-                {currentLanguage === "ar"
-                  ? "المعامل"
-                  : currentLanguage === "fr"
-                    ? "Coefficient"
-                    : "Coefficient"}
-              </th>
-              <th
-                scope="col"
-                className="whitespace-nowrap px-6 py-3 text-center"
-              >
-                {currentLanguage === "ar"
-                  ? "الامتحان الأول"
-                  : currentLanguage === "fr"
-                    ? "Premier examen"
-                    : "First Exam Score"}
-              </th>
-              <th
-                scope="col"
-                className="whitespace-nowrap px-6 py-3 text-center"
-              >
-                {currentLanguage === "ar"
-                  ? "الامتحان الثاني"
-                  : currentLanguage === "fr"
-                    ? "Deuxième examen"
-                    : "Second Exam Score"}
-              </th>
-              <th
-                scope="col"
-                className="whitespace-nowrap px-6 py-3 text-center"
-              >
-                {currentLanguage === "ar"
-                  ? "الامتحان الثالث"
-                  : currentLanguage === "fr"
-                    ? "Troisième examen"
-                    : "Third Exam Score"}
-              </th>
-              <th
-                scope="col"
-                className="whitespace-nowrap px-6 py-3 text-center"
-              >
-                {currentLanguage === "ar"
-                  ? "الامتحان الرابع"
-                  : currentLanguage === "fr"
-                    ? "Quatrième examen"
-                    : "Fourth Exam Score"}
-              </th>
-              <th
-                scope="col"
-                className="whitespace-nowrap px-6 py-3 text-center"
-              >
-                {currentLanguage === "ar"
-                  ? "الأنشطة المتكاملة"
-                  : currentLanguage === "fr"
-                    ? "Activités intégrées"
-                    : "Integrated Activities"}
-              </th>
-              <th
-                scope="col"
-                className="whitespace-nowrap px-6 py-3 text-center"
-              >
-                {currentLanguage === "ar"
-                  ? "النقاط"
-                  : currentLanguage === "fr"
-                    ? "Points"
-                    : "Points"}
-              </th>
-              <th
-                scope="col"
-                className="whitespace-nowrap px-6 py-3 text-center"
-              >
-                {currentLanguage === "ar"
-                  ? "التقييم المستمر"
-                  : currentLanguage === "fr"
-                    ? "Évaluation continue"
-                    : "Continuous Assessment"}
-              </th>
-              <th
-                scope="col"
-                className="whitespace-nowrap px-6 py-3 text-center"
-              >
-                {currentLanguage === "ar"
-                  ? "المعدل التراكمي"
-                  : currentLanguage === "fr"
-                    ? "Moyenne cumulative"
-                    : "GPA"}
-              </th>
-            </tr>
-          </thead>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {filteredData?.map((item: any, index: any) => (
+            <GradeReportCard
+              key={index}
+              studentName={item.studentName}
+              className={item.className}
+              courseName={item.courseGradeReportDTO.courseName}
+              points={item.courseGradeReportDTO.points}
+              continuousAssessment={item.courseGradeReportDTO.continuousAssessment}
+              gpa={item.courseGradeReportDTO.gpa}
+            />
+          ))}
+        </div>
 
-          <tbody>
-            {filteredData.map((course: any, index: number) => (
-              <tr
-                key={index}
-                className="border-b border-borderPrimary bg-bgPrimary hover:bg-bgSecondary"
-              >
-                <td className="whitespace-nowrap px-6 py-4">
-                  {course.studentName || "-"}
-                </td>
-                <td className="whitespace-nowrap px-6 py-4">
-                  {course.className || "-"}
-                </td>
-                <td className="whitespace-nowrap px-6 py-4">
-                  {course.courseGradeReportDTO.courseName || "-"}
-                </td>
-                <td className="whitespace-nowrap px-6 py-4 text-center">
-                  {course.courseGradeReportDTO.coefficient || "-"}
-                </td>
-                <td className="whitespace-nowrap px-6 py-4 text-center">
-                  {course.courseGradeReportDTO.firstExamScore || "-"}
-                </td>
-                <td className="whitespace-nowrap px-6 py-4 text-center">
-                  {course.courseGradeReportDTO.secondExamScore || "-"}
-                </td>
-                <td className="whitespace-nowrap px-6 py-4 text-center">
-                  {course.courseGradeReportDTO.thirdExamScore || "-"}
-                </td>
-                <td className="whitespace-nowrap px-6 py-4 text-center">
-                  {course.courseGradeReportDTO.fourthExamScore || "-"}
-                </td>
-                <td className="whitespace-nowrap px-6 py-4 text-center">
-                  {course.courseGradeReportDTO.integratedActivitiesScore || "-"}
-                </td>
-                <td className="whitespace-nowrap px-6 py-4 text-center">
-                  {course.courseGradeReportDTO.points || "-"}
-                </td>
-                <td className="whitespace-nowrap px-6 py-4 text-center">
-                  {course.courseGradeReportDTO.continuousAssessment || "-"}
-                </td>
-                <td className="whitespace-nowrap px-6 py-4 text-center">
-                  {course.courseGradeReportDTO.gpa || "-"}
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-        {(filteredData.length == 0 || data == null) && (
-          <div className="flex w-full justify-center py-3 text-center text-[18px] font-semibold">
-            {currentLanguage === "en"
-              ? "There is No Data"
-              : currentLanguage === "ar"
-                ? "لا توجد بيانات"
-                : "Aucune donnée"}
-          </div>
-        )}
-      </div>
+
+      </Container>
     </>
   );
 };

@@ -118,13 +118,25 @@ const AddNewTeacher = () => {
       toast.success("Teacher created successfully");
       router.push("/teacher");
     } catch (error: any) {
-      if (error.data && error.data.data && error.data.data.length > 0) {
-        setBackendError(error.data.data[0]);
-      } else {
-        setBackendError("Failed to create parent");
-      }
-      toast.error("Failed to create parent");
+      const message = error?.data?.message || "Failed to create parent";
+      const details = error?.data?.data;
+
+      setBackendError(details?.join("\n") || message);
+
+      toast.error(
+        <div>
+          <strong>{message}</strong>
+          {details && details.length > 0 && (
+            <ul style={{ marginTop: "0.5rem", paddingLeft: "1.25rem" }}>
+              {details.map((item: string, idx: number) => (
+                <li key={idx}>{item}</li>
+              ))}
+            </ul>
+          )}
+        </div>
+      );
     }
+
   };
 
   const booleanValue = useSelector((state: RootState) => state.boolean.value);
@@ -684,18 +696,18 @@ const AddNewTeacher = () => {
                             title: string;
                             id: string | number | readonly string[] | undefined;
                             name:
-                              | string
-                              | number
-                              | bigint
-                              | boolean
-                              | React.ReactElement<
-                                  any,
-                                  string | React.JSXElementConstructor<any>
-                                >
-                              | Iterable<React.ReactNode>
-                              | React.ReactPortal
-                              | null
-                              | undefined;
+                            | string
+                            | number
+                            | bigint
+                            | boolean
+                            | React.ReactElement<
+                              any,
+                              string | React.JSXElementConstructor<any>
+                            >
+                            | Iterable<React.ReactNode>
+                            | React.ReactPortal
+                            | null
+                            | undefined;
                           },
                           index: React.Key | null | undefined,
                         ) => (

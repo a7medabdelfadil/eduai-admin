@@ -34,6 +34,10 @@ export const otherOfficialDocumentsApi = createApi({
       query: () => "/api/v1/student/medical-record/students-with-status",
       transformResponse: (response: any) => response.data.content,
     }),
+    getMedicalRecordByStudentId: builder.query({
+      query: (studentId: number | string) =>
+        `/api/v1/student/medical-record/${studentId}`,
+    }),
     createMedicalRecord: builder.mutation({
       query: (formValues: {
         file: File;
@@ -123,6 +127,13 @@ export const otherOfficialDocumentsApi = createApi({
         };
       },
     }),
+    deleteMedicalRecord: builder.mutation({
+      query: (medicalRecordId: number | string) => ({
+        url: `/api/v1/student/medical-record/${medicalRecordId}`,
+        method: "DELETE",
+      }),
+    }),
+
   }),
 });
 
@@ -136,4 +147,6 @@ export const {
   useUploadFileMutation,
   useDeleteFolderMutation,
   useUpdateFolderNameMutation,
+  useGetMedicalRecordByStudentIdQuery,
+  useDeleteMedicalRecordMutation
 } = otherOfficialDocumentsApi;

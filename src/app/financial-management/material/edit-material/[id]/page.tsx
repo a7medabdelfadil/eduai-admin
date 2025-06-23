@@ -5,12 +5,53 @@ import { useSelector } from "react-redux";
 import { useForm } from "react-hook-form";
 import Spinner from "@/components/spinner";
 import { toast } from "react-toastify";
-import { useRouter } from "next/navigation";
+import { useRouter, useParams } from "next/navigation";
 import Container from "@/components/Container";
+import { useEffect } from "react";
 import { useGetAllLevelsQuery } from "@/features/signupApi";
-import { useCreateFeesItemMutation } from "@/features/Financial/paymentApi";
+import { useGetFeesItemByIdQuery, useUpdateFeesItemMutation } from "@/features/Financial/paymentApi";
 
-const AddUniform = () => {
+const EditMaterial = () => {
+  const { id } = useParams();
+  const router = useRouter();
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm();
+
+  const booleanValue = useSelector((state: RootState) => state.boolean.value);
+  const { language: currentLanguage } = useSelector((state: RootState) => state.language);
+
+  const { data: levelsData, isLoading: levelsLoading } = useGetAllLevelsQuery(null);
+  const { data: feesData, isLoading: feesLoading } = useGetFeesItemByIdQuery(id as string);
+  const [updateFeesItem, { isLoading: submitting }] = useUpdateFeesItemMutation();
+
+  useEffect(() => {
+    if (feesData?.data) {
+      reset(feesData.data);
+    }
+  }, [feesData, reset]);
+
+  const onSubmit = async (formData: any) => {
+    try {
+      await updateFeesItem({ id, body: { ...formData, itemType: "MATERIAL" } }).unwrap();
+      toast.success("Material updated successfully!");
+      router.push("/financial-management/material");
+    } catch (error: any) {
+      toast.error("Error updating material: " + (error?.data?.message || ""));
+    }
+  };
+
+  if (levelsLoading || feesLoading) {
+    return (
+      <div className="flex h-screen w-full items-center justify-center">
+        <Spinner />
+      </div>
+    );
+  }
+
   const breadcrumbs = [
     {
       nameEn: "Financial Management",
@@ -19,49 +60,18 @@ const AddUniform = () => {
       href: "/financial-management",
     },
     {
-      nameEn: "Uniform",
-      nameAr: "الزي المدرسي",
-      nameFr: "Uniforme",
-      href: "/financial-management/uniform",
+      nameEn: "Material",
+      nameAr: "الكتب الدراسية",
+      nameFr: "Matériel",
+      href: "/financial-management/material",
     },
     {
-      nameEn: "Add Uniform",
-      nameAr: "إضافة زي",
-      nameFr: "Ajouter un uniforme",
-      href: "/financial-management/uniform/add-uniform",
+      nameEn: "Edit Material",
+      nameAr: "تعديل كتاب",
+      nameFr: "Modifier le matériel",
+      href: `/financial-management/material/edit-material/${id}`,
     },
   ];
-
-  const router = useRouter();
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm();
-
-  const booleanValue = useSelector((state: RootState) => state.boolean.value);
-  const { language: currentLanguage } = useSelector((state: RootState) => state.language);
-
-  const { data: levelsData, isLoading: levelsLoading } = useGetAllLevelsQuery(null);
-  const [createFeesItem, { isLoading: submitting }] = useCreateFeesItemMutation();
-
-  const onSubmit = async (formData: any) => {
-    try {
-      await createFeesItem({ ...formData, itemType: "UNIFORM" }).unwrap();
-      toast.success("Uniform added successfully!");
-      router.push("/financial-management/uniform");
-    } catch (error: any) {
-      toast.error("Error adding uniform: " + (error?.data?.message || ""));
-    }
-  };
-
-  if (levelsLoading) {
-    return (
-      <div className="flex h-screen w-full items-center justify-center">
-        <Spinner />
-      </div>
-    );
-  }
 
   return (
     <>
@@ -70,12 +80,10 @@ const AddUniform = () => {
         <div className="-ml-1 -mt-2 mb-8 flex items-center justify-between">
           <h1 className="text-3xl font-semibold">
             {currentLanguage === "en"
-              ? "Add Uniform"
+              ? "Edit Material"
               : currentLanguage === "ar"
-              ? "إضافة زي"
-              : currentLanguage === "fr"
-              ? "Ajouter un uniforme"
-              : "Add Uniform"}
+              ? "تعديل كتاب"
+              : "Modifier le matériel"}
           </h1>
         </div>
         <form
@@ -107,10 +115,10 @@ const AddUniform = () => {
               </svg>
               <h1 className="text-[22px] font-semibold">
                 {currentLanguage === "ar"
-                  ? "معلومات الزي"
+                  ? "معلومات الكتاب"
                   : currentLanguage === "fr"
-                  ? "Informations sur l'uniforme"
-                  : "Uniform Information"}
+                  ? "Informations sur le matériel"
+                  : "Material Information"}
               </h1>
             </div>
             <div className="grid grid-cols-2 gap-4 p-6 max-[1278px]:grid-cols-1">
@@ -134,9 +142,7 @@ const AddUniform = () => {
                   </option>
                   {levelsData?.data &&
                     Object.entries(levelsData.data).map(([key, val]) => (
-                      <option key={key} value={key}>
-                        {String(val)}
-                      </option>
+                      <option key={key} value={key}>{String(val)}</option>
                     ))}
                 </select>
               </label>
@@ -209,4 +215,4 @@ const AddUniform = () => {
   );
 };
 
-export default AddUniform;
+export default EditMaterial;

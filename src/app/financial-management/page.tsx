@@ -117,7 +117,7 @@ const FinancialManagement = () => {
               : "All information about Bank Account", // Default to English
     },
     {
-      href: "/financial-management/payment",
+      href: "/financial-management/tuition",
       icon: <FaMoneyBill size={30} />,
       title:
         currentLanguage === "en"
@@ -170,15 +170,14 @@ const FinancialManagement = () => {
 
       <div
         dir={currentLanguage === "ar" ? "rtl" : "ltr"}
-        className={`${
-          currentLanguage === "ar"
+        className={`${currentLanguage === "ar"
             ? booleanValue
               ? "lg:mr-[40px]"
               : "lg:mr-[290px]"
             : booleanValue
               ? "lg:ml-[40px]"
               : "lg:ml-[290px]"
-        } mt-12 grid justify-center`}
+          } mt-12 grid justify-center`}
       >
         <div className="grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
           {financials.map((item, index) => (

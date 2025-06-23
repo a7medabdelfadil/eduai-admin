@@ -103,13 +103,25 @@ const AddNewParent = () => {
       toast.success("Parent created successfully");
       router.push("/parent");
     } catch (error: any) {
-      if (error.data && error.data.data && error.data.data.length > 0) {
-        setBackendError(error.data.data[0]);
-      } else {
-        setBackendError("Failed to create parent");
-      }
-      toast.error(error.data.message);
+      const message = error?.data?.message || "Failed to create parent";
+      const details = error?.data?.data;
+
+      setBackendError(details?.join("\n") || message);
+
+      toast.error(
+        <div>
+          <strong>{message}</strong>
+          {details && details.length > 0 && (
+            <ul style={{ marginTop: "0.5rem", paddingLeft: "1.25rem" }}>
+              {details.map((item: string, idx: number) => (
+                <li key={idx}>{item}</li>
+              ))}
+            </ul>
+          )}
+        </div>
+      );
     }
+
   };
 
   const { language: currentLanguage, loading } = useSelector(
@@ -145,9 +157,6 @@ const AddNewParent = () => {
           onSubmit={handleSubmit(onSubmit)}
         >
           <div className="w-[90] rounded-xl bg-bgPrimary p-10 md:w-[80%]">
-            {backendError && (
-              <div className="text-center text-error">{backendError}</div>
-            )}
             <div className="flex items-center justify-start gap-2">
               <svg
                 className="h-6 w-6 font-bold text-secondary group-hover:text-hover"

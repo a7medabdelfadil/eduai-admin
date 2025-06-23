@@ -413,7 +413,6 @@ const Student = () => {
                 <TableHead>
                   {t("Email", "البريد الإلكتروني", "E-mail")}
                 </TableHead>
-                <TableHead>{t("Mobile", "الهاتف المحمول", "Mobile")}</TableHead>
                 <TableHead>
                   {t("Classroom", "الفصل الدراسي", "Classe")}
                 </TableHead>
@@ -469,7 +468,6 @@ const Student = () => {
                     <TableCell>{student.gender}</TableCell>
                     <TableCell>{student.nationality}</TableCell>
                     <TableCell>{student.email}</TableCell>
-                    <TableCell>{student.number}</TableCell>
                     <TableCell>{student.classroomName}</TableCell>
                     <TableCell>
                       <Link

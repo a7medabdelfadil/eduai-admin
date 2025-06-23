@@ -6,7 +6,6 @@ import BreadCrumbs from "@/components/BreadCrumbs";
 import { useSelector } from "react-redux";
 import { RootState } from "@/GlobalRedux/store";
 import { toast } from "react-toastify";
-import Spinner from "@/components/spinner";
 import {
   useDeleteActivityMutation,
   useGetAllActivitiesQuery,
@@ -101,19 +100,19 @@ const Activity = () => {
         <div className="-ml-1 -mt-2 mb-6 flex items-center justify-between">
           <h1 className="text-3xl font-semibold">
             {currentLanguage === "en"
-              ? "Activity"
+              ? "Payment"
               : currentLanguage === "ar"
-                ? "النشاط"
+                ? "الدفع"
                 : currentLanguage === "fr"
-                  ? "Activité"
-                  : "Activity"}{" "}
+                  ? "Paiement"
+                  : "Payment"}{" "}
             {/* default */}
           </h1>
         </div>
         <div className="justify-left mb-5 ml-4 flex gap-5 text-[20px] font-semibold">
           <Link
             className="text-secondary hover:text-blue-500 hover:underline"
-            href="/financial-management/payment"
+            href="/financial-management/tuition"
           >
             {currentLanguage === "en"
               ? "Tuition"

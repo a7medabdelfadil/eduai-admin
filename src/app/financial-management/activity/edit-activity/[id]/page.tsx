@@ -18,11 +18,9 @@ const EditActivity = () => {
   const router = useRouter();
   const params = useParams();
   const activityId = params.id as string;
-  console.log("👾 ~ EditActivity ~ activityId:", activityId);
 
   const { data: activityData, isLoading: loadingActivity } =
     useGetActivityByIdQuery(activityId);
-  console.log("👾 ~ EditActivity ~ activityData:", activityData);
   const { data: activityTypes, isLoading: activityTypesLoading } =
     useGetActivityTypesQuery(null);
 

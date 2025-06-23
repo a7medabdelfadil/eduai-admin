@@ -5,12 +5,53 @@ import { useSelector } from "react-redux";
 import { useForm } from "react-hook-form";
 import Spinner from "@/components/spinner";
 import { toast } from "react-toastify";
-import { useRouter } from "next/navigation";
+import { useRouter, useParams } from "next/navigation";
 import Container from "@/components/Container";
+import { useEffect } from "react";
 import { useGetAllLevelsQuery } from "@/features/signupApi";
-import { useCreateFeesItemMutation } from "@/features/Financial/paymentApi";
+import { useGetFeesItemByIdQuery, useUpdateFeesItemMutation } from "@/features/Financial/paymentApi";
 
-const AddUniform = () => {
+const EditUniform = () => {
+  const { id } = useParams();
+  const router = useRouter();
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm();
+
+  const booleanValue = useSelector((state: RootState) => state.boolean.value);
+  const { language: currentLanguage } = useSelector((state: RootState) => state.language);
+
+  const { data: levelsData, isLoading: levelsLoading } = useGetAllLevelsQuery(null);
+  const { data: feesData, isLoading: feesLoading } = useGetFeesItemByIdQuery(id as string);
+  const [updateFeesItem, { isLoading: submitting }] = useUpdateFeesItemMutation();
+
+  useEffect(() => {
+    if (feesData?.data) {
+      reset(feesData.data);
+    }
+  }, [feesData, reset]);
+
+  const onSubmit = async (formData: any) => {
+    try {
+      await updateFeesItem({ id, body: { ...formData, itemType: "UNIFORM" } }).unwrap();
+      toast.success("Uniform updated successfully!");
+      router.push("/financial-management/uniform");
+    } catch (error: any) {
+      toast.error("Error updating uniform: " + (error?.data?.message || ""));
+    }
+  };
+
+  if (levelsLoading || feesLoading) {
+    return (
+      <div className="flex h-screen w-full items-center justify-center">
+        <Spinner />
+      </div>
+    );
+  }
+
   const breadcrumbs = [
     {
       nameEn: "Financial Management",
@@ -25,43 +66,12 @@ const AddUniform = () => {
       href: "/financial-management/uniform",
     },
     {
-      nameEn: "Add Uniform",
-      nameAr: "إضافة زي",
-      nameFr: "Ajouter un uniforme",
-      href: "/financial-management/uniform/add-uniform",
+      nameEn: "Edit Uniform",
+      nameAr: "تعديل زي",
+      nameFr: "Modifier l'uniforme",
+      href: `/financial-management/uniform/edit-uniform/${id}`,
     },
   ];
-
-  const router = useRouter();
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm();
-
-  const booleanValue = useSelector((state: RootState) => state.boolean.value);
-  const { language: currentLanguage } = useSelector((state: RootState) => state.language);
-
-  const { data: levelsData, isLoading: levelsLoading } = useGetAllLevelsQuery(null);
-  const [createFeesItem, { isLoading: submitting }] = useCreateFeesItemMutation();
-
-  const onSubmit = async (formData: any) => {
-    try {
-      await createFeesItem({ ...formData, itemType: "UNIFORM" }).unwrap();
-      toast.success("Uniform added successfully!");
-      router.push("/financial-management/uniform");
-    } catch (error: any) {
-      toast.error("Error adding uniform: " + (error?.data?.message || ""));
-    }
-  };
-
-  if (levelsLoading) {
-    return (
-      <div className="flex h-screen w-full items-center justify-center">
-        <Spinner />
-      </div>
-    );
-  }
 
   return (
     <>
@@ -70,12 +80,12 @@ const AddUniform = () => {
         <div className="-ml-1 -mt-2 mb-8 flex items-center justify-between">
           <h1 className="text-3xl font-semibold">
             {currentLanguage === "en"
-              ? "Add Uniform"
+              ? "Edit Uniform"
               : currentLanguage === "ar"
-              ? "إضافة زي"
+              ? "تعديل زي"
               : currentLanguage === "fr"
-              ? "Ajouter un uniforme"
-              : "Add Uniform"}
+              ? "Modifier l'uniforme"
+              : "Edit Uniform"}
           </h1>
         </div>
         <form
@@ -209,4 +219,4 @@ const AddUniform = () => {
   );
 };
 
-export default AddUniform;
+export default EditUniform;

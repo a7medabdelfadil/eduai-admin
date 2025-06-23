@@ -71,7 +71,7 @@ const SearchableSelect: React.FC<SearchableSelectProps> = ({
               }}
               onFocus={() => setIsOpen(true)}
               className={`w-full rounded-xl p-2 transition-all duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-primary ${
-                errors[name] ? "border-red-500" : "border-gray-300"
+                errors[name] ? "border-red-500" : "border-borderPrimary"
               } border border-border bg-bgPrimary text-textPrimary shadow-sm`}
             />
 

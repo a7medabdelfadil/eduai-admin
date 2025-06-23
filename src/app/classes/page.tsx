@@ -15,7 +15,6 @@ import {
 
 import BreadCrumbs from "@/components/BreadCrumbs";
 import Modal from "@/components/model";
-import Spinner from "@/components/spinner";
 import { useUploadClassroomsMutation } from "@/features/events/eventsApi";
 import { useGetAllClasssQuery } from "@/features/Infrastructure/classApi";
 import { RootState } from "@/GlobalRedux/store";
@@ -171,7 +170,7 @@ const Infrastructure = () => {
       >
         <BreadCrumbs breadcrumbs={breadcrumbs} />
         <div className="my-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-          <h1 className="text-2xl font-bold text-gray-800">
+          <h1 className="text-2xl font-bold text-textPrimary">
             {currentLanguage === "ar"
               ? "الفصول الدراسية"
               : currentLanguage === "fr"
@@ -226,7 +225,7 @@ const Infrastructure = () => {
         {/* Header section */}
         <div className="my-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div>
-            <h1 className="text-2xl font-bold text-gray-800">
+            <h1 className="text-2xl font-bold text-textPrimary">
               {currentLanguage === "ar"
                 ? "الفصول الدراسية"
                 : currentLanguage === "fr"
@@ -242,7 +241,7 @@ const Infrastructure = () => {
             </p>
           </div>
           <div className="flex flex-wrap gap-3">
-            <div className="flex items-center gap-2 rounded-lg bg-blue-50 px-4 py-2 text-blue-700">
+            <div className="flex items-center gap-2 rounded-lg bg-thead px-4 py-2 text-blue-700">
               <Users size={18} />
               <span className="text-sm font-medium">
                 {data?.data?.content?.length || 0}{" "}
@@ -265,7 +264,7 @@ const Infrastructure = () => {
             <input
               type="text"
               onChange={e => setSearch(e.target.value)}
-              className="block w-full rounded-lg border border-gray-200 bg-white py-3 pl-10 pr-3 text-sm placeholder-gray-400 shadow-sm focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
+              className="block w-full rounded-lg border border-borderPrimary bg-bgPrimary py-3 pl-10 pr-3 text-sm placeholder-gray-400 shadow-sm focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
               placeholder={
                 currentLanguage === "en"
                   ? "Search classrooms..."
@@ -278,7 +277,7 @@ const Infrastructure = () => {
           <div className="flex flex-wrap gap-3">
             <button
               onClick={handleOpenModal}
-              className="inline-flex items-center gap-2 rounded-lg border border-primary bg-white px-4 py-2.5 text-sm font-medium text-primary transition-colors hover:bg-primary hover:text-white"
+              className="inline-flex items-center gap-2 rounded-lg border border-primary bg-bgPrimary px-4 py-2.5 text-sm font-medium text-primary transition-colors hover:bg-primary hover:text-white"
             >
               <Upload size={18} />
               <span>
@@ -321,7 +320,7 @@ const Infrastructure = () => {
                 key={classItem.roomId}
                 className="group transition-all duration-300 hover:-translate-y-1"
               >
-                <div className="flex h-full flex-col overflow-hidden rounded-xl bg-white shadow-md transition-shadow hover:shadow-lg">
+                <div className="flex h-full flex-col overflow-hidden rounded-xl bg-bgPrimary shadow-md transition-shadow hover:shadow-lg">
                   <div className="flex items-center gap-4 border-b p-6">
                     <div
                       className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-full ${getClassColorClasses(index)}`}
@@ -386,7 +385,7 @@ const Infrastructure = () => {
 
         {/* Empty state */}
         {data?.data.content.length === 0 && (
-          <div className="mt-8 flex flex-col items-center justify-center rounded-lg border border-dashed border-gray-300 bg-gray-50 px-6 py-16 text-center">
+          <div className="mt-8 flex flex-col items-center justify-center rounded-lg border border-dashed border-borderPrimary bg-bgPrimary px-6 py-16 text-center">
             <School size={48} className="mb-4 text-gray-300" />
             <h3 className="mb-2 text-lg font-medium text-gray-900">
               {currentLanguage === "ar"
@@ -466,7 +465,7 @@ const Infrastructure = () => {
                     <button
                       type="button"
                       onClick={() => fileInputRef.current?.click()}
-                      className="inline-flex items-center gap-2 rounded-lg border border-primary bg-white px-4 py-2 text-sm font-medium text-primary transition-colors hover:bg-primary hover:text-white"
+                      className="inline-flex items-center gap-2 rounded-lg border border-primary bg-bgPrimary px-4 py-2 text-sm font-medium text-primary transition-colors hover:bg-primary hover:text-white"
                     >
                       <span>
                         {currentLanguage === "ar"
@@ -551,7 +550,7 @@ const Infrastructure = () => {
                 <button
                   type="button"
                   onClick={handleCloseModal}
-                  className="flex-1 rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-50"
+                  className="flex-1 rounded-lg border border-gray-300 bg-bgPrimary px-4 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-50"
                 >
                   {currentLanguage === "ar"
                     ? "إلغاء"

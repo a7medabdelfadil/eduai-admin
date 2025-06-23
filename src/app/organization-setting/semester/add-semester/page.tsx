@@ -133,7 +133,7 @@ const AddSemester = () => {
                     : "Season"}
                 <select
                   id="season"
-                  className="w-full rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                   {...register("name", { required: true })}
                 >
                   <option value="">Select season</option>
@@ -161,7 +161,7 @@ const AddSemester = () => {
                 <input
                   id="code"
                   type="date"
-                  className="w-full rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                   {...register("startDate", { required: true })}
                 />
                 {errors.startDate && (
@@ -184,7 +184,7 @@ const AddSemester = () => {
                 <input
                   id="about"
                   type="date"
-                  className="w-full rounded-xl border border-borderPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                  className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                   {...register("endDate", { required: true })}
                 />
                 {errors.endDate && (

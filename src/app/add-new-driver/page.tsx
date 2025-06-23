@@ -39,6 +39,7 @@ const AddNewDriver = () => {
 
   const [createDriver, { isLoading }] = useCreateDriversMutation();
   const { data: rigiond } = useGetAllReginionIDQuery(null);
+  console.log("🚀 ~ AddNewDriver ~ rigiond:", rigiond)
   const optionsRigon =
     rigiond?.data?.map(
       (rigion: {

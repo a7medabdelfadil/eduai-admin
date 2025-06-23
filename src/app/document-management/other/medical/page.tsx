@@ -275,15 +275,15 @@ const Medical = () => {
                           {student.name}
                         </div>
                       </TableCell>
-                      <TableCell>{student.id}</TableCell>
-                      <TableCell>{student.gender}</TableCell>
+                      <TableCell>{student.id ?? "-"}</TableCell>
+                      <TableCell>{student.gender ?? "-"}</TableCell>
                       <TableCell>{student.age ?? "—"}</TableCell>
-                      <TableCell>{student.studyStage}</TableCell>
-                      <TableCell>{student.ParentMobile}</TableCell>
-                      <TableCell>{student.status}</TableCell>
+                      <TableCell>{student.studyStage ?? "-"}</TableCell>
+                      <TableCell>{student.ParentMobile ?? "-"}</TableCell>
+                      <TableCell>{student.status ?? "-"}</TableCell>
                       <TableCell>
                         <Link
-                          href={`/student/medical-record/${student.id}`}
+                          href={`/document-management/other/medical/view/${student.id}`}
                           className="font-medium text-blue-600 hover:underline"
                         >
                           {currentLanguage === "ar"

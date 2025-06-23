@@ -41,6 +41,7 @@ const Bank = () => {
   const [search, setSearch] = useState("");
   const [isModalOpen, setModalOpen] = useState(false);
   const [isModalOpen2, setModalOpen2] = useState(false);
+  const [bankType, setBankType] = useState<"Local" | "IBAN">("Local");
 
   const [createAcount, { isLoading: isCreating }] =
     useCreateBankAcountsMutation();
@@ -72,6 +73,8 @@ const Bank = () => {
       beneficiaryAddress: bank.beneficiaryAddress,
       beneficiaryAccountNumber: bank.beneficiaryAccountNumber,
     });
+    const startsWithLetters = /^[A-Za-z]{2}/.test(bank.beneficiaryAccountNumber);
+    setBankType(startsWithLetters ? "IBAN" : "Local");
     setValue("bankName", bank.bankName);
     setValue("bankShortName", bank.bankShortName);
     setValue("beneficiaryName", bank.beneficiaryName);
@@ -95,7 +98,7 @@ const Bank = () => {
   };
   type Bank = Record<string, any>;
   const { data, error, isLoading, refetch } = useGetAllBankAcountsQuery(null);
-  console.log("🚀 ~ Bank ~ data:", data);
+
   const [deleteBankAcount] = useDeleteBankAcountsMutation();
   const handleDelete = async (id: string) => {
     try {
@@ -107,9 +110,57 @@ const Bank = () => {
     }
   };
   const onSubmit = async (data: any) => {
+    if (bankType === "IBAN") {
+      const ibanRegex = /^[A-Z]{2}[A-Za-z0-9]{0,32}$/;
+      if (!ibanRegex.test(data.beneficiaryAccountNumber)) {
+        toast.error(
+          currentLanguage === "en"
+            ? "IBAN must start with 2 letters followed by alphanumeric characters (up to 34 characters)"
+            : currentLanguage === "fr"
+              ? "L'IBAN doit commencer par 2 lettres suivies de caractères alphanumériques (jusqu'à 34 caractères)"
+              : "IBAN يجب أن يبدأ بحرفين ويليه حروف أو أرقام (حد أقصى 34)"
+        );
+        return;
+      }
+      if (data.beneficiaryAccountNumber.length > 34) {
+        toast.error(
+          currentLanguage === "en"
+            ? "IBAN must not exceed 34 characters"
+            : currentLanguage === "fr"
+              ? "L'IBAN ne doit pas dépasser 34 caractères"
+              : "الـ IBAN لا يجب أن يتجاوز 34 خانة"
+        );
+        return;
+      }
+    } else if (bankType === "Local") {
+      const localRegex = /^[0-9]+$/;
+      if (!localRegex.test(data.beneficiaryAccountNumber)) {
+        toast.error(
+          currentLanguage === "en"
+            ? "Local account number must contain digits only"
+            : currentLanguage === "fr"
+              ? "Le compte local doit contenir uniquement des chiffres"
+              : "رقم الحساب المحلي يجب أن يحتوي على أرقام فقط"
+        );
+        return;
+      }
+      if (data.beneficiaryAccountNumber.length > 16) {
+        toast.error(
+          currentLanguage === "en"
+            ? "Local account number must not exceed 16 digits"
+            : currentLanguage === "fr"
+              ? "Le numéro de compte local ne doit pas dépasser 16 chiffres"
+              : "رقم الحساب المحلي لا يجب أن يتجاوز 16 رقم"
+        );
+        return;
+      }
+    }
+
     try {
       await createAcount(data).unwrap();
       void refetch();
+      setModalOpen(false);
+      reset();
       toast.success("Acount created successfully");
     } catch (err) {
       toast.error("Failed to create Acount");
@@ -117,6 +168,54 @@ const Bank = () => {
   };
 
   const onSubmitUpdate = async (data: any) => {
+    const startsWithLetters = /^[A-Za-z]{2}/.test(data.beneficiaryAccountNumber);
+    const inferredType: "IBAN" | "Local" = startsWithLetters ? "IBAN" : "Local";
+
+    if (inferredType === "IBAN") {
+      const ibanRegex = /^[A-Z]{2}[A-Za-z0-9]{0,32}$/;
+      if (!ibanRegex.test(data.beneficiaryAccountNumber)) {
+        toast.error(
+          currentLanguage === "en"
+            ? "IBAN must start with 2 letters followed by alphanumeric characters (up to 34 characters)"
+            : currentLanguage === "fr"
+              ? "L'IBAN doit commencer par 2 lettres suivies de caractères alphanumériques (jusqu'à 34 caractères)"
+              : "IBAN يجب أن يبدأ بحرفين ويليه حروف أو أرقام (حد أقصى 34)"
+        );
+        return;
+      }
+      if (data.beneficiaryAccountNumber.length > 34) {
+        toast.error(
+          currentLanguage === "en"
+            ? "IBAN must not exceed 34 characters"
+            : currentLanguage === "fr"
+              ? "L'IBAN ne doit pas dépasser 34 caractères"
+              : "الـ IBAN لا يجب أن يتجاوز 34 خانة"
+        );
+        return;
+      }
+    } else {
+      const localRegex = /^[0-9]+$/;
+      if (!localRegex.test(data.beneficiaryAccountNumber)) {
+        toast.error(
+          currentLanguage === "en"
+            ? "Local account number must contain digits only"
+            : currentLanguage === "fr"
+              ? "Le compte local doit contenir uniquement des chiffres"
+              : "رقم الحساب المحلي يجب أن يحتوي على أرقام فقط"
+        );
+        return;
+      }
+      if (data.beneficiaryAccountNumber.length > 16) {
+        toast.error(
+          currentLanguage === "en"
+            ? "Local account number must not exceed 16 digits"
+            : currentLanguage === "fr"
+              ? "Le numéro de compte local ne doit pas dépasser 16 chiffres"
+              : "رقم الحساب المحلي لا يجب أن يتجاوز 16 رقم"
+        );
+        return;
+      }
+    }
     const { id } = editAcount;
     try {
       await UpdateAcount({ id, formData: data }).unwrap();
@@ -148,15 +247,14 @@ const Bank = () => {
       <BreadCrumbs breadcrumbs={breadcrumbs} />
       <div
         dir={currentLanguage === "ar" ? "rtl" : "ltr"}
-        className={`${
-          currentLanguage === "ar"
-            ? booleanValue
-              ? "lg:mr-[100px]"
-              : "lg:mr-[270px]"
-            : booleanValue
-              ? "lg:ml-[100px]"
-              : "lg:ml-[270px]"
-        } mt-10`}
+        className={`${currentLanguage === "ar"
+          ? booleanValue
+            ? "lg:mr-[100px]"
+            : "lg:mr-[270px]"
+          : booleanValue
+            ? "lg:ml-[100px]"
+            : "lg:ml-[270px]"
+          } mt-10`}
       >
         <div className="flex justify-between text-center max-[502px]:grid max-[502px]:justify-center">
           <div className="mb-3">
@@ -452,6 +550,30 @@ const Bank = () => {
                 </span>
               )}
             </div>
+            <h2 className="mb-4 text-xl font-semibold">
+              {currentLanguage === "en"
+                ? "Bank Type"
+                : currentLanguage === "ar"
+                  ? "نوع البنك"
+                  : "Type de banque"}
+            </h2>
+            <div className="mb-4 rounded-sm">
+              <select
+                value={bankType}
+                onChange={e => setBankType(e.target.value as "Local" | "IBAN")}
+                className="w-full rounded-xl border border-borderPrimary bg-bgSecondary px-4 py-2 shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              >
+                <option value="Local">
+                  {currentLanguage === "en"
+                    ? "Local"
+                    : currentLanguage === "ar"
+                      ? "محلي"
+                      : "Locale"}
+                </option>
+                <option value="IBAN">IBAN</option>
+              </select>
+            </div>
+
             <h2 className="mb-4 text-xl font-semibold">
               {currentLanguage === "en"
                 ? "Beneficiary Address"

@@ -4,82 +4,54 @@ import { RootState } from "@/GlobalRedux/store";
 import { useSelector } from "react-redux";
 import { useForm } from "react-hook-form";
 import Spinner from "@/components/spinner";
+import { toast } from "react-toastify";
+import { useRouter } from "next/navigation";
 import Container from "@/components/Container";
+import { useGetAllLevelsQuery } from "@/features/signupApi";
+import { useCreateFeesItemMutation } from "@/features/Financial/paymentApi";
 
 const AddMaterial = () => {
   const breadcrumbs = [
-    {
-      nameEn: "Administration",
-      nameAr: "الإدارة",
-      nameFr: "Administration",
-      href: "/",
-    },
-    {
-      nameEn: "Financial Management",
-      nameAr: "الإدارة المالية",
-      nameFr: "Gestion financière",
-      href: "/financial-management",
-    },
-    {
-      nameEn: "Material",
-      nameAr: "المادة",
-      nameFr: "Matériel",
-      href: "/financial-management/material",
-    },
-    {
-      nameEn: "Add Material",
-      nameAr: "إضافة مادة",
-      nameFr: "Ajouter un matériel",
-      href: "/financial-management/material/add-material",
-    },
+    { nameEn: "Financial Management", nameAr: "الإدارة المالية", nameFr: "Gestion financière", href: "/financial-management" },
+    { nameEn: "Material", nameAr: "الكتب الدراسية", nameFr: "Matériel", href: "/financial-management/material" },
+    { nameEn: "Add Material", nameAr: "إضافة كتاب", nameFr: "Ajouter un matériel", href: "/financial-management/material/add-material" },
   ];
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm();
 
+  const router = useRouter();
+  const { register, handleSubmit } = useForm();
   const booleanValue = useSelector((state: RootState) => state.boolean.value);
-  const { language: currentLanguage, loading } = useSelector(
-    (state: RootState) => state.language,
-  );
+  const { language: currentLanguage } = useSelector((state: RootState) => state.language);
 
-  if (loading)
-    return (
-      <div className="flex h-screen w-full items-center justify-center">
-        <Spinner />
-      </div>
-    );
+  const { data: levelsData, isLoading: levelsLoading } = useGetAllLevelsQuery(null);
+  const [createFeesItem, { isLoading: submitting }] = useCreateFeesItemMutation();
+
+  const onSubmit = async (formData: any) => {
+    try {
+      await createFeesItem({ ...formData, itemType: "MATERIAL" }).unwrap();
+      toast.success("Material added successfully!");
+      router.push("/financial-management/material");
+    } catch (error: any) {
+      toast.error("Error adding material: " + (error?.data?.message || ""));
+    }
+  };
+
+  if (levelsLoading) {
+    return <div className="flex h-screen w-full items-center justify-center"><Spinner /></div>;
+  }
+
   return (
     <>
       <BreadCrumbs breadcrumbs={breadcrumbs} />
       <Container>
         <div className="-ml-1 -mt-2 mb-8 flex items-center justify-between">
           <h1 className="text-3xl font-semibold">
-            {currentLanguage === "en"
-              ? "Add Material"
-              : currentLanguage === "ar"
-                ? "إضافة مادة"
-                : currentLanguage === "fr"
-                  ? "Ajouter un matériel"
-                  : "Add Material"}{" "}
-            {/* default */}
+            {currentLanguage === "en" ? "Add Material" : currentLanguage === "ar" ? "إضافة كتاب" : "Ajouter un matériel"}
           </h1>
         </div>
-        <form className="flex h-full w-full items-center justify-center">
+        <form className="flex h-full w-full items-center justify-center" onSubmit={handleSubmit(onSubmit)}>
           <div className="w-[90] rounded-xl bg-bgPrimary p-10 md:w-[80%]">
             <div className="flex items-center justify-start gap-2">
-              <svg
-                className="h-6 w-6 font-bold text-secondary group-hover:text-hover"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                strokeWidth="2"
-                stroke="currentColor"
-                fill="none"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              >
+              <svg className="h-6 w-6 font-bold text-secondary group-hover:text-hover" width="24" height="24" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" fill="none" strokeLinecap="round" strokeLinejoin="round">
                 <path stroke="none" d="M0 0h24v24H0z" />
                 <line x1="3" y1="21" x2="21" y2="21" />
                 <line x1="3" y1="10" x2="21" y2="10" />
@@ -91,124 +63,35 @@ const AddMaterial = () => {
                 <line x1="16" y1="14" x2="16" y2="17" />
               </svg>
               <h1 className="text-[22px] font-semibold">
-                {currentLanguage === "ar"
-                  ? "معلومات المادة"
-                  : currentLanguage === "fr"
-                    ? "Informations sur le matériel"
-                    : "Material Information"}
-                {/* default */}
+                {currentLanguage === "ar" ? "معلومات الكتاب" : currentLanguage === "fr" ? "Informations sur le matériel" : "Material Information"}
               </h1>
             </div>
             <div className="grid grid-cols-2 gap-4 p-6 max-[1278px]:grid-cols-1">
-              <label htmlFor="grade" className="grid text-[18px] font-semibold">
-                {currentLanguage === "ar"
-                  ? "الدرجة"
-                  : currentLanguage === "fr"
-                    ? "Note"
-                    : "Grade"}
-                <select
-                  id="grade"
-                  className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
-                  {...register("grade", { required: true })}
-                >
+              <label htmlFor="studyLevel" className="grid text-[18px] font-semibold">
+                {currentLanguage === "ar" ? "المرحلة الدراسية" : currentLanguage === "fr" ? "Niveau d'étude" : "Study Level"}
+                <select id="studyLevel" {...register("studyLevel")} className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 text-textPrimary outline-none max-[471px]:w-[350px]">
                   <option value="">
-                    {currentLanguage === "ar"
-                      ? "اختر الدرجة"
-                      : currentLanguage === "fr"
-                        ? "Sélectionnez la note"
-                        : "Select Grade"}
+                    {currentLanguage === "ar" ? "اختر المرحلة" : currentLanguage === "fr" ? "Sélectionnez le niveau" : "Select Study Level"}
                   </option>
-                  <option value="EXCELLENT">
-                    {currentLanguage === "ar"
-                      ? "ممتاز"
-                      : currentLanguage === "fr"
-                        ? "Excellent"
-                        : "Excellent"}
-                  </option>
-                  <option value="VERY_GOOD">
-                    {currentLanguage === "ar"
-                      ? "جيد جدًا"
-                      : currentLanguage === "fr"
-                        ? "Très bon"
-                        : "Very Good"}
-                  </option>
-                  <option value="GOOD">
-                    {currentLanguage === "ar"
-                      ? "جيد"
-                      : currentLanguage === "fr"
-                        ? "Bon"
-                        : "Good"}
-                  </option>
-                  <option value="ACCEPTABLE">
-                    {currentLanguage === "ar"
-                      ? "مقبول"
-                      : currentLanguage === "fr"
-                        ? "Passable"
-                        : "Acceptable"}
-                  </option>
-                  <option value="FAIL">
-                    {currentLanguage === "ar"
-                      ? "راسب"
-                      : currentLanguage === "fr"
-                        ? "Échoué"
-                        : "Fail"}
-                  </option>
+                  {levelsData?.data && Object.entries(levelsData.data).map(([key, val]) => (
+                    <option key={key} value={key}>{String(val)}</option>
+                  ))}
                 </select>
               </label>
               <label htmlFor="cost" className="grid text-[18px] font-semibold">
-                {currentLanguage === "ar"
-                  ? "التكلفة"
-                  : currentLanguage === "fr"
-                    ? "Coût"
-                    : "Cost"}
-                {/* default */}
-                <input
-                  id="cost"
-                  type="number"
-                  className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
-                  placeholder={
-                    currentLanguage === "ar"
-                      ? "أدخل التكلفة"
-                      : currentLanguage === "fr"
-                        ? "Entrez le coût"
-                        : "Enter Cost"
-                  }
-                />
-              </label>
+                {currentLanguage === "ar" ? "التكلفة" : currentLanguage === "fr" ? "Coût" : "Cost"}
+                <input id="cost" type="number" {...register("cost")} className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]" placeholder={currentLanguage === "ar" ? "أدخل التكلفة" : currentLanguage === "fr" ? "Entrez le coût" : "Enter Cost"} />
+              </label>َ
               <label htmlFor="about" className="grid text-[18px] font-semibold">
-                {currentLanguage === "ar"
-                  ? "حول (اختياري)"
-                  : currentLanguage === "fr"
-                    ? "À propos (Facultatif)"
-                    : "About (Optional)"}
-                {/* default */}
-                <input
-                  id="about"
-                  type="text"
-                  className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
-                  placeholder={
-                    currentLanguage === "ar"
-                      ? "اكتب شيئًا"
-                      : currentLanguage === "fr"
-                        ? "Écrivez quelque chose"
-                        : "Write Something"
-                  }
-                />
+                {currentLanguage === "ar" ? "حول (اختياري)" : currentLanguage === "fr" ? "À propos (Facultatif)" : "About (Optional)"}
+                <input id="about" type="text" {...register("about")} className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]" placeholder={currentLanguage === "ar" ? "اكتب شيئًا" : currentLanguage === "fr" ? "Écrivez quelque chose" : "Write Something"} />
               </label>
             </div>
-
             <div className="flex justify-center text-center">
-              <button
-                type="submit"
-                className="w-fit rounded-xl bg-primary px-4 py-2 text-[18px] text-white duration-300 ease-in hover:bg-hover hover:shadow-xl"
-              >
-                {currentLanguage === "ar"
-                  ? "حفظ"
-                  : currentLanguage === "fr"
-                    ? "Sauvegarder"
-                    : "Save"}
-
-                {/* default */}
+              <button type="submit" disabled={submitting} className={`w-fit rounded-xl px-4 py-2 text-[18px] text-white duration-300 ease-in hover:shadow-xl ${submitting ? "cursor-not-allowed bg-gray-400" : "bg-primary hover:bg-hover"}`}>
+                {submitting
+                  ? currentLanguage === "ar" ? "جاري الحفظ..." : currentLanguage === "fr" ? "Enregistrement..." : "Saving..."
+                  : currentLanguage === "ar" ? "حفظ" : currentLanguage === "fr" ? "Sauvegarder" : "Save"}
               </button>
             </div>
           </div>
