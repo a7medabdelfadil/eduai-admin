@@ -129,7 +129,7 @@ const Dashboard: React.FC = () => {
     "text-red-500",
   ];
 
-  const [createEvent] = useCreateEventsMutation();
+  const [createEvent, { isLoading: isCreating }] = useCreateEventsMutation();
 
   const {
     register,
@@ -206,9 +206,11 @@ const Dashboard: React.FC = () => {
       const result = await createEvent(formDataToSend).unwrap();
       toast.success("Event created success");
       handleCloseModal();
-    } catch (error) {
-      toast.error("Fiald Create Event");
+    } catch (error: any) {
+      const errMsg = error?.data?.message ?? "Failed to create event";
+      toast.error(errMsg);
     }
+
   };
   const [deleteEvent] = useDeleteNoteMutation();
 
@@ -792,14 +794,27 @@ const Dashboard: React.FC = () => {
             <div className="flex justify-between">
               <button
                 type="submit"
-                className="mx-3 mb-5 w-fit whitespace-nowrap rounded-xl bg-primary px-4 py-2 text-[18px] font-semibold text-white duration-300 ease-in hover:bg-hover hover:shadow-xl"
+                disabled={isCreating}
+                className={`
+    mx-3 mb-5 w-fit whitespace-nowrap rounded-xl
+    px-4 py-2 text-[18px] font-semibold text-white
+    duration-300 ease-in
+    ${isCreating ? "bg-gray-400 cursor-not-allowed" : "bg-primary hover:bg-hover hover:shadow-xl"}
+  `}
               >
-                {currentLanguage === "ar"
-                  ? "إضافة"
-                  : currentLanguage === "fr"
-                    ? "Ajouter"
-                    : "Add"}
+                {isCreating
+                  ? (currentLanguage === "ar"
+                    ? "جارٍ الإضافة..."
+                    : currentLanguage === "fr"
+                      ? "Ajout en cours..."
+                      : "Adding…")
+                  : (currentLanguage === "ar"
+                    ? "إضافة"
+                    : currentLanguage === "fr"
+                      ? "Ajouter"
+                      : "Add")}
               </button>
+
               <button
                 onClick={handleCloseModal}
                 className="mx-3 mb-5 w-fit whitespace-nowrap rounded-xl bg-error px-4 py-2 text-[18px] font-semibold text-white duration-300 ease-in hover:bg-warning hover:shadow-xl"
