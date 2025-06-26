@@ -3,8 +3,8 @@
 import Link from "next/link";
 import { useState } from "react";
 import {
-  useGetAllStudentsQuery,
   useDeleteStudentsMutation,
+  useGetAllStudentsQuery,
 } from "@/features/User-Management/studentApi";
 import Spinner from "@/components/spinner";
 import { useSelector } from "react-redux";
@@ -24,6 +24,7 @@ import { Skeleton } from "@/components/Skeleton";
 import { BiSearchAlt, BiTrash } from "react-icons/bi";
 import { GrView } from "react-icons/gr";
 import SeeMoreButton from "@/components/SeeMoreButton";
+import { FaUnlockAlt } from "react-icons/fa";
 
 const Student = () => {
   const breadcrumbs = [
@@ -133,17 +134,35 @@ const Student = () => {
     size: 1000000,
     graduated: "false",
   });
-  const [deleteStudents] = useDeleteStudentsMutation();
 
-  const handleDelete = async (id: string) => {
+  const [unlockStudent, { isLoading: isUnlocking }] =
+    useDeleteStudentsMutation();
+
+  const handleUnlock = async (id: string) => {
+
     try {
-      await deleteStudents({ id: id, lock: "false" }).unwrap();
-      toast.success(`Student with ID ${id} unLocked successfully`);
-      void refetch();
-    } catch (err) {
-      toast.error("Failed to unlock the Student");
+      await unlockStudent({ id, lock: false }).unwrap();
+
+      toast.success(
+        currentLanguage === "ar"
+          ? "تم إلغاء الحظر بنجاح"
+          : currentLanguage === "fr"
+            ? "Déblocage effectué"
+            : "Student unlocked successfully"
+      );
+      refetch();
+    } catch (err: any) {
+      toast.error(
+        err?.data?.message ||
+        (currentLanguage === "ar"
+          ? "حدث خطأ أثناء العملية"
+          : currentLanguage === "fr"
+            ? "Une erreur s'est produite"
+            : "Something went wrong")
+      );
     }
   };
+
 
   const filteredData = data?.data?.content?.filter((student: Student) =>
     student.name?.toLowerCase().includes(search.trim().toLowerCase()),
@@ -225,7 +244,7 @@ const Student = () => {
                 {isLoading ? (
                   [...Array(3)].map((_, i) => (
                     <TableRow key={i}>
-                      {Array.from({ length: 9 }).map((_, j) => (
+                      {Array.from({ length: 8 }).map((_, j) => (
                         <TableCell key={j}>
                           <Skeleton className="h-4 w-24" />
                         </TableCell>
@@ -234,7 +253,7 @@ const Student = () => {
                   ))
                 ) : !filteredData?.length ? (
                   <TableRow>
-                    <TableCell colSpan={9} className="text-center font-medium">
+                    <TableCell colSpan={8} className="text-center font-medium">
                       {translate.noData}
                     </TableCell>
                   </TableRow>
@@ -266,11 +285,11 @@ const Student = () => {
                             <GrView />
                           </Link>
                           <button
-                            onClick={() => handleDelete(student.id)}
+                            onClick={() => handleUnlock(student.id)}
                             className="text-error transition hover:text-red-800"
                             title={translate.unlock}
                           >
-                            <BiTrash size={20} />
+                            <FaUnlockAlt size={18} />
                           </button>
                         </div>
                       </TableCell>

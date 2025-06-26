@@ -173,14 +173,22 @@ const NavBar = () => {
     dispatch2(setLanguage(language));
   };
 
+  useEffect(() => {
+    if (loading) {
+      document.body.classList.add('overflow-hidden');
+    } else {
+      document.body.classList.remove('overflow-hidden');
+    }
+  }, [loading]);
+
+
   if (loading) {
     return (
-      <div className="flex h-screen w-full items-center justify-center">
+      <div className="fixed inset-0 z-50 flex items-center justify-center bg-white">
         <Spinner />
       </div>
     );
   }
-
   return (
     <>
       {isOpen && (
