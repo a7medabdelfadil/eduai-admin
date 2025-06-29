@@ -76,8 +76,8 @@ const AddNewPost = () => {
       await createPost(formData).unwrap();
       toast.success("Create post Success");
     } catch (err) {
-      toast.error("Failed to create post");
-    }
+                  toast.error((err as { data: { message: string } }).data?.message);
+                }
   };
   const { language: currentLanguage, loading } = useSelector(
     (state: RootState) => state.language,

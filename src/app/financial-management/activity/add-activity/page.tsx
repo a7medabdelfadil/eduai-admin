@@ -57,20 +57,17 @@ const AddActivity = () => {
     isLoading: activityLoading,
     refetch,
   } = useGetUnusedActivitiesQuery(null);
-  console.log("👾 ~ AddActivity ~ data:", data);
   const [createActivity, { isLoading: submitting }] =
     useCreateActivityMutation();
 
   const onSubmit = async (formData: any) => {
-    console.log("Form data submitted:", formData);
     try {
       await createActivity(formData).unwrap();
       toast.success("Activity created successfully!");
       router.push("/financial-management/activity");
       refetch();
-    } catch (error: any) {
-      console.error("Error creating activity:", error);
-      toast.error("Error creating activity: " + (error?.data?.message || ""));
+    } catch (err) {
+      toast.error((err as { data: { message: string } }).data?.message);
     }
   };
 
@@ -80,45 +77,49 @@ const AddActivity = () => {
         <Spinner />
       </div>
     );
-  if (
-    !activityLoading &&
-    (!Array.isArray(data?.data) || data.data.length === 0)
-  ) {
+  if (!activityLoading && (!Array.isArray(data?.data) || data.data.length === 0)) {
     return (
       <div
         dir={currentLanguage === "ar" ? "rtl" : "ltr"}
-        className={`${
-          currentLanguage === "ar"
+        className={`${currentLanguage === "ar"
             ? booleanValue
               ? "lg:mr-[100px]"
               : "lg:mr-[270px]"
             : booleanValue
               ? "lg:ml-[100px]"
               : "lg:ml-[270px]"
-        } mx-3 mt-[40px] flex h-[500px] items-center justify-center text-center`}
+          } mx-3 mt-[40px] flex h-[500px] items-center justify-center text-center`}
       >
-        <div className="rounded-xl bg-bgPrimary p-10 shadow-md">
+        <div className="rounded-xl bg-bgPrimary p-10 shadow-md max-w-xl">
           <h2 className="mb-4 text-[20px] font-semibold text-secondary">
             {currentLanguage === "ar"
-              ? "لا توجد أنواع نشاط متاحة لإضافتها حالياً."
+              ? "كل أنواع النشاط المتاحة تم إضافتها مسبقًا."
               : currentLanguage === "fr"
-                ? "Aucun type d'activité disponible pour le moment."
-                : "No activity types available to add now."}
+                ? "Tous les types d'activité disponibles ont déjà été ajoutés."
+                : "All available activity types have already been added."}
           </h2>
+          <p className="mb-6 text-sm text-textPrimary">
+            {currentLanguage === "ar"
+              ? "يمكنك تعديل الأنشطة الموجودة من صفحة النشاط."
+              : currentLanguage === "fr"
+                ? "Vous pouvez modifier les activités existantes depuis la page d'activité."
+                : "You can edit existing activities from the Activity page."}
+          </p>
           <button
             onClick={() => router.push("/financial-management/activity")}
             className="rounded-xl bg-primary px-4 py-2 text-white hover:bg-hover"
           >
             {currentLanguage === "ar"
-              ? "العودة"
+              ? "الذهاب إلى صفحة النشاط"
               : currentLanguage === "fr"
-                ? "Retour"
-                : "Go Back"}
+                ? "Aller à la page d'activité"
+                : "Go to Activity Page"}
           </button>
         </div>
       </div>
     );
   }
+
 
   return (
     <>
@@ -251,11 +252,10 @@ const AddActivity = () => {
               <button
                 type="submit"
                 disabled={submitting}
-                className={`w-fit rounded-xl px-4 py-2 text-[18px] text-white duration-300 ease-in hover:shadow-xl ${
-                  submitting
-                    ? "cursor-not-allowed bg-gray-400"
-                    : "bg-primary hover:bg-hover"
-                }`}
+                className={`w-fit rounded-xl px-4 py-2 text-[18px] text-white duration-300 ease-in hover:shadow-xl ${submitting
+                  ? "cursor-not-allowed bg-gray-400"
+                  : "bg-primary hover:bg-hover"
+                  }`}
               >
                 {submitting
                   ? currentLanguage === "ar"

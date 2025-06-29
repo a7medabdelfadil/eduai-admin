@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { createUser } from "@/components/cometchatUser"; // Adjust the path
+import { toast } from "react-toastify";
 
 const RegisterForm = ({ onClose }: { onClose: () => void }) => {
   const [username, setUsername] = useState("");
@@ -10,7 +11,9 @@ const RegisterForm = ({ onClose }: { onClose: () => void }) => {
     try {
       await createUser(userId, username);
       onClose(); // Close the modal after successful registration
-    } catch (error) {}
+    } catch (err) {
+      toast.error((err as { data: { message: string } }).data?.message);
+    }
   };
 
   return (

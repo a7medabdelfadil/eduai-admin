@@ -107,16 +107,46 @@ const AddDisciplinaryRecordForm = () => {
       <Container>
         <h2 className="mb-6 text-2xl font-semibold md:text-3xl">
           {currentLanguage === "ar"
-            ? "إشعار تأديبي"
+            ? "السجلات التأديبية"
             : currentLanguage === "fr"
-              ? "Avis disciplinaire"
-              : "Disciplinary Notice"}
+              ? "Dossiers disciplinaires"
+              : "Disciplinary Records"}
         </h2>
 
         <form
           onSubmit={handleSubmit}
           className="mx-auto w-[80%] space-y-6 rounded-xl bg-bgPrimary p-6 shadow-md"
         >
+          <div className="flex items-center justify-start gap-2">
+            <svg
+              className="h-6 w-6 font-bold text-secondary group-hover:text-hover"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              strokeWidth="2"
+              stroke="currentColor"
+              fill="none"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <path stroke="none" d="M0 0h24v24H0z" />
+              <line x1="3" y1="21" x2="21" y2="21" />
+              <line x1="3" y1="10" x2="21" y2="10" />
+              <polyline points="5 6 12 3 19 6" />
+              <line x1="4" y1="10" x2="4" y2="21" />
+              <line x1="20" y1="10" x2="20" y2="21" />
+              <line x1="8" y1="14" x2="8" y2="17" />
+              <line x1="12" y1="14" x2="12" y2="17" />
+              <line x1="16" y1="14" x2="16" y2="17" />
+            </svg>
+            <h1 className="text-[22px] font-semibold">
+              {currentLanguage === "ar"
+                ? "إشعار تأديبي"
+                : currentLanguage === "fr"
+                  ? "Avis disciplinaire"
+                  : "Disciplinary Notice"}
+            </h1>
+          </div>
           <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
             <div>
               <label className="mb-1 block font-medium">
@@ -160,116 +190,117 @@ const AddDisciplinaryRecordForm = () => {
                 className="w-full rounded border border-borderPrimary bg-bgPrimary p-2"
               />
             </div>
-          </div>
 
-          <div>
-            <label className="mb-1 block font-medium">
-              {currentLanguage === "ar"
-                ? "نوع المخالفة"
-                : currentLanguage === "fr"
-                  ? "Type d'infraction"
-                  : "Violation Type"}
-            </label>
-            <select
-              name="violationType"
-              value={formData.violationType}
-              onChange={handleChange}
-              required
-              className="w-full rounded border border-borderPrimary bg-bgPrimary p-2"
-            >
-              <option value="">
+            <div>
+              <label className="mb-1 block font-medium">
                 {currentLanguage === "ar"
-                  ? "اختر المخالفة"
+                  ? "نوع المخالفة"
                   : currentLanguage === "fr"
-                    ? "Sélectionner une infraction"
-                    : "Select Violation"}
-              </option>
-              {violationTypes?.data?.map((type: string) => (
-                <option key={type} value={type}>
-                  {type.replace(/_/g, " ")}
+                    ? "Type d'infraction"
+                    : "Violation Type"}
+              </label>
+              <select
+                name="violationType"
+                value={formData.violationType}
+                onChange={handleChange}
+                required
+                className="w-full rounded border border-borderPrimary bg-bgPrimary p-2"
+              >
+                <option value="">
+                  {currentLanguage === "ar"
+                    ? "اختر المخالفة"
+                    : currentLanguage === "fr"
+                      ? "Sélectionner une infraction"
+                      : "Select Violation"}
                 </option>
-              ))}
-            </select>
-          </div>
+                {violationTypes?.data?.map((type: string) => (
+                  <option key={type} value={type}>
+                    {type.replace(/_/g, " ")}
+                  </option>
+                ))}
+              </select>
+            </div>
 
-          <div>
-            <label className="mb-1 block font-medium">
-              {currentLanguage === "ar"
-                ? "الإجراء المتخذ"
-                : currentLanguage === "fr"
-                  ? "Action prise"
-                  : "Action Taken"}
-            </label>
-            <select
-              name="actionTaken"
-              value={formData.actionTaken}
-              onChange={handleChange}
-              required
-              className="w-full rounded border border-borderPrimary bg-bgPrimary p-2"
-            >
-              <option value="">
+            <div>
+              <label className="mb-1 block font-medium">
                 {currentLanguage === "ar"
-                  ? "اختر إجراء"
+                  ? "الإجراء المتخذ"
                   : currentLanguage === "fr"
-                    ? "Sélectionner une action"
-                    : "Select Action"}
-              </option>
-              {actionsTaken?.data?.map((action: string) => (
-                <option key={action} value={action}>
-                  {action.replace(/_/g, " ")}
+                    ? "Action prise"
+                    : "Action Taken"}
+              </label>
+              <select
+                name="actionTaken"
+                value={formData.actionTaken}
+                onChange={handleChange}
+                required
+                className="w-full rounded border border-borderPrimary bg-bgPrimary p-2"
+              >
+                <option value="">
+                  {currentLanguage === "ar"
+                    ? "اختر إجراء"
+                    : currentLanguage === "fr"
+                      ? "Sélectionner une action"
+                      : "Select Action"}
                 </option>
-              ))}
-            </select>
-          </div>
+                {actionsTaken?.data?.map((action: string) => (
+                  <option key={action} value={action}>
+                    {action.replace(/_/g, " ")}
+                  </option>
+                ))}
+              </select>
+            </div>
 
-          <div>
-            <label className="mb-1 block font-medium">
-              {currentLanguage === "ar"
-                ? "تفاصيل الواقعة"
-                : currentLanguage === "fr"
-                  ? "Détails de l'incident"
-                  : "Details of the Incident"}
-            </label>
-            <textarea
-              name="description"
-              value={formData.description}
-              onChange={handleChange}
-              required
-              className="w-full rounded border border-borderPrimary bg-bgPrimary p-2"
-              placeholder={
-                currentLanguage === "ar"
-                  ? "أدخل التفاصيل"
+           
+            <div>
+              <label className="mb-1 block font-medium">
+                {currentLanguage === "ar"
+                  ? "نسخة مقدمة إلى"
                   : currentLanguage === "fr"
-                    ? "Entrez les détails"
-                    : "Enter details"
-              }
-              rows={4}
-            />
+                    ? "Copie fournie à"
+                    : "Copy Provided To"}
+              </label>
+              <input
+                type="text"
+                name="providedTo"
+                value={formData.providedTo}
+                onChange={handleChange}
+                className="w-full rounded border border-borderPrimary bg-bgPrimary p-2"
+                placeholder={
+                  currentLanguage === "ar"
+                    ? "أدخل المستلم (اختياري)"
+                    : currentLanguage === "fr"
+                      ? "Entrez le destinataire (facultatif)"
+                      : "Enter recipient (optional)"
+                }
+              />
+            </div>
           </div>
+ <div>
+              <label className="mb-1 block font-medium">
+                {currentLanguage === "ar"
+                  ? "تفاصيل الواقعة"
+                  : currentLanguage === "fr"
+                    ? "Détails de l'incident"
+                    : "Details of the Incident"}
+              </label>
+              <textarea
+                name="description"
+                value={formData.description}
+                onChange={handleChange}
+                required
+                className="w-full rounded border border-borderPrimary bg-bgPrimary p-2"
+                placeholder={
+                  currentLanguage === "ar"
+                    ? "أدخل التفاصيل"
+                    : currentLanguage === "fr"
+                      ? "Entrez les détails"
+                      : "Enter details"
+                }
+                rows={4}
+              />
+            </div>
 
-          <div>
-            <label className="mb-1 block font-medium">
-              {currentLanguage === "ar"
-                ? "نسخة مقدمة إلى"
-                : currentLanguage === "fr"
-                  ? "Copie fournie à"
-                  : "Copy Provided To"}
-            </label>
-            <input
-              type="text"
-              name="providedTo"
-              value={formData.providedTo}
-              onChange={handleChange}
-              className="w-full rounded border border-borderPrimary bg-bgPrimary p-2"
-              placeholder={
-                currentLanguage === "ar"
-                  ? "أدخل المستلم (اختياري)"
-                  : currentLanguage === "fr"
-                    ? "Entrez le destinataire (facultatif)"
-                    : "Enter recipient (optional)"
-              }
-            />
-          </div>
 
           <div className="flex justify-center">
             <button

@@ -98,7 +98,7 @@ const Events = () => {
       toast.success("Delete post Success");
       void refetch();
     } catch (err) {
-      toast.error("Can not Delete post");
+      toast.error((err as { data: { message: string } }).data?.message);
     }
   };
 
@@ -136,14 +136,8 @@ const Events = () => {
       );
       handleCloseModal();
       refetch();
-    } catch (error) {
-      toast.error(
-        currentLanguage === "ar"
-          ? "فشل إنشاء الحدث"
-          : currentLanguage === "fr"
-            ? "Échec de la création de l'événement"
-            : "Failed to create event",
-      );
+    } catch (err) {
+      toast.error((err as { data: { message: string } }).data?.message);
     }
   };
 

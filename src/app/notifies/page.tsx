@@ -80,8 +80,8 @@ const Notifies = () => {
       toast.success(`Notification read`);
       void refetch();
     } catch (err) {
-      toast.error("Failed to Read Notification");
-    }
+                  toast.error((err as { data: { message: string } }).data?.message);
+                }
   };
 
   const handleDelete = async (id: string) => {
@@ -90,8 +90,8 @@ const Notifies = () => {
       toast.success(`Notification Deleted`);
       void refetch();
     } catch (err) {
-      toast.error("Failed to Delete Notification");
-    }
+                  toast.error((err as { data: { message: string } }).data?.message);
+                }
   };
 
   const { language: currentLanguage, loading } = useSelector(

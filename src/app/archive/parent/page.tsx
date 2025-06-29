@@ -134,7 +134,7 @@ const Parent = () => {
       toast.success(`Parent with ID ${id} unLocked successfully`);
       void refetch();
     } catch (err) {
-      toast.error("Failed to unlock the Parent");
+      toast.error((err as { data: { message: string } }).data?.message);
     }
   };
 

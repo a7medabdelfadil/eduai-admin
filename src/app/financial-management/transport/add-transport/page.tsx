@@ -14,7 +14,7 @@ const AddTransport = () => {
   const breadcrumbs = [
     { nameEn: "Financial Management", nameAr: "الإدارة المالية", nameFr: "Gestion financière", href: "/financial-management" },
     { nameEn: "Transport", nameAr: "النقل", nameFr: "Transport", href: "/financial-management/transport" },
-    { nameEn: "Add Transport", nameAr: "إضافة نقل", nameFr: "Ajouter un transport", href: "/financial-management/transport/add" },
+    { nameEn: "Add Transport", nameAr: "إضافة نقل", nameFr: "Ajouter un transport", href: "/financial-management/transport/add-transport" },
   ];
 
   const router = useRouter();
@@ -29,8 +29,8 @@ const AddTransport = () => {
       await createBusCost(formData).unwrap();
       toast.success("Transport cost added successfully!");
       router.push("/financial-management/transport");
-    } catch (error: any) {
-      toast.error("Error adding transport cost: " + (error?.data?.message || ""));
+    } catch (err) {
+      toast.error((err as { data: { message: string } }).data?.message);
     }
   };
 

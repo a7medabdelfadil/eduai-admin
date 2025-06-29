@@ -86,14 +86,8 @@ const DepartmentId = ({ params }: EditDepartmentProps) => {
             : "Department Edited Successfully",
       );
     } catch (err) {
-      toast.error(
-        currentLanguage === "ar"
-          ? "فشل في تعديل القسم"
-          : currentLanguage === "fr"
-            ? "Échec de la modification du département"
-            : "Failed to edit department",
-      );
-    }
+                  toast.error((err as { data: { message: string } }).data?.message);
+                }
   };
 
   if (loading || isLoading)

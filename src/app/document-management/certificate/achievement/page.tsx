@@ -127,8 +127,8 @@ const Achievement = () => {
       await deleteAchievement(id).unwrap();
       toast.success(`Achievement with ID ${id} Deleted successfully`);
       void refetch();
-    } catch {
-      toast.error("Failed to Delete the Achievement");
+    } catch (err) {
+      toast.error((err as { data: { message: string } }).data?.message);
     }
   };
 

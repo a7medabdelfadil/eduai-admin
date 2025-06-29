@@ -61,9 +61,9 @@ const ComplaintParent = () => {
       await deleteDepartment(id).unwrap();
       toast.success(`Complaint with ID ${id} deleted successfully`);
       refetch();
-    } catch {
-      toast.error("Failed to delete the Complaint");
-    }
+    } catch (err) {
+                  toast.error((err as { data: { message: string } }).data?.message);
+                }
   };
 
   const { language: currentLanguage, loading } = useSelector(

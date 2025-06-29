@@ -200,7 +200,6 @@ export const useWebSocketChat = ({
 
     const uploadUrl = `https://api.eduai.tech/api/v1/messages/${userId}/file`;
 
-    console.log(`رفع ملف إلى ${uploadUrl}`);
 
     try {
       const response = await fetch(uploadUrl, {

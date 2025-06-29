@@ -59,8 +59,8 @@ const Exams = () => {
 
       toast.success(`Exam with ID ${id} Deleted successfully`);
       void refetch();
-    } catch {
-      toast.error("Failed to Delete the Exam");
+    } catch (err) {
+      toast.error((err as { data: { message: string } }).data?.message);
     }
   };
 

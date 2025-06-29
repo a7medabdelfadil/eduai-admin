@@ -131,8 +131,8 @@ const Bus = () => {
 
       toast.success(`Bus with ID ${id} Deleted successfully`);
       void refetch();
-    } catch {
-      toast.error("Failed to Delete the Bus");
+    } catch (err) {
+      toast.error((err as { data: { message: string } }).data?.message);
     }
   };
 

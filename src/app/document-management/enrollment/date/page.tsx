@@ -68,14 +68,8 @@ const EnrollmentDate = () => {
             : "Student account locked successfully.",
       );
       refetch();
-    } catch {
-      toast.error(
-        currentLanguage === "ar"
-          ? "فشل في قفل الحساب."
-          : currentLanguage === "fr"
-            ? "Échec du verrouillage du compte."
-            : "Failed to lock student account.",
-      );
+    } catch (err) {
+      toast.error((err as { data: { message: string } }).data?.message);
     }
   };
 
@@ -207,11 +201,10 @@ const EnrollmentDate = () => {
               <Link
                 key={item.href}
                 href={item.href}
-                className={`transition duration-200 ease-in-out ${
-                  pathname === item.href
+                className={`transition duration-200 ease-in-out ${pathname === item.href
                     ? "text-indigo-600 underline underline-offset-4"
                     : "hover:text-indigo-500"
-                }`}
+                  }`}
               >
                 {item.name}
               </Link>
@@ -283,7 +276,7 @@ const EnrollmentDate = () => {
                       <TableCell>
                         <div className="flex items-center gap-3">
                           {student.hasPicture &&
-                          student.picture?.startsWith("http") ? (
+                            student.picture?.startsWith("http") ? (
                             <img
                               src={student.picture}
                               alt={student.name}

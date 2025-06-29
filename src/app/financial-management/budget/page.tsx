@@ -158,6 +158,18 @@ const Budget = () => {
     return formatter.format(new Date(dateString));
   };
 
+  const formatAmount = (
+    value: number | undefined | null,
+    digits = 2,
+    locale = 'en-US'
+  ) => {
+    if (value === undefined || value === null) return '--';
+    return new Intl.NumberFormat(locale, {
+      minimumFractionDigits: digits,
+      maximumFractionDigits: digits,
+    }).format(value);
+  };
+
   const [visibleCount, setVisibleCount] = useState(20);
   const visibleData = data?.data?.content?.slice(0, visibleCount);
 
@@ -181,7 +193,7 @@ const Budget = () => {
         <div className="mb-5 flex justify-center gap-4 max-[840px]:grid">
           {/* Total Earning */}
           <div className="grid gap-4 max-[840px]:flex max-[840px]:gap-2">
-            <div className="flex h-[120px] w-[240px] items-center justify-between gap-3 rounded-xl bg-bgPrimary p-4 shadow-xl max-[840px]:w-[200px] max-[576px]:h-[110px]">
+            <div className="flex h-[120px] min-w-[240px] items-center justify-between gap-3 rounded-xl bg-bgPrimary p-4 shadow-xl max-[840px]:w-[200px] max-[576px]:h-[110px]">
               <div>
                 <img src="/images/earnning.png" alt="#" className="h-14 w-14" />
               </div>

@@ -45,8 +45,8 @@ const EditActivity = () => {
       await updateActivity({ id: activityId, body: formData }).unwrap();
       toast.success("Activity updated successfully!");
       router.push("/financial-management/activity");
-    } catch (error) {
-      toast.error("Error updating activity.");
+    } catch (err) {
+      toast.error((err as { data: { message: string } }).data?.message);
     }
   };
 

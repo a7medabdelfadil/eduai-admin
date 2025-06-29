@@ -47,7 +47,6 @@ const FeesManagement = () => {
   ];
 
   const { data, error, isLoading, refetch } = useGetAllTaxesQuery(null);
-  console.log("🚀 ~ FeesManagement ~ data:", data);
   type Invoice = Record<string, any>;
   const [search, setSearch] = useState("");
   const [deleteInvoice] = useDeleteTaxesMutation();
@@ -58,8 +57,8 @@ const FeesManagement = () => {
 
       toast.success(`Bus with ID ${id} Deleted successfully`);
       void refetch();
-    } catch {
-      toast.error("Failed to Delete the Bus");
+    } catch (err) {
+      toast.error((err as { data: { message: string } }).data?.message);
     }
   };
   const formatTransactionDate = (dateString: string | number | Date) => {

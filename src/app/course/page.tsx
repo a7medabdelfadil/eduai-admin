@@ -50,7 +50,7 @@ const Course = () => {
               : "All Courses in School", // Default to English
     },
     {
-      href: "/course/resource",
+      href: "/infrastructure/store/digital-resource",
       icon: <AiOutlineFileText size={40} />,
       title:
         currentLanguage === "en"

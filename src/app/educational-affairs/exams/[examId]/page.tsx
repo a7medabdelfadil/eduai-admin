@@ -67,8 +67,8 @@ const EditExam = ({ params }: ParamsType) => {
     try {
       await createExam({ formData: data, id: params.examId }).unwrap();
       toast.success("Exam edited successfully");
-    } catch (error: any) {
-      toast.error(`${error.data.message}`);
+    } catch (err) {
+      toast.error((err as { data: { message: string } }).data?.message);
     }
   };
 

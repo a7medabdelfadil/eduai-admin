@@ -265,13 +265,7 @@ const Legal = () => {
                             : "Folder created successfully",
                       );
                     } catch (err) {
-                      toast.error(
-                        currentLanguage === "ar"
-                          ? "فشل في إنشاء المجلد"
-                          : currentLanguage === "fr"
-                            ? "Échec de la création du dossier"
-                            : "Failed to create folder",
-                      );
+                      toast.error((err as { data: { message: string } }).data?.message);
                     }
                   }}
                   className="space-y-4"
@@ -369,13 +363,7 @@ const Legal = () => {
                             : "File uploaded successfully",
                       );
                     } catch (err) {
-                      toast.error(
-                        currentLanguage === "ar"
-                          ? "فشل في رفع الملف"
-                          : currentLanguage === "fr"
-                            ? "Échec du téléversement"
-                            : "File upload failed",
-                      );
+                      toast.error((err as { data: { message: string } }).data?.message);
                     }
                   }}
                   className="space-y-4"
@@ -529,13 +517,7 @@ const Legal = () => {
                                         : "Folder renamed",
                                   );
                                 } catch (err) {
-                                  toast.error(
-                                    currentLanguage === "ar"
-                                      ? "فشل في تعديل الاسم"
-                                      : currentLanguage === "fr"
-                                        ? "Échec de la modification du nom"
-                                        : "Rename failed",
-                                  );
+                                  toast.error((err as { data: { message: string } }).data?.message);
                                 }
                               }}
                               className="space-y-4"
@@ -632,13 +614,7 @@ const Legal = () => {
                                             : "Folder deleted successfully",
                                       );
                                     } catch (err) {
-                                      toast.error(
-                                        currentLanguage === "ar"
-                                          ? "فشل في حذف المجلد"
-                                          : currentLanguage === "fr"
-                                            ? "Échec de la suppression du dossier"
-                                            : "Failed to delete folder",
-                                      );
+                                      toast.error((err as { data: { message: string } }).data?.message);
                                     }
                                   }}
                                   className="rounded bg-red-600 px-4 py-2 text-sm text-white hover:bg-red-700"
@@ -749,13 +725,7 @@ const Legal = () => {
                                               : "File deleted successfully",
                                         );
                                       } catch (err) {
-                                        toast.error(
-                                          currentLanguage === "ar"
-                                            ? "فشل في حذف الملف"
-                                            : currentLanguage === "fr"
-                                              ? "Échec de la suppression du fichier"
-                                              : "Failed to delete file",
-                                        );
+                                        toast.error((err as { data: { message: string } }).data?.message);
                                       }
                                     }}
                                     className="rounded bg-red-600 px-4 py-2 text-sm text-white hover:bg-red-700"

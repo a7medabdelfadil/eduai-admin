@@ -41,7 +41,6 @@ const Course = ({ params }: ParamsType) => {
     (state: RootState) => state.language,
   );
   const { data, isLoading } = useGetAllGradeCourseQuery(params.courseId);
-  console.log("🚀 ~ Course ~ data:", data)
   const filteredData = data?.data?.filter((course: any) =>
     course.studentName?.toLowerCase().includes(searchTerm.toLowerCase()),
   );

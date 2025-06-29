@@ -30,8 +30,8 @@ const AddMaterial = () => {
       await createFeesItem({ ...formData, itemType: "MATERIAL" }).unwrap();
       toast.success("Material added successfully!");
       router.push("/financial-management/material");
-    } catch (error: any) {
-      toast.error("Error adding material: " + (error?.data?.message || ""));
+    } catch (err) {
+      toast.error((err as { data: { message: string } }).data?.message);
     }
   };
 

@@ -1,5 +1,6 @@
 "use client";
 import BreadCrumbs from "@/components/BreadCrumbs";
+import Container from "@/components/Container";
 import Spinner from "@/components/spinner";
 import { RootState } from "@/GlobalRedux/store";
 import Link from "next/link";
@@ -19,7 +20,7 @@ const MLExam = () => {
       nameEn: "School Comparisons",
       nameAr: "مقارنات المدارس",
       nameFr: "Comparaisons des écoles",
-      href: "/insight",
+      href: "/insight/ml-exam",
     },
   ];
 
@@ -36,20 +37,10 @@ const MLExam = () => {
   return (
     <>
       <BreadCrumbs breadcrumbs={breadcrumbs} />
-      <div
-        className={`${
-          currentLanguage === "ar"
-            ? booleanValue
-              ? "lg:mr-[100px]"
-              : "lg:mr-[270px]"
-            : booleanValue
-              ? "lg:ml-[100px]"
-              : "lg:ml-[270px]"
-        }`}
-      >
+      <Container>
         <div className="grid overflow-x-auto">
-          <div className="justify-left mb-5 ml-4 mt-10 flex gap-5 overflow-x-auto text-nowrap text-[20px] font-semibold">
-            <Link href="/insight">
+          <div className="justify-left mb-5 ml-4 mt-10 flex flex-wrap gap-5 overflow-x-auto text-nowrap text-[20px] font-semibold">
+            <Link className="hover:text-blue-500 hover:underline" href="/insight">
               {currentLanguage === "en"
                 ? "Student Performance"
                 : currentLanguage === "ar"
@@ -58,7 +49,7 @@ const MLExam = () => {
                     ? "Performance de l'étudiant"
                     : "Student Performance"}
             </Link>
-            <Link href="/insight/school">
+            <Link className="hover:text-blue-500 hover:underline" href="/insight/school">
               {currentLanguage === "en"
                 ? "School Performance"
                 : currentLanguage === "ar"
@@ -67,7 +58,7 @@ const MLExam = () => {
                     ? "Performance de l'école"
                     : "School Performance"}
             </Link>
-            <Link href="/insight/class">
+            <Link className="hover:text-blue-500 hover:underline" href="/insight/class">
               {currentLanguage === "en"
                 ? "Class Performance"
                 : currentLanguage === "ar"
@@ -87,7 +78,7 @@ const MLExam = () => {
             </Link>
           </div>
         </div>
-      </div>
+      </Container>
     </>
   );
 };

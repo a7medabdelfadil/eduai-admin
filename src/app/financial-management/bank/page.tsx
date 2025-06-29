@@ -106,7 +106,7 @@ const Bank = () => {
       toast.success("Delete post Success");
       void refetch();
     } catch (err) {
-      toast.error("Can not Delete post");
+      toast.error((err as { data: { message: string } }).data?.message);
     }
   };
   const onSubmit = async (data: any) => {
@@ -163,7 +163,7 @@ const Bank = () => {
       reset();
       toast.success("Acount created successfully");
     } catch (err) {
-      toast.error("Failed to create Acount");
+      toast.error((err as { data: { message: string } }).data?.message);
     }
   };
 
@@ -223,7 +223,7 @@ const Bank = () => {
       void refetch();
       setModalOpen2(false);
     } catch (err) {
-      toast.error("Failed to Update Acount");
+      toast.error((err as { data: { message: string } }).data?.message);
     }
   };
   const [open, setOpen] = useState<number | boolean | null>(false);

@@ -71,8 +71,8 @@ const AddDepartment = () => {
       toast.success("Department created successfully");
       router.push("/organization-setting/department");
     } catch (err) {
-      toast.error("Failed to create Department");
-    }
+                  toast.error((err as { data: { message: string } }).data?.message);
+                }
   };
 
   const { language: currentLanguage, loading } = useSelector(

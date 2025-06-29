@@ -211,7 +211,7 @@ const Chat = () => {
       }
       regetusers();
     } catch (err) {
-      toast.error("Failed to delete the chat");
+      toast.error((err as { data: { message: string } }).data?.message);
     } finally {
       setDeleting(false);
     }
@@ -266,14 +266,8 @@ const Chat = () => {
       }
 
       regetusers();
-    } catch (err: any) {
-      toast.error(
-        getTranslation(
-          "Failed to create chat",
-          "فشل في إنشاء المحادثة",
-          "Échec de la création de la discussion",
-        ),
-      );
+    } catch (err) {
+      toast.error((err as { data: { message: string } }).data?.message);
     } finally {
       setCreating(false);
     }

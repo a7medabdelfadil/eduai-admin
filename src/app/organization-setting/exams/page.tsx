@@ -63,14 +63,12 @@ const Exams = () => {
     useDeleteExamTypeMutation();
 
   const handleDelete = async (id: any) => {
-    console.log(id);
-
     try {
       await deleteExamType(id).unwrap();
       toast.success(`Semester with ID ${id} deleted successfully`);
       refetchExam();
-    } catch (err: any) {
-      toast.error(err.data.statusMsg);
+    } catch (err) {
+      toast.error((err as { data: { message: string } }).data?.message);
     }
   };
 

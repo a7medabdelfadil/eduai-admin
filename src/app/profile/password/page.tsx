@@ -26,8 +26,8 @@ const Password = () => {
       await UpdateUser(data).unwrap();
       toast.success("User Updated successfully");
     } catch (err) {
-      toast.error("Failed to Update User");
-    }
+                  toast.error((err as { data: { message: string } }).data?.message);
+                }
   };
   if (loading)
     return (

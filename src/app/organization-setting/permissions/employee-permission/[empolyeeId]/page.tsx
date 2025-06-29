@@ -124,9 +124,9 @@ const Permissions: React.FC<employeeIdProps> = ({ params }) => {
           formData: { permissions: selectedPermissions },
         });
         toast.success("Permission Submitted successfully!");
-      } catch {
-        toast.error("Error to submit Permission");
-      }
+      } catch (err) {
+                  toast.error((err as { data: { message: string } }).data?.message);
+                }
     }
   };
 

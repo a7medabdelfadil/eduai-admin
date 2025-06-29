@@ -108,13 +108,7 @@ const AddMedicalRecord = () => {
         router.push("/document-management/other/medical");
       }, 1000);
     } catch (err) {
-      toast.error(
-        currentLanguage === "ar"
-          ? "حدث خطأ أثناء الإضافة"
-          : currentLanguage === "fr"
-            ? "Une erreur s'est produite lors de l'ajout"
-            : "An error occurred while adding",
-      );
+      toast.error((err as { data: { message: string } }).data?.message);
     }
   };
 

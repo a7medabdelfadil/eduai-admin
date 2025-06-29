@@ -39,8 +39,8 @@ const EditMaterial = () => {
       await updateFeesItem({ id, body: { ...formData, itemType: "MATERIAL" } }).unwrap();
       toast.success("Material updated successfully!");
       router.push("/financial-management/material");
-    } catch (error: any) {
-      toast.error("Error updating material: " + (error?.data?.message || ""));
+    } catch (err) {
+      toast.error((err as { data: { message: string } }).data?.message);
     }
   };
 

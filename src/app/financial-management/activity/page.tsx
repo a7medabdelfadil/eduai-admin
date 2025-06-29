@@ -76,8 +76,8 @@ const Activity = () => {
       setDialogToClose(id);
       toast.success("Activity deleted successfully!");
       await refetch();
-    } catch {
-      toast.error("Error deleting activity");
+    } catch (err) {
+      toast.error((err as { data: { message: string } }).data?.message);
     }
   };
   const [visibleCount, setVisibleCount] = useState(10);

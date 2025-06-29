@@ -60,22 +60,10 @@ const Archive = () => {
     },
     { href: "/archive/worker", icon: <FaTools size={40} />, key: "Worker" },
     { href: "/archive/bus", icon: <FaBus size={40} />, key: "Bus" },
-    { href: "/book", icon: <FaBook size={40} />, key: "Library" },
-    { href: "/rooms", icon: <FaDoorClosed size={40} />, key: "Room" },
-    {
-      href: "/educational-affairs/grades",
-      icon: <FaClipboardList size={40} />,
-      key: "Grades",
-    },
     {
       href: "/archive/store/digital-resource",
       icon: <FaBoxOpen size={40} />,
       key: "Resource Management",
-    },
-    {
-      href: "/financial-management",
-      icon: <FaMoneyBillAlt size={40} />,
-      key: "Fees",
     },
   ];
 

@@ -167,8 +167,8 @@ const Store = () => {
       await restoreResource(id).unwrap();
       toast.success("Resource restored successfully");
       refetch();
-    } catch (err: any) {
-      toast.error(err?.data?.message || "Failed to restore resource");
+    } catch (err) {
+      toast.error((err as { data: { message: string } }).data?.message);
     }
   };
   const formatDate = (date: string) =>

@@ -23,7 +23,7 @@ const UserManagment = () => {
 
   const UserManagments = [
     {
-      href: "/driver",
+      href: "/user-management/driver",
       icon: <FaCar size={30} />,
       title:
         currentLanguage === "en"
@@ -43,7 +43,7 @@ const UserManagment = () => {
               : "Number of Drivers",
     },
     {
-      href: "/employee",
+      href: "/user-management/employee",
       icon: <FaBriefcase size={30} />,
       title:
         currentLanguage === "en"
@@ -63,7 +63,7 @@ const UserManagment = () => {
               : "Number of Employees",
     },
     {
-      href: "/parent",
+      href: "/user-management/parent",
       icon: <FaUserFriends size={30} />,
 
       title:
@@ -84,7 +84,7 @@ const UserManagment = () => {
               : "Number of Parents",
     },
     {
-      href: "/student",
+      href: "/user-management/student",
       icon: <FaUserGraduate size={30} />,
       title:
         currentLanguage === "en"
@@ -104,7 +104,7 @@ const UserManagment = () => {
               : "Number of Students",
     },
     {
-      href: "/teacher",
+      href: "/user-management/teacher",
       icon: <FaChalkboardTeacher size={30} />,
       title:
         currentLanguage === "en"
@@ -124,7 +124,7 @@ const UserManagment = () => {
               : "All Teachers",
     },
     {
-      href: "/worker",
+      href: "/user-management/worker",
       icon: <FaHardHat size={30} />,
       title:
         currentLanguage === "en"
@@ -173,15 +173,14 @@ const UserManagment = () => {
       <BreadCrumbs breadcrumbs={breadcrumbs} />
       <div
         dir={currentLanguage === "ar" ? "rtl" : "ltr"}
-        className={`${
-          currentLanguage === "ar"
+        className={`${currentLanguage === "ar"
             ? booleanValue
               ? "lg:mr-[40px]"
               : "lg:mr-[290px]"
             : booleanValue
               ? "lg:ml-[40px]"
               : "lg:ml-[290px]"
-        } mt-12 grid justify-center`}
+          } mt-12 grid justify-center`}
       >
         <div className="grid grid-cols-2 gap-5 max-[577px]:grid-cols-1 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-4">
           {UserManagments.map((item, index) => (

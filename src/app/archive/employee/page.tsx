@@ -55,7 +55,6 @@ const ArchiveEmployee = () => {
     page: 0,
     size: 1000000,
   });
-  console.log("🚀 ~ ArchiveEmployee ~ data:", data);
   const [deleteEmployees] = useDeleteEmployeesMutation();
 
   const translate = {
@@ -130,8 +129,8 @@ const ArchiveEmployee = () => {
       await deleteEmployees({ id, lock: "false" }).unwrap();
       toast.success(`Employee with ID ${id} unlocked successfully`);
       void refetch();
-    } catch {
-      toast.error("Failed to unlock the employee");
+    } catch (err) {
+      toast.error((err as { data: { message: string } }).data?.message);
     }
   };
 

@@ -115,7 +115,7 @@ const UpdateEvent = ({ params }: Props) => {
       toast.success("Event updated successfully");
       router.push("/educational-affairs/events");
     } catch (err) {
-      toast.error("Failed to update event");
+      toast.error((err as { data: { message: string } }).data?.message);
     }
   };
 

@@ -28,16 +28,16 @@ export const transportApi = createApi({
     getAllBusCosts: builder.query({
       query: () => "/api/v1/bus-cost/all",
     }),
-    getBusCostByRegionId: builder.query({
-      query: (regionId: number | string) =>
-        `/api/v1/bus-cost/update?regionId=${regionId}`,
-    }),
     createBusCost: builder.mutation({
       query: body => ({
         url: "/api/v1/bus-cost",
         method: "POST",
         body,
       }),
+    }),
+    getBusCostByRegionId: builder.query({
+      query: (regionId: number | string) =>
+        `/api/v1/bus-cost/update?regionId=${regionId}`,
     }),
     updateBusCost: builder.mutation({
       query: body => ({

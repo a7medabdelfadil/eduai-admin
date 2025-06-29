@@ -20,6 +20,7 @@ import {
   Tooltip,
   Legend,
   YAxis,
+  ResponsiveContainer,   // ✅ NEW
 } from "recharts";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
@@ -38,6 +39,7 @@ import {
   useTopStudentsInClassQuery,
 } from "@/features/Acadimic/scheduleApi";
 import { useGetAllClasssQuery } from "@/features/Infrastructure/classApi";
+import Container from "@/components/Container";
 
 const chartConfig = {
   desktop: { label: "My school", color: "#e23670" },
@@ -57,47 +59,23 @@ function InsightPage() {
   const { data: classes, isLoading: isClassing } = useGetAllClasssQuery(null);
   const { data: strugglingStudents, isLoading: isStudentsLoading } =
     useTopStudentsInClassQuery(
-      {
-        classRoom: classroomId,
-      },
-      {
-        skip: classroomId === null,
-      },
+      { classRoom: classroomId },
+      { skip: classroomId === null },
     );
-  console.log(classroomId);
 
-  const booleanValue = useSelector((state: RootState) => state.boolean.value);
   const { language: currentLanguage, loading } = useSelector(
     (state: RootState) => state.language,
   );
 
-  const chartData = [
-    {
-      month: `${currentLanguage === "ar" ? "المدرسة الابتدائية" : currentLanguage === "fr" ? "École primaire" : "Primary school"}`,
-      desktop: 186,
-      mobile: 80,
-    },
-    {
-      month: `${currentLanguage === "ar" ? "الثانوي الإعدادي" : currentLanguage === "fr" ? "Collège" : "Preparatory"}`,
-      desktop: 305,
-      mobile: 200,
-    },
-    {
-      month: `${currentLanguage === "ar" ? "الثانوي التأهيلي" : currentLanguage === "fr" ? "Lycée" : "high school"}`,
-      desktop: 237,
-      mobile: 120,
-    },
-  ];
-
   // Transform averageAttendance data for the chart
   const transformedAttendanceData = averageAttendance
     ? Object.keys(averageAttendance[0].MonthsAttendance).map(month => ({
-        month,
-        KINDERGARTEN: averageAttendance[0].MonthsAttendance[month],
-        PRIMARY: averageAttendance[1].MonthsAttendance[month],
-        PREPARATORY: averageAttendance[2].MonthsAttendance[month],
-        SECONDARY: averageAttendance[3].MonthsAttendance[month],
-      }))
+      month,
+      KINDERGARTEN: averageAttendance[0].MonthsAttendance[month],
+      PRIMARY: averageAttendance[1].MonthsAttendance[month],
+      PREPARATORY: averageAttendance[2].MonthsAttendance[month],
+      SECONDARY: averageAttendance[3].MonthsAttendance[month],
+    }))
     : [];
 
   interface Student {
@@ -110,10 +88,10 @@ function InsightPage() {
   const chartData3 =
     strugglingStudents && classroomId
       ? strugglingStudents.map((student: Student) => ({
-          name: student.studentName,
-          grade: student.averageGrade,
-          attendance: student.attendanceRate,
-        }))
+        name: student.studentName,
+        grade: student.averageGrade,
+        attendance: student.attendanceRate,
+      }))
       : [];
 
   const [isMounted, setIsMounted] = useState(false);
@@ -148,101 +126,136 @@ function InsightPage() {
   return (
     <>
       <BreadCrumbs breadcrumbs={breadcrumbs} />
-      <div
-        className={`${
-          currentLanguage === "ar"
-            ? booleanValue
-              ? "lg:mr-[100px]"
-              : "lg:mr-[270px]"
-            : booleanValue
-              ? "lg:ml-[100px]"
-              : "lg:ml-[270px]"
-        }`}
-      >
+      <Container>
+        {/* navigation tabs */}
         <div className="grid overflow-x-auto">
-          <div className="justify-left mb-5 ml-4 mt-10 flex gap-5 overflow-x-auto text-nowrap text-[20px] font-semibold">
+          <div className="mb-5 ml-4 mt-10 flex flex-wrap gap-5 overflow-x-auto whitespace-nowrap text-[20px] font-semibold">
             <Link href="/insight" className="text-blue-500 underline">
-              {currentLanguage === "en"
-                ? "Student Performance"
-                : currentLanguage === "ar"
+              {currentLanguage === "ar"
+                ? "تقدم الطلاب"
+                : currentLanguage === "fr"
+                  ? "Progression des étudiants"
+                  : "Student Performance"}
+            </Link>
+            <Link className="hover:text-blue-500 hover:underline" href="/insight/school">
+              {currentLanguage === "ar"
+                ? "تقدم المدرسة"
+                : currentLanguage === "fr"
+                  ? "Progression de l'école"
+                  : "School Performance"}
+            </Link>
+            <Link className="hover:text-blue-500 hover:underline" href="/insight/class">
+              {currentLanguage === "ar"
+                ? "تقدم الفصل"
+                : currentLanguage === "fr"
+                  ? "Progression de la classe"
+                  : "Class Performance"}
+            </Link>
+            <Link className="hover:text-blue-500 hover:underline" href="/insight/ml-exam">
+              {currentLanguage === "ar"
+                ? "ML التقدم في امتحان تعلم الالة"
+                : currentLanguage === "fr"
+                  ? "Progression à l'examen de ML"
+                  : "ML Exam Performance"}
+            </Link>
+          </div>
+        </div>
+
+        {/* charts */}
+        <div className="mt-5 flex flex-col xl:flex-row justify-evenly gap-4">
+          {/* Average grade/attendance */}
+          <Card className="w-full h-fit overflow-x-auto bg-bgPrimary xl:w-3/5">
+            <CardHeader>
+              <CardTitle>
+                {currentLanguage === "ar"
                   ? "تقدم الطلاب"
                   : currentLanguage === "fr"
                     ? "Progression des étudiants"
                     : "Student Performance"}
-            </Link>
-            <Link href="/insight/school">
-              {currentLanguage === "en"
-                ? "School Performance"
-                : currentLanguage === "ar"
-                  ? "تقدم المدرسة"
-                  : currentLanguage === "fr"
-                    ? "Progression de l'école"
-                    : "School Performance"}
-            </Link>
-            <Link href="/insight/class">
-              {currentLanguage === "en"
-                ? "Class Performance"
-                : currentLanguage === "ar"
-                  ? "تقدم الفصل"
-                  : currentLanguage === "fr"
-                    ? "Progression de la classe"
-                    : "Class Performance"}
-            </Link>
-            <Link href="/insight/ml-exam">
-              {currentLanguage === "en"
-                ? "ML Exam Performance"
-                : currentLanguage === "ar"
-                  ? "ML التقدم في امتحان تعلم الالة"
-                  : currentLanguage === "fr"
-                    ? "Progression à l'examen de ML"
-                    : "ML Exam Performance"}
-            </Link>
-          </div>
-        </div>
-        <div className="mt-5 flex flex-wrap justify-evenly gap-5 overflow-x-auto">
-          <div className="flex items-center justify-center overflow-x-auto">
-            <Card className="w-[850px] overflow-x-auto bg-bgPrimary max-[1170px]:w-[550px] max-[605px]:w-[450px]">
-              <CardHeader>
-                <CardTitle>
-                  {currentLanguage === "ar"
-                    ? "تقدم الطلاب"
-                    : currentLanguage === "fr"
-                      ? "Progression des étudiants"
-                      : "Student Performance"}
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <ChartContainer config={chartConfig}>
-                  <BarChart accessibilityLayer data={data}>
-                    <CartesianGrid vertical={false} />
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <ChartContainer config={chartConfig}>
+                <ResponsiveContainer width="100%" aspect={2}>
+                  <BarChart
+                    data={data}
+                    margin={{ top: 20, right: 30, left: 20, bottom: 0 }}
+                  >
+                    <CartesianGrid strokeDasharray="3 3" vertical={false} />
                     <XAxis
                       dataKey="stage"
                       tickLine={false}
                       tickMargin={10}
                       axisLine={false}
-                      tickFormatter={(value: string) => String(value)}
+                      tickFormatter={(value: string) => {
+                        if (currentLanguage === "ar") {
+                          return value === "KINDERGARTEN"
+                            ? "رياض الأطفال"
+                            : value === "PRIMARY"
+                              ? "الابتدائي"
+                              : value === "PREPARATORY"
+                                ? "الإعدادي"
+                                : value === "SECONDARY"
+                                  ? "الثانوي"
+                                  : value;
+                        }
+                        if (currentLanguage === "fr") {
+                          return value === "KINDERGARTEN"
+                            ? "Jardin"
+                            : value === "PRIMARY"
+                              ? "Primaire"
+                              : value === "PREPARATORY"
+                                ? "Collège"
+                                : value === "SECONDARY"
+                                  ? "Lycée"
+                                  : value;
+                        }
+                        return value;
+                      }}
                     />
-                    <ChartTooltip
-                      cursor={false}
-                      content={<ChartTooltipContent indicator="dashed" />}
+                    <YAxis
+                      tickLine={false}
+                      axisLine={false}
+                      tickMargin={8}
+                      domain={[0, "dataMax + 1"]}
                     />
+                    <Tooltip />
+                    <Legend />
                     <Bar
                       dataKey="AVGGrade"
                       fill="var(--color-desktop)"
-                      radius={5}
+                      name={
+                        currentLanguage === "ar"
+                          ? "متوسط النقاط"
+                          : currentLanguage === "fr"
+                            ? "Note moyenne"
+                            : "Average Grade"
+                      }
+                      radius={[5, 5, 0, 0]}
+                      barSize={30}
                     />
                     <Bar
                       dataKey="AVGAttendance"
                       fill="var(--color-mobile)"
-                      radius={5}
+                      name={
+                        currentLanguage === "ar"
+                          ? "متوسط الحضور"
+                          : currentLanguage === "fr"
+                            ? "Présence moyenne"
+                            : "Average Attendance"
+                      }
+                      radius={[5, 5, 0, 0]}
+                      barSize={30}
                     />
                   </BarChart>
-                </ChartContainer>
-              </CardContent>
-            </Card>
-          </div>
-          <div className="grid gap-5 overflow-x-auto">
-            <Card className="w-[550px] bg-bgPrimary max-[605px]:w-[450px]">
+                </ResponsiveContainer>
+              </ChartContainer>
+            </CardContent>
+          </Card>
+
+          <div className="flex flex-col gap-2 w-full xl:w-2/5">
+            {/* Attendance trend */}
+            <Card className="w-full bg-bgPrimary">
               <CardHeader>
                 <CardTitle>
                   {currentLanguage === "ar"
@@ -254,54 +267,54 @@ function InsightPage() {
               </CardHeader>
               <CardContent>
                 <ChartContainer config={chartConfig2}>
-                  <LineChart
-                    data={transformedAttendanceData}
-                    margin={{ left: 12, right: 12 }}
-                  >
-                    <CartesianGrid vertical={false} />
-                    <XAxis
-                      dataKey="month"
-                      tickLine={false}
-                      axisLine={false}
-                      tickMargin={8}
-                      tickFormatter={value => value.slice(0, 3)}
-                    />
-                    <Tooltip />
-                    <Legend />
-                    <Line
-                      dataKey="KINDERGARTEN"
-                      type="monotone"
-                      stroke="#8884d8"
-                      strokeWidth={4}
-                      dot={false}
-                    />
-                    <Line
-                      dataKey="PRIMARY"
-                      type="monotone"
-                      stroke="#82ca9d"
-                      strokeWidth={4}
-                      dot={false}
-                    />
-                    <Line
-                      dataKey="PREPARATORY"
-                      type="monotone"
-                      stroke="#ffc658"
-                      strokeWidth={4}
-                      dot={false}
-                    />
-                    <Line
-                      dataKey="SECONDARY"
-                      type="monotone"
-                      stroke="#ff7300"
-                      strokeWidth={4}
-                      dot={false}
-                    />
-                  </LineChart>
+                  <ResponsiveContainer width="100%" height={300}>
+                    <LineChart data={transformedAttendanceData}>
+                      <CartesianGrid vertical={false} />
+                      <XAxis
+                        dataKey="month"
+                        tickLine={false}
+                        axisLine={false}
+                        tickMargin={8}
+                        tickFormatter={value => value.slice(0, 3)}
+                      />
+                      <Tooltip />
+                      <Legend />
+                      <Line
+                        dataKey="KINDERGARTEN"
+                        type="monotone"
+                        stroke="#8884d8"
+                        strokeWidth={4}
+                        dot={false}
+                      />
+                      <Line
+                        dataKey="PRIMARY"
+                        type="monotone"
+                        stroke="#82ca9d"
+                        strokeWidth={4}
+                        dot={false}
+                      />
+                      <Line
+                        dataKey="PREPARATORY"
+                        type="monotone"
+                        stroke="#ffc658"
+                        strokeWidth={4}
+                        dot={false}
+                      />
+                      <Line
+                        dataKey="SECONDARY"
+                        type="monotone"
+                        stroke="#ff7300"
+                        strokeWidth={4}
+                        dot={false}
+                      />
+                    </LineChart>
+                  </ResponsiveContainer>
                 </ChartContainer>
               </CardContent>
             </Card>
 
-            <Card className="w-[550px] overflow-x-auto whitespace-nowrap text-nowrap bg-bgPrimary max-[605px]:w-[450px]">
+            {/* Struggling students */}
+            <Card className="w-full overflow-x-auto whitespace-nowrap bg-bgPrimary">
               <CardHeader>
                 <CardTitle>
                   {currentLanguage === "ar"
@@ -327,10 +340,7 @@ function InsightPage() {
                   >
                     <option value="">Select Class</option>
                     {classes?.data?.content?.map(
-                      (classroom: {
-                        roomId: string;
-                        classroomName: string;
-                      }) => (
+                      (classroom: { roomId: string; classroomName: string }) => (
                         <option key={classroom.roomId} value={classroom.roomId}>
                           {classroom.classroomName}
                         </option>
@@ -338,39 +348,51 @@ function InsightPage() {
                     )}
                   </select>
                 </div>
+
                 {classroomId ? (
                   isStudentsLoading ? (
                     <div className="flex h-[300px] items-center justify-center">
                       <Spinner />
                     </div>
                   ) : (
-                    <BarChart
-                      className="whitespace-nowrap text-nowrap font-semibold"
-                      width={400}
-                      height={300}
-                      data={chartData3}
-                      layout="vertical"
-                      margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
-                    >
-                      <XAxis type="number" domain={[0, 100]} />
-                      <YAxis dataKey="name" type="category" />
-                      <Tooltip />
-                      <Legend />
-                      <Bar
-                        dataKey="attendance"
-                        fill="#e23670"
-                        name={`${currentLanguage === "ar" ? "الحضور (متوسط)" : currentLanguage === "fr" ? "(AVG) Présences" : "(AVG) Attendances"}`}
-                        barSize={17}
-                        radius={10}
-                      />
-                      <Bar
-                        dataKey="grade"
-                        fill="#2560d4"
-                        name={`${currentLanguage === "ar" ? "النقاط (متوسط)" : currentLanguage === "fr" ? "(AVG) Note" : "(AVG) Grade"}`}
-                        barSize={17}
-                        radius={10}
-                      />
-                    </BarChart>
+                    <ResponsiveContainer width="100%" height={300}>
+                      <BarChart
+                        data={chartData3}
+                        layout="vertical"
+                        margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
+                      >
+                        <XAxis type="number" domain={[0, 100]} />
+                        <YAxis dataKey="name" type="category" />
+                        <Tooltip />
+                        <Legend />
+                        <Bar
+                          dataKey="attendance"
+                          fill="#e23670"
+                          name={
+                            currentLanguage === "ar"
+                              ? "الحضور (متوسط)"
+                              : currentLanguage === "fr"
+                                ? "(AVG) Présences"
+                                : "(AVG) Attendances"
+                          }
+                          barSize={17}
+                          radius={10}
+                        />
+                        <Bar
+                          dataKey="grade"
+                          fill="#2560d4"
+                          name={
+                            currentLanguage === "ar"
+                              ? "النقاط (متوسط)"
+                              : currentLanguage === "fr"
+                                ? "(AVG) Note"
+                                : "(AVG) Grade"
+                          }
+                          barSize={17}
+                          radius={10}
+                        />
+                      </BarChart>
+                    </ResponsiveContainer>
                   )
                 ) : (
                   <div className="flex h-[300px] items-center justify-center text-center text-gray-500">
@@ -385,7 +407,7 @@ function InsightPage() {
             </Card>
           </div>
         </div>
-      </div>
+      </Container>
     </>
   );
 }

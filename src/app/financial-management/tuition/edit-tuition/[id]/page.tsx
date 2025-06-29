@@ -33,9 +33,9 @@ const EditTuition = () => {
             await updateFeesItem({ id, body: { ...formData, itemType: "TUITION" } }).unwrap();
             toast.success("Tuition updated successfully!");
             router.push("/financial-management/tuition");
-        } catch (error: any) {
-            toast.error("Error updating tuition: " + (error?.data?.message || ""));
-        }
+        } catch (err) {
+      toast.error((err as { data: { message: string } }).data?.message);
+    }
     };
 
     if (levelsLoading || feesLoading) {

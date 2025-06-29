@@ -37,7 +37,7 @@ const Infrastructure = () => {
 
   const infrastructureItems = [
     {
-      href: "/bus",
+      href: "/infrastructure/bus",
       icon: <FaBus size={30} />,
       title:
         currentLanguage === "en"
@@ -57,7 +57,7 @@ const Infrastructure = () => {
               : "Number Of Bus, Add New Bus And Edit a Bus", // Default to English
     },
     {
-      href: "/classes",
+      href: "/infrastructure/classes",
       icon: <FaChalkboardTeacher size={30} />,
       title:
         currentLanguage === "en"
@@ -95,26 +95,6 @@ const Infrastructure = () => {
             : currentLanguage === "fr"
               ? "Nombre de livres, ajouter un nouveau livre et modifier un livre"
               : "Number of book, add new book and edit a book", // Default to English
-    },
-    {
-      href: "/camera",
-      icon: <FaVideo size={30} />,
-      title:
-        currentLanguage === "en"
-          ? "Cameras"
-          : currentLanguage === "ar"
-            ? "الكاميرات"
-            : currentLanguage === "fr"
-              ? "Caméras"
-              : "Cameras", // Default to English
-      description:
-        currentLanguage === "en"
-          ? "Security cameras"
-          : currentLanguage === "ar"
-            ? "كاميرات المراقبة"
-            : currentLanguage === "fr"
-              ? "Caméras de sécurité"
-              : "Security cameras", // Default to English
     },
     {
       href: "/infrastructure/store/digital-resource",

@@ -30,9 +30,9 @@ const AddTuition = () => {
             await createFeesItem({ ...formData, itemType: "TUITION" }).unwrap();
             toast.success("Tuition added successfully!");
             router.push("/financial-management/tuition");
-        } catch (error: any) {
-            toast.error("Error adding tuition: " + (error?.data?.message || ""));
-        }
+        } catch (err) {
+      toast.error((err as { data: { message: string } }).data?.message);
+    }
     };
 
     if (levelsLoading) {

@@ -76,7 +76,7 @@ const EditLab: React.FC<ViewEmployeeProps> = ({ params }) => {
       await createDriver({ formData: data, id: params.labId }).unwrap();
       toast.success("Driver Updated successfully");
     } catch (err) {
-      toast.error("Failed to Update Driver");
+      toast.error((err as { data: { message: string } }).data?.message);
     }
   };
   const { language: currentLanguage, loading } = useSelector(

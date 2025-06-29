@@ -51,7 +51,6 @@ const PostManagment = () => {
   const [search, setSearch] = useState("");
   type Post = Record<string, any>;
   const { data, error, isLoading, refetch } = useGetAllPostsQuery(null);
-  console.log("🚀 ~ PostManagment ~ data:", data);
   const [filteredCount, setFilteredCount] = useState(0);
   const [filteredData, setFilteredData] = useState<Post[]>([]);
 
@@ -75,8 +74,8 @@ const PostManagment = () => {
       toast.success("Delete post Success");
       void refetch();
     } catch (err) {
-      toast.error("Can not Delete post");
-    }
+                  toast.error((err as { data: { message: string } }).data?.message);
+                }
   };
 
   const { language: currentLanguage, loading } = useSelector(

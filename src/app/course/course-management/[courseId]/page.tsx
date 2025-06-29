@@ -76,13 +76,7 @@ const EditCourse = ({ params }: EditCourseProps) => {
             : "Course Edited successfully",
       );
     } catch (err) {
-      toast.error(
-        currentLanguage === "ar"
-          ? "فشل في تعديل الدورة"
-          : currentLanguage === "fr"
-            ? "Échec de la modification du cours"
-            : "Failed to edit course",
-      );
+      toast.error((err as { data: { message: string } }).data?.message);
     }
   };
 

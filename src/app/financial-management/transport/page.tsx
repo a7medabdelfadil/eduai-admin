@@ -62,8 +62,8 @@ const Transport = () => {
       await deleteBusCost(selectedId).unwrap();
       toast.success(translate("Deleted successfully", "تم الحذف بنجاح", "Supprimé avec succès"));
       refetch();
-    } catch (err: any) {
-      toast.error(err?.data?.message || translate("Delete failed", "فشل الحذف", "Échec de la suppression"));
+    } catch (err) {
+      toast.error((err as { data: { message: string } }).data?.message);
     } finally {
       setSelectedId(null);
     }
@@ -114,7 +114,7 @@ const Transport = () => {
             </div>
             <Link
               href="/financial-management/transport/add-transport"
-              className="mx-3 w-fit self-end whitespace-nowrap rounded-xl bg-primary px-4 py-2 text-[18px] font-semibold text-white hover:bg-hover hover:shadow-xl"
+              className="mx-3 w-fit self-end whitespace-nowrap rounded-xl bg-primary px-4 py-2 text-[18px] font-semibold text-white transition-all duration-300 hover:bg-hover hover:shadow-xl"
             >
               {translate("Add Transport", "إضافة نقل", "Ajouter un transport")}
             </Link>

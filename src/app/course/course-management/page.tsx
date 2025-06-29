@@ -257,14 +257,7 @@ const CourseManagement = () => {
                           : "Deleted successfully",
                     );
                   } catch (err) {
-                    toast(
-                      currentLanguage === "ar"
-                        ? "فشل في الحذف"
-                        : currentLanguage === "fr"
-                          ? "Échec de la suppression"
-                          : "Failed to delete",
-                      { type: "error" },
-                    );
+                    toast.error((err as { data: { message: string } }).data?.message);
                   }
                 }
               }}

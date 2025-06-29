@@ -39,8 +39,8 @@ const EditUniform = () => {
       await updateFeesItem({ id, body: { ...formData, itemType: "UNIFORM" } }).unwrap();
       toast.success("Uniform updated successfully!");
       router.push("/financial-management/uniform");
-    } catch (error: any) {
-      toast.error("Error updating uniform: " + (error?.data?.message || ""));
+    } catch (err) {
+      toast.error((err as { data: { message: string } }).data?.message);
     }
   };
 

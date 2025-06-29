@@ -55,8 +55,8 @@ const UpdateSemester = ({ params }: ParamsType) => {
       await createSemester({ formData: data, id: params.semesterId }).unwrap();
       toast.success("Semester updated successfully");
     } catch (err) {
-      toast.error("Failed to update Semester");
-    }
+                  toast.error((err as { data: { message: string } }).data?.message);
+                }
   };
   const { language: currentLanguage, loading } = useSelector(
     (state: RootState) => state.language,

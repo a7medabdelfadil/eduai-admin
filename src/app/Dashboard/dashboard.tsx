@@ -81,7 +81,6 @@ const Dashboard: React.FC = () => {
     end: end,
   });
   const { data: studentPercentage } = useGetStudentPercentageQuery(null);
-  console.log("👾 ~ studentPercentage:", studentPercentage?.data);
   const { data: teacherAttendance } = useGetTeacherAttendenceQuery(null);
   const { data: employeeAttendance } = useGetEmployeeAttendenceQuery(null);
   const { data: workersAttendance } = useGetWorkerAttendenceQuery(null);
@@ -206,9 +205,8 @@ const Dashboard: React.FC = () => {
       const result = await createEvent(formDataToSend).unwrap();
       toast.success("Event created success");
       handleCloseModal();
-    } catch (error: any) {
-      const errMsg = error?.data?.message ?? "Failed to create event";
-      toast.error(errMsg);
+    } catch (err) {
+      toast.error((err as { data: { message: string } }).data?.message);
     }
 
   };
@@ -220,7 +218,7 @@ const Dashboard: React.FC = () => {
       toast.success("Delete note Success");
       void refetch();
     } catch (err) {
-      toast.error("Can not Delete note");
+      toast.error((err as { data: { message: string } }).data?.message);
     }
   };
 

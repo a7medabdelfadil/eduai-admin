@@ -72,8 +72,8 @@ const EditPost = ({ params }: EditPostProps) => {
       toast.success("Delete Post Image Success");
       void refetch();
     } catch (err) {
-      toast.error("Can not Delete Post Image");
-    }
+                  toast.error((err as { data: { message: string } }).data?.message);
+                }
   };
   const {
     register,
@@ -106,9 +106,9 @@ const EditPost = ({ params }: EditPostProps) => {
     try {
       await updatePost({ formData: data, id: params.postId }).unwrap();
       toast.success("Post data edited successfully");
-    } catch (err: any) {
-      toast.error(`${err.data.message}`);
-    }
+    } catch (err) {
+                  toast.error((err as { data: { message: string } }).data?.message);
+                }
   };
 
   const onSubmitFile: SubmitHandler<FileFormData> = async data => {
@@ -117,9 +117,9 @@ const EditPost = ({ params }: EditPostProps) => {
     try {
       await updatePostFiles({ formData, id: params.postId }).unwrap();
       toast.success("Post file edited successfully");
-    } catch (err: any) {
-      toast.error(`${err.data.message}`);
-    }
+    } catch (err) {
+                  toast.error((err as { data: { message: string } }).data?.message);
+                }
   };
 
   if (isLoading)

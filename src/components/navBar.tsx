@@ -47,7 +47,6 @@ const NavBar = () => {
     error: userError,
     isLoading: userLoading,
   } = useGetAllCurrentUserQuery(null);
-  console.log(userData);
 
   const { theme, setTheme } = useTheme();
   const [isClient, setIsClient] = useState(false);
@@ -169,7 +168,6 @@ const NavBar = () => {
   const booleanValue = useSelector((state: RootState) => state.boolean.value);
 
   const handleLanguageChange = (language: any) => {
-    console.log(language);
     dispatch2(setLanguage(language));
   };
 
@@ -184,7 +182,7 @@ const NavBar = () => {
 
   if (loading) {
     return (
-      <div className="fixed inset-0 z-50 flex items-center justify-center bg-white">
+      <div className="fixed inset-0 z-50 flex items-center justify-center bg-bgPrimary">
         <Spinner />
       </div>
     );
@@ -491,7 +489,7 @@ const NavBar = () => {
             dir={currentLanguage === "ar" ? "rtl" : "ltr"}
             id="application-sidebar"
             className={cn(
-              "fixed inset-y-0 start-0 z-[60] border-e border-borderPrimary bg-bgPrimary",
+              "fixed inset-y-0 start-0 z-[60] border-e border-borderPrimary overflow-x-hidden bg-bgPrimary",
               "transition-all duration-300",
               "lg:bottom-0 lg:end-auto lg:block",
               small ? "w-24" : "w-64 overflow-y-auto",
@@ -582,66 +580,7 @@ const NavBar = () => {
                   )}
                 </div>
 
-                {userData?.data?.employeeType === "DRIVER" ? (
-                  <>
-                    <li>
-                      <Link
-                        onClick={() => setIsOpen(false)}
-                        className={`flex ${small ? "w-[40px]" : ""} text-md group mt-4 items-center gap-x-3.5 rounded-lg px-2.5 py-2 font-bold text-secondary hover:bg-bgSecondary hover:text-primary`}
-                        href="/attendances"
-                      >
-                        <FaClock className="text-xl" />
-                        {!small && (
-                          <p>
-                            {currentLanguage === "ar"
-                              ? "الحضور"
-                              : currentLanguage === "fr"
-                                ? "Présence"
-                                : "Attendance"}
-                          </p>
-                        )}
-                      </Link>
-                    </li>
-                    <li>
-                      <Link
-                        onClick={() => setIsOpen(false)}
-                        className={`flex ${small ? "w-[40px]" : ""} text-md group mt-4 items-center gap-x-3.5 rounded-lg px-2.5 py-2 font-bold text-secondary hover:bg-bgSecondary hover:text-primary`}
-                        href="/driver/salary"
-                      >
-                        <FaMoneyBillWave className="text-xl" />
-                        {!small && (
-                          <p>
-                            {currentLanguage === "ar"
-                              ? "الراتب"
-                              : currentLanguage === "fr"
-                                ? "Salaire"
-                                : "Salary"}
-                          </p>
-                        )}
-                      </Link>
-                    </li>
-                    <li>
-                      <Link
-                        onClick={() => setIsOpen(false)}
-                        className={`flex ${small ? "w-[40px]" : ""} text-md group mt-4 items-center gap-x-3.5 rounded-lg px-2.5 py-2 font-bold text-secondary hover:bg-bgSecondary hover:text-primary`}
-                        href="/driver/gps"
-                      >
-                        <FaMapMarkedAlt className="text-xl" />
-                        {!small && (
-                          <p>
-                            {currentLanguage === "ar"
-                              ? "تتبع GPS"
-                              : currentLanguage === "fr"
-                                ? "Suivi GPS"
-                                : "GPS Tracking"}
-                          </p>
-                        )}
-                      </Link>
-                    </li>
-                  </>
-                ) : (
-                  <>
-                    {navigationItems.map(item => (
+                {navigationItems.map(item => (
                       <li
                         key={item.id}
                         className={item.isDropdown ? "group relative" : ""}
@@ -698,8 +637,6 @@ const NavBar = () => {
                         )}
                       </li>
                     ))}
-                  </>
-                )}
               </ul>
             </nav>
           </div>

@@ -102,7 +102,7 @@ const News = () => {
       reset();
       toast.success("Comment Added successfully");
     } catch (err) {
-      toast.error("Failed to create Comment");
+      toast.error((err as { data: { message: string } }).data?.message);
     }
   };
 
@@ -112,7 +112,7 @@ const News = () => {
       toast.success("Delete post Success");
       void refetch();
     } catch (err) {
-      toast.error("Can not Delete post");
+      toast.error((err as { data: { message: string } }).data?.message);
     }
   };
   const PutLike = async (id: string) => {
@@ -122,7 +122,9 @@ const News = () => {
         like: "true",
       }).unwrap();
       void refetch();
-    } catch (err) {}
+    } catch (err) {
+      toast.error((err as { data: { message: string } }).data?.message);
+    }
   };
   const DeleteLike = async (id: string) => {
     try {
@@ -131,7 +133,9 @@ const News = () => {
         like: "false",
       }).unwrap();
       void refetch();
-    } catch (err) {}
+    } catch (err) {
+      toast.error((err as { data: { message: string } }).data?.message);
+    }
   };
 
   const formatTransactionDate = (dateString: string | number | Date) => {

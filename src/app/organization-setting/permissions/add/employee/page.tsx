@@ -65,8 +65,8 @@ const Permissions = () => {
           formData: { permissions: selectedPermissions },
         });
         toast.success("Permission Submitted successfully!");
-      } catch {
-        toast.error("Error to submit Permission");
+      } catch (err) {
+        toast.error((err as { data: { message: string } }).data?.message);
       }
     }
   };
@@ -135,15 +135,14 @@ const Permissions = () => {
       <BreadCrumbs breadcrumbs={breadcrumbs} />
 
       <div
-        className={`${
-          currentLanguage === "ar"
+        className={`${currentLanguage === "ar"
             ? booleanValue
               ? "lg:mr-[100px]"
               : "lg:mr-[270px]"
             : booleanValue
               ? "lg:ml-[100px]"
               : "lg:ml-[270px]"
-        } mx-3 mt-[70px]`}
+          } mx-3 mt-[70px]`}
       >
         <div className="rounded-xl bg-bgPrimary pb-5">
           <div className="flex justify-between rounded-t-xl bg-thead px-10 py-4 text-[18px] font-semibold">

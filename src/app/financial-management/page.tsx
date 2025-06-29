@@ -37,7 +37,7 @@ const FinancialManagement = () => {
 
   const financials = [
     {
-      href: "/fees-management",
+      href: "/financial-management/fees-management",
       icon: <FaDollarSign size={30} />,
       title:
         currentLanguage === "en"
@@ -57,7 +57,7 @@ const FinancialManagement = () => {
               : "All invoices ",
     },
     {
-      href: "/fees-management/scholarship",
+      href: "/financial-management/fees-management/scholarship",
       icon: <FaSchool size={30} />,
       title:
         currentLanguage === "en"

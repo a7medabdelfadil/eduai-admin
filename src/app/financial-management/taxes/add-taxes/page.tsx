@@ -162,14 +162,7 @@ const AddTaxes = () => {
             : "Tax record created successfully",
       );
     } catch (err) {
-      console.error("Error submitting form:", err);
-      toast.error(
-        currentLanguage === "ar"
-          ? "فشل في إنشاء سجل الضريبة"
-          : currentLanguage === "fr"
-            ? "Échec de la création de l'enregistrement de la taxe"
-            : "Failed to create tax record",
-      );
+      toast.error((err as { data: { message: string } }).data?.message);
     }
   };
 

@@ -92,14 +92,8 @@ const OTP = () => {
             : "OTP verified successfully!",
       );
       router.replace("/login");
-    } catch (error) {
-      toast.error(
-        currentLanguage === "ar"
-          ? "فشل في التحقق من OTP. يرجى المحاولة مرة أخرى."
-          : currentLanguage === "fr"
-            ? "Échec de la vérification de l'OTP. Veuillez réessayer."
-            : "Failed to verify OTP. Please try again.",
-      );
+    } catch (err) {
+      toast.error((err as { data: { message: string } }).data?.message);
     }
   };
   const [selectAccount] = useSelectAccoutConfirmMutation();

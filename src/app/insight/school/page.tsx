@@ -22,6 +22,7 @@ import {
   ChartTooltipContent,
 } from "@/components/ui/chart";
 import Spinner from "@/components/spinner";
+import Container from "@/components/Container";
 
 const School = () => {
   const chartData = [
@@ -71,7 +72,7 @@ const School = () => {
       nameEn: "School Comparisons",
       nameAr: "مقارنات المدارس",
       nameFr: "Comparaisons des écoles",
-      href: "/insight",
+      href: "/insight/school",
     },
   ];
   const chartData2 = [
@@ -103,54 +104,37 @@ const School = () => {
   return (
     <>
       <BreadCrumbs breadcrumbs={breadcrumbs} />
-      <div
-        className={`${
-          currentLanguage === "ar"
-            ? booleanValue
-              ? "lg:mr-[100px]"
-              : "lg:mr-[270px]"
-            : booleanValue
-              ? "lg:ml-[100px]"
-              : "lg:ml-[270px]"
-        }`}
-      >
-        <div className="grid overflow-x-scroll">
-          <div className="justify-left mb-5 ml-4 mt-10 flex gap-5 overflow-x-auto text-nowrap text-[20px] font-semibold">
-            <Link href="/insight">
-              {currentLanguage === "en"
-                ? "Student Performance"
-                : currentLanguage === "ar"
-                  ? "أداء الطالب"
-                  : currentLanguage === "fr"
-                    ? "Performance de l'étudiant"
-                    : "Student Performance"}
+      <Container>
+       {/* navigation tabs */}
+        <div className="grid overflow-x-auto">
+          <div className="mb-5 ml-4 mt-10 flex flex-wrap gap-5 overflow-x-auto whitespace-nowrap text-[20px] font-semibold">
+            <Link className="hover:text-blue-500 hover:underline" href="/insight" >
+              {currentLanguage === "ar"
+                ? "تقدم الطلاب"
+                : currentLanguage === "fr"
+                  ? "Progression des étudiants"
+                  : "Student Performance"}
             </Link>
-            <Link href="/insight/school" className="text-blue-500 underline">
-              {currentLanguage === "en"
-                ? "School Performance"
-                : currentLanguage === "ar"
-                  ? "أداء المدرسة"
-                  : currentLanguage === "fr"
-                    ? "Performance de l'école"
-                    : "School Performance"}
+            <Link className="text-blue-500 underline" href="/insight/school">
+              {currentLanguage === "ar"
+                ? "تقدم المدرسة"
+                : currentLanguage === "fr"
+                  ? "Progression de l'école"
+                  : "School Performance"}
             </Link>
-            <Link href="/insight/class">
-              {currentLanguage === "en"
-                ? "Class Performance"
-                : currentLanguage === "ar"
-                  ? "أداء الفصل"
-                  : currentLanguage === "fr"
-                    ? "Performance de la classe"
-                    : "Class Performance"}
+            <Link className="hover:text-blue-500 hover:underline" href="/insight/class">
+              {currentLanguage === "ar"
+                ? "تقدم الفصل"
+                : currentLanguage === "fr"
+                  ? "Progression de la classe"
+                  : "Class Performance"}
             </Link>
-            <Link href="/insight/ml-exam">
-              {currentLanguage === "en"
-                ? "ML Exam Performance"
-                : currentLanguage === "ar"
-                  ? "أداء اختبار تعلم الآلة"
-                  : currentLanguage === "fr"
-                    ? "Performance de l'examen ML"
-                    : "ML Exam Performance"}
+            <Link className="hover:text-blue-500 hover:underline" href="/insight/ml-exam">
+              {currentLanguage === "ar"
+                ? "ML التقدم في امتحان تعلم الالة"
+                : currentLanguage === "fr"
+                  ? "Progression à l'examen de ML"
+                  : "ML Exam Performance"}
             </Link>
           </div>
         </div>
@@ -223,7 +207,7 @@ const School = () => {
             </CardContent>
           </Card>
         </div>
-      </div>
+      </Container>
     </>
   );
 };

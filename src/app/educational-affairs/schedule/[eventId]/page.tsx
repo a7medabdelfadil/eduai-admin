@@ -120,7 +120,7 @@ const UpdateEvent = ({ params }: Props) => {
       router.back();
       toast.success("Event updated successfully");
     } catch (err) {
-      toast.error("Failed to update event");
+      toast.error((err as { data: { message: string } }).data?.message);
     }
   };
 

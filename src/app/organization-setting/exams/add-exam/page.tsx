@@ -94,15 +94,8 @@ const AddExam = () => {
         reset(); // Reset form after successful submission
         router.push("/organization-setting/exams"); // Redirect to exams page
       }
-    } catch (error) {
-      toast.error(
-        currentLanguage === "ar"
-          ? "حدث خطأ أثناء إضافة الامتحان"
-          : currentLanguage === "fr"
-            ? "Une erreur s'est produite lors de l'ajout de l'examen"
-            : "An error occurred while adding the exam",
-      );
-      console.error("Error creating exam type:", error);
+    } catch (err) {
+      toast.error((err as { data: { message: string } }).data?.message);
     } finally {
       setIsSubmitting(false);
     }

@@ -73,9 +73,9 @@ const AddPosition = ({ params }: ParamsType) => {
     try {
       await updatePosition({ formData: data, id: params.positionId }).unwrap();
       toast.success("Position updated successfully");
-    } catch {
-      toast.error("Failed to update position");
-    }
+    } catch (err) {
+                  toast.error((err as { data: { message: string } }).data?.message);
+                }
   };
   const { language: currentLanguage, loading } = useSelector(
     (state: RootState) => state.language,

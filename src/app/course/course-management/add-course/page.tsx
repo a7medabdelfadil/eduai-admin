@@ -59,7 +59,7 @@ const AddCourse = () => {
       await createCourse(data).unwrap();
       toast.success("Course created successfully");
     } catch (err) {
-      toast.error("Failed to create Course");
+      toast.error((err as { data: { message: string } }).data?.message);
     }
   };
   const { language: currentLanguage, loading } = useSelector(

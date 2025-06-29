@@ -55,9 +55,9 @@ const AddPosition = () => {
       await createPosition(data).unwrap();
       toast.success("Position created successfully");
       router.push("/organization-setting/position");
-    } catch {
-      toast.error("Failed to create Position");
-    }
+    } catch (err) {
+                  toast.error((err as { data: { message: string } }).data?.message);
+                }
   };
   const { language: currentLanguage, loading } = useSelector(
     (state: RootState) => state.language,

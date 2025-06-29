@@ -81,9 +81,9 @@ const Annual = () => {
             ? "Le congé a été supprimé avec succès"
             : "Annual leave deleted successfully",
       );
-    } catch (error) {
-      toast.error(`${error instanceof Error ? error.message : String(error)}`);
-    }
+    } catch (err) {
+                  toast.error((err as { data: { message: string } }).data?.message);
+                }
   };
 
   const { data, error, isLoading, refetch } = useGetAllAnnualLeavesQuery({});

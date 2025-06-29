@@ -64,7 +64,7 @@ const ArchiveDriver = () => {
       toast.success(`Driver with ID ${id} unLocked successfully`);
       void refetch();
     } catch (err) {
-      toast.error("Failed to unlock the Driver");
+      toast.error((err as { data: { message: string } }).data?.message);
     }
   };
 

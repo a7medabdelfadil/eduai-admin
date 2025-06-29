@@ -126,7 +126,7 @@ const Worker = () => {
       toast.success(`Worker with ID ${id} unLocked successfully`);
       void refetch();
     } catch (err) {
-      toast.error("Failed to unlock the Worker");
+      toast.error((err as { data: { message: string } }).data?.message);
     }
   };
 

@@ -60,8 +60,8 @@ const Lab = () => {
       await deleteLab(id).unwrap();
       toast.success(`Lab with ID ${id} deleted successfully`);
       void refetch();
-    } catch {
-      toast.error("Failed to delete the lab");
+    } catch (err) {
+      toast.error((err as { data: { message: string } }).data?.message);
     }
   };
 

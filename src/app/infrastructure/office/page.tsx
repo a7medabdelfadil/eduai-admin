@@ -64,10 +64,8 @@ const Office = () => {
       await deleteOffice(id).unwrap();
       toast.success(t("Office deleted", "تم حذف المكتب", "Bureau supprimé"));
       void refetch();
-    } catch {
-      toast.error(
-        t("Failed to delete", "فشل الحذف", "Échec de la suppression"),
-      );
+    } catch (err) {
+      toast.error((err as { data: { message: string } }).data?.message);
     }
   };
 

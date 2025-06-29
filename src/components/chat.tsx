@@ -423,10 +423,9 @@ const ChatPage = ({
       } else {
         toast.error("Failed to send message. Please try again.");
       }
-    } catch (error) {
-      console.error("Message sending failed:", error);
-      toast.error("Failed to send message. Please try again.");
-    } finally {
+    } catch (err) {
+                  toast.error((err as { data: { message: string } }).data?.message);
+                } finally {
       setIsSending(false);
     }
   };

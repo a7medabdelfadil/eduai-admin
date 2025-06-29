@@ -60,8 +60,8 @@ const AddNewLibrary = () => {
       }).unwrap();
       toast.success("Room created successfully");
       router.push("/infrastructure/library");
-    } catch (err: any) {
-      toast.error(err?.data?.message || "Failed to create room");
+    } catch (err) {
+      toast.error((err as { data: { message: string } }).data?.message);
     }
   };
 

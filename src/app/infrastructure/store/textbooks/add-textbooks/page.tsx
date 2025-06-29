@@ -59,8 +59,8 @@ const AddDigitalResource = () => {
             }).unwrap();
             toast.success("Resource created successfully");
             router.push("/infrastructure/store/textbooks");
-        } catch (err: any) {
-            toast.error(err?.data?.message || "Failed to create resource");
+        } catch (err) {
+            toast.error((err as { data: { message: string } }).data?.message);
         }
     };
 

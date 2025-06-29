@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { loginUser } from "@/components/cometchatUser"; // Adjust the path
+import { toast } from "react-toastify";
 
 const LoginForm = ({ onClose }: { onClose: () => void }) => {
   const [userId, setUserId] = useState("");
@@ -10,7 +11,9 @@ const LoginForm = ({ onClose }: { onClose: () => void }) => {
       await loginUser(userId);
       console.log("User logged in successfully");
       onClose(); // Close the modal after successful login
-    } catch (error) {}
+    } catch (err) {
+      toast.error((err as { data: { message: string } }).data?.message);
+    }
   };
 
   return (

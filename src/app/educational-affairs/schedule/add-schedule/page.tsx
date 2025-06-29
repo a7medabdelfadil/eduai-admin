@@ -138,8 +138,8 @@ const AddSchedule = () => {
       toast.success("Schedule Created Successfully");
       router.push("/educational-affairs/schedule/");
       reset();
-    } catch (error: any) {
-      toast.error(`${error.data.message}`);
+    } catch (err) {
+      toast.error((err as { data: { message: string } }).data?.message);
     }
   };
 

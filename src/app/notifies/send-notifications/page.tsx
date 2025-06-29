@@ -85,9 +85,9 @@ const SendNotifications = () => {
       setDescription("");
       setRoles([]);
       setIsAllRolesChecked(false);
-    } catch (error) {
-      toast.error("Failed to send notification. Please try again.");
-    }
+    } catch (err) {
+                  toast.error((err as { data: { message: string } }).data?.message);
+                }
   };
 
   const { language: currentLanguage, loading } = useSelector(

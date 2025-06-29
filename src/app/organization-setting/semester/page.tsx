@@ -58,8 +58,8 @@ const Semester = () => {
       toast.success(`Semester with ID ${id} deleted successfully`);
       refetch();
     } catch (err) {
-      toast.error("Failed to delete the Semester");
-    }
+                  toast.error((err as { data: { message: string } }).data?.message);
+                }
   };
 
   const { language: currentLanguage, loading } = useSelector(

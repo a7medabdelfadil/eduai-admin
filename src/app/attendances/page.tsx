@@ -46,7 +46,6 @@ const Attendance = () => {
 
   const { data: employeedata, isLoading: isLoadingE } =
     useGetEmployeeAttendenceQuery(null);
-  console.log("🚀 ~ Attendance ~ employeedata:", employeedata);
   const { data: driverCount, isLoading: isCount } =
     useGetDriversCountQuery(null);
   const { data: driverAttend, isLoading: isAttend } =
@@ -57,7 +56,6 @@ const Attendance = () => {
     useGetWorkerAttendenceQuery(null);
   const { data: employeeCount, isLoading: isECount } =
     useGetAllEmployeesQuery(null);
-  console.log("🚀 ~ Attendance ~ employeeCount:", employeeCount);
   const { data: studentCount, isLoading: isSCount } =
     useGetAllStudentsQuery(null);
   const { data: students, isLoading: isStudents } =
@@ -68,7 +66,7 @@ const Attendance = () => {
 
   const UserManagments = [
     {
-      href: "/student-attendance",
+      href: "/attendances/student-attendance",
       icon: <FaUserGraduate size={30} />,
       title:
         currentLanguage === "en"
@@ -82,7 +80,7 @@ const Attendance = () => {
       number: students?.data,
     },
     {
-      href: "/teacher-attendance",
+      href: "/attendances/teacher-attendance",
       icon: <FaChalkboardTeacher size={30} />,
       title:
         currentLanguage === "en"
@@ -96,7 +94,7 @@ const Attendance = () => {
       number: teacherdata?.data,
     },
     {
-      href: "/employee-attendance",
+      href: "/attendances/employee-attendance",
       icon: <FaBriefcase size={30} />,
       title:
         currentLanguage === "en"
@@ -110,7 +108,7 @@ const Attendance = () => {
       number: employeedata?.data,
     },
     {
-      href: "/worker-attendance",
+      href: "/attendances/worker-attendance",
       icon: <FaHardHat size={30} />,
       title:
         currentLanguage === "en"
@@ -124,7 +122,7 @@ const Attendance = () => {
       number: workerdata?.data,
     },
     {
-      href: "/driver-attendance",
+      href: "/attendances/driver-attendance",
       icon: <FaUserTie size={30} />,
       title:
         currentLanguage === "en"

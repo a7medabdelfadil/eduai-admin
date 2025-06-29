@@ -64,7 +64,7 @@ const ClassSchedule = () => {
       toast.success("Delete post Success");
       void refetch();
     } catch (err) {
-      toast.error("Can not Delete post");
+      toast.error((err as { data: { message: string } }).data?.message);
     }
   };
 

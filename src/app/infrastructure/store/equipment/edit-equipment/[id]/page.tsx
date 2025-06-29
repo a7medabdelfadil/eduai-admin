@@ -49,8 +49,8 @@ const EditDigitalResource = () => {
             }).unwrap();
             toast.success("Resource updated successfully");
             router.push("/infrastructure/store/equipment");
-        } catch (err: any) {
-            toast.error(err?.data?.message || "Failed to update resource");
+        } catch (err) {
+            toast.error((err as { data: { message: string } }).data?.message);
         }
     };
 

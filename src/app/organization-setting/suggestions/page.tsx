@@ -48,8 +48,8 @@ const Suggestion = () => {
       toast.success(`report deleted successfully`);
       void refetch();
     } catch (err) {
-      toast.error("Failed to delete the report");
-    }
+                  toast.error((err as { data: { message: string } }).data?.message);
+                }
   };
 
   const { language: currentLanguage, loading } = useSelector(

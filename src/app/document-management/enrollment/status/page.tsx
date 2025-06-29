@@ -91,14 +91,8 @@ const EnrollmentStatus = () => {
             : "Student account locked successfully.",
       );
       refetch();
-    } catch {
-      toast.error(
-        currentLanguage === "ar"
-          ? "فشل في قفل الحساب."
-          : currentLanguage === "fr"
-            ? "Échec du verrouillage du compte."
-            : "Failed to lock student account.",
-      );
+    } catch (err) {
+      toast.error((err as { data: { message: string } }).data?.message);
     }
   };
 

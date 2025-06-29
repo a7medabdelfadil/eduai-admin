@@ -35,7 +35,6 @@ const Report = () => {
     },
   ];
   const { data, error, isLoading, refetch } = useGetAllReportsQuery("REPORT");
-  console.log("🚀 ~ Report ~ data:", data);
   type Notifi = Record<string, any>;
 
   const [deleteReport] = useDeleteReportsMutation();
@@ -46,8 +45,8 @@ const Report = () => {
       toast.success(`report deleted successfully`);
       void refetch();
     } catch (err) {
-      toast.error("Failed to delete the report");
-    }
+                  toast.error((err as { data: { message: string } }).data?.message);
+                }
   };
 
   const { language: currentLanguage, loading } = useSelector(

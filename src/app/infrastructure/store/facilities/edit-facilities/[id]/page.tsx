@@ -49,8 +49,8 @@ const EditDigitalResource = () => {
             }).unwrap();
             toast.success("Resource updated successfully");
             router.push("/infrastructure/store/facilities");
-        } catch (err: any) {
-            toast.error(err?.data?.message || "Failed to update resource");
+        } catch (err) {
+            toast.error((err as { data: { message: string } }).data?.message);
         }
     };
 
@@ -77,12 +77,12 @@ const EditDigitalResource = () => {
                         nameFr: "Cours et Ressources",
                         href: "/infrastructure",
                     },
-                   {
-      nameEn: "Facilities",
-      nameAr: "مرافق",
-      nameFr: "Installations",
-      href: "/infrastructure/store/facilities",
-    },
+                    {
+                        nameEn: "Facilities",
+                        nameAr: "مرافق",
+                        nameFr: "Installations",
+                        href: "/infrastructure/store/facilities",
+                    },
                     {
                         nameEn: "Edit Facilities",
                         nameAr: "تعديل مرافق",

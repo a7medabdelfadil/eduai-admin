@@ -382,11 +382,8 @@ const Store = () => {
                                     );
                                     setDialogOpen(false);
                                     refetch();
-                                  } catch (err: any) {
-                                    toast.error(
-                                      err?.data?.message ||
-                                      "Failed to delete resource",
-                                    );
+                                  } catch (err) {
+                                    toast.error((err as { data: { message: string } }).data?.message);
                                   }
                                 }}
                                 className="rounded bg-error px-4 py-2 font-medium text-white transition hover:bg-red-700"
@@ -491,8 +488,8 @@ const Store = () => {
                   refetch();
                   setQuantityDialogOpen(false);
                   setQuantity(1);
-                } catch (err: any) {
-                  toast.error(err?.data?.message || "Operation failed");
+                } catch (err) {
+                  toast.error((err as { data: { message: string } }).data?.message);
                 }
               }}
             >

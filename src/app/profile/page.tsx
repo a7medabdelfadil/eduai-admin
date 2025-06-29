@@ -85,8 +85,8 @@ const Profile = () => {
       await UpdateUser(data).unwrap();
       toast.success("User Updated successfully");
     } catch (err) {
-      toast.error("Failed to Update User");
-    }
+                  toast.error((err as { data: { message: string } }).data?.message);
+                }
   };
 
   const onSubmitPicture = async (data: any, event?: BaseSyntheticEvent) => {
@@ -102,9 +102,9 @@ const Profile = () => {
       await updatePicture(formData).unwrap();
       refetch();
       toast.success("Picture updated successfully");
-    } catch (error) {
-      toast.error("Failed to update picture");
-    }
+    } catch (err) {
+                  toast.error((err as { data: { message: string } }).data?.message);
+                }
   };
 
   const { language: currentLanguage, loading } = useSelector(

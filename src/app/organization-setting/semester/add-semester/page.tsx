@@ -52,11 +52,8 @@ const AddSemester = () => {
       toast.success("Semester created successfully");
       router.push("/organization-setting/semester");
     } catch (err) {
-      toast.error(
-        (err as { data?: { message?: string } })?.data?.message ||
-          "An error occurred",
-      );
-    }
+                  toast.error((err as { data: { message: string } }).data?.message);
+                }
   };
   const { language: currentLanguage, loading } = useSelector(
     (state: RootState) => state.language,

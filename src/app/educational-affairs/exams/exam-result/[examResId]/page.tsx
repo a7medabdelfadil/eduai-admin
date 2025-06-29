@@ -76,8 +76,8 @@ const ExamRes = ({ params }: ParamsType) => {
 
       toast.success(`Exam Result with ID ${id} Deleted successfully`);
       void refetch();
-    } catch {
-      toast.error("Failed to Delete the Exam Result");
+    } catch (err) {
+      toast.error((err as { data: { message: string } }).data?.message);
     }
   };
 

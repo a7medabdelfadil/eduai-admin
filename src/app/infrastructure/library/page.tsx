@@ -293,11 +293,8 @@ const Library = () => {
                                     await deleteRoom(room.roomId).unwrap();
                                     toast.success("Room deleted successfully");
                                     refetch();
-                                  } catch (err: any) {
-                                    toast.error(
-                                      err?.data?.message ||
-                                      "Failed to delete room",
-                                    );
+                                  } catch (err) {
+                                    toast.error((err as { data: { message: string } }).data?.message);
                                   }
                                 }}
                                 className="rounded bg-error px-4 py-2 font-medium text-white transition hover:bg-red-700"

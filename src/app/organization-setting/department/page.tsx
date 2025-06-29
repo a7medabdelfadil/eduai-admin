@@ -61,9 +61,9 @@ const Department = () => {
       await deleteDepartment(id).unwrap();
       toast.success(`Department with ID ${id} deleted successfully`);
       refetch();
-    } catch {
-      toast.error("Failed to delete the Department");
-    }
+    } catch (err) {
+                  toast.error((err as { data: { message: string } }).data?.message);
+                }
   };
 
   const filteredData = data?.data.content.filter((d: Department) =>

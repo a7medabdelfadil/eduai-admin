@@ -130,8 +130,8 @@ const ProfessionalDevelopment = () => {
       await deleteProfessional(id).unwrap();
       toast.success(`Professional with ID ${id} Deleted successfully`);
       void refetch();
-    } catch {
-      toast.error("Failed to Delete the Professional");
+    } catch (err) {
+      toast.error((err as { data: { message: string } }).data?.message);
     }
   };
 

@@ -79,8 +79,8 @@ const EditSchool = () => {
         await uploadSchoolLogo(logo).unwrap();
         refetch();
         toast.success("Logo uploaded successfully!"); // Show success toast
-      } catch (error) {
-        toast.error("Error uploading logo!"); // Show error toast
+      } catch (err) {
+        toast.error((err as { data: { message: string } }).data?.message);
       }
     } else {
       toast.error("Please select a logo to upload.");

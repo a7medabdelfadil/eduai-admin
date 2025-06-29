@@ -71,7 +71,6 @@ const Disciplinary = () => {
     isError,
     refetch,
   } = useGetAllDisciplinaryRecordsQuery(null);
-    console.log("🚀 ~ Disciplinary ~ disciplinaryData:", disciplinaryData)
 
   const { language: currentLanguage, loading } = useSelector(
     (state: RootState) => state.language,

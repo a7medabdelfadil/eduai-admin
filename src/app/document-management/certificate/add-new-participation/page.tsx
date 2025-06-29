@@ -84,7 +84,7 @@ const AddNewParticipation = () => {
       toast.success("Certificate created successfully");
       router.push("/document-management/certificate/participation");
     } catch (err) {
-      toast.error("Failed to create Certificate");
+      toast.error((err as { data: { message: string } }).data?.message);
     }
   };
   const { language: currentLanguage, loading } = useSelector(

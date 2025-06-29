@@ -35,7 +35,7 @@ const Grads = () => {
       nameEn: "Grades",
       nameAr: "الدرجات",
       nameFr: "Notes",
-      href: "/educational-affairs/grads",
+      href: "/educational-affairs/grades",
     },
   ];
 

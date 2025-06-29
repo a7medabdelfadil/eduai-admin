@@ -124,9 +124,9 @@ const Position = () => {
       await deletePosition(id).unwrap();
       toast.success(`Position with ID ${id} deleted successfully`);
       refetch();
-    } catch {
-      toast.error("Failed to delete the Position");
-    }
+    } catch (err) {
+                  toast.error((err as { data: { message: string } }).data?.message);
+                }
   };
 
   const formatTransactionDate = (dateString: string | number | Date) => {

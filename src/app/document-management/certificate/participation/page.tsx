@@ -126,8 +126,8 @@ const Participation = () => {
       await deleteParticipation(id).unwrap();
       toast.success(`Participation with ID ${id} Deleted successfully`);
       void refetch();
-    } catch {
-      toast.error("Failed to Delete the Participation");
+    } catch (err) {
+      toast.error((err as { data: { message: string } }).data?.message);
     }
   };
 

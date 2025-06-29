@@ -51,7 +51,7 @@ const AddOffice = () => {
       await createBus(data).unwrap();
       toast.success("Lab created successfully");
     } catch (err) {
-      toast.error("Failed to create Lab");
+      toast.error((err as { data: { message: string } }).data?.message);
     }
   };
 

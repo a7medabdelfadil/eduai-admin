@@ -57,11 +57,8 @@ const MedicalRecordView = () => {
       toast.success(translate("Deleted successfully", "تم الحذف بنجاح", "Supprimé avec succès"));
       setConfirmId(null);
       refetch();
-    } catch (err: any) {
-      toast.error(
-        err?.data?.message ||
-        translate("Deletion failed", "فشل الحذف", "Échec de la suppression")
-      );
+    } catch (err) {
+      toast.error((err as { data: { message: string } }).data?.message);
     }
   };
 

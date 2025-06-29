@@ -86,7 +86,7 @@ const AddNewProfessional = () => {
       toast.success("Certificate created successfully");
       router.push("/document-management/certificate/professional-development");
     } catch (err) {
-      toast.error("Failed to create Certificate");
+      toast.error((err as { data: { message: string } }).data?.message);
     }
   };
 

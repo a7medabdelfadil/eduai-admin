@@ -58,7 +58,7 @@ const Certificate = () => {
       toast.success(`Certificate with ID ${id} Deleted successfully`);
       void refetch();
     } catch (err) {
-      toast.error("Failed to Delete the Certificate");
+      toast.error((err as { data: { message: string } }).data?.message);
     }
   };
 

@@ -125,8 +125,8 @@ const Teacher = () => {
       await deleteTeachers({ id: id, lock: "false" }).unwrap();
       toast.success(`Teacher with ID ${id} unLocked successfully`);
       void refetch();
-    } catch {
-      toast.error("Failed to unlock the Teacher");
+    } catch (err) {
+      toast.error((err as { data: { message: string } }).data?.message);
     }
   };
 

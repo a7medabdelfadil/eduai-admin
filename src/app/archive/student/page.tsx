@@ -151,15 +151,8 @@ const Student = () => {
             : "Student unlocked successfully"
       );
       refetch();
-    } catch (err: any) {
-      toast.error(
-        err?.data?.message ||
-        (currentLanguage === "ar"
-          ? "حدث خطأ أثناء العملية"
-          : currentLanguage === "fr"
-            ? "Une erreur s'est produite"
-            : "Something went wrong")
-      );
+    } catch (err) {
+      toast.error((err as { data: { message: string } }).data?.message);
     }
   };
 

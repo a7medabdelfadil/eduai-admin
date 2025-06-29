@@ -54,8 +54,8 @@ const EditLibrary = () => {
       }).unwrap();
       toast.success("Room updated successfully");
       router.push("/infrastructure/library");
-    } catch (err: any) {
-      toast.error(err?.data?.message || "Failed to update room");
+    } catch (err) {
+      toast.error((err as { data: { message: string } }).data?.message);
     }
   };
 

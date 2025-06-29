@@ -9,6 +9,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { usePathname } from "next/navigation";
 import ThemeProvider from "./providers/themeProvider";
 import { Sora } from "next/font/google";
+import PermissionGuard from "@/components/PermissionGuard";
 
 const sora = Sora({
   subsets: ["latin"],
@@ -50,7 +51,8 @@ const RootLayout: React.FC<RootLayoutProps> = ({ children }) => {
           <ThemeProvider attribute="class" defaultTheme="light" enableSystem>
             {!isLoginPage && <NavBar />}
             <Notification />
-            {children}
+            <PermissionGuard>{children}</PermissionGuard>
+
           </ThemeProvider>
         </Providers>
       </body>

@@ -62,8 +62,8 @@ const AddExam = () => {
     try {
       await createExam(data).unwrap();
       toast.success("Exam created successfully");
-    } catch (error: any) {
-      toast.error(`${error.data.message}`);
+    } catch (err) {
+      toast.error((err as { data: { message: string } }).data?.message);
     }
   };
   const { language: currentLanguage, loading } = useSelector(
