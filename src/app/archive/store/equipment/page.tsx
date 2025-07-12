@@ -33,17 +33,17 @@ const Store = () => {
       nameFr: "Administration",
       href: "/",
     },
-    {
-      nameEn: "Infrastructure",
-      nameAr: "البنية التحتية",
-      nameFr: "Infrastructure",
-      href: "/infrastructure",
+     {
+      nameEn: "Archive",
+      nameAr: "الأرشيف",
+      nameFr: "Archives",
+      href: "/archive",
     },
     {
       nameEn: "Equipment",
       nameAr: "معدات",
       nameFr: "Équipement",
-      href: "/infrastructure/store/equipment",
+      href: "/archive/store/equipment",
     },
   ];
 

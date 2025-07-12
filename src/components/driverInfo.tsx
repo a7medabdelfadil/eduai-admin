@@ -20,7 +20,7 @@ const DriverInfo = ({ data }: { data: any }) => {
                 ? "Informations sur le chauffeur"
                 : "Driver Information"}
           </h1>
-          <Link href={`/edit-driver/${data?.data.id}`}>
+          <Link href={`/user-management/driver/edit-driver/${data?.data.id}`}>
             <svg
               className="h-6 w-6 text-textPrimary"
               fill="none"

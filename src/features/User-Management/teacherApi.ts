@@ -62,7 +62,14 @@ export const teacherApi = createApi({
     getTeacherByIdUpdate: builder.query({
       query: id => `/api/v1/management/teacher/${id}/update`,
     }),
-    //
+    getCoursesByTeacherId: builder.query({
+      query: id => `api/v1/schedule-utils/courses-of-teacher?teacherId=${id}`,
+    }),
+    getClassroomsByCourseAndTeacher: builder.query({
+      query: ({ teacherId, courseId }) =>
+        `/api/v1/schedule-utils/classrooms-of-course-and-teacher?teacherId=${teacherId}&courseId=${courseId}`,
+    }),
+
     updateTeachers: builder.mutation({
       query: ({ formData, id }) => ({
         url: `/api/v1/management/teacher/${id}/update`,
@@ -82,4 +89,6 @@ export const {
   useGetTeacherClassQuery,
   useUpdateTeachersMutation,
   useGetAllUsersChatQuery,
+  useGetCoursesByTeacherIdQuery,
+  useGetClassroomsByCourseAndTeacherQuery
 } = teacherApi;

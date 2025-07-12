@@ -106,7 +106,7 @@ const DriverLocationSender: React.FC = () => {
       <input
         type="text"
         id="busId"
-        className="mb-4 w-full rounded border p-2"
+        className="mb-4 w-full bg-bgPrimary rounded border border-borderPrimary p-2"
         placeholder="Enter Bus ID"
         value={formData.busId}
         onChange={e => setFormData({ ...formData, busId: e.target.value })}
@@ -116,9 +116,8 @@ const DriverLocationSender: React.FC = () => {
         <button
           onClick={connect}
           disabled={connected}
-          className={`rounded px-4 py-2 font-semibold text-white ${
-            connected ? "bg-gray-400" : "bg-green-500 hover:bg-green-600"
-          }`}
+          className={`rounded px-4 py-2 font-semibold text-white ${connected ? "bg-gray-400" : "bg-green-500 hover:bg-green-600"
+            }`}
         >
           Connect
         </button>
@@ -126,9 +125,8 @@ const DriverLocationSender: React.FC = () => {
         <button
           onClick={disconnect}
           disabled={!connected}
-          className={`rounded px-4 py-2 font-semibold text-white ${
-            !connected ? "bg-gray-400" : "bg-red-500 hover:bg-red-600"
-          }`}
+          className={`rounded px-4 py-2 font-semibold text-white ${!connected ? "bg-gray-400" : "bg-red-500 hover:bg-red-600"
+            }`}
         >
           Disconnect
         </button>
@@ -136,13 +134,12 @@ const DriverLocationSender: React.FC = () => {
         <button
           onClick={() => setSending(!sending)}
           disabled={!connected}
-          className={`rounded px-4 py-2 font-semibold text-white ${
-            !connected
+          className={`rounded px-4 py-2 font-semibold text-white ${!connected
               ? "bg-gray-400"
               : sending
                 ? "bg-yellow-500 hover:bg-yellow-600"
                 : "bg-blue-500 hover:bg-blue-600"
-          }`}
+            }`}
         >
           {sending ? "Stop Sending" : "Start Sending"}
         </button>

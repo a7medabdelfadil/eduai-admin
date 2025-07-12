@@ -31,6 +31,7 @@ import {
 } from "react-icons/bi";
 import { FaDownload } from "react-icons/fa";
 import { FiDownload } from "react-icons/fi";
+import Spinner from "@/components/spinner";
 
 const PostManagment = () => {
   const breadcrumbs = [
@@ -47,6 +48,8 @@ const PostManagment = () => {
       href: "/post-management",
     },
   ];
+  const [preview, setPreview] = useState<{ url: string; isVideo: boolean } | null>(null);
+  const [isPreviewLoading, setIsPreviewLoading] = useState(true);
 
   const [search, setSearch] = useState("");
   type Post = Record<string, any>;
@@ -74,8 +77,8 @@ const PostManagment = () => {
       toast.success("Delete post Success");
       void refetch();
     } catch (err) {
-                  toast.error((err as { data: { message: string } }).data?.message);
-                }
+      toast.error((err as { data: { message: string } }).data?.message);
+    }
   };
 
   const { language: currentLanguage, loading } = useSelector(
@@ -144,6 +147,19 @@ const PostManagment = () => {
         : currentLanguage === "fr"
           ? "résultat(s)"
           : "Result(s)",
+    created:
+      currentLanguage === "ar"
+        ? "تاريخ الإنشاء"
+        : currentLanguage === "fr"
+          ? "Date de création"
+          : "Created",
+    updated:
+      currentLanguage === "ar"
+        ? "تاريخ التحديث"
+        : currentLanguage === "fr"
+          ? "Date de mise à jour"
+          : "Updated",
+
   };
   const [visibleCount, setVisibleCount] = useState(20);
   const visibleData = filteredData?.slice(0, visibleCount) || [];
@@ -169,16 +185,6 @@ const PostManagment = () => {
           </Link>
           <Link
             className="hover:text-blue-500 hover:underline"
-            href="/post-management/reviews"
-          >
-            {currentLanguage === "ar"
-              ? "التقييمات"
-              : currentLanguage === "fr"
-                ? "Avis"
-                : "Reviews"}
-          </Link>
-          <Link
-            className="hover:text-blue-500 hover:underline"
             href="/post-management/news"
           >
             {currentLanguage === "ar"
@@ -189,7 +195,7 @@ const PostManagment = () => {
           </Link>
         </div>
         <div className="max-w-screen overflow-x-hidden rounded-xl bg-bgPrimary">
-          <div className="flex flex-col items-center justify-between gap-4 rounded-lg px-4 py-4 md:flex-row">
+          <div className="flex flex-col md:items-center justify-between gap-4 rounded-lg px-4 py-4 md:flex-row">
             {/* Search Input */}
             <div
               dir={currentLanguage === "ar" ? "rtl" : "ltr"}
@@ -228,9 +234,10 @@ const PostManagment = () => {
               <TableHeader>
                 <TableRow>
                   <TableHead>{translate.title}</TableHead>
-                  <TableHead>{translate.id}</TableHead>
                   <TableHead>{translate.content}</TableHead>
                   <TableHead>{translate.attachment}</TableHead>
+                  <TableHead>{translate.created}</TableHead>
+                  <TableHead>{translate.updated}</TableHead>
                   <TableHead>{translate.action}</TableHead>
                 </TableRow>
               </TableHeader>
@@ -238,7 +245,7 @@ const PostManagment = () => {
                 {isLoading ? (
                   [...Array(3)].map((_, i) => (
                     <TableRow key={i}>
-                      {Array.from({ length: 5 }).map((_, j) => (
+                      {Array.from({ length: 6 }).map((_, j) => (
                         <TableCell key={j}>
                           <Skeleton className="h-4 w-24" />
                         </TableCell>
@@ -255,7 +262,6 @@ const PostManagment = () => {
                   visibleData.map((post: Post, index: number) => (
                     <TableRow key={post.id} data-index={index}>
                       <TableCell>{post.title_en}</TableCell>
-                      <TableCell>{post.id}</TableCell>
                       <TableCell>{post.content_en}</TableCell>
 
                       <TableCell>
@@ -267,14 +273,17 @@ const PostManagment = () => {
                                 className="flex items-center gap-2"
                               >
                                 <a
-                                  href={attachment.viewLink}
-                                  target="_blank"
-                                  rel="noopener noreferrer"
-                                  className="text-primary transition hover:text-hover"
+                                  onClick={() => {
+                                    setPreview({ url: attachment.viewLink, isVideo: attachment.isVideo });
+                                    setIsPreviewLoading(true);
+                                  }}
+
+                                  className="cursor-pointer text-primary transition hover:text-hover"
                                   title="View"
                                 >
                                   <BiShowAlt size={20} />
                                 </a>
+
                                 <a
                                   href={attachment.downloadLink}
                                   target="_blank"
@@ -289,7 +298,8 @@ const PostManagment = () => {
                           )}
                         </div>
                       </TableCell>
-
+                      <TableCell>{new Date(post.createdDate).toLocaleString()}</TableCell>
+                      <TableCell>{new Date(post.updatedDate).toLocaleString()}</TableCell>
                       <TableCell className="flex items-center gap-3">
                         <Link
                           href={`/post-management/${post.id}`}
@@ -320,6 +330,41 @@ const PostManagment = () => {
           </div>
         </div>
       </Container>
+      {preview && (
+        <div
+          className="fixed inset-0 z-[1002] flex items-center justify-center bg-black/70"
+          onClick={() => setPreview(null)}
+        >
+          <div
+            className="relative rounded-xl bg-bgPrimary p-4 max-w-[90vw] max-h-[90vh]"
+            onClick={e => e.stopPropagation()}
+          >
+            {isPreviewLoading && (
+              <div className="absolute inset-0 z-50 flex items-center justify-center bg-black/30 rounded-xl">
+                <Spinner />
+              </div>
+            )}
+
+            {preview.isVideo ? (
+              <video
+                src={preview.url}
+                controls
+                className="h-auto w-auto max-h-[90vh] max-w-[90vw] rounded-lg object-contain"
+                onCanPlay={() => setIsPreviewLoading(false)}
+              />
+            ) : (
+              <img
+                src={preview.url}
+                alt="preview"
+                className="h-auto w-auto max-h-[90vh] max-w-[90vw] rounded-lg object-contain"
+                onLoad={() => setIsPreviewLoading(false)}
+              />
+            )}
+          </div>
+        </div>
+      )}
+
+
     </>
   );
 };

@@ -37,7 +37,13 @@ export const postApi = createApi({
     }),
     //
     getAllAllPosts: builder.query({
-      query: () => "/api/v1/post/all?size=1000000&page=0",
+      query: ({ lang }) => ({
+        url: "/api/v1/post/all?size=1000000&page=0",
+        method: "GET",
+        headers: {
+          "Accept-Language": lang || "en",
+        },
+      }),
     }),
     //
     deletePosts: builder.mutation({

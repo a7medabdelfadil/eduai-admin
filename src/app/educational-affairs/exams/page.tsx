@@ -193,7 +193,7 @@ const Exams = () => {
         </div>
 
         <div className="max-w-screen overflow-x-hidden rounded-xl bg-bgPrimary">
-          <div className="flex flex-col items-center justify-between gap-4 rounded-lg px-4 py-4 md:flex-row">
+          <div className="flex flex-col md:items-center justify-between gap-4 rounded-lg px-4 py-4 md:flex-row">
             {/* Search Input */}
             <div
               dir={currentLanguage === "ar" ? "rtl" : "ltr"}
@@ -261,8 +261,8 @@ const Exams = () => {
                     </TableCell>
                   </TableRow>
                 ) : (
-                  visibleData.map((exam: Exam) => (
-                    <TableRow key={exam.id}>
+                  visibleData.map((exam: Exam, index: number) => (
+                    <TableRow key={exam.id} data-index={index}>
                       <TableCell>{exam.examDate}</TableCell>
                       <TableCell>{exam.examBeginning}</TableCell>
                       <TableCell>{exam.examEnding}</TableCell>

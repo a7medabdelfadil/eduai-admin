@@ -48,6 +48,15 @@ export const signupApi = createApi({
     getAllLanguages: builder.query({
       query: () => "/api/v1/public/enumeration/language",
     }),
+    getAllSemester: builder.query({
+      query: () => "/api/v1/public/enumeration/semester-name",
+    }),
+    getAllSecondarySchoolDepartments: builder.query({
+      query: () => "/api/v1/public/enumeration/secondary-school-department",
+    }),
+    getAllSecondarySchoolSubDepartments: builder.query({
+      query: department => `/api/v1/public/enumeration/secondary-school-sub-department?department=${department}`,
+    }),
   }),
 });
 
@@ -62,4 +71,7 @@ export const {
   useGetAllRegistrationsQuery,
   useGetAllLanguagesQuery,
   useGetValidUsernameQuery,
+  useGetAllSemesterQuery,
+  useGetAllSecondarySchoolDepartmentsQuery,
+  useGetAllSecondarySchoolSubDepartmentsQuery,
 } = signupApi;

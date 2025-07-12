@@ -22,6 +22,7 @@ import {
 import { Skeleton } from "@/components/Skeleton";
 import { BiSearchAlt, BiTrash } from "react-icons/bi";
 import SeeMoreButton from "@/components/SeeMoreButton";
+import { FaUnlockAlt } from "react-icons/fa";
 
 const Worker = () => {
   const breadcrumbs = [
@@ -180,17 +181,6 @@ const Worker = () => {
                 </span>
               </div>
             </div>
-
-            <Link
-              href="/add-new-worker"
-              className="mx-3 mb-5 whitespace-nowrap rounded-xl bg-primary px-4 py-2 text-[18px] font-semibold text-white hover:bg-hover hover:shadow-xl"
-            >
-              {currentLanguage === "ar"
-                ? "+ إضافة عامل جديد"
-                : currentLanguage === "fr"
-                  ? "+ Ajouter un nouveau travailleur"
-                  : "+ Add new Worker"}
-            </Link>
           </div>
           <div className="relative overflow-auto bg-bgPrimary shadow-md sm:rounded-lg">
             <Table>
@@ -243,7 +233,7 @@ const Worker = () => {
                       <TableCell>
                         <div className="flex items-center gap-2">
                           <Link
-                            href={`/worker/view-worker/${worker.id}`}
+                            href={`/user-management/worker/view-worker/${worker.id}`}
                             className="text-blue-600 hover:underline"
                           >
                             {translate.view}
@@ -253,7 +243,7 @@ const Worker = () => {
                             className="text-error transition hover:text-red-800"
                             title={translate.unlock}
                           >
-                            <BiTrash size={20} />
+                            <FaUnlockAlt size={20} />
                           </button>
                         </div>
                       </TableCell>

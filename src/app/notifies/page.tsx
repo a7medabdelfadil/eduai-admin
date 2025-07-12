@@ -14,6 +14,8 @@ import { useSelector } from "react-redux";
 import { RootState } from "@/GlobalRedux/store";
 import Pagination from "@/components/pagination";
 import { useNotificationsSocket } from "@/hooks/useGetAllNotifications";
+import { useUnreadNotificationsCount } from "@/hooks/useUnreadNotificationsCount";
+import SeeMoreButton from "@/components/SeeMoreButton";
 
 const Notifies = () => {
   const userId = useSelector((state: RootState) => state.user.id);
@@ -47,51 +49,80 @@ const Notifies = () => {
     });
     return formatter.format(new Date(dateString));
   };
+  const [visibleCount, setVisibleCount] = useState(10);
 
-  const [currentPage, setCurrentPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(10);
-
-  const { data, error, isLoading, refetch } = useGetAllNotificationsQuery({
-    page: currentPage,
-    size: rowsPerPage,
+  const { data, error, isLoading, refetch, isFetching } = useGetAllNotificationsQuery({
+    page: 0,
+    size: 1000000,
   });
+  useEffect(() => {
+    const handleNewNotification = () => {
+      refetch();
+    };
 
-  // Combine fetched and socket notifications
-  const combinedNotifications = [
-    ...(socketNotifications || []),
-    ...(data?.data.content || []),
-  ];
+    window.addEventListener("new-notification", handleNewNotification);
 
-  const onPageChange = (page: SetStateAction<number>) => {
-    setCurrentPage(page);
-  };
+    return () => {
+      window.removeEventListener("new-notification", handleNewNotification);
+    };
+  }, [refetch]);
 
-  const onElementChange = (ele: SetStateAction<number>) => {
-    setRowsPerPage(ele);
-    setCurrentPage(0);
-  };
+  const allNotifications = [...(socketNotifications || []), ...(data?.data.content || [])];
+
 
   const [readNotifi] = usePutNotifiReadMutation();
   const [deleteNotifi] = useDeleteNotificationMutation();
 
-  const handleRead = async (id: string) => {
+  const { unreadCount, refetch: refetchNotificationsCounts } = useUnreadNotificationsCount();
+  const [readingId, setReadingId] = useState<string | null>(null);
+  const [notifications, setNotifications] = useState<any[]>([]);
+
+  useEffect(() => {
+    if (data) {
+      setNotifications([...(socketNotifications || []), ...(data.data.content || [])]);
+    }
+  }, [data, socketNotifications]);
+
+  const displayedNotifications = notifications.slice(0, visibleCount);
+  const [pendingReadIds, setPendingReadIds] = useState<Set<string>>(new Set());
+  const handleRead = async (id: string, read: boolean) => {
+    if (read || readingId || isFetching) return; // ⛔ امنع التكرار
+    setReadingId(id);
     try {
       await readNotifi(id).unwrap();
+      const updated = notifications.map((n) =>
+        n.id === id ? { ...n, read: true } : n
+      );
+      setNotifications(updated);
       toast.success(`Notification read`);
-      void refetch();
+
+      setPendingReadIds((prev) => new Set(prev).add(id));
     } catch (err) {
-                  toast.error((err as { data: { message: string } }).data?.message);
-                }
+      toast.error((err as { data: { message: string } }).data?.message);
+    } finally {
+      setReadingId(null);
+    }
   };
+
+  useEffect(() => {
+    if (pendingReadIds.size === 0) return;
+    const timeout = setTimeout(() => {
+      refetchNotificationsCounts();
+      setPendingReadIds(new Set()); // reset
+    }, 600); // Delay to batch multiple reads
+
+    return () => clearTimeout(timeout);
+  }, [pendingReadIds]);
 
   const handleDelete = async (id: string) => {
     try {
       await deleteNotifi(id).unwrap();
       toast.success(`Notification Deleted`);
       void refetch();
+      void refetchNotificationsCounts();
     } catch (err) {
-                  toast.error((err as { data: { message: string } }).data?.message);
-                }
+      toast.error((err as { data: { message: string } }).data?.message);
+    }
   };
 
   const { language: currentLanguage, loading } = useSelector(
@@ -110,15 +141,14 @@ const Notifies = () => {
       <BreadCrumbs breadcrumbs={breadcrumbs} />
       <div
         dir={currentLanguage === "ar" ? "rtl" : "ltr"}
-        className={`${
-          currentLanguage === "ar"
-            ? booleanValue
-              ? "lg:mr-[120px]"
-              : "lg:mr-[290px]"
-            : booleanValue
-              ? "lg:ml-[120px]"
-              : "lg:ml-[290px]"
-        } mt-12`}
+        className={`${currentLanguage === "ar"
+          ? booleanValue
+            ? "lg:mr-[120px]"
+            : "lg:mr-[290px]"
+          : booleanValue
+            ? "lg:ml-[120px]"
+            : "lg:ml-[290px]"
+          } mt-12`}
       >
         <div className="flex justify-end">
           <Link
@@ -154,10 +184,12 @@ const Notifies = () => {
             </h1>
           </div>
 
-          {combinedNotifications.map((notifi: any, index: number) => (
+          {displayedNotifications.map((notifi: any, index: number) => (
             <div
+
               key={`${notifi.id}-${index}`}
-              className={`flex gap-2 ${notifi.read ? "bg-bgPrimary" : "bg-thead"} h-full w-[1000px] rounded-lg p-3 shadow-xl max-[1340px]:w-[700px] max-[1040px]:w-[500px] max-[550px]:w-[300px]`}
+              onClick={() => handleRead(notifi.id, notifi.read)}
+              className={`pointer-events-${readingId || isFetching ? "none" : "auto"} flex gap-2 ${notifi.read ? "bg-bgPrimary" : "bg-thead"} cursor-pointer h-full w-[1000px] rounded-lg p-3 shadow-xl max-[1340px]:w-[700px] max-[1040px]:w-[500px] max-[550px]:w-[300px]`}
             >
               <div>
                 {notifi.picture == null ? (
@@ -175,25 +207,24 @@ const Notifies = () => {
                 )}
               </div>
               <div className="flex w-full justify-between">
-                <div className="grid items-center justify-center gap-4">
-                  <h1 className="flex items-center gap-2 font-semibold">
-                    {notifi.title}{" "}
+                <div className="flex flex-col gap-1">
+                  <h1 className="line-clamp-2 break-words break-all font-semibold text-base text-textPrimary">
+                    {notifi.title}
+                  </h1>
+
+                  <div className="flex items-center gap-2">
                     <span className="text-[12px] text-gray-400">
                       {formatTransactionDate(notifi.timestamp)}
-                    </span>{" "}
-                    {notifi.read ? (
-                      ""
-                    ) : (
+                    </span>
+                    {!notifi.read && (
                       <span className="relative flex h-3 w-3">
                         <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-sky-400 opacity-75"></span>
                         <span className="relative inline-flex h-3 w-3 rounded-full bg-sky-500"></span>
                       </span>
-                    )}{" "}
-                  </h1>
-                  <div
-                    dangerouslySetInnerHTML={{ __html: notifi.description }}
-                  />
+                    )}
+                  </div>
                 </div>
+
                 <div className="flex items-start gap-2">
                   {notifi.read ? (
                     <button className="text-[20px] text-gray-600">
@@ -213,7 +244,6 @@ const Notifies = () => {
                     </button>
                   ) : (
                     <button
-                      onClick={() => handleRead(notifi.id)}
                       className="text-[20px] text-gray-600"
                     >
                       <svg
@@ -255,15 +285,19 @@ const Notifies = () => {
               </div>
             </div>
           ))}
-          <div className="relative overflow-auto">
-            <Pagination
-              totalPages={data?.data.totalPagesCount}
-              elementsPerPage={rowsPerPage}
-              onChangeElementsPerPage={onElementChange}
-              currentPage={currentPage}
-              onChangePage={onPageChange}
+          {visibleCount < allNotifications.length && (
+            <SeeMoreButton
+              onClick={() => setVisibleCount(prev => prev + 10)}
+              label={
+                currentLanguage === "ar"
+                  ? "عرض المزيد"
+                  : currentLanguage === "fr"
+                    ? "Voir plus"
+                    : "See More"
+              }
             />
-          </div>
+          )}
+
         </div>
       </div>
     </>

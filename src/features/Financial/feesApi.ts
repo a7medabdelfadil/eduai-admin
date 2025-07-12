@@ -96,6 +96,9 @@ export const feesApi = createApi({
         body: formData,
       }),
     }),
+    getBudgetChart: builder.query({
+      query: (year: number) => `/api/v1/budget/chart?year=${year}`,
+    }),
   }),
 });
 
@@ -112,4 +115,5 @@ export const {
   useUpdateInvoicesMutation,
   useGetAllCurrencyQuery,
   useGetAllInvoicesItemsQuery,
+  useGetBudgetChartQuery
 } = feesApi;

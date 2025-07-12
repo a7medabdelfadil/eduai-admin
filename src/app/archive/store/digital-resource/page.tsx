@@ -34,16 +34,16 @@ const Store = () => {
       href: "/",
     },
     {
-      nameEn: "Infrastructure",
-      nameAr: "البنية التحتية",
-      nameFr: "Infrastructure",
-      href: "/infrastructure",
+      nameEn: "Archive",
+      nameAr: "الأرشيف",
+      nameFr: "Archives",
+      href: "/archive",
     },
     {
       nameEn: "Digital Resources",
       nameAr: "الموارد الرقمية",
       nameFr: "Ressources numériques",
-      href: "/infrastructure/store/digital-resource",
+      href: "/archive/store/digital-resource",
     },
   ];
 

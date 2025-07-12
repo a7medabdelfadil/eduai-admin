@@ -7,6 +7,8 @@ import { AiOutlineFileText } from "react-icons/ai";
 import BreadCrumbs from "@/components/BreadCrumbs";
 import Spinner from "@/components/spinner";
 import Container from "@/components/Container";
+import { FaBookOpen } from "react-icons/fa";
+import { IoBookOutline } from "react-icons/io5";
 
 const Course = () => {
   const breadcrumbs = [
@@ -23,7 +25,6 @@ const Course = () => {
       href: "/course",
     },
   ];
-  const booleanValue = useSelector((state: RootState) => state.boolean.value);
   const { language: currentLanguage, loading } = useSelector(
     (state: RootState) => state.language,
   );
@@ -35,6 +36,26 @@ const Course = () => {
       title:
         currentLanguage === "en"
           ? "Course Scheduling"
+          : currentLanguage === "ar"
+            ? "جدولة الدورات"
+            : currentLanguage === "fr"
+              ? "Planification des cours"
+              : "Course", // Default to English
+      description:
+        currentLanguage === "en"
+          ? "All Courses"
+          : currentLanguage === "ar"
+            ? "جميع الدورات"
+            : currentLanguage === "fr"
+              ? "Tous les cours"
+              : "All Courses", // Default to English
+    },
+    {
+      href: "/course/course-management",
+      icon: <IoBookOutline size={40} />,
+      title:
+        currentLanguage === "en"
+          ? "Courses Education System"
           : currentLanguage === "ar"
             ? "جدولة الدورات"
             : currentLanguage === "fr"

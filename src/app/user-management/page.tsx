@@ -35,12 +35,12 @@ const UserManagment = () => {
               : "Driver",
       description:
         currentLanguage === "en"
-          ? "Number of Drivers"
+          ? "Manage All School Drivers"
           : currentLanguage === "ar"
-            ? "عدد السائقين"
+            ? "إدارة جميع سائقي المدرسة"
             : currentLanguage === "fr"
-              ? "Nombre de conducteurs"
-              : "Number of Drivers",
+              ? "Gérer tous les chauffeurs de l'école"
+              : "Manage All School Drivers",
     },
     {
       href: "/user-management/employee",
@@ -55,12 +55,12 @@ const UserManagment = () => {
               : "Employee",
       description:
         currentLanguage === "en"
-          ? "Number of Employees"
+          ? "School Staff Management List"
           : currentLanguage === "ar"
-            ? "عدد الموظفين"
+            ? "قائمة إدارة موظفي المدرسة"
             : currentLanguage === "fr"
-              ? "Nombre d'employés"
-              : "Number of Employees",
+              ? "Liste de gestion du personnel scolaire"
+              : "School Staff Management List",
     },
     {
       href: "/user-management/parent",
@@ -76,12 +76,12 @@ const UserManagment = () => {
               : "Parent",
       description:
         currentLanguage === "en"
-          ? "Number of Parents"
+          ? "Registered School Parents List"
           : currentLanguage === "ar"
-            ? "عدد أولياء الأمور"
+            ? "قائمة أولياء أمور المدرسة المسجلين"
             : currentLanguage === "fr"
-              ? "Nombre de parents"
-              : "Number of Parents",
+              ? "Liste des parents d'élèves enregistrés"
+              : "Registered School Parents List",
     },
     {
       href: "/user-management/student",
@@ -96,12 +96,12 @@ const UserManagment = () => {
               : "Student",
       description:
         currentLanguage === "en"
-          ? "Number of Students"
+          ? "All Enrolled School Students"
           : currentLanguage === "ar"
-            ? "عدد الطلاب"
+            ? "جميع الطلاب المسجلين في المدرسة"
             : currentLanguage === "fr"
-              ? "Nombre d'étudiants"
-              : "Number of Students",
+              ? "Tous les élèves inscrits à l'école"
+              : "All Enrolled School Students",
     },
     {
       href: "/user-management/teacher",
@@ -116,12 +116,12 @@ const UserManagment = () => {
               : "Teacher",
       description:
         currentLanguage === "en"
-          ? "All Teachers"
+          ? "Teacher List and Details"
           : currentLanguage === "ar"
-            ? "جميع المعلمين"
+            ? "قائمة المعلمين والتفاصيل"
             : currentLanguage === "fr"
-              ? "Tous les enseignants"
-              : "All Teachers",
+              ? "Liste des enseignants et détails"
+              : "Teacher List and Details",
     },
     {
       href: "/user-management/worker",
@@ -136,12 +136,12 @@ const UserManagment = () => {
               : "Worker",
       description:
         currentLanguage === "en"
-          ? "All Workers"
+          ? "Workers and Maintenance Staff"
           : currentLanguage === "ar"
-            ? "جميع العمال"
+            ? "العمال وموظفو الصيانة"
             : currentLanguage === "fr"
-              ? "Tous les travailleurs"
-              : "All Workers",
+              ? "Ouvriers et personnel de maintenance"
+              : "Workers and Maintenance Staff",
     },
   ];
 
@@ -174,12 +174,12 @@ const UserManagment = () => {
       <div
         dir={currentLanguage === "ar" ? "rtl" : "ltr"}
         className={`${currentLanguage === "ar"
-            ? booleanValue
-              ? "lg:mr-[40px]"
-              : "lg:mr-[290px]"
-            : booleanValue
-              ? "lg:ml-[40px]"
-              : "lg:ml-[290px]"
+          ? booleanValue
+            ? "lg:mr-[40px]"
+            : "lg:mr-[290px]"
+          : booleanValue
+            ? "lg:ml-[40px]"
+            : "lg:ml-[290px]"
           } mt-12 grid justify-center`}
       >
         <div className="grid grid-cols-2 gap-5 max-[577px]:grid-cols-1 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-4">

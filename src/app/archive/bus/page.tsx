@@ -251,7 +251,7 @@ const Bus = () => {
                       </TableCell>
                       <TableCell className="flex items-center gap-3">
                         <Link
-                          href={`/edit-bus/${bus.busId}`}
+                          href={`/infrastructure/bus/edit-bus/${bus.busId}`}
                           className="text-primary transition hover:text-hover"
                           title={translate.edit}
                         >

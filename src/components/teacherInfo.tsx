@@ -20,7 +20,7 @@ const TeacherInfo = ({ data }: { data: any }) => {
                 ? "Informations sur l'enseignant"
                 : "Teacher Information"}
           </h1>
-          <Link href={`/edit-teacher/${data?.data?.id}`}>
+          <Link href={`/user-management/teacher/edit-teacher/${data?.data?.id}`}>
             <svg
               className="h-6 w-6 text-textPrimary"
               fill="none"

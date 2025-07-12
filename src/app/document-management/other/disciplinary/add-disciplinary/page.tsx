@@ -6,11 +6,15 @@ import {
   useGetActionsTakenQuery,
   useGetViolationTypesQuery,
 } from "@/features/Document-Management/disciplinaryApi";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { useSelector } from "react-redux";
 import { RootState } from "@/GlobalRedux/store";
 import { useRouter } from "next/navigation";
+import { useGetAllStudentsQuery } from "@/features/User-Management/studentApi";
+import { useGetAllTeachersQuery } from "@/features/User-Management/teacherApi";
+import { useGetAllEmployeesQuery } from "@/features/User-Management/employeeApi";
+import Spinner from "@/components/spinner";
 
 const AddDisciplinaryRecordForm = () => {
   const { language: currentLanguage } = useSelector(
@@ -44,6 +48,25 @@ const AddDisciplinaryRecordForm = () => {
       href: "/document-management/other/disciplinary/add-disciplinary",
     },
   ];
+
+  const { data: studentsData, isLoading: isStudentLoading } = useGetAllStudentsQuery({
+    page: 0,
+    size: 1000000,
+    archived: false,
+    graduated: false,
+  });
+
+  const { data: teachersData, isLoading: isTeacherLoading } = useGetAllTeachersQuery({
+    page: 0,
+    size: 1000000,
+    archived: false,
+  });
+
+  const { data: employeesData, isLoading: isEmployeesLoading } = useGetAllEmployeesQuery({
+    page: 0,
+    size: 1000000,
+    archived: false,
+  });
 
   const [formData, setFormData] = useState({
     UserId: "",
@@ -101,6 +124,14 @@ const AddDisciplinaryRecordForm = () => {
     }
   };
 
+
+  if (isStudentLoading || isTeacherLoading || isEmployeesLoading)
+    return (
+      <div className="flex h-screen w-full items-center justify-center overflow-hidden ">
+        <Spinner />
+      </div>
+    );
+
   return (
     <>
       <BreadCrumbs breadcrumbs={breadcrumbs} />
@@ -156,21 +187,53 @@ const AddDisciplinaryRecordForm = () => {
                     ? "ID de l'utilisateur"
                     : "User ID"}
               </label>
-              <input
-                type="number"
+              <select
                 name="UserId"
                 value={formData.UserId}
                 onChange={handleChange}
                 required
                 className="w-full rounded border border-borderPrimary bg-bgPrimary p-2"
-                placeholder={
-                  currentLanguage === "ar"
-                    ? "أدخل معرف المستخدم"
+              >
+                <option value="">
+                  {currentLanguage === "ar"
+                    ? "اختر المستخدم"
                     : currentLanguage === "fr"
-                      ? "Entrez l'ID"
-                      : "Enter User ID"
-                }
-              />
+                      ? "Sélectionner un utilisateur"
+                      : "Select User"}
+                </option>
+
+                {studentsData?.data?.content?.length > 0 && (
+                  <optgroup label={currentLanguage === "ar" ? "الطلاب" : currentLanguage === "fr" ? "Étudiants" : "Students"}>
+                    {studentsData.data.content.map((s: any) => (
+                      <option key={`student-${s.id}`} value={s.id}>
+                        {s.name} (student)
+                      </option>
+                    ))}
+                  </optgroup>
+                )}
+
+                {teachersData?.data?.content?.length > 0 && (
+                  <optgroup label={currentLanguage === "ar" ? "المعلمين" : currentLanguage === "fr" ? "Enseignants" : "Teachers"}>
+                    {teachersData.data.content.map((t: any) => (
+                      <option key={`teacher-${t.id}`} value={t.id}>
+                        {t.name} (teacher)
+                      </option>
+                    ))}
+                  </optgroup>
+                )}
+
+                {employeesData?.data?.content?.length > 0 && (
+                  <optgroup label={currentLanguage === "ar" ? "الموظفين" : currentLanguage === "fr" ? "Employés" : "Employees"}>
+                    {employeesData.data.content.map((e: any) => (
+                      <option key={`employee-${e.id}`} value={e.id}>
+                        {e.name} (employee)
+                      </option>
+                    ))}
+                  </optgroup>
+                )}
+              </select>
+
+
             </div>
 
             <div>
@@ -251,7 +314,6 @@ const AddDisciplinaryRecordForm = () => {
               </select>
             </div>
 
-           
             <div>
               <label className="mb-1 block font-medium">
                 {currentLanguage === "ar"
@@ -260,46 +322,67 @@ const AddDisciplinaryRecordForm = () => {
                     ? "Copie fournie à"
                     : "Copy Provided To"}
               </label>
-              <input
-                type="text"
+              <select
                 name="providedTo"
                 value={formData.providedTo}
                 onChange={handleChange}
                 className="w-full rounded border border-borderPrimary bg-bgPrimary p-2"
-                placeholder={
-                  currentLanguage === "ar"
-                    ? "أدخل المستلم (اختياري)"
+              >
+                <option value="">
+                  {currentLanguage === "ar"
+                    ? "اختر المستلم (اختياري)"
                     : currentLanguage === "fr"
-                      ? "Entrez le destinataire (facultatif)"
-                      : "Enter recipient (optional)"
-                }
-              />
+                      ? "Sélectionner un destinataire"
+                      : "Select recipient (optional)"}
+                </option>
+
+                {teachersData?.data?.content?.length > 0 && (
+                  <optgroup label={currentLanguage === "ar" ? "المعلمين" : currentLanguage === "fr" ? "Enseignants" : "Teachers"}>
+                    {teachersData.data.content.map((t: any) => (
+                      <option key={`teacher-${t.id}`} value={t.email || t.username}>
+                        {t.name} (teacher)
+                      </option>
+                    ))}
+                  </optgroup>
+                )}
+
+                {employeesData?.data?.content?.length > 0 && (
+                  <optgroup label={currentLanguage === "ar" ? "الموظفين" : currentLanguage === "fr" ? "Employés" : "Employees"}>
+                    {employeesData.data.content.map((e: any) => (
+                      <option key={`employee-${e.id}`} value={e.email || e.username}>
+                        {e.name} (employee)
+                      </option>
+                    ))}
+                  </optgroup>
+                )}
+              </select>
             </div>
+
           </div>
- <div>
-              <label className="mb-1 block font-medium">
-                {currentLanguage === "ar"
-                  ? "تفاصيل الواقعة"
+          <div>
+            <label className="mb-1 block font-medium">
+              {currentLanguage === "ar"
+                ? "تفاصيل الواقعة"
+                : currentLanguage === "fr"
+                  ? "Détails de l'incident"
+                  : "Details of the Incident"}
+            </label>
+            <textarea
+              name="description"
+              value={formData.description}
+              onChange={handleChange}
+              required
+              className="w-full rounded border border-borderPrimary bg-bgPrimary p-2"
+              placeholder={
+                currentLanguage === "ar"
+                  ? "أدخل التفاصيل"
                   : currentLanguage === "fr"
-                    ? "Détails de l'incident"
-                    : "Details of the Incident"}
-              </label>
-              <textarea
-                name="description"
-                value={formData.description}
-                onChange={handleChange}
-                required
-                className="w-full rounded border border-borderPrimary bg-bgPrimary p-2"
-                placeholder={
-                  currentLanguage === "ar"
-                    ? "أدخل التفاصيل"
-                    : currentLanguage === "fr"
-                      ? "Entrez les détails"
-                      : "Enter details"
-                }
-                rows={4}
-              />
-            </div>
+                    ? "Entrez les détails"
+                    : "Enter details"
+              }
+              rows={4}
+            />
+          </div>
 
 
           <div className="flex justify-center">

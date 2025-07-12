@@ -1,9 +1,7 @@
 "use client";
 
 import { RootState } from "@/GlobalRedux/store";
-import Calendar from "@/components/calendar";
 import Modal from "@/components/model";
-import Spinner from "@/components/spinner";
 import {
   useGetAllEmployeesQuery,
   useGetAllStudentsQuery,
@@ -36,6 +34,19 @@ import { HiOutlineArrowNarrowUp } from "react-icons/hi";
 import { Text } from "@/components/Text";
 import { formatDistanceToNow, parseISO, format } from "date-fns";
 import { ar, fr, enUS } from "date-fns/locale";
+import {
+  Dialog,
+  DialogTrigger,
+  DialogContent,
+  DialogHeader,
+  DialogFooter,
+  DialogTitle,
+  DialogDescription,
+  DialogClose,
+} from "@/components/Dialog";
+import { BiEditAlt, BiTrash } from "react-icons/bi";
+import { Skeleton } from "@/components/Skeleton";
+import CalendarEvents from "@/components/CalendarEvents";
 
 // Define the type for notice items
 interface Notice {
@@ -59,6 +70,7 @@ const eventSchema = z.object({
   description_en: z.string().min(1, "English description is required"),
   description_ar: z.string().min(1, "Arabic description is required"),
   description_fr: z.string().min(1, "French description is required"),
+  max_attendees: z.number().min(1, "Max attendees is required"),
   file: z.any().optional(),
 });
 
@@ -80,10 +92,12 @@ const Dashboard: React.FC = () => {
     start: start,
     end: end,
   });
-  const { data: studentPercentage } = useGetStudentPercentageQuery(null);
-  const { data: teacherAttendance } = useGetTeacherAttendenceQuery(null);
-  const { data: employeeAttendance } = useGetEmployeeAttendenceQuery(null);
-  const { data: workersAttendance } = useGetWorkerAttendenceQuery(null);
+
+  const [deleteNote] = useDeleteNoteMutation();
+  const { data: studentPercentage, isLoading: isStudentPercentageLoading } = useGetStudentPercentageQuery(null);
+  const { data: teacherAttendance, isLoading: isTeacherAttendanceLoading } = useGetTeacherAttendenceQuery(null);
+  const { data: employeeAttendance, isLoading: isEmployeeAttendanceLoading } = useGetEmployeeAttendenceQuery(null);
+  const { data: workersAttendance, isLoading: isWorkersAttendanceLoading } = useGetWorkerAttendenceQuery(null);
   const {
     data: students,
     error: err1,
@@ -191,6 +205,7 @@ const Dashboard: React.FC = () => {
         description_en: formData.description_en,
         description_ar: formData.description_ar,
         description_fr: formData.description_fr,
+        max_attendees: formData.max_attendees,
       };
 
       // Append the JSON data as a string to FormData
@@ -223,7 +238,6 @@ const Dashboard: React.FC = () => {
   };
 
   const { theme } = useTheme();
-  const booleanValue = useSelector((state: RootState) => state.boolean.value);
 
   const [options, setOptions] = useState({
     chart: {
@@ -242,6 +256,18 @@ const Dashboard: React.FC = () => {
     xaxis: {
       categories: categories,
     },
+    yaxis: {
+      labels: {
+        formatter: (val: number) => {
+          if (val >= 1_000_000) return Math.round(val / 1_000_000) + "M";
+          if (val >= 1_000) return Math.round(val / 1_000) + "K";
+          return val.toString();
+        }
+
+      },
+    },
+
+
     tooltip: {
       theme: theme,
       x: {
@@ -250,23 +276,6 @@ const Dashboard: React.FC = () => {
     },
   });
   type Meeting = Record<string, any>;
-
-  if (
-    isStudents ||
-    isEmployee ||
-    isWorker ||
-    isTeacher ||
-    isEvents ||
-    isMeeting ||
-    isNotices ||
-    isExpenses ||
-    loading
-  )
-    return (
-      <div className="flex h-screen w-full items-center justify-center">
-        <Spinner />
-      </div>
-    );
 
   return (
     <>
@@ -309,14 +318,20 @@ const Dashboard: React.FC = () => {
                     ? "Total des étudiants"
                     : "Total student"}
               </p>
-              <h1 className="text-3xl font-semibold">{students?.data} </h1>
+              {isStudents ? (
+                <Skeleton className="h-8 w-24 rounded-lg" />
+              ) : (
+                <h1 className="text-3xl font-semibold">{students?.data}</h1>
+              )}
               <div className="flex gap-2">
-                <div
-                  className={`flex ${studentPercentage?.data > 0 ? "text-error" : "text-success"} text-success`}
-                >
-                  <HiOutlineArrowNarrowUp className="mt-[2px]" />{" "}
-                  {studentPercentage?.data}%
-                </div>
+                {isStudentPercentageLoading ? (
+                  <Skeleton className="h-4 w-16 rounded-md" />
+                ) : (
+                  <div className={`flex ${studentPercentage?.data > 0 ? "text-success" : "text-error"}`}>
+                    <HiOutlineArrowNarrowUp className="mt-[2px]" /> {studentPercentage?.data}%
+                  </div>
+                )}
+
                 <div>
                   <Text>
                     {currentLanguage === "ar"
@@ -339,9 +354,17 @@ const Dashboard: React.FC = () => {
                     ? "Total des enseignants"
                     : "Total teacher"}
               </p>
-              <h1 className="text-3xl font-semibold">{teachers?.data} </h1>
+              {isTeacher ? (
+                <Skeleton className="h-8 w-24 rounded-lg" />
+              ) : (
+                <h1 className="text-3xl font-semibold">{teachers?.data}</h1>
+              )}
               <div className="flex gap-2">
-                <Text color={"success"}>{teacherAttendance?.data}</Text>
+                {isTeacherAttendanceLoading ? (
+                  <Skeleton className="h-4 w-10 rounded-md" />
+                ) : (
+                  <Text color={"success"}>{teacherAttendance?.data}</Text>
+                )}
                 <Text>
                   {currentLanguage === "ar"
                     ? "الحضور اليوم"
@@ -362,9 +385,17 @@ const Dashboard: React.FC = () => {
                     ? "Total des employés"
                     : "Total employee"}
               </p>
-              <h1 className="text-3xl font-semibold">{employees?.data}</h1>
+              {isEmployee ? (
+                <Skeleton className="h-8 w-24 rounded-lg" />
+              ) : (
+                <h1 className="text-3xl font-semibold">{employees?.data}</h1>
+              )}
               <div className="flex gap-2">
-                <Text color={"success"}>{employeeAttendance?.data}</Text>
+                {isEmployeeAttendanceLoading ? (
+                  <Skeleton className="h-4 w-10 rounded-md" />
+                ) : (
+                  <Text color={"success"}>{employeeAttendance?.data}</Text>
+                )}
                 <Text>
                   {currentLanguage === "ar"
                     ? "الحضور اليوم"
@@ -385,9 +416,17 @@ const Dashboard: React.FC = () => {
                     ? "Total des travailleurs"
                     : "Total Worker"}
               </p>
-              <h1 className="text-3xl font-semibold">{workers?.data} </h1>
+              {isWorker ? (
+                <Skeleton className="h-8 w-24 rounded-lg" />
+              ) : (
+                <h1 className="text-3xl font-semibold">{workers?.data}</h1>
+              )}
               <div className="flex gap-2">
-                <Text color={"success"}>{workersAttendance?.data}</Text>
+                {isWorkersAttendanceLoading ? (
+                  <Skeleton className="h-4 w-10 rounded-md" />
+                ) : (
+                  <Text color={"success"}>{workersAttendance?.data}</Text>
+                )}
                 <Text>
                   {currentLanguage === "ar"
                     ? "الحضور اليوم"
@@ -409,7 +448,11 @@ const Dashboard: React.FC = () => {
                     : "Events"}
               </p>
               <div className="flex items-end gap-2">
-                <h1 className="text-3xl font-semibold">{events?.data}</h1>
+                {isEvents ? (
+                  <Skeleton className="h-8 w-24 rounded-lg" />
+                ) : (
+                  <h1 className="text-3xl font-semibold">{events?.data}</h1>
+                )}
                 <Text className="mb-[1px]">
                   {currentLanguage === "en"
                     ? "in this month"
@@ -434,8 +477,8 @@ const Dashboard: React.FC = () => {
           </div>
         </div>
 
-        <div className="grid w-full grid-cols-1 gap-6 overflow-x-auto pb-4 lg:grid-cols-3">
-          <div className="col-span-1 flex overflow-x-auto rounded-xl lg:col-span-2">
+        <div className="grid w-full grid-cols-1 gap-6 overflow-x-auto pb-4 xl:grid-cols-3">
+          <div className="col-span-1 flex overflow-x-auto rounded-xl xl:col-span-2">
             <div
               id="chart"
               className="w-full overflow-hidden rounded-xl bg-bgPrimary p-4 shadow"
@@ -450,19 +493,24 @@ const Dashboard: React.FC = () => {
                     ? "مالية المدرسة"
                     : "Finance de l'école"}
               </p>
-              <ReactApexChart
-                options={options}
-                series={series}
-                type="area"
-                width="100%"
-                height={options.chart.height}
-              />
+              {isExpenses ? (
+                <Skeleton className="h-[350px] w-full rounded-xl" />
+              ) : (
+                <ReactApexChart
+                  options={options}
+                  series={series}
+                  type="area"
+                  width="100%"
+                  height={options.chart.height}
+                />
+              )}
+
             </div>
           </div>
 
           <div className="col-span-1 flex justify-center">
             <div className="grid w-full overflow-hidden rounded-2xl">
-              <div className="grid max-h-[450px] w-full overflow-hidden rounded-2xl bg-bgPrimary p-4 shadow-xl">
+              <div className="flex flex-col gap-4 max-h-[450px] w-full overflow-hidden rounded-2xl bg-bgPrimary p-4 shadow-xl">
                 <div
                   className="flex w-full justify-start text-start"
                   dir={currentLanguage === "ar" ? "rtl" : "ltr"}
@@ -476,45 +524,54 @@ const Dashboard: React.FC = () => {
                   </h1>
                 </div>
 
-                {mettings?.data.content.length > 0 ? (
-                  mettings?.data.content.map((meeting: Meeting) => (
-                    <div
-                      key={meeting.id}
-                      className="flex items-center justify-between"
-                    >
-                      <div className="mx-3 flex h-[75px] w-[66px] items-center justify-center rounded-xl bg-[#F9DCA4] p-2 text-center">
-                        <h1 className="text-[18px] font-semibold text-warning">
-                          {format(parseISO(meeting.startDate), "d")}
-                        </h1>
-                        <h1 className="text-[18px] font-semibold text-warning">
-                          {format(parseISO(meeting.startDate), "EEE")}
-                        </h1>
-                      </div>
-                      <div className="grid w-[150px] gap-2">
-                        <p className="text-[13px] text-warning">
-                          {format(
-                            parseISO(meeting.startDate),
-                            "dd - MMMM - yyyy",
-                          )}
-                        </p>
-                        <p className="truncate text-[16px] text-gray-400">
-                          {meeting.title}
-                        </p>
-                        <div className="h-2.5 w-full rounded-full bg-gray-200">
-                          <div
-                            className="h-2.5 rounded-full bg-warning"
-                            style={{ width: `22%` }}
-                          ></div>
+                {isMeeting ? (
+                  <Skeleton className="h-[300px] w-full rounded-xl" />
+                ) : mettings?.data.content.length > 0 ? (
+                  [...mettings?.data.content]
+                    .sort((a, b) => new Date(a.startDate).getTime() - new Date(b.startDate).getTime())
+                    .map((meeting: Meeting) => (
+                      <div
+                        key={meeting.id}
+                        className="mb-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3"
+                      >
+                        <div className="flex gap-3 w-full">
+                          {/* التاريخ */}
+                          <div className="flex flex-col items-center justify-center h-[70px] min-w-[60px] rounded-xl bg-[#F9DCA4] px-2">
+                            <span className="text-[18px] font-bold text-warning">
+                              {format(parseISO(meeting.startDate), "d")}
+                            </span>
+                            <span className="text-[13px] font-medium text-warning">
+                              {format(parseISO(meeting.startDate), "EEE")}
+                            </span>
+                          </div>
+
+                          {/* التفاصيل */}
+                          <div className="flex flex-col w-full overflow-hidden">
+                            {/* التاريخ + الوقت */}
+                            <div className="flex justify-between items-center w-full">
+                              <span className="text-base xl:text-[11px] 2xl:text-[14px] text-warning">
+                                {format(parseISO(meeting.startDate), "dd - MMMM - yyyy")}
+                              </span>
+                              <span className="text-base xl:text-[11px] 2xl:text-[14px] text-warning text-end min-w-fit">
+                                {format(parseISO(meeting.startDate), "hh:mm a")} -{" "}
+                                {format(parseISO(meeting.endDate), "hh:mm a")}
+                              </span>
+                            </div>
+
+                            {/* العنوان */}
+                            <p className="mt-1 text-[15px] font-medium text-gray-300 break-all w-full line-clamp-1">
+                              {meeting.title}
+                            </p>
+
+                            {/* البار */}
+                            <div className="mt-1 h-2.5 w-full rounded-full bg-gray-200">
+                              <div className="h-2.5 rounded-full bg-warning" style={{ width: `22%` }} />
+                            </div>
+                          </div>
                         </div>
+
                       </div>
-                      <div className="ml-3 grid w-[200px] gap-8">
-                        <p className="text-[13px] text-warning">
-                          {format(parseISO(meeting.startDate), "hh:mm a")} -{" "}
-                          {format(parseISO(meeting.endDate), "hh:mm a")}
-                        </p>
-                      </div>
-                    </div>
-                  ))
+                    ))
                 ) : (
                   <div className="flex w-full justify-center py-3 text-center text-[18px] font-semibold text-secondary">
                     {currentLanguage === "en"
@@ -524,6 +581,7 @@ const Dashboard: React.FC = () => {
                         : "Aucun événement trouvé"}
                   </div>
                 )}
+
 
                 <div className="flex h-full items-center justify-evenly">
                   <button
@@ -554,12 +612,12 @@ const Dashboard: React.FC = () => {
           </div>
         </div>
 
-        <div className="mb-6 grid w-full grid-cols-1 gap-6 overflow-x-auto lg:grid-cols-2">
-          <div className="grid w-full overflow-x-auto rounded-2xl">
+        <div className="mb-6 grid w-full grid-cols-1 gap-6 xl:grid-cols-2">
+          <div className="grid w-full rounded-2xl">
             <div className="flex w-full flex-col items-center justify-center overflow-x-auto rounded-2xl bg-bgPrimary shadow">
               <div
                 dir={currentLanguage === "ar" ? "rtl" : "ltr"}
-                className="mt-4 flex w-full flex-col items-start px-4"
+                className="flex w-full flex-col items-start p-4"
               >
                 <p className="text-xl font-bold text-textPrimary">
                   {currentLanguage === "ar"
@@ -568,22 +626,15 @@ const Dashboard: React.FC = () => {
                       ? "Calendrier des événements scolaires"
                       : "School Events Calendar"}
                 </p>
-                <p className="text-lg font-semibold text-secondary">
-                  {currentLanguage === "ar"
-                    ? "لديك 250 طالبًا"
-                    : currentLanguage === "fr"
-                      ? "Vous avez 250 étudiants"
-                      : "You have 250 students"}
-                </p>
               </div>
-              <Calendar />
+              <CalendarEvents meetings={mettings?.data?.content || []} />
             </div>
           </div>
           <div
             dir={currentLanguage === "ar" ? "rtl" : "ltr"}
-            className="grid w-full overflow-x-auto rounded-xl"
+            className="grid max-h-[550px] overflow-y-auto w-full rounded-xl"
           >
-            <div className="w-full overflow-x-auto overflow-y-auto rounded-xl bg-bgPrimary p-4">
+            <div className="w-full rounded-xl bg-bgPrimary p-4">
               <div className="flex w-full justify-between">
                 <p className="text-[20px] font-bold">
                   {currentLanguage === "en"
@@ -595,7 +646,7 @@ const Dashboard: React.FC = () => {
                         : "Notice Board"}
                 </p>
                 <Link
-                  href="/add-note"
+                  href="/note/add-note"
                   className="mx-3 mb-5 h-[35px] whitespace-nowrap rounded-xl bg-primary px-2 py-1 text-[18px] font-semibold text-white duration-300 ease-in hover:bg-hover hover:shadow-xl"
                 >
                   {currentLanguage === "en"
@@ -604,16 +655,20 @@ const Dashboard: React.FC = () => {
                       ? "+  أضف تعليق"
                       : currentLanguage === "fr"
                         ? "+ Ajouter une note"
-                        : "+ New Driver"}{" "}
+                        : "+ Add Note"}{" "}
                   {/* Default to English */}
                 </Link>
               </div>
               <div className="w-full">
                 {isNotices ? (
-                  <p className="text-center text-gray-500">Loading...</p>
+                  <Skeleton className="h-[400px] w-full rounded-xl" />
                 ) : noticesState.length === 0 ? (
                   <p className="text-center text-gray-500">
-                    No notices available
+                    {currentLanguage === "ar"
+                      ? "لا توجد إشعارات"
+                      : currentLanguage === "fr"
+                        ? "Aucune note disponible"
+                        : "No notices available"}
                   </p>
                 ) : (
                   noticesState.map((item, index) => (
@@ -621,31 +676,105 @@ const Dashboard: React.FC = () => {
                       {/* Name + Time */}
                       <div className="flex items-center justify-between">
                         <div className="flex items-center gap-2">
-                          <p
-                            className={`text-lg font-semibold ${nameColors[index % nameColors.length]}`}
-                          >
+                          <p className={`text-lg font-semibold break-all whitespace-pre-wrap ${nameColors[index % nameColors.length]}`}>
                             {item.title}
                           </p>
-                          <span className="text-sm text-textSecondary">
+                          <span className="text-sm min-w-[140px] text-textSecondary">
                             {formatDistanceToNow(parseISO(item.createdAt), {
                               addSuffix: true,
                               locale,
                             })}
                           </span>
                         </div>
-                        {/* Date on the right */}
-                        <div
-                          className={`text-right text-sm font-semibold ${nameColors[index % nameColors.length]}`}
-                        >
-                          {format(parseISO(item.createdAt), "dd - MMM - yyyy", {
-                            locale,
-                          })}
+                        <div className="flex items-center gap-1">
+                          <Link href={`/note/edit-note/${item.id}`} className="text-primary hover:opacity-80">
+                            <BiEditAlt size={20} />
+                          </Link>
+
+                          <Dialog>
+                            <DialogTrigger asChild>
+                              <button className="text-error hover:opacity-70">
+                                <BiTrash size={20} />
+                              </button>
+                            </DialogTrigger>
+                            <DialogContent>
+                              <DialogHeader>
+                                <DialogTitle>
+                                  {currentLanguage === "ar"
+                                    ? "هل أنت متأكد؟"
+                                    : currentLanguage === "fr"
+                                      ? "Êtes-vous sûr ?"
+                                      : "Are you sure?"}
+                                </DialogTitle>
+                                <DialogDescription>
+                                  {currentLanguage === "ar"
+                                    ? "سيتم حذف الإشعار نهائيًا."
+                                    : currentLanguage === "fr"
+                                      ? "Cette note sera supprimée définitivement."
+                                      : "This note will be permanently deleted."}
+                                </DialogDescription>
+                              </DialogHeader>
+                              <DialogFooter>
+                                <DialogClose asChild>
+                                  <button className="rounded-md bg-bgSecondary px-4 py-2 text-sm">
+                                    {currentLanguage === "ar"
+                                      ? "إلغاء"
+                                      : currentLanguage === "fr"
+                                        ? "Annuler"
+                                        : "Cancel"}
+                                  </button>
+                                </DialogClose>
+                                <button
+                                  className="rounded-md bg-red-600 px-4 py-2 text-sm text-white"
+                                  onClick={async () => {
+                                    try {
+                                      await deleteNote(item.id).unwrap();
+                                      toast.success(
+                                        currentLanguage === "ar"
+                                          ? "تم حذف الإشعار بنجاح"
+                                          : currentLanguage === "fr"
+                                            ? "Note supprimée avec succès"
+                                            : "Note deleted successfully"
+                                      );
+                                      void refetch();
+                                    } catch (err) {
+                                      toast.error(
+                                        (err as any)?.data?.message
+                                          ? (currentLanguage === "ar"
+                                            ? `حدث خطأ: ${(err as any).data.message}`
+                                            : currentLanguage === "fr"
+                                              ? `Erreur: ${(err as any).data.message}`
+                                              : `Error: ${(err as any).data.message}`)
+                                          : (currentLanguage === "ar"
+                                            ? "حدث خطأ غير متوقع"
+                                            : currentLanguage === "fr"
+                                              ? "Une erreur inattendue s'est produite"
+                                              : "An unexpected error occurred")
+                                      );
+                                    }
+                                  }}
+                                >
+                                  {currentLanguage === "ar"
+                                    ? "تأكيد"
+                                    : currentLanguage === "fr"
+                                      ? "Confirmer"
+                                      : "Confirm"}
+                                </button>
+                              </DialogFooter>
+                            </DialogContent>
+                          </Dialog>
                         </div>
+
                       </div>
 
-                      {/* Description */}
-                      <p className="mt-1 text-gray-500">{item.description}</p>
+                      <div
+                        className="mt-1 break-words whitespace-pre-wrap overflow-hidden max-w-full"
+                        style={{ wordBreak: "break-word" }}
+                        dangerouslySetInnerHTML={{ __html: item.description }}
+                      />
+
                     </div>
+
                   ))
                 )}
               </div>
@@ -776,6 +905,27 @@ const Dashboard: React.FC = () => {
               {errors.description_fr && (
                 <p className="text-error">
                   {errors.description_fr.message as string}
+                </p>
+              )}
+            </div>
+
+            {/* Max Attendees */}
+            <div className="mb-4 col-span-2">
+              <input
+                type="number"
+                {...register("max_attendees", { valueAsNumber: true })}
+                placeholder={
+                  currentLanguage === "ar"
+                    ? "الحد الأقصى للحضور"
+                    : currentLanguage === "fr"
+                      ? "Nombre max de participants"
+                      : "Max attendees"
+                }
+                className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-2 shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+              {errors.max_attendees && (
+                <p className="text-error">
+                  {errors.max_attendees.message as string}
                 </p>
               )}
             </div>

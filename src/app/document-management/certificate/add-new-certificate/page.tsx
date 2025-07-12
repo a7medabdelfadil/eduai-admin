@@ -13,6 +13,7 @@ import { FaCloudUploadAlt } from "react-icons/fa";
 import { useGetAllStudentsQuery } from "@/features/User-Management/studentApi";
 import { useRouter } from "next/navigation";
 import Container from "@/components/Container";
+import SearchableSelect from "@/components/select";
 
 const AddNewCertificate = () => {
   const breadcrumbs = [
@@ -42,12 +43,8 @@ const AddNewCertificate = () => {
     },
   ];
 
-  const booleanValue = useSelector((state: RootState) => state.boolean.value);
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm();
+  const { register, handleSubmit, setValue, watch, control, formState: { errors } } = useForm();
+
   const router = useRouter();
   const [createCertificate, { isLoading }] = useCreateCertificatesMutation();
   const [fileName, setFileName] = useState("");
@@ -81,7 +78,11 @@ const AddNewCertificate = () => {
       toast.success("Certificate created successfully");
       router.push("/document-management/certificate/");
     } catch (err) {
-      toast.error((err as { data: { message: string } }).data?.message);
+      toast.error(
+        (err as { data: { detail?: string; message?: string } }).data?.detail ||
+        (err as { data: { message?: string } }).data?.message ||
+        "Failed to create certificate"
+      );
     }
   };
   const { language: currentLanguage, loading } = useSelector(
@@ -146,55 +147,34 @@ const AddNewCertificate = () => {
               </h1>
             </div>
             <div className="grid grid-cols-2 gap-4 p-6 max-[1278px]:grid-cols-1">
-              <label
-                htmlFor="studentId"
-                className="grid text-[18px] font-semibold"
-              >
+              <label htmlFor="studentId" className="grid text-[18px] font-semibold">
                 {currentLanguage === "en"
                   ? "Student ID"
                   : currentLanguage === "ar"
                     ? "رقم الطالب"
                     : "ID de l'étudiant"}
 
-                <select
-                  id="studentId"
-                  {...register("studentId")}
-                  className="h-full w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 text-[18px] outline-none max-[458px]:w-[350px]"
-                >
-                  <option value="">
-                    {currentLanguage === "en"
+                <SearchableSelect
+                  name="studentId"
+                  control={control}
+                  errors={errors}
+                  options={
+                    students?.data.content.map((student: any) => ({
+                      value: student.id ?? "",
+                      label: String(student.name),
+                    })) || []
+                  }
+                  currentLanguage={currentLanguage}
+                  placeholder={
+                    currentLanguage === "en"
                       ? "Select Student"
                       : currentLanguage === "ar"
                         ? "اختر الطالب"
-                        : "Sélectionner Étudiant"}
-                  </option>
-                  {students?.data.content.map(
-                    (student: {
-                      id: string | null | undefined;
-                      name:
-                        | string
-                        | number
-                        | bigint
-                        | boolean
-                        | null
-                        | undefined;
-                    }) => (
-                      <option key={student.id} value={student.id ?? ""}>
-                        {String(student.name)}
-                      </option>
-                    ),
-                  )}
-                </select>
-                {errors.studentId && (
-                  <span className="text-error">
-                    {currentLanguage === "ar"
-                      ? "هذا الحقل مطلوب"
-                      : currentLanguage === "fr"
-                        ? "Ce champ est requis"
-                        : "This field is required"}
-                  </span>
-                )}
+                        : "Sélectionner Étudiant"
+                  }
+                />
               </label>
+
               <label htmlFor="stage" className="grid text-[18px] font-semibold">
                 {currentLanguage === "ar"
                   ? "المرحلة التعليمية"

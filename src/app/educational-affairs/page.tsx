@@ -43,12 +43,12 @@ const EducationalAffairs = () => {
               : "Events", // Default to English
       description:
         currentLanguage === "en"
-          ? "All school events and you can add new event"
+          ? "Manage All School Events"
           : currentLanguage === "ar"
-            ? "جميع أحداث المدرسة ويمكنك إضافة حدث جديد"
+            ? "إدارة جميع أحداث المدرسة"
             : currentLanguage === "fr"
-              ? "Tous les événements scolaires et vous pouvez ajouter un nouvel événement"
-              : "All school events and you can add new event", // Default to English
+              ? "Gérer tous les événements scolaires"
+              : "Manage All School Events" // Default to English
     },
     {
       href: "/educational-affairs/exams",
@@ -63,12 +63,12 @@ const EducationalAffairs = () => {
               : "Exams", // Default to English
       description:
         currentLanguage === "en"
-          ? "All exams in all subjects"
+          ? "View All Scheduled Exams"
           : currentLanguage === "ar"
-            ? "جميع الامتحانات في جميع المواد"
+            ? "عرض جميع الامتحانات المجدولة"
             : currentLanguage === "fr"
-              ? "Tous les examens dans toutes les matières"
-              : "All exams in all subjects", // Default to English
+              ? "Voir tous les examens programmés"
+              : "View All Scheduled Exams" // Default to English
     },
     {
       href: "/educational-affairs/grades",
@@ -83,12 +83,12 @@ const EducationalAffairs = () => {
               : "Grades", // Default to English
       description:
         currentLanguage === "en"
-          ? "Grades in all exams"
+          ? "Track All Student Grades"
           : currentLanguage === "ar"
-            ? "الدرجات في جميع الامتحانات"
+            ? "تتبع جميع درجات الطلاب"
             : currentLanguage === "fr"
-              ? "Notes dans tous les examens"
-              : "Grades in all exams", // Default to English
+              ? "Suivre toutes les notes des étudiants"
+              : "Track All Student Grades" // Default to English
     },
     {
       href: "/educational-affairs/schedule",
@@ -103,12 +103,12 @@ const EducationalAffairs = () => {
               : "Schedule", // Default to English
       description:
         currentLanguage === "en"
-          ? "All Schedules for both teachers and classes"
+          ? "View and Edit Schedules"
           : currentLanguage === "ar"
-            ? "جميع الجداول لكل من المعلمين والفصول"
+            ? "عرض وتحرير الجداول"
             : currentLanguage === "fr"
-              ? "Tous les emplois du temps pour les enseignants et les classes"
-              : "All Schedules for both teachers and classes", // Default to English
+              ? "Voir et modifier les emplois du temps"
+              : "View and Edit Schedules" // Default to English
     },
   ];
 
@@ -124,15 +124,14 @@ const EducationalAffairs = () => {
       <BreadCrumbs breadcrumbs={breadcrumbs} />
       <div
         dir={currentLanguage === "ar" ? "rtl" : "ltr"}
-        className={`${
-          currentLanguage === "ar"
-            ? booleanValue
-              ? "lg:mr-[40px]"
-              : "lg:mr-[290px]"
-            : booleanValue
-              ? "lg:ml-[40px]"
-              : "lg:ml-[290px]"
-        } mt-12 grid justify-center`}
+        className={`${currentLanguage === "ar"
+          ? booleanValue
+            ? "lg:mr-[40px]"
+            : "lg:mr-[290px]"
+          : booleanValue
+            ? "lg:ml-[40px]"
+            : "lg:ml-[290px]"
+          } mt-12 grid justify-center`}
       >
         <div className="grid grid-cols-2 gap-5 max-[577px]:grid-cols-1 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-4">
           {Educations.map((item, index) => (

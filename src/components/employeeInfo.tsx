@@ -20,7 +20,7 @@ const EmployeeInfo = ({ data }: { data: any }) => {
                 ? "Informations sur l'employé"
                 : "Employee Information"}
           </h1>
-          <Link href={`/edit-employee/${data.data.id}`}>
+          <Link href={`/user-management/employee/edit-employee/${data.data.id}`}>
             <svg
               className="h-6 w-6 text-textPrimary"
               fill="none"

@@ -2,15 +2,16 @@
 import React from "react";
 import { useForm } from "react-hook-form";
 import Spinner from "@/components/spinner";
-import { useCreateExamsMutation } from "@/features/Acadimic/examsApi";
+import { useCreateExamsMutation, useGetAllExamTypesNonTeacherQuery } from "@/features/Acadimic/examsApi";
 import { toast } from "react-toastify";
 import { useSelector } from "react-redux";
 import { RootState } from "@/GlobalRedux/store";
 import BreadCrumbs from "@/components/BreadCrumbs";
-import { useGetAllTeachersQuery } from "@/features/User-Management/teacherApi";
+import { useGetAllTeachersQuery, useGetClassroomsByCourseAndTeacherQuery, useGetCoursesByTeacherIdQuery } from "@/features/User-Management/teacherApi";
 import { useGetAllCoursesQuery } from "@/features/Acadimic/courseApi";
 import { useGetAllClasssQuery } from "@/features/Infrastructure/classApi";
 import Container from "@/components/Container";
+import { useRouter } from "next/navigation";
 
 const AddExam = () => {
   type Teacher = Record<string, any>;
@@ -42,13 +43,37 @@ const AddExam = () => {
     },
   ];
 
-  const booleanValue = useSelector((state: RootState) => state.boolean.value);
+  const router = useRouter();
+
+  const [selectedTeacherId, setSelectedTeacherId] = React.useState<string>("");
+  const [selectedCourseId, setSelectedCourseId] = React.useState<string>("");
+
+  const {
+    data: teacherCourses,
+    isLoading: isTeacherCoursesLoading,
+  } = useGetCoursesByTeacherIdQuery(selectedTeacherId, {
+    skip: !selectedTeacherId,
+  });
+  const {
+    data: availableClassrooms,
+    isLoading: isClassroomLoading,
+  } = useGetClassroomsByCourseAndTeacherQuery(
+    {
+      teacherId: selectedTeacherId,
+      courseId: selectedCourseId,
+    },
+    {
+      skip: !selectedTeacherId || !selectedCourseId,
+    }
+  );
 
   const {
     register,
     handleSubmit,
     formState: { errors },
+    reset,
   } = useForm();
+
   const [createExam, { isLoading }] = useCreateExamsMutation();
   const { data, isLoading: isTeacher } = useGetAllTeachersQuery({
     archived: "false",
@@ -57,15 +82,27 @@ const AddExam = () => {
   });
   const { data: courses, isLoading: isCourses } = useGetAllCoursesQuery(null);
   const { data: classes, isLoading: isClasses } = useGetAllClasssQuery(null);
+  const { data: examTypes, isLoading: isExamTypesLoading } = useGetAllExamTypesNonTeacherQuery(null);
 
   const onSubmit = async (data: any) => {
     try {
       await createExam(data).unwrap();
-      toast.success("Exam created successfully");
+      toast.success(
+        currentLanguage === "en"
+          ? "Exam created successfully"
+          : currentLanguage === "ar"
+            ? "تم إنشاء الامتحان بنجاح"
+            : currentLanguage === "fr"
+              ? "Examen créé avec succès"
+              : "Exam created successfully"
+      );
+      router.push("/educational-affairs/exams");
+      reset();
     } catch (err) {
       toast.error((err as { data: { message: string } }).data?.message);
     }
   };
+
   const { language: currentLanguage, loading } = useSelector(
     (state: RootState) => state.language,
   );
@@ -260,10 +297,17 @@ const AddExam = () => {
                   className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                   {...register("teacherId", {
                     required: true,
+                    onChange: e => setSelectedTeacherId(e.target.value),
                   })}
                 >
-                  <option selected value="">
-                    Select Teacher
+                  <option value="">
+                    {currentLanguage === "en"
+                      ? "Select Teacher"
+                      : currentLanguage === "ar"
+                        ? "اختر المدرس"
+                        : currentLanguage === "fr"
+                          ? "Sélectionnez le professeur"
+                          : "Select Teacher"}
                   </option>
                   {data?.data.content.map((teacher: Teacher) => (
                     <option key={teacher.id} value={teacher.id}>
@@ -271,6 +315,7 @@ const AddExam = () => {
                     </option>
                   ))}
                 </select>
+
                 {errors.teacherId && (
                   <span className="text-error">
                     {currentLanguage === "en"
@@ -299,17 +344,34 @@ const AddExam = () => {
                   className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
                   {...register("courseId", {
                     required: true,
+                    onChange: e => setSelectedCourseId(e.target.value),
                   })}
+                  disabled={!selectedTeacherId}
                 >
-                  <option selected value="">
-                    Select Course
+                  <option value="">
+                    {selectedTeacherId
+                      ? currentLanguage === "en"
+                        ? "Select Course"
+                        : currentLanguage === "ar"
+                          ? "اختر الدورة"
+                          : currentLanguage === "fr"
+                            ? "Sélectionnez le cours"
+                            : "Select Course"
+                      : currentLanguage === "en"
+                        ? "Select a teacher first"
+                        : currentLanguage === "ar"
+                          ? "اختر المدرس أولًا"
+                          : currentLanguage === "fr"
+                            ? "Sélectionnez d'abord l'enseignant"
+                            : "Select a teacher first"}
                   </option>
-                  {courses?.data.content.map((teacher: Teacher) => (
-                    <option key={teacher.id} value={teacher.id}>
-                      {teacher.name}
+                  {teacherCourses?.data?.map((course: any) => (
+                    <option key={course.courseId} value={course.courseId}>
+                      {course.courseName} ({course.courseCode})
                     </option>
                   ))}
                 </select>
+
                 {errors.courseId && (
                   <span className="text-error">
                     {currentLanguage === "en"
@@ -322,6 +384,7 @@ const AddExam = () => {
                   </span>
                 )}
               </label>
+
               <label
                 htmlFor="teacherCourseRegistrationId"
                 className="grid text-[18px] font-semibold"
@@ -334,21 +397,36 @@ const AddExam = () => {
                       ? "ID d'salle de classe"
                       : "Teacher Course Registration ID"}{" "}
                 <select
-                  id="teacherCourseRegistrationId"
                   className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
-                  {...register("classroomId", {
-                    required: true,
-                  })}
+
+                  {...register("classroomId", { required: true })}
+                  disabled={!selectedTeacherId || !selectedCourseId}
                 >
-                  <option selected value="">
-                    Select Class Room
+                  <option value="">
+                    {!selectedTeacherId || !selectedCourseId
+                      ? currentLanguage === "en"
+                        ? "Select teacher and course first"
+                        : currentLanguage === "ar"
+                          ? "اختر المدرس والدورة أولًا"
+                          : currentLanguage === "fr"
+                            ? "Sélectionnez d'abord l'enseignant et le cours"
+                            : "Select teacher and course first"
+                      : currentLanguage === "en"
+                        ? "Select Class Room"
+                        : currentLanguage === "ar"
+                          ? "اختر الصف"
+                          : currentLanguage === "fr"
+                            ? "Sélectionnez la salle"
+                            : "Select Class Room"}
                   </option>
-                  {classes?.data.content.map((teacher: Teacher) => (
-                    <option key={teacher.roomId} value={teacher.roomId}>
-                      {teacher.classroomName}
+
+                  {availableClassrooms?.data.map((room: any) => (
+                    <option key={room.classroomId} value={room.classroomId}>
+                      {room.classroomName} ({room.classroomStudyLevel})
                     </option>
                   ))}
                 </select>
+
                 {errors.teacherId && (
                   <span className="text-error">
                     {currentLanguage === "en"
@@ -361,23 +439,34 @@ const AddExam = () => {
                   </span>
                 )}
               </label>
-              <label
-                htmlFor="examTypeId"
-                className="grid text-[18px] font-semibold"
-              >
+              <label htmlFor="examTypeId" className="grid text-[18px] font-semibold">
                 {currentLanguage === "en"
-                  ? "Exam Type ID"
+                  ? "Exam Type"
                   : currentLanguage === "ar"
-                    ? "معرف نوع الامتحان"
+                    ? "نوع الامتحان"
                     : currentLanguage === "fr"
-                      ? "ID du type d'examen"
-                      : "Exam Type ID"}{" "}
-                <input
+                      ? "Type d'examen"
+                      : "Exam Type"}
+                <select
                   id="examTypeId"
                   {...register("examTypeId", { required: true })}
-                  type="number"
                   className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
-                />
+                >
+                  <option value="">
+                    {currentLanguage === "en"
+                      ? "Select Exam Type"
+                      : currentLanguage === "ar"
+                        ? "اختر نوع الامتحان"
+                        : currentLanguage === "fr"
+                          ? "Sélectionnez le type d'examen"
+                          : "Select Exam Type"}
+                  </option>
+                  {examTypes?.data.map((type: any) => (
+                    <option key={type.examTypeId} value={type.examTypeId}>
+                      {type.name} - {type.studyLevel}
+                    </option>
+                  ))}
+                </select>
                 {errors.examTypeId && (
                   <span className="text-error">
                     {currentLanguage === "en"
@@ -386,10 +475,11 @@ const AddExam = () => {
                         ? "هذا الحقل مطلوب"
                         : currentLanguage === "fr"
                           ? "Ce champ est requis"
-                          : "This field is required"}{" "}
+                          : "This field is required"}
                   </span>
                 )}
               </label>
+
             </div>
 
             <div className="flex justify-center text-center">

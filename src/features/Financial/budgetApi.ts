@@ -28,9 +28,14 @@ export const budgetApi = createApi({
     getBudgetSummary: builder.query({
       query: () => "/api/v1/budget/summary",
     }),
+    getSchoolYears: builder.query({
+      query: () => "/api/v1/dashboard/school/years",
+    }),
   }),
+
 });
 
 export const {
   useGetBudgetSummaryQuery,
+  useGetSchoolYearsQuery
 } = budgetApi;

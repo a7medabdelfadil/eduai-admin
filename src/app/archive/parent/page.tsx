@@ -23,6 +23,7 @@ import {
 import { Skeleton } from "@/components/Skeleton";
 import { BiSearchAlt, BiTrash } from "react-icons/bi";
 import SeeMoreButton from "@/components/SeeMoreButton";
+import { FaUnlockAlt } from "react-icons/fa";
 
 const Parent = () => {
   const breadcrumbs = [
@@ -185,17 +186,6 @@ const Parent = () => {
                 </span>
               </div>
             </div>
-
-            <Link
-              href="/add-new-parent"
-              className="mx-3 w-fit whitespace-nowrap rounded-xl bg-primary px-4 py-2 text-[18px] font-semibold text-white duration-300 ease-in hover:bg-hover hover:shadow-xl"
-            >
-              {currentLanguage === "ar"
-                ? "+ إضافة ولي أمر جديد"
-                : currentLanguage === "fr"
-                  ? "+ Ajouter un nouveau parent"
-                  : "+ Add New Parent"}
-            </Link>
           </div>
           <div className="relative overflow-auto bg-bgPrimary shadow-md sm:rounded-lg">
             <Table>
@@ -248,7 +238,7 @@ const Parent = () => {
                       <TableCell>{parent.number}</TableCell>
                       <TableCell>
                         <Link
-                          href={`/parent/view-parent/${parent.id}`}
+                          href={`/user-management/parent/view-parent/${parent.id}`}
                           className="text-blue-600 hover:underline"
                         >
                           {translate.view}
@@ -260,7 +250,7 @@ const Parent = () => {
                           className="text-error transition hover:text-red-800"
                           title={translate.unlock}
                         >
-                          <BiTrash size={20} />
+                          <FaUnlockAlt size={20} />
                         </button>
                       </TableCell>
                     </TableRow>

@@ -21,10 +21,18 @@ import { useRouter } from "next/navigation";
 import Container from "@/components/Container";
 
 const AddNewDriver = () => {
-  const booleanValue = useSelector((state: RootState) => state.boolean.value);
   const [backendError, setBackendError] = useState<string | null>(null);
   const { data: nationalityData, isLoading: nationalityLoading } =
     useGetAllNationalitysQuery(null);
+
+  const sortedNationalityData =
+    nationalityData &&
+    Object.entries(nationalityData.data)
+      .sort(([, valueA], [, valueB]) => String(valueA).localeCompare(String(valueB)))
+      .reduce<Record<string, string>>((acc, [key, value]) => {
+        acc[key] = value as string;
+        return acc;
+      }, {});
   const { data: countryCode, isLoading: isCountryCode } =
     useGetAllCountryCodeQuery(null);
   const { data: positionData, isLoading: isPosition } =
@@ -249,7 +257,7 @@ const AddNewDriver = () => {
                         ? "هذا الحقل مطلوب"
                         : currentLanguage === "fr"
                           ? "Ce champ est requis"
-                          : "This field is required"}{" "}
+                          : "This field  is required"}{" "}
                     {/* default */}
                   </span>
                 )}
@@ -370,17 +378,10 @@ const AddNewDriver = () => {
                           : "Select Nationality"}{" "}
                     {/* default */}
                   </option>
-                  {nationalityData &&
-                    Object.entries(nationalityData.data).map(([key, value]) => (
+                  {sortedNationalityData &&
+                    Object.entries(sortedNationalityData).map(([key, value]) => (
                       <option key={key} value={key}>
-                        {currentLanguage === "en"
-                          ? String(value)
-                          : currentLanguage === "ar"
-                            ? String(value)
-                            : currentLanguage === "fr"
-                              ? String(value)
-                              : String(value)}{" "}
-                        {/* default */}
+                        {String(value)}
                       </option>
                     ))}
                 </select>
@@ -404,12 +405,12 @@ const AddNewDriver = () => {
                 className="grid text-[18px] font-semibold"
               >
                 {currentLanguage === "en"
-                  ? "Region Id"
+                  ? "Region"
                   : currentLanguage === "ar"
-                    ? "معرف المنطقة"
+                    ? "المنطقة"
                     : currentLanguage === "fr"
-                      ? "ID de la région"
-                      : "Region Id"}{" "}
+                      ? "région"
+                      : "Region"}{" "}
                 {/* default */}
                 <SearchableSelect
                   name="regionId"
@@ -724,19 +725,12 @@ const AddNewDriver = () => {
                 className="grid text-[18px] font-semibold"
               >
                 {currentLanguage === "en"
-                  ? "Position Id"
+                  ? "Position"
                   : currentLanguage === "ar"
-                    ? "رقم الوظيفة"
+                    ? "الوظيفة"
                     : currentLanguage === "fr"
-                      ? "ID de position"
-                      : "Position Id"}{" "}
-                {/* default */}
-                {/* <input
-                  id="positionId"
-                  type="number"
-                  className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
-                  {...register("positionId", { required: true })}
-                /> */}
+                      ? "position"
+                      : "Position"}{" "}
                 <select
                   defaultValue=""
                   id="positionId"
@@ -745,12 +739,12 @@ const AddNewDriver = () => {
                 >
                   <option value="">
                     {currentLanguage === "en"
-                      ? "Select Position Id"
+                      ? "Select Position"
                       : currentLanguage === "ar"
-                        ? "اختر معرف الوظيفة"
+                        ? "اختر الوظيفة"
                         : currentLanguage === "fr"
-                          ? "Sélectionner l'ID de la position"
-                          : "Select Region Id"}{" "}
+                          ? "Sélectionner le poste"
+                          : "Select Position"}{" "}
                     {/* default */}
                   </option>
                   {positionData &&
@@ -760,18 +754,18 @@ const AddNewDriver = () => {
                           title: string;
                           id: string | number | readonly string[] | undefined;
                           name:
-                            | string
-                            | number
-                            | bigint
-                            | boolean
-                            | React.ReactElement<
-                                any,
-                                string | React.JSXElementConstructor<any>
-                              >
-                            | Iterable<React.ReactNode>
-                            | React.ReactPortal
-                            | null
-                            | undefined;
+                          | string
+                          | number
+                          | bigint
+                          | boolean
+                          | React.ReactElement<
+                            any,
+                            string | React.JSXElementConstructor<any>
+                          >
+                          | Iterable<React.ReactNode>
+                          | React.ReactPortal
+                          | null
+                          | undefined;
                         },
                         index: React.Key | null | undefined,
                       ) => (

@@ -23,6 +23,7 @@ import BreadCrumbs from "@/components/BreadCrumbs";
 import Container from "@/components/Container";
 import { Skeleton } from "@/components/Skeleton";
 import SeeMoreButton from "@/components/SeeMoreButton";
+import { FaUnlockAlt } from "react-icons/fa";
 
 const ArchiveEmployee = () => {
   const breadcrumbs = [
@@ -180,17 +181,6 @@ const ArchiveEmployee = () => {
                 </span>
               </div>
             </div>
-
-            <Link
-              href="/add-new-employee"
-              className="w-fit self-end whitespace-nowrap rounded-xl bg-primary px-4 py-2 text-[16px] font-semibold text-white transition hover:bg-hover hover:shadow-md"
-            >
-              {currentLanguage === "ar"
-                ? "+ إضافة موظف جديد"
-                : currentLanguage === "fr"
-                  ? "+ Ajouter un nouvel employé"
-                  : "+ Add New Employee"}
-            </Link>
           </div>
 
           <div className="relative overflow-auto bg-bgPrimary shadow-md sm:rounded-lg">
@@ -244,7 +234,7 @@ const ArchiveEmployee = () => {
                       <TableCell>{emp.number}</TableCell>
                       <TableCell>
                         <Link
-                          href={`/employee/view-employee/${emp.id}`}
+                          href={`/user-management/employee/view-employee/${emp.id}`}
                           className="text-blue-600 hover:underline"
                         >
                           {translate.view}
@@ -256,7 +246,7 @@ const ArchiveEmployee = () => {
                           className="text-error transition hover:text-red-800"
                           title={translate.unlock}
                         >
-                          <BiTrash size={20} />
+                          <FaUnlockAlt size={20} />
                         </button>
                       </TableCell>
                     </TableRow>

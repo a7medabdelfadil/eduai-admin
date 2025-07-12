@@ -215,15 +215,14 @@ const Events = () => {
       <BreadCrumbs breadcrumbs={breadcrumbs} />
       <div
         dir={currentLanguage === "ar" ? "rtl" : "ltr"}
-        className={` ${
-          currentLanguage === "ar"
+        className={` ${currentLanguage === "ar"
             ? booleanValue
               ? "lg:mr-[100px]"
               : "lg:mr-[270px]"
             : booleanValue
               ? "lg:ml-[100px]"
               : "lg:ml-[270px]"
-        } mt-7`}
+          } mt-7`}
       >
         <div className="flex justify-end">
           <button
@@ -391,7 +390,7 @@ const Events = () => {
             <div className="flex justify-between">
               <button
                 type="submit"
-                className="mx-3 mb-5 w-fit whitespace-nowrap rounded-xl bg-primary px-4 py-2 text-[18px] font-semibold text-white duration-300 ease-in hover:bg-hover hover:shadow-xl"
+                className="mx-3 self-end whitespace-nowrap rounded-xl bg-primary px-4 py-2 text-[18px] font-semibold text-white hover:bg-hover hover:shadow-xl"
               >
                 {currentLanguage === "ar"
                   ? "إضافة"

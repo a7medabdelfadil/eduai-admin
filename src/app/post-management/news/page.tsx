@@ -12,10 +12,6 @@ import Link from "next/link";
 import {
   useState,
   SetStateAction,
-  JSXElementConstructor,
-  ReactElement,
-  ReactNode,
-  ReactPortal,
 } from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "@/GlobalRedux/store";
@@ -50,14 +46,19 @@ const News = () => {
       href: "/post-management/news",
     },
   ];
-
-  const booleanValue = useSelector((state: RootState) => state.boolean.value);
+  const { language: currentLanguage, loading } = useSelector(
+    (state: RootState) => state.language,
+  );
+  const [likeLoadingId, setLikeLoadingId] = useState<string | null>(null);
   type Post = Record<string, any>;
   const [selectedPostId, setSelectedPostId] = useState<number | null>(null);
   const handleCommentClick = (postId: number) => {
     setSelectedPostId(postId === selectedPostId ? null : postId);
   };
-  const { data, error, isLoading, refetch } = useGetAllAllPostsQuery(null);
+
+  const { data, error, isLoading, refetch } = useGetAllAllPostsQuery({
+    lang: currentLanguage,
+  });
   const [deletePosts] = useDeletePostsMutation();
   const [putLike] = usePutPostLikeMutation();
 
@@ -72,7 +73,6 @@ const News = () => {
   const handleClick = (id: SetStateAction<null>) => {
     setSelectedId(id);
   };
-
   const [open, setOpen] = useState<number | boolean | null>(false);
   const toggleNavbar = (index: number) => {
     setOpen(open === index ? null : index);
@@ -99,6 +99,7 @@ const News = () => {
     try {
       await createSemester({ formData: data, id: id }).unwrap();
       refetchComment();
+      refetch();
       reset();
       toast.success("Comment Added successfully");
     } catch (err) {
@@ -116,36 +117,38 @@ const News = () => {
     }
   };
   const PutLike = async (id: string) => {
+    if (likeLoadingId) return;
     try {
-      await putLike({
-        id: id,
-        like: "true",
-      }).unwrap();
-      void refetch();
+      setLikeLoadingId(id);
+      await putLike({ id, like: "true" }).unwrap();
+      refetch();
     } catch (err) {
       toast.error((err as { data: { message: string } }).data?.message);
+    } finally {
+      setLikeLoadingId(null);
     }
   };
+
   const DeleteLike = async (id: string) => {
+    if (likeLoadingId) return;
     try {
-      await putLike({
-        id: id,
-        like: "false",
-      }).unwrap();
-      void refetch();
+      setLikeLoadingId(id);
+      await putLike({ id, like: "false" }).unwrap();
+      refetch();
     } catch (err) {
       toast.error((err as { data: { message: string } }).data?.message);
+    } finally {
+      setLikeLoadingId(null);
     }
   };
+
 
   const formatTransactionDate = (dateString: string | number | Date) => {
     if (!dateString) return "No transaction date";
     const date = new Date(dateString);
     return isNaN(date.getTime()) ? "Invalid date" : date.toLocaleString();
   };
-  const { language: currentLanguage, loading } = useSelector(
-    (state: RootState) => state.language,
-  );
+
 
   if (loading || isLoading)
     return (
@@ -337,6 +340,7 @@ const News = () => {
                     }}
                     className="primary:border-b border-spacing-2 text-textSecondary"
                   >
+                    {post.commentsCount}{" "}
                     {currentLanguage === "ar"
                       ? "تعليقات"
                       : currentLanguage === "fr"
@@ -348,10 +352,9 @@ const News = () => {
               <div className="flex items-center justify-center gap-10 border-y border-borderPrimary px-2 py-3 font-semibold text-textSecondary max-[505px]:gap-8">
                 <div className="flex gap-3">
                   <button
-                    onClick={() =>
-                      !post.isLiked ? PutLike(post.id) : DeleteLike(post.id)
-                    }
-                    className={`flex gap-2 ${post.isLiked && "text-primary"}`}
+                    disabled={likeLoadingId === post.id}
+                    onClick={() => !post.isLiked ? PutLike(post.id) : DeleteLike(post.id)}
+                    className={`flex gap-2 ${post.isLiked && "text-primary"} ${likeLoadingId === post.id ? "opacity-50 cursor-not-allowed" : ""}`}
                   >
                     <FaThumbsUp size={20} className="mx-[10px]" />
                     {currentLanguage === "ar"
@@ -360,6 +363,7 @@ const News = () => {
                         ? "J'aime"
                         : "Like"}
                   </button>
+
                 </div>
                 <div className="flex gap-3">
                   <button

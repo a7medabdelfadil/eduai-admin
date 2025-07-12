@@ -123,14 +123,14 @@ const ViewInvoice: React.FC<ViewInvoiceProps> = ({ params }) => {
       nameEn: "Fees Management",
       nameAr: "إدارة المستندات",
       nameFr: "Gestion des documents",
-      href: "/fees-management",
+      href: "/financial-management/fees-management",
     },
     {
       name: params.invoiceId,
       nameEn: params.invoiceId,
       nameAr: params.invoiceId,
       nameFr: params.invoiceId,
-      href: `/fees-management/${params.invoiceId}`,
+      href: `/financial-management/fees-management/${params.invoiceId}`,
     },
   ];
 
@@ -170,15 +170,14 @@ const ViewInvoice: React.FC<ViewInvoiceProps> = ({ params }) => {
       <BreadCrumbs breadcrumbs={breadcrumbs} />
       <div
         dir={currentLanguage === "ar" ? "rtl" : "ltr"}
-        className={`${
-          currentLanguage === "ar"
+        className={`${currentLanguage === "ar"
             ? booleanValue
               ? "lg:mr-[100px]"
               : "lg:mr-[270px]"
             : booleanValue
               ? "lg:ml-[100px]"
               : "lg:ml-[270px]"
-        } mt-4 rounded-xl bg-bgPrimary px-8 py-4`}
+          } mt-4 rounded-xl bg-bgPrimary px-8 py-4`}
       >
         <div className="flex w-full justify-between">
           <Image
@@ -216,9 +215,8 @@ const ViewInvoice: React.FC<ViewInvoiceProps> = ({ params }) => {
             <h1 className="flex items-center gap-1 text-[20px] font-semibold text-secondary">
               {translations[currentLanguage].billedTo}:{" "}
               <p
-                className={`text-[17px] ${
-                  theme == "dark" ? "text-white" : "text-black"
-                }`}
+                className={`text-[17px] ${theme == "dark" ? "text-white" : "text-black"
+                  }`}
               >
                 {data?.data?.billedToBasicInfo?.name}
               </p>
@@ -226,9 +224,8 @@ const ViewInvoice: React.FC<ViewInvoiceProps> = ({ params }) => {
             <h1 className="flex items-center gap-1 text-[20px] font-semibold text-secondary">
               {translations[currentLanguage].id}:{" "}
               <p
-                className={`text-[17px] ${
-                  theme == "dark" ? "text-white" : "text-black"
-                }`}
+                className={`text-[17px] ${theme == "dark" ? "text-white" : "text-black"
+                  }`}
               >
                 {data?.data?.billedToBasicInfo?.id}
               </p>
@@ -236,9 +233,8 @@ const ViewInvoice: React.FC<ViewInvoiceProps> = ({ params }) => {
             <h1 className="flex items-center gap-1 text-[20px] font-semibold text-secondary">
               {translations[currentLanguage].email}:{" "}
               <p
-                className={`text-[17px] ${
-                  theme == "dark" ? "text-white" : "text-black"
-                }`}
+                className={`text-[17px] ${theme == "dark" ? "text-white" : "text-black"
+                  }`}
               >
                 {data?.data?.billedToBasicInfo?.email}
               </p>
@@ -246,9 +242,8 @@ const ViewInvoice: React.FC<ViewInvoiceProps> = ({ params }) => {
             <h1 className="flex items-center gap-1 text-[20px] font-semibold text-secondary">
               {translations[currentLanguage].phone}:{" "}
               <p
-                className={`text-[17px] ${
-                  theme == "dark" ? "text-white" : "text-black"
-                }`}
+                className={`text-[17px] ${theme == "dark" ? "text-white" : "text-black"
+                  }`}
               >
                 {data?.data?.billedToBasicInfo?.phone == null
                   ? "_"
@@ -260,9 +255,8 @@ const ViewInvoice: React.FC<ViewInvoiceProps> = ({ params }) => {
             <h1 className="flex items-center gap-1 text-[20px] font-semibold text-secondary">
               {translations[currentLanguage].invoiceDate}:{" "}
               <p
-                className={`text-[17px] ${
-                  theme == "dark" ? "text-white" : "text-black"
-                }`}
+                className={`text-[17px] ${theme == "dark" ? "text-white" : "text-black"
+                  }`}
               >
                 {formatTransactionDate(data?.data?.creationDate)}
               </p>
@@ -270,9 +264,8 @@ const ViewInvoice: React.FC<ViewInvoiceProps> = ({ params }) => {
             <h1 className="flex items-center gap-1 text-[20px] font-semibold text-secondary">
               {translations[currentLanguage].dueDate}:{" "}
               <p
-                className={`text-[17px] ${
-                  theme == "dark" ? "text-white" : "text-black"
-                }`}
+                className={`text-[17px] ${theme == "dark" ? "text-white" : "text-black"
+                  }`}
               >
                 {formatTransactionDate(data?.data?.dueDate)}
               </p>
@@ -280,9 +273,8 @@ const ViewInvoice: React.FC<ViewInvoiceProps> = ({ params }) => {
             <h1 className="flex items-center gap-1 text-[20px] font-semibold text-secondary">
               {translations[currentLanguage].status}:{" "}
               <p
-                className={`text-[17px] ${
-                  theme == "dark" ? "text-white" : "text-black"
-                }`}
+                className={`text-[17px] ${theme == "dark" ? "text-white" : "text-black"
+                  }`}
               >
                 {data?.data?.paymentStatus
                   .toLowerCase()
@@ -299,9 +291,8 @@ const ViewInvoice: React.FC<ViewInvoiceProps> = ({ params }) => {
             <h1 className="flex items-center gap-1 text-[20px] font-semibold text-secondary">
               {translations[currentLanguage].totalAmount}:{" "}
               <p
-                className={`text-[17px] ${
-                  theme == "dark" ? "text-white" : "text-black"
-                }`}
+                className={`text-[17px] ${theme == "dark" ? "text-white" : "text-black"
+                  }`}
               >
                 {data?.data?.totalAmount}
               </p>
@@ -357,9 +348,8 @@ const ViewInvoice: React.FC<ViewInvoiceProps> = ({ params }) => {
             <p className="flex items-center justify-between gap-4 border-b border-borderPrimary text-[18px] font-semibold text-secondary">
               {translations[currentLanguage].paidAmount}:{" "}
               <p
-                className={`text-end text-[18px] ${
-                  theme == "dark" ? "text-white" : "text-black"
-                }`}
+                className={`text-end text-[18px] ${theme == "dark" ? "text-white" : "text-black"
+                  }`}
               >
                 {data?.data?.paidAmount}
               </p>
@@ -367,9 +357,8 @@ const ViewInvoice: React.FC<ViewInvoiceProps> = ({ params }) => {
             <p className="flex items-center justify-between gap-4 border-b border-borderPrimary text-[18px] font-semibold text-secondary">
               {translations[currentLanguage].discountAmount}:{" "}
               <p
-                className={`text-[18px] ${
-                  theme == "dark" ? "text-white" : "text-black"
-                }`}
+                className={`text-[18px] ${theme == "dark" ? "text-white" : "text-black"
+                  }`}
               >
                 {data?.data?.discountAmount}
               </p>
@@ -377,9 +366,8 @@ const ViewInvoice: React.FC<ViewInvoiceProps> = ({ params }) => {
             <p className="flex items-center justify-between gap-4 border-b border-borderPrimary text-[18px] font-semibold text-secondary">
               {translations[currentLanguage].taxAmount}:{" "}
               <p
-                className={`text-[18px] ${
-                  theme == "dark" ? "text-white" : "text-black"
-                }`}
+                className={`text-[18px] ${theme == "dark" ? "text-white" : "text-black"
+                  }`}
               >
                 {data?.data?.taxAmount}
               </p>
@@ -387,9 +375,8 @@ const ViewInvoice: React.FC<ViewInvoiceProps> = ({ params }) => {
             <p className="flex items-center justify-between gap-4 text-[18px] font-semibold text-secondary">
               {translations[currentLanguage].dueAmount}:{" "}
               <p
-                className={`text-[18px] ${
-                  theme == "dark" ? "text-white" : "text-black"
-                }`}
+                className={`text-[18px] ${theme == "dark" ? "text-white" : "text-black"
+                  }`}
               >
                 {data?.data?.dueAmount}
               </p>

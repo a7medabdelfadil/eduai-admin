@@ -281,7 +281,7 @@ const EmployeeSearch = () => {
                         <div className="flex justify-end">
                           <Link
                             className="rounded-lg bg-primary px-2 py-1 font-semibold text-white duration-300 ease-in hover:bg-hover hover:shadow-xl"
-                            href={`/employee/view-employee/${EmployeeQ.data.id}`}
+                            href={`/user-management/employee/view-employee/${EmployeeQ.data.id}`}
                           >
                             {currentLanguage === "ar"
                               ? "عرض"

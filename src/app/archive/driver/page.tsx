@@ -22,6 +22,7 @@ import {
 } from "@/components/Table";
 import { Skeleton } from "@/components/Skeleton";
 import SeeMoreButton from "@/components/SeeMoreButton";
+import { FaUnlockAlt } from "react-icons/fa";
 
 const ArchiveDriver = () => {
   const breadcrumbs = [
@@ -185,17 +186,6 @@ const ArchiveDriver = () => {
                 </span>
               </div>
             </div>
-
-            <Link
-              href="/add-new-driver"
-              className="w-fit self-end whitespace-nowrap rounded-xl bg-primary px-4 py-2 text-[16px] font-semibold text-white transition hover:bg-hover hover:shadow-md"
-            >
-              {currentLanguage === "ar"
-                ? "+ سائق جديد"
-                : currentLanguage === "fr"
-                  ? "+ Nouveau Chauffeur"
-                  : "+ New Driver"}
-            </Link>
           </div>
 
           <div className="relative overflow-auto bg-bgPrimary shadow-md sm:rounded-l">
@@ -254,7 +244,7 @@ const ArchiveDriver = () => {
                       <TableCell>{driver.number}</TableCell>
                       <TableCell>
                         <Link
-                          href={`/driver/view-driver/${driver.id}`}
+                          href={`/user-management/driver/view-driver/${driver.id}`}
                           className="text-blue-600 hover:underline"
                         >
                           {translate.view}
@@ -266,7 +256,7 @@ const ArchiveDriver = () => {
                           className="text-error transition hover:text-red-800"
                           title={translate.unlock}
                         >
-                          <BiTrash size={20} />
+                          <FaUnlockAlt size={20} />
                         </button>
                       </TableCell>
                     </TableRow>

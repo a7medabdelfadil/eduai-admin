@@ -49,13 +49,23 @@ const TextEditor = ({
 
   const handleChange = () => {
     if (editorRef.current) {
-      const content = editorRef.current.innerHTML;
       const textContent = editorRef.current.textContent || "";
-      onChange(content);
-      setCharacterCount(textContent.length);
-      setEditorIsEmpty(textContent.trim() === "");
+
+      if (textContent.length > maxCharacters) {
+        const allowedText = textContent.slice(0, maxCharacters);
+        editorRef.current.textContent = allowedText;
+        setCharacterCount(maxCharacters);
+        setEditorIsEmpty(allowedText.trim() === "");
+        onChange(allowedText);
+      } else {
+        const content = editorRef.current.innerHTML;
+        onChange(content);
+        setCharacterCount(textContent.length);
+        setEditorIsEmpty(textContent.trim() === "");
+      }
     }
   };
+
 
   // Function to wrap selected text with a tag
   const wrapSelectionWithTag = (tagName: string) => {
@@ -200,11 +210,13 @@ const TextEditor = ({
     const pastedText = e.clipboardData.getData("text/plain");
     const currentText = editorRef.current?.textContent || "";
     const remainingChars = maxCharacters - currentText.length;
+
     if (remainingChars > 0) {
-      const textToInsert = pastedText.substring(0, remainingChars);
+      const textToInsert = pastedText.slice(0, remainingChars);
       document.execCommand("insertText", false, textToInsert);
     }
   };
+
 
   const applyFormat = (command: string, value: any = null) => {
     document.execCommand(command, false, value);
@@ -285,11 +297,10 @@ const TextEditor = ({
   };
 
   const getButtonClassName = (isActive: boolean) => {
-    return `rounded px-3 py-2 ${isActive ? "bg-blue-500 text-white" : ""} ${
-      theme === "dark"
-        ? "hover:bg-hover"
-        : "hover:bg-hover hover:text-[#ffffff]"
-    }`;
+    return `rounded px-3 py-2 ${isActive ? "bg-blue-500 text-white" : ""} ${theme === "dark"
+      ? "hover:bg-hover"
+      : "hover:bg-hover hover:text-[#ffffff]"
+      }`;
   };
 
   // Keyboard shortcuts
@@ -365,18 +376,17 @@ const TextEditor = ({
     const inputType = inputEvent.inputType;
     const inputData = inputEvent.data || "";
     const currentText = editorRef.current?.textContent || "";
-    if (inputType === "insertText" || inputType === "insertCompositionText") {
-      const newLength = currentText.length + inputData.length;
-      if (newLength > maxCharacters) {
-        const allowedChars = maxCharacters - currentText.length;
-        if (allowedChars > 0) {
-          const textToInsert = inputData.substring(0, allowedChars);
-          document.execCommand("insertText", false, textToInsert);
-        }
-        e.preventDefault();
-      }
+
+    const newLength = currentText.length + inputData.length;
+
+    if (
+      (inputType === "insertText" || inputType === "insertCompositionText") &&
+      newLength > maxCharacters
+    ) {
+      e.preventDefault();
     }
   };
+
 
   return (
     <div className="mx-auto p-4">
@@ -643,7 +653,7 @@ const TextEditor = ({
         <div
           ref={editorRef}
           contentEditable={true}
-          className="editor-content min-h-[200px] cursor-text rounded-b-md border border-borderPrimary p-4 focus:outline-none"
+          className="editor-content min-h-[200px] max-h-[300px] overflow-y-auto break-all whitespace-pre-wrap cursor-text rounded-b-md border border-borderPrimary p-4 focus:outline-none"
           style={{ whiteSpace: "pre-wrap" }}
           onInput={handleChange}
           onFocus={() => setEditorIsEmpty(false)}

@@ -207,17 +207,6 @@ const Student = () => {
                 </span>
               </div>
             </div>
-
-            <Link
-              href="/add-new-parent"
-              className="mx-3 mb-5 w-[190px] whitespace-nowrap rounded-xl bg-primary px-4 py-2 text-[18px] font-semibold text-white hover:bg-hover hover:shadow-xl"
-            >
-              {currentLanguage === "ar"
-                ? "+ طالب جديد"
-                : currentLanguage === "fr"
-                  ? "+ Nouvel étudiant"
-                  : "+ New Student"}
-            </Link>
           </div>
           <div className="relative overflow-auto bg-bgPrimary shadow-md sm:rounded-lg">
             <Table>
@@ -272,7 +261,7 @@ const Student = () => {
                       <TableCell>
                         <div className="flex items-center gap-2">
                           <Link
-                            href={`/student/view-student/${student.id}`}
+                            href={`/user-management/student/view-student/${student.id}`}
                             className="text-blue-600 hover:underline"
                           >
                             <GrView />

@@ -154,7 +154,6 @@ const Bus = () => {
                 <TableRow>
                   <TableHead>{t("Bus Number")}</TableHead>
                   <TableHead>{t("Bus Capacity")}</TableHead>
-                  <TableHead>{t("School Id")}</TableHead>
                   <TableHead>{t("Created At")}</TableHead>
                   <TableHead>{t("Updated At")}</TableHead>
                   <TableHead>{t("Action")}</TableHead>
@@ -164,7 +163,7 @@ const Bus = () => {
                 {loading || isLoading ? (
                   [...Array(3)].map((_, i) => (
                     <TableRow key={i}>
-                      {Array.from({ length: 6 }).map((_, j) => (
+                      {Array.from({ length: 5 }).map((_, j) => (
                         <TableCell key={j}>
                           <Skeleton className="h-4 w-24" />
                         </TableCell>
@@ -173,7 +172,7 @@ const Bus = () => {
                   ))
                 ) : !filtered?.length ? (
                   <TableRow>
-                    <TableCell colSpan={6} className="text-center font-medium">
+                    <TableCell colSpan={5} className="text-center font-medium">
                       {currentLanguage === "ar"
                         ? "لا توجد بيانات"
                         : currentLanguage === "fr"
@@ -186,7 +185,6 @@ const Bus = () => {
                     <TableRow key={index} data-index={index}>
                       <TableCell>{bus.busNumber}</TableCell>
                       <TableCell>{bus.busCapacity}</TableCell>
-                      <TableCell>{bus.schoolId}</TableCell>
                       <TableCell>
                         {formatTransactionDate(bus.createdAt)}
                       </TableCell>

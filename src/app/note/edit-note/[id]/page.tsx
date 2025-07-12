@@ -1,41 +1,78 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Spinner from "@/components/spinner";
 import TextEditor from "@/components/textEditor";
-import { useCreateNoteMutation } from "@/features/dashboard/dashboardApi";
+import {
+  useGetNoteByIdQuery,
+  useUpdateNoteMutation,
+} from "@/features/dashboard/dashboardApi";
 import { toast } from "react-toastify";
 import { RootState } from "@/GlobalRedux/store";
 import { useSelector } from "react-redux";
 import BreadCrumbs from "@/components/BreadCrumbs";
 import Container from "@/components/Container";
+import { useParams, useRouter } from "next/navigation";
 
-const AddNote = () => {
+const EditNote = () => {
+  const { id } = useParams();
+  const router = useRouter();
+
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
-  const [createNotification, { isLoading }] = useCreateNoteMutation();
-  const handleSubmit = async (e: { preventDefault: () => void }) => {
-    e.preventDefault();
-    if (!title || !description) {
-      toast.error("Please fill in all fields and select at least one role.");
-      return;
-    }
-    try {
-      // Send the title and description as an object
-      await createNotification({
-        title,
-        description,
-      }).unwrap();
-
-      toast.success("Notification sent successfully!");
-      setTitle("");
-      setDescription("");
-    } catch (err) {
-      toast.error((err as { data: { message: string } }).data?.message);
-    }
-  };
   const { language: currentLanguage, loading } = useSelector(
     (state: RootState) => state.language,
   );
+
+  const noteId = Array.isArray(id) ? id[0] : id;
+  const { data, isLoading: isFetching } = useGetNoteByIdQuery(noteId);
+  const [updateNote, { isLoading: isUpdating }] = useUpdateNoteMutation();
+
+  useEffect(() => {
+    if (data?.data) {
+      setTitle(data.data.title);
+      setDescription(data.data.description);
+    }
+  }, [data]);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!title || !description) {
+      toast.error(
+        currentLanguage === "ar"
+          ? "يرجى ملء كل الحقول"
+          : currentLanguage === "fr"
+            ? "Veuillez remplir tous les champs"
+            : "Please fill in all fields."
+      );
+      return;
+    }
+
+    try {
+      await updateNote({ id, title, description }).unwrap();
+      toast.success(
+        currentLanguage === "ar"
+          ? "تم تحديث الإعلان بنجاح"
+          : currentLanguage === "fr"
+            ? "Annonce mise à jour avec succès"
+            : "Notice updated successfully!"
+      );
+      router.push("/");
+    } catch (err) {
+      toast.error(
+        (err as any)?.data?.message
+          ? (currentLanguage === "ar"
+              ? `حدث خطأ: ${(err as any).data.message}`
+              : currentLanguage === "fr"
+                ? `Erreur: ${(err as any).data.message}`
+                : `Error: ${(err as any).data.message}`)
+          : (currentLanguage === "ar"
+              ? "حدث خطأ غير متوقع"
+              : currentLanguage === "fr"
+                ? "Une erreur inattendue s'est produite"
+                : "An unexpected error occurred")
+      );
+    }
+  };
 
   const breadcrumbs = [
     {
@@ -45,14 +82,14 @@ const AddNote = () => {
       href: "/",
     },
     {
-      nameEn: "Add Note",
-      nameAr: "إضافة ملاحظة",
-      nameFr: "Ajouter une note",
-      href: "/add-note",
+      nameEn: "Edit Note",
+      nameAr: "تعديل ملاحظة",
+      nameFr: "Modifier une note",
+      href: `/note/edit-note/${noteId}`,
     },
   ];
 
-  if (loading)
+  if (loading || isFetching)
     return (
       <div className="flex h-screen w-full items-center justify-center">
         <Spinner />
@@ -72,13 +109,13 @@ const AddNote = () => {
               : "Notice Board"}
         </h1>
         <div className="mb-10">
-          <div className="mx-6 my-6 grid h-full w-[90] items-center gap-3 rounded-xl bg-bgPrimary p-6 md:mx-auto md:w-[80%]">
+          <div className="mx-6 my-6 grid h-full w-[90%] items-center gap-3 rounded-xl bg-bgPrimary p-6 md:mx-auto md:w-[80%]">
             <h1 className="text-2xl font-semibold">
               {currentLanguage === "ar"
-                ? "إضافة إعلان"
+                ? "تعديل إعلان"
                 : currentLanguage === "fr"
-                  ? "Ajouter une annonce"
-                  : "Add Notice"}
+                  ? "Modifier une annonce"
+                  : "Edit Notice"}
             </h1>
             <form
               className="flex h-full w-full items-center justify-center px-6"
@@ -91,7 +128,8 @@ const AddNote = () => {
                 >
                   Title
                   <input
-                    className="mx-4 rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-2 pb-28 outline-none"
+                    maxLength={55}
+                    className="mx-4 rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-2 pb-2 outline-none"
                     placeholder={
                       currentLanguage === "en"
                         ? "Write title...."
@@ -125,7 +163,7 @@ const AddNote = () => {
                   </div>
                 </label>
                 <div>
-                  {isLoading ? (
+                  {isUpdating ? (
                     <Spinner />
                   ) : (
                     <div className="flex w-full items-center justify-center">
@@ -134,10 +172,10 @@ const AddNote = () => {
                         className="mx-3 flex items-center gap-2 whitespace-nowrap rounded-xl bg-primary px-6 py-4 text-[18px] font-semibold text-white duration-300 ease-in hover:bg-hover hover:shadow-xl"
                       >
                         {currentLanguage === "ar"
-                          ? "إضافة إعلان"
+                          ? "تحديث الإعلان"
                           : currentLanguage === "fr"
-                            ? "Ajouter une annonce"
-                            : "Add Notice"}
+                            ? "Mettre à jour l'annonce"
+                            : "Update Notice"}
                       </button>
                     </div>
                   )}
@@ -151,4 +189,4 @@ const AddNote = () => {
   );
 };
 
-export default AddNote;
+export default EditNote;

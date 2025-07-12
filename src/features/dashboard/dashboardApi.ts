@@ -99,6 +99,18 @@ export const dashboardApi = createApi({
         method: "DELETE",
       }),
     }),
+    getNoteById: builder.query({
+      query: (id: string | number) => `/api/management/note/${id}`,
+    }),
+
+    updateNote: builder.mutation({
+      query: ({ id, title, description }) => ({
+        url: `/api/management/note/${id}`,
+        method: "PUT",
+        body: { title, description },
+      }),
+    }),
+
     //
     getExpenses: builder.query({
       query: ({ start, end }) =>
@@ -126,4 +138,6 @@ export const {
   useGetWorkerAttendenceQuery,
   useGetNoticesQuery,
   useGetStudentPercentageQuery,
+  useGetNoteByIdQuery,
+  useUpdateNoteMutation
 } = dashboardApi;

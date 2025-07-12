@@ -154,7 +154,7 @@ const Medical = () => {
             <div className="flex justify-center">
               <Link
                 href="/document-management/other/medical/add-medical"
-                className="mx-3 mb-5 w-fit whitespace-nowrap rounded-xl bg-primary px-4 py-2 text-[18px] font-semibold text-white duration-300 ease-in hover:bg-hover hover:shadow-xl"
+                className="mx-3 self-end whitespace-nowrap rounded-xl bg-primary px-4 py-2 text-[18px] font-semibold text-white hover:bg-hover hover:shadow-xl"
               >
                 {currentLanguage === "ar"
                   ? "+ إضافة سجل طبي"

@@ -94,7 +94,9 @@ const ClassSchedule = () => {
       >
         <div className="mb-6 mr-5 flex justify-between max-[540px]:my-1 max-[540px]:mr-0 max-[540px]:grid max-[540px]:justify-center">
           <div className="ml-2 flex items-center justify-start gap-3 text-xl font-semibold max-[540px]:mb-2 max-[540px]:ml-0 max-[540px]:justify-center">
-            <Link href="/educational-affairs/schedule">
+            <Link
+              className="hover:text-blue-500 hover:underline"
+             href="/educational-affairs/schedule">
               {currentLanguage === "ar"
                 ? "معلم"
                 : currentLanguage === "fr"

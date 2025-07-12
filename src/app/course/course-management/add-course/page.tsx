@@ -1,486 +1,344 @@
 "use client";
-import React, { useEffect } from "react";
-import { useForm } from "react-hook-form";
+import React, { useState } from "react";
+import { Controller, useForm } from "react-hook-form";
 import Spinner from "@/components/spinner";
-import { useCreateCoursesMutation } from "@/features/Acadimic/courseApi";
-import {
-  useGetAllLevelsQuery,
-  useGetAllRegistrationsQuery,
-  useGetAllLanguagesQuery,
-} from "@/features/signupApi";
 import { toast } from "react-toastify";
 import { useSelector } from "react-redux";
 import { RootState } from "@/GlobalRedux/store";
-import { useGetAllCountrysQuery } from "@/features/dashboard/dashboardApi";
 import BreadCrumbs from "@/components/BreadCrumbs";
 import Container from "@/components/Container";
+import { useCreateCoursesMutation, useGetAllCoursesQuery } from "@/features/Acadimic/courseApi";
+import {
+    useGetAllCountryCodeQuery,
+    useGetAllLanguagesQuery,
+    useGetAllLevelsQuery,
+    useGetAllRegistrationsQuery,
+    useGetAllSecondarySchoolDepartmentsQuery,
+    useGetAllSecondarySchoolSubDepartmentsQuery,
+    useGetAllSemesterQuery,
+} from "@/features/signupApi";
+import { useGetAllEducationsQuery } from "@/features/User-Management/studentApi";
+import { useRouter } from "next/navigation";
+import Select from "react-select";
 
-const AddCourse = () => {
-  const breadcrumbs = [
-    {
-      nameEn: "Academic",
-      nameAr: "أكاديمي",
-      nameFr: "Académique",
-      href: "/",
-    },
-    {
-      nameEn: "Course Management",
-      nameAr: "إدارة الدورات",
-      nameFr: "Gestion des cours",
-      href: "/course/course-management",
-    },
-    {
-      nameEn: "Add Course",
-      nameAr: "إضافة دورة",
-      nameFr: "Ajouter un cours",
-      href: "/course/course-management/add-course",
-    },
-  ];
-  const booleanValue = useSelector((state: RootState) => state.boolean.value);
+const CreateCourse = () => {
+    const breadcrumbs = [
+        { nameEn: "Academic", nameAr: "أكاديمي", nameFr: "Académique", href: "/" },
+        {
+            nameEn: "Course Management",
+            nameAr: "إدارة الدورات",
+            nameFr: "Gestion des cours",
+            href: "/course/course-management",
+        },
+        {
+            nameEn: "Create Course",
+            nameAr: "إنشاء دورة",
+            nameFr: "Créer un cours",
+            href: `/course/course-management/add-course`,
+        },
+    ];
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm();
-  const { data: CountryData, isLoading: CountryLoading } =
-    useGetAllCountrysQuery(null);
-  const { data: LevelData, isLoading: LevelLoading } =
-    useGetAllLevelsQuery(null);
-  const { data: RegData, isLoading: RegLoading } =
-    useGetAllRegistrationsQuery(null);
-  const { data: LangData, isLoading: LangLoading } =
-    useGetAllLanguagesQuery(null);
+    const router = useRouter();
+    const { language: currentLanguage, loading } = useSelector((state: RootState) => state.language);
+    const [selectedDepartment, setSelectedDepartment] = useState("");
 
-  const [createCourse, { isLoading }] = useCreateCoursesMutation();
+    const { data: subDepartmentsData, isLoading: subDepartmentsLoading } = useGetAllSecondarySchoolSubDepartmentsQuery(selectedDepartment, { skip: !selectedDepartment });
+    const { data: allCoursesData } = useGetAllCoursesQuery(null);
+    const { data: eduSystemsData } = useGetAllEducationsQuery(null);
+    const { data: countryCodesData, isLoading: countryCodesLoading } = useGetAllCountryCodeQuery(null);
+    const { data: departmentsData, isLoading: departmentsLoading } = useGetAllSecondarySchoolDepartmentsQuery(null);
+    const { data: semestersData, isLoading: semestersLoading } = useGetAllSemesterQuery(null);
+    const { data: languagesData, isLoading: languagesLoading } = useGetAllLanguagesQuery(null);
+    const { data: levelsData, isLoading: levelsLoading } = useGetAllLevelsQuery(null);
+    const { data: registrationsData, isLoading: registrationsLoading } = useGetAllRegistrationsQuery(null);
 
-  const onSubmit = async (data: any) => {
-    try {
-      await createCourse(data).unwrap();
-      toast.success("Course created successfully");
-    } catch (err) {
-      toast.error((err as { data: { message: string } }).data?.message);
-    }
-  };
-  const { language: currentLanguage, loading } = useSelector(
-    (state: RootState) => state.language,
-  );
+    const { register, handleSubmit, setValue, control, formState: { errors } } = useForm();
+    const [createCourse, { isLoading: isCreating }] = useCreateCoursesMutation();
 
-  if (CountryLoading || LevelLoading || RegLoading || LangLoading || loading)
-    return (
-      <div className="grid h-screen grid-cols-2 items-center justify-center bg-bgPrimary duration-300 ease-in max-[1040px]:grid-cols-1">
-        <Spinner />
-      </div>
+    const onSubmit = async (formData: any) => {
+        try {
+            await createCourse(formData).unwrap();
+            toast.success(
+                currentLanguage === "ar"
+                    ? "تم إنشاء الدورة بنجاح"
+                    : currentLanguage === "fr"
+                        ? "Cours créé avec succès"
+                        : "Course created successfully"
+            );
+            router.push("/course/course-management");
+        } catch (err) {
+            toast.error((err as { data: { message: string } }).data?.message);
+        }
+    };
+
+    const courseOptions = allCoursesData?.data?.content?.map((course: any) => ({
+        value: course.id,
+        label: course.name,
+    })) || [];
+
+
+    if (loading) return (
+        <div className="flex h-screen w-full items-center justify-center">
+            <Spinner />
+        </div>
     );
 
-  return (
-    <>
-      <BreadCrumbs breadcrumbs={breadcrumbs} />
-      <Container>
-        <div className="-ml-1 -mt-2 mb-8 flex items-center justify-between">
-          <h1 className="text-3xl font-semibold">
-            {currentLanguage === "en"
-              ? "Add Course"
-              : currentLanguage === "ar"
-                ? "إضافة دورة"
-                : currentLanguage === "fr"
-                  ? "Ajouter un cours"
-                  : "Add Course"}{" "}
-            {/* default */}
-          </h1>
-        </div>
-        <form
-          className="flex h-full w-full items-center justify-center"
-          onSubmit={handleSubmit(onSubmit)}
-        >
-          <div className="w-[90] rounded-xl bg-bgPrimary p-10 md:w-[80%]">
-            <div className="flex items-center justify-start gap-2">
-              <svg
-                className="h-6 w-6 font-bold text-secondary group-hover:text-primary"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                strokeWidth="2"
-                stroke="currentColor"
-                fill="none"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              >
-                {" "}
-                <path stroke="none" d="M0 0h24v24H0z" />{" "}
-                <line x1="3" y1="21" x2="21" y2="21" />{" "}
-                <line x1="3" y1="10" x2="21" y2="10" />{" "}
-                <polyline points="5 6 12 3 19 6" />{" "}
-                <line x1="4" y1="10" x2="4" y2="21" />{" "}
-                <line x1="20" y1="10" x2="20" y2="21" />{" "}
-                <line x1="8" y1="14" x2="8" y2="17" />{" "}
-                <line x1="12" y1="14" x2="12" y2="17" />{" "}
-                <line x1="16" y1="14" x2="16" y2="17" />
-              </svg>
-              <h1 className="text-[22px] font-semibold">
-                {currentLanguage === "ar"
-                  ? "معلومات الدورة"
-                  : currentLanguage === "fr"
-                    ? "Informations sur le cours"
-                    : "Course Information"}
-              </h1>
-            </div>
-            <div className="grid grid-cols-2 gap-4 p-6 max-[1278px]:grid-cols-1">
-              <label htmlFor="name" className="grid text-[18px] font-semibold">
-                {currentLanguage === "ar"
-                  ? "(en) الاسم"
-                  : currentLanguage === "fr"
-                    ? "Nom (en)"
-                    : "Name (en)"}
-                <input
-                  id="name"
-                  {...register("name_en", { required: true })}
-                  type="text"
-                  className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
-                />
-                {errors.name_en && (
-                  <span className="text-error">
-                    {currentLanguage === "ar"
-                      ? "هذا الحقل مطلوب"
-                      : currentLanguage === "fr"
-                        ? "Ce champ est requis"
-                        : "This field is required"}
-                  </span>
-                )}
-              </label>
-              <label htmlFor="name" className="grid text-[18px] font-semibold">
-                {currentLanguage === "ar"
-                  ? "(ar) الاسم"
-                  : currentLanguage === "fr"
-                    ? "Nom (ar)"
-                    : "Name (ar)"}
-                <input
-                  id="name"
-                  {...register("name_ar", { required: true })}
-                  type="text"
-                  className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
-                />
-                {errors.name_ar && (
-                  <span className="text-error">
-                    {currentLanguage === "ar"
-                      ? "هذا الحقل مطلوب"
-                      : currentLanguage === "fr"
-                        ? "Ce champ est requis"
-                        : "This field is required"}
-                  </span>
-                )}
-              </label>
-              <label htmlFor="name" className="grid text-[18px] font-semibold">
-                {currentLanguage === "ar"
-                  ? "(fr) الاسم"
-                  : currentLanguage === "fr"
-                    ? "Nom (fr)"
-                    : "Name (fr)"}
-                <input
-                  id="name"
-                  {...register("name_fr", { required: true })}
-                  type="text"
-                  className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
-                />
-                {errors.name_fr && (
-                  <span className="text-error">
-                    {currentLanguage === "ar"
-                      ? "هذا الحقل مطلوب"
-                      : currentLanguage === "fr"
-                        ? "Ce champ est requis"
-                        : "This field is required"}
-                  </span>
-                )}
-              </label>
-              <label htmlFor="name" className="grid text-[18px] font-semibold">
-                {currentLanguage === "ar"
-                  ? "(en) الوصف"
-                  : currentLanguage === "fr"
-                    ? "Description (en)"
-                    : "Description (en)"}
-                <input
-                  id="name"
-                  {...register("description_en", { required: true })}
-                  type="text"
-                  className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
-                />
-                {errors.description_en && (
-                  <span className="text-error">
-                    {currentLanguage === "ar"
-                      ? "هذا الحقل مطلوب"
-                      : currentLanguage === "fr"
-                        ? "Ce champ est requis"
-                        : "This field is required"}
-                  </span>
-                )}
-              </label>
-              <label htmlFor="name" className="grid text-[18px] font-semibold">
-                {currentLanguage === "ar"
-                  ? "(ar) الوصف"
-                  : currentLanguage === "fr"
-                    ? "Description (ar)"
-                    : "Description (ar)"}
-                <input
-                  id="name"
-                  {...register("description_ar", { required: true })}
-                  type="text"
-                  className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
-                />
-                {errors.description_ar && (
-                  <span className="text-error">
-                    {currentLanguage === "ar"
-                      ? "هذا الحقل مطلوب"
-                      : currentLanguage === "fr"
-                        ? "Ce champ est requis"
-                        : "This field is required"}
-                  </span>
-                )}
-              </label>
-              <label htmlFor="name" className="grid text-[18px] font-semibold">
-                {currentLanguage === "ar"
-                  ? "(fr) الوصف"
-                  : currentLanguage === "fr"
-                    ? "Description (fr)"
-                    : "Description (fr)"}
-                <input
-                  id="name"
-                  {...register("description_fr", { required: true })}
-                  type="text"
-                  className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
-                />
-                {errors.description_fr && (
-                  <span className="text-error">
-                    {currentLanguage === "ar"
-                      ? "هذا الحقل مطلوب"
-                      : currentLanguage === "fr"
-                        ? "Ce champ est requis"
-                        : "This field is required"}
-                  </span>
-                )}
-              </label>
-              <label
-                htmlFor="countryId"
-                className="grid text-start text-[15px] font-semibold text-blackOrWhite"
-              >
-                {currentLanguage === "ar"
-                  ? "البلد"
-                  : currentLanguage === "fr"
-                    ? "Pays"
-                    : "Country"}
-                <select
-                  defaultValue=""
-                  id="countryId"
-                  {...register("countryId")}
-                  className={`border ${errors.countryId ? "border-warning" : "border-borderPrimary"} h-full w-full rounded-xl px-4 py-3 text-sm text-blackOrWhite outline-none max-[458px]:w-[350px]`}
-                >
-                  <option selected value="">
-                    {currentLanguage === "ar"
-                      ? "اختر البلد"
-                      : currentLanguage === "fr"
-                        ? "Sélectionner le pays"
-                        : "Select Country"}
-                  </option>
-                  {CountryData &&
-                    Object.entries(CountryData.data).map(([key, value]) => (
-                      <option key={String(value)} value={key}>
-                        {String(value)}
-                      </option>
-                    ))}
-                </select>
-                {errors.countryId && (
-                  <span className="text-[13px] text-error">
-                    {currentLanguage === "ar"
-                      ? "البلد مطلوب"
-                      : currentLanguage === "fr"
-                        ? "Le pays est requis"
-                        : "Country is Required"}
-                  </span>
-                )}
-              </label>
-              <label
-                htmlFor="level"
-                className="grid text-start text-[15px] font-semibold text-blackOrWhite"
-              >
-                {currentLanguage === "ar"
-                  ? "مستوى الدراسة"
-                  : currentLanguage === "fr"
-                    ? "Niveau d'étude"
-                    : "Study Level"}
-                <select
-                  defaultValue=""
-                  id="level"
-                  {...register("level", { required: true })}
-                  className={`border ${errors.level ? "border-warning" : "border-borderPrimary"} h-full w-full rounded-xl px-4 py-3 text-sm text-blackOrWhite outline-none max-[458px]:w-[350px]`}
-                >
-                  <option selected value="">
-                    {currentLanguage === "ar"
-                      ? "اختر مستوى الدراسة"
-                      : currentLanguage === "fr"
-                        ? "Sélectionner le niveau d'étude"
-                        : "Select Study Level"}
-                  </option>
-                  {LevelData &&
-                    Object.entries(LevelData.data).map(([key, value]) => (
-                      <option key={String(value)} value={key}>
-                        {String(value)}
-                      </option>
-                    ))}
-                </select>
-                {errors.level && (
-                  <span className="text-[13px] text-error">
-                    {currentLanguage === "ar"
-                      ? "مستوى الدراسة مطلوب"
-                      : currentLanguage === "fr"
-                        ? "Le niveau d'études est requis"
-                        : "Study Level is Required"}
-                  </span>
-                )}
-              </label>
-              <label
-                htmlFor="registrationType"
-                className="grid text-start text-[15px] font-semibold text-blackOrWhite"
-              >
-                {currentLanguage === "ar"
-                  ? "التسجيل"
-                  : currentLanguage === "fr"
-                    ? "Inscription"
-                    : "Registration"}
-                <select
-                  defaultValue=""
-                  id="registrationType"
-                  {...register("registrationType", { required: true })}
-                  className={`border ${errors.registrationType ? "border-warning" : "border-borderPrimary"} h-full w-full rounded-xl px-4 py-3 text-sm text-blackOrWhite outline-none max-[458px]:w-[350px]`}
-                >
-                  <option selected value="">
-                    {currentLanguage === "ar"
-                      ? "اختر التسجيل"
-                      : currentLanguage === "fr"
-                        ? "Sélectionner l'inscription"
-                        : "Select Registration"}
-                  </option>
-                  {RegData &&
-                    Object.entries(RegData.data).map(([key, value]) => (
-                      <option key={String(value)} value={key}>
-                        {String(value)}
-                      </option>
-                    ))}
-                </select>
-                {errors.registrationType && (
-                  <span className="text-[13px] text-error">
-                    {currentLanguage === "ar"
-                      ? "التسجيل مطلوب"
-                      : currentLanguage === "fr"
-                        ? "L'inscription est requise"
-                        : "Registration is Required"}
-                  </span>
-                )}
-              </label>
-              <label
-                htmlFor="language"
-                className="grid text-start text-[15px] font-semibold text-blackOrWhite"
-              >
-                {currentLanguage === "ar"
-                  ? "اللغة"
-                  : currentLanguage === "fr"
-                    ? "Langue"
-                    : "Language"}
-                <select
-                  defaultValue=""
-                  id="language"
-                  {...register("language", { required: true })}
-                  className={`border ${errors.language ? "border-warning" : "border-borderPrimary"} h-full w-full rounded-xl px-4 py-3 text-sm text-blackOrWhite outline-none max-[458px]:w-[350px]`}
-                >
-                  <option selected value="">
-                    {currentLanguage === "ar"
-                      ? "اختر اللغة"
-                      : currentLanguage === "fr"
-                        ? "Sélectionner la langue"
-                        : "Select Language"}{" "}
-                  </option>
-                  {LangData &&
-                    Object.entries(LangData.data).map(([key, value]) => (
-                      <option key={String(value)} value={key}>
-                        {String(value)}
-                      </option>
-                    ))}
-                </select>
-                {errors.language && (
-                  <span className="text-[13px] text-error">
-                    {currentLanguage === "ar"
-                      ? "اللغة مطلوبة"
-                      : currentLanguage === "fr"
-                        ? "La langue est requise"
-                        : "Language is Required"}
-                  </span>
-                )}
-              </label>
-              <label htmlFor="code" className="grid text-[18px] font-semibold">
-                {currentLanguage === "ar"
-                  ? "الرمز"
-                  : currentLanguage === "fr"
-                    ? "Code"
-                    : "Code"}
-                <input
-                  id="code"
-                  {...register("code", { required: true })}
-                  type="number"
-                  className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
-                />
-                {errors.code && (
-                  <span className="text-error">
-                    {currentLanguage === "ar"
-                      ? "هذا الحقل مطلوب"
-                      : currentLanguage === "fr"
-                        ? "Ce champ est requis"
-                        : "This field is required"}
-                  </span>
-                )}
-              </label>
-              <label htmlFor="code" className="grid text-[18px] font-semibold">
-                {currentLanguage === "ar"
-                  ? "معرف النظام التعليمي"
-                  : currentLanguage === "fr"
-                    ? "ID du système éducatif"
-                    : "EDU System Id"}
-                <input
-                  id="eduSystemId"
-                  {...register("eduSystemId", { required: true })}
-                  type="number"
-                  className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
-                />
-                {errors.eduSystemId && (
-                  <span className="text-error">
-                    {currentLanguage === "ar"
-                      ? "هذا الحقل مطلوب"
-                      : currentLanguage === "fr"
-                        ? "Ce champ est requis"
-                        : "This field is required"}
-                  </span>
-                )}
-              </label>
-            </div>
+    return (
+        <>
+            <BreadCrumbs breadcrumbs={breadcrumbs} />
+            <Container>
+                <div dir={currentLanguage == "ar" ? "rtl" : "ltr"} className="-ml-1 -mt-2 mb-8 flex items-center justify-between">
+                    <h1 className="text-3xl font-semibold">
+                        {currentLanguage === "en"
+                            ? "Create Course"
+                            : currentLanguage === "ar"
+                                ? "إنشاء دورة"
+                                : "Créer un cours"}
+                    </h1>
+                </div>
 
-            <div className="flex justify-center text-center">
-              {isLoading ? (
-                <Spinner />
-              ) : (
-                <button
-                  type="submit"
-                  className="w-[140px] rounded-xl bg-primary px-4 py-2 text-[18px] text-white duration-300 ease-in hover:bg-hover hover:shadow-xl"
-                >
-                  {currentLanguage === "ar"
-                    ? "+ إضافة دورة"
-                    : currentLanguage === "fr"
-                      ? "+ Ajouter un cours"
-                      : "+ Add Course"}
-                </button>
-              )}
-            </div>
-          </div>
-        </form>
-      </Container>
-    </>
-  );
+                <form className="flex h-full w-full items-center justify-center" onSubmit={handleSubmit(onSubmit)}>
+                    <div className="w-[90] rounded-xl bg-bgPrimary p-10 md:w-[80%] grid grid-cols-2 gap-4 max-[1278px]:grid-cols-1">
+                        <label className="grid text-[18px] font-semibold">
+                            {currentLanguage === "en"
+                                ? "Course Code"
+                                : currentLanguage === "ar"
+                                    ? "رمز الدورة"
+                                    : "Code du cours"}
+                            <input {...register("code", { required: true })} className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]" />
+                            {errors.code && <span className="text-error">{currentLanguage === "ar" ? "هذا الحقل مطلوب" : currentLanguage === "fr" ? "Ce champ est requis" : "This field is required"}</span>}
+                        </label>
+
+                        <label className="grid text-[18px] font-semibold">
+                            {currentLanguage === "en" ? "Course Name (en)" : currentLanguage === "ar" ? "اسم الدورة (بالإنجليزية)" : "Nom du cours (en)"}
+                            <input {...register("name_en", { required: true })} className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]" />
+                            {errors.name_en && <span className="text-error">{currentLanguage === "ar" ? "هذا الحقل مطلوب" : currentLanguage === "fr" ? "Ce champ est requis" : "This field is required"}</span>}
+                        </label>
+
+                        <label className="grid text-[18px] font-semibold">
+                            {currentLanguage === "en" ? "Course Name (fr)" : currentLanguage === "ar" ? "اسم الدورة (بالفرنسية)" : "Nom du cours (fr)"}
+                            <input {...register("name_fr", { required: true })} className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]" />
+                            {errors.name_fr && <span className="text-error">{currentLanguage === "ar" ? "هذا الحقل مطلوب" : currentLanguage === "fr" ? "Ce champ est requis" : "This field is required"}</span>}
+                        </label>
+
+                        <label className="grid text-[18px] font-semibold">
+                            {currentLanguage === "en" ? "Course Name (ar)" : currentLanguage === "ar" ? "اسم الدورة (بالعربية)" : "Nom du cours (ar)"}
+                            <input {...register("name_ar", { required: true })} className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]" />
+                            {errors.name_ar && <span className="text-error">{currentLanguage === "ar" ? "هذا الحقل مطلوب" : currentLanguage === "fr" ? "Ce champ est requis" : "This field is required"}</span>}
+                        </label>
+
+                        <label className="grid text-[18px] font-semibold">
+                            {currentLanguage === "en" ? "Description (en)" : currentLanguage === "ar" ? "وصف الدورة (بالإنجليزية)" : "Description (en)"}
+                            <input {...register("description_en", { required: true })} className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]" />
+                            {errors.description_en && <span className="text-error">{currentLanguage === "ar" ? "هذا الحقل مطلوب" : currentLanguage === "fr" ? "Ce champ est requis" : "This field is required"}</span>}
+                        </label>
+
+                        <label className="grid text-[18px] font-semibold">
+                            {currentLanguage === "en" ? "Description (fr)" : currentLanguage === "ar" ? "وصف الدورة (بالفرنسية)" : "Description (fr)"}
+                            <input {...register("description_fr", { required: true })} className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]" />
+                            {errors.description_fr && <span className="text-error">{currentLanguage === "ar" ? "هذا الحقل مطلوب" : currentLanguage === "fr" ? "Ce champ est requis" : "This field is required"}</span>}
+                        </label>
+
+                        <label className="grid text-[18px] font-semibold">
+                            {currentLanguage === "en" ? "Description (ar)" : currentLanguage === "ar" ? "وصف الدورة (بالعربية)" : "Description (ar)"}
+                            <input {...register("description_ar", { required: true })} className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]" />
+                            {errors.description_ar && <span className="text-error">{currentLanguage === "ar" ? "هذا الحقل مطلوب" : currentLanguage === "fr" ? "Ce champ est requis" : "This field is required"}</span>}
+                        </label>
+
+                        <label className="grid text-[18px] font-semibold">
+                            {currentLanguage === "en" ? "Country" : currentLanguage === "ar" ? "الدولة" : "Pays"}
+                            <select {...register("countryId", { required: true })} className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]">
+                                <option value="">{countryCodesLoading ? "Loading..." : currentLanguage === "en" ? "Select country" : currentLanguage === "ar" ? "اختر الدولة" : "Sélectionnez un pays"}</option>
+                                {!countryCodesLoading && countryCodesData &&
+                                    Object.entries(countryCodesData.data).map(([code, id]) => (
+                                        <option key={code as string} value={id as number}>{`${code} (+${id})`}</option>
+                                    ))}
+                            </select>
+                            {errors.countryId && <span className="text-error">{currentLanguage === "ar" ? "هذا الحقل مطلوب" : currentLanguage === "fr" ? "Ce champ est requis" : "This field is required"}</span>}
+                        </label>
+
+                        <label className="grid text-[18px] font-semibold">
+                            {currentLanguage === "en" ? "Level" : currentLanguage === "ar" ? "المستوى" : "Niveau"}
+                            <select {...register("level", { required: true })} className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]">
+                                <option value="">{levelsLoading ? "Loading..." : currentLanguage === "en" ? "Level" : currentLanguage === "ar" ? "المستوى" : "Niveau"}</option>
+                                {!levelsLoading && levelsData &&
+                                    Object.entries(levelsData.data).map(([value, label]) => (
+                                        <option key={value} value={value}>{String(label)}</option>
+                                    ))}
+                            </select>
+                            {errors.level && <span className="text-error">{currentLanguage === "ar" ? "هذا الحقل مطلوب" : currentLanguage === "fr" ? "Ce champ est requis" : "This field is required"}</span>}
+                        </label>
+
+                        <label className="grid text-[18px] font-semibold">
+                            {currentLanguage === "en" ? "Registration Type" : currentLanguage === "ar" ? "نوع التسجيل" : "Type d'inscription"}
+                            <select {...register("registrationType", { required: true })} className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]">
+                                <option value="">{registrationsLoading ? "Loading..." : currentLanguage === "en" ? "Select registration type" : currentLanguage === "ar" ? "اختر نوع التسجيل" : "Sélectionnez le type d'inscription"}</option>
+                                {!registrationsLoading && registrationsData &&
+                                    Object.entries(registrationsData.data).map(([value, label]) => (
+                                        <option key={value} value={value}>{String(label)}</option>
+                                    ))}
+                            </select>
+                            {errors.registrationType && <span className="text-error">{currentLanguage === "ar" ? "هذا الحقل مطلوب" : currentLanguage === "fr" ? "Ce champ est requis" : "This field is required"}</span>}
+                        </label>
+
+                        <label className="grid text-[18px] font-semibold">
+                            {currentLanguage === "en" ? "Language" : currentLanguage === "ar" ? "اللغة" : "Langue"}
+                            <select {...register("language", { required: true })} className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]">
+                                <option value="">{languagesLoading ? "Loading..." : currentLanguage === "en" ? "Select language" : currentLanguage === "ar" ? "اختر اللغة" : "Sélectionnez une langue"}</option>
+                                {!languagesLoading && languagesData &&
+                                    Object.entries(languagesData.data).map(([value, label]) => (
+                                        <option key={value} value={value}>{String(label)}</option>
+                                    ))}
+                            </select>
+                            {errors.language && <span className="text-error">{currentLanguage === "ar" ? "هذا الحقل مطلوب" : currentLanguage === "fr" ? "Ce champ est requis" : "This field is required"}</span>}
+                        </label>
+
+                        <label className="grid text-[18px] font-semibold">
+                            {currentLanguage === "en" ? "Coefficient" : currentLanguage === "ar" ? "المعامل" : "Coefficient"}
+                            <input {...register("coefficient", { required: true })} className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]" />
+                            {errors.coefficient && <span className="text-error">{currentLanguage === "ar" ? "هذا الحقل مطلوب" : currentLanguage === "fr" ? "Ce champ est requis" : "This field is required"}</span>}
+                        </label>
+
+                        <label className="grid text-[18px] font-semibold">
+                            {currentLanguage === "en" ? "Semester" : currentLanguage === "ar" ? "الفصل الدراسي" : "Semestre"}
+                            <select {...register("semesterName", { required: true })} className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]">
+                                <option value="">{semestersLoading ? "Loading..." : currentLanguage === "en" ? "Select semester" : currentLanguage === "ar" ? "اختر الفصل الدراسي" : "Sélectionnez un semestre"}</option>
+                                {!semestersLoading && semestersData &&
+                                    Object.entries(semestersData.data).map(([value, label]) => (
+                                        <option key={value} value={value}>{String(label)}</option>
+                                    ))}
+                            </select>
+                            {errors.semesterName && <span className="text-error">{currentLanguage === "ar" ? "هذا الحقل مطلوب" : currentLanguage === "fr" ? "Ce champ est requis" : "This field is required"}</span>}
+                        </label>
+
+                        <label className="grid text-[18px] font-semibold">
+                            {currentLanguage === "en" ? "Department" : currentLanguage === "ar" ? "القسم" : "Département"}
+                            <select {...register("secondarySchoolDepartment", { required: true })} onChange={(e) => { setSelectedDepartment(e.target.value); setValue("secondarySchoolDepartment", e.target.value); setValue("subDepartment", ""); }} className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]">
+                                <option value="">{departmentsLoading ? "Loading..." : currentLanguage === "en" ? "Select department" : currentLanguage === "ar" ? "اختر القسم" : "Sélectionnez un département"}</option>
+                                {!departmentsLoading && departmentsData &&
+                                    Object.entries(departmentsData.data).map(([value, label]) => (
+                                        <option key={value} value={value}>{String(label)}</option>
+                                    ))}
+                            </select>
+                            {errors.secondarySchoolDepartment && <span className="text-error">{currentLanguage === "ar" ? "هذا الحقل مطلوب" : currentLanguage === "fr" ? "Ce champ est requis" : "This field is required"}</span>}
+                        </label>
+                        <label className="grid text-[18px] font-semibold">
+                            {currentLanguage === "en" ? "Sub Department" : currentLanguage === "ar" ? "القسم الفرعي" : "Sous-département"}
+                            <select
+                                {...register("subDepartment", { required: true })}
+                                disabled={!selectedDepartment}
+                                className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                            >
+                                <option value="">
+                                    {subDepartmentsLoading
+                                        ? currentLanguage === "en"
+                                            ? "Loading..."
+                                            : currentLanguage === "ar"
+                                                ? "جارٍ التحميل..."
+                                                : "Chargement..."
+                                        : currentLanguage === "en"
+                                            ? "Select sub department"
+                                            : currentLanguage === "ar"
+                                                ? "اختر القسم الفرعي"
+                                                : "Sélectionnez un sous-département"}
+                                </option>
+                                {!subDepartmentsLoading &&
+                                    subDepartmentsData &&
+                                    Object.entries(subDepartmentsData.data).map(([value, label]) => (
+                                        <option key={value} value={value}>
+                                            {String(label)}
+                                        </option>
+                                    ))}
+                            </select>
+                            {errors.subDepartment && (
+                                <span className="text-error">
+                                    {currentLanguage === "ar"
+                                        ? "هذا الحقل مطلوب"
+                                        : currentLanguage === "fr"
+                                            ? "Ce champ est requis"
+                                            : "This field is required"}
+                                </span>
+                            )}
+                        </label>
+                        <label className="grid text-[18px] font-semibold">
+                            {currentLanguage === "en" ? "Education System" : currentLanguage === "ar" ? "النظام التعليمي" : "Système éducatif"}
+                            <select
+                                {...register("eduSystemId", { required: true })}
+                                className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                            >
+                                <option value="">
+                                    {eduSystemsData?.data?.content
+                                        ? currentLanguage === "en"
+                                            ? "Select system"
+                                            : currentLanguage === "ar"
+                                                ? "اختر النظام"
+                                                : "Sélectionnez un système"
+                                        : currentLanguage === "en"
+                                            ? "Loading..."
+                                            : currentLanguage === "ar"
+                                                ? "جارٍ التحميل..."
+                                                : "Chargement..."}
+                                </option>
+                                {eduSystemsData?.data?.content?.map((item: any) => (
+                                    <option key={item.id} value={item.id}>
+                                        {item.name}
+                                    </option>
+                                ))}
+                            </select>
+                            {errors.eduSystemId && (
+                                <span className="text-error">
+                                    {currentLanguage === "ar"
+                                        ? "هذا الحقل مطلوب"
+                                        : currentLanguage === "fr"
+                                            ? "Ce champ est requis"
+                                            : "This field is required"}
+                                </span>
+                            )}
+                        </label>
+                        <label className="grid text-[18px] font-semibold">
+                            {currentLanguage === "en"
+                                ? "Prerequisite Courses"
+                                : currentLanguage === "ar"
+                                    ? "المقررات المطلوبة"
+                                    : "Cours préalables"}
+                            <Controller
+                                control={control}
+                                name="prerequisiteIds"
+                                render={({ field }) => (
+                                    <Select
+                                        isMulti
+                                        options={courseOptions}
+                                        className="basic-multi-select"
+                                        classNamePrefix="select"
+                                        value={courseOptions.filter((opt: any) => field.value?.includes(opt.value))}
+                                        onChange={(selected) => field.onChange(selected.map((opt) => opt.value))}
+                                    />
+                                )}
+                            />
+
+                        </label>
+
+                        <div className="col-span-2 flex justify-center text-center mt-4">
+                            {isCreating ? (
+                                <Spinner />
+                            ) : (
+                                <button
+                                    type="submit"
+                                    className="w-[140px] rounded-xl bg-primary px-4 py-2 text-[18px] text-white duration-300 ease-in hover:bg-hover hover:shadow-xl"
+                                >
+                                    {currentLanguage === "ar"
+                                        ? "حفظ"
+                                        : currentLanguage === "fr"
+                                            ? "Enregistrer"
+                                            : "Save"}
+                                </button>
+                            )}
+                        </div>
+                    </div>
+                </form>
+            </Container>
+        </>
+    );
 };
 
-export default AddCourse;
+export default CreateCourse;

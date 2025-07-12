@@ -76,6 +76,9 @@ export const examsApi = createApi({
       query: id =>
         `/api/v1/academic/educationalAffairs/exam-types/non-teacher/all-by-course/${id}`,
     }),
+    getAllExamTypesNonTeacher: builder.query({
+      query: () => `/api/v1/academic/educationalAffairs/exam-types/non-teacher/all`,
+    }),
     //
     updateExam: builder.mutation({
       query: ({ formData, id }) => ({
@@ -97,4 +100,5 @@ export const {
   useUpdateExamMutation,
   useGetExamTypeByCourseIdQuery,
   useDeleteExamResultMutation,
+  useGetAllExamTypesNonTeacherQuery
 } = examsApi;

@@ -30,6 +30,9 @@ export const courseApi = createApi({
     getAllCourses: builder.query({
       query: () => "/api/v1/management/course/all?size=1000000&page=0",
     }),
+    getAllCoursesForSchool: builder.query({
+      query: () => "/api/v1/management/course/all-for-school?size=1000000&page=0",
+    }),
     //
     getAllGrades: builder.query({
       query: ({ studentId, semesterId }) =>
@@ -58,7 +61,7 @@ export const courseApi = createApi({
     updateCourses: builder.mutation({
       query: ({ formData, id }) => ({
         url: `/api/v1/management/course/${id}`,
-        method: "PATCH",
+        method: "PUT",
         body: formData,
       }),
     }),
@@ -72,4 +75,5 @@ export const {
   useGetCourseByIdQuery,
   useUpdateCoursesMutation,
   useGetAllGradesQuery,
+  useGetAllCoursesForSchoolQuery,
 } = courseApi;

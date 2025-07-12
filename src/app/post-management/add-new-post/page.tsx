@@ -10,6 +10,7 @@ import Spinner from "@/components/spinner";
 import { useState } from "react";
 import Container from "@/components/Container";
 import { Text } from "@/components/Text";
+import { useRouter } from "next/navigation";
 
 const AddNewPost = () => {
   const [imagePreview, setImagePreview] = useState<string | null>(null);
@@ -33,7 +34,7 @@ const AddNewPost = () => {
       href: "/post-management/add-new-post",
     },
   ];
-
+const router = useRouter();
   const {
     register,
     handleSubmit,
@@ -75,6 +76,7 @@ const AddNewPost = () => {
     try {
       await createPost(formData).unwrap();
       toast.success("Create post Success");
+      router.push("/post-management");
     } catch (err) {
                   toast.error((err as { data: { message: string } }).data?.message);
                 }
@@ -151,7 +153,7 @@ const AddNewPost = () => {
                             ? "Le titre en anglais est requis"
                             : "Title in English is required",
                     })}
-                    className="h-[60px] rounded-lg border border-borderPrimary px-3 py-2 outline-none"
+                    className="bg-bgPrimary h-[60px] rounded-lg border border-borderPrimary px-3 py-2 outline-none"
                   />
                   {errors.title_en && (
                     <span className="text-red-500">
@@ -182,7 +184,7 @@ const AddNewPost = () => {
                             ? "Le titre en français est requis"
                             : "Title in French is required",
                     })}
-                    className="h-[60px] rounded-lg border border-borderPrimary px-3 py-2 outline-none"
+                    className="bg-bgPrimary h-[60px] rounded-lg border border-borderPrimary px-3 py-2 outline-none"
                   />
                   {errors.title_fr && (
                     <span className="text-red-500">
@@ -213,7 +215,7 @@ const AddNewPost = () => {
                             ? "Le titre en arabe est requis"
                             : "Title in Arabic is required",
                     })}
-                    className="h-[60px] rounded-lg border border-borderPrimary px-3 py-2 outline-none"
+                    className="bg-bgPrimary h-[60px] rounded-lg border border-borderPrimary px-3 py-2 outline-none"
                   />
                   {errors.title_ar && (
                     <span className="text-red-500">
@@ -244,7 +246,7 @@ const AddNewPost = () => {
                             ? "Le contenu en anglais est requis"
                             : "Content in English is required",
                     })}
-                    className="h-[60px] rounded-lg border border-borderPrimary px-3 py-2 outline-none"
+                    className="bg-bgPrimary h-[60px] rounded-lg border border-borderPrimary px-3 py-2 outline-none"
                   />
                   {errors.content_en && (
                     <span className="text-red-500">
@@ -275,7 +277,7 @@ const AddNewPost = () => {
                             ? "Le contenu en français est requis"
                             : "Content in French is required",
                     })}
-                    className="h-[60px] rounded-lg border border-borderPrimary px-3 py-2 outline-none"
+                    className="bg-bgPrimary h-[60px] rounded-lg border border-borderPrimary px-3 py-2 outline-none"
                   />
                   {errors.content_fr && (
                     <span className="text-red-500">
@@ -306,7 +308,7 @@ const AddNewPost = () => {
                             ? "Le contenu en arabe est requis"
                             : "Content in Arabic is required",
                     })}
-                    className="h-[60px] rounded-lg border border-borderPrimary px-3 py-2 outline-none"
+                    className="bg-bgPrimary h-[60px] rounded-lg border border-borderPrimary px-3 py-2 outline-none"
                   />
                   {errors.content_ar && (
                     <span className="text-red-500">

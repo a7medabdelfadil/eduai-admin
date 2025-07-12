@@ -49,6 +49,18 @@ export const disciplinaryApi = createApi({
         method: "DELETE",
       }),
     }),
+    getDisciplinaryRecordById: builder.query({
+      query: (id: string | number) => `/api/v1/disciplinary-Record/${id}`,
+    }),
+
+    updateDisciplinaryRecord: builder.mutation({
+      query: ({ id, data }: { id: string | number; data: any }) => ({
+        url: `/api/v1/disciplinary-Record/${id}`,
+        method: "PUT",
+        body: data,
+      }),
+    }),
+
   }),
 });
 
@@ -58,4 +70,7 @@ export const {
   useGetActionsTakenQuery,
   useCreateDisciplinaryRecordMutation,
   useDeleteDisciplinaryRecordMutation,
+  useGetDisciplinaryRecordByIdQuery,
+  useUpdateDisciplinaryRecordMutation,
+
 } = disciplinaryApi;

@@ -16,92 +16,83 @@ export const useNotificationsWebSocket = (
   const stompClientRef = useRef<Client | null>(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const previousCountRef = useRef<number>(0);
+  const connectedRef = useRef(false);
 
-  // Preload the notification sound
   useEffect(() => {
-    audioRef.current = new Audio("/sounds/notifi.mp3"); // Ensure this path is correct in your public folder
+    audioRef.current = new Audio("/sounds/notifi.mp3");
     audioRef.current.preload = "auto";
   }, []);
 
   useEffect(() => {
-    // Validate token and userId before connection
     const token = Cookies.get("token");
-    if (!token || !userId) {
-      return;
-    }
+    if (!token || !userId) return;
 
-    // Create STOMP client
     const stompClient = new Client({
-      brokerURL: `${baseUrlStock}ws?token=${token}`,
-      debug: function (str) {
-        console.log("[STOMP Notifications Debug]", str);
-      },
-      reconnectDelay: 5000,
+      webSocketFactory: () => new WebSocket(`${baseUrlStock}ws?token=${token}`),
+      reconnectDelay: 3000,
+      connectionTimeout: 5000,
       heartbeatIncoming: 4000,
       heartbeatOutgoing: 4000,
+      debug: (str) => console.log("[STOMP Debug]", str),
     });
 
-    // Connection success handler
     stompClient.onConnect = () => {
-      console.log("WebSocket Notifications Connected Successfully");
+      console.log("✅ Connected to notifications-count");
       setIsConnected(true);
+      connectedRef.current = true;
 
-      // Subscribe to user-specific notifications count channel
       stompClient.subscribe(
         `/user/${userId}/notifications-count`,
         (message: IMessage) => {
           try {
-            // Parse the notification count from the message
             const count = parseInt(message.body, 10);
-
-            // Check if count has increased
-            if (count > previousCountRef.current) {
-              // Play notification sound
-              if (audioRef.current) {
-                audioRef.current.play().catch(error => {
-                  console.error("Error playing notification sound:", error);
-                });
-              }
+            if (count > previousCountRef.current && audioRef.current) {
+              audioRef.current.play().catch((err) => {
+                console.error("🔇 Failed to play sound:", err);
+              });
             }
-
-            // Update notifications count, ensuring it's not negative
             setNotificationsCount(Math.max(0, count));
-
-            // Update previous count reference
             previousCountRef.current = count;
-          } catch (parseError) {
-            console.error("Error parsing notifications count:", parseError);
+            window.dispatchEvent(new Event("new-notification"));
+          } catch (error) {
+            console.error("❌ Failed to parse notifications count:", error);
           }
         },
       );
     };
 
-    // Error handling
-    stompClient.onStompError = frame => {
-      console.error(
-        "Broker reported notifications error:",
-        frame.headers["message"],
-      );
+    stompClient.onStompError = (frame) => {
+      console.error("⛔ STOMP error:", frame.headers["message"]);
       console.error("Details:", frame.body);
       setIsConnected(false);
     };
 
-    stompClient.onWebSocketError = event => {
-      console.error("WebSocket notifications connection error:", event);
+    stompClient.onWebSocketError = (event) => {
+      console.error("🛑 WebSocket error:", event);
       setIsConnected(false);
     };
 
-    // Activate the connection
     stompClient.activate();
     stompClientRef.current = stompClient;
 
-    // Cleanup on component unmount
     return () => {
       stompClient.deactivate();
       stompClientRef.current = null;
+      connectedRef.current = false;
       setIsConnected(false);
     };
   }, [userId]);
+
+  // ✅ هذه useEffect خارجية لإعادة المحاولة
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if (!connectedRef.current && stompClientRef.current && !stompClientRef.current.active) {
+        console.log("🔁 Trying to reconnect...");
+        stompClientRef.current.activate();
+      }
+    }, 5000);
+    return () => clearInterval(interval);
+  }, []);
 
   return {
     notificationsCount,

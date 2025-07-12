@@ -58,6 +58,24 @@ export const classApi = createApi({
         body: formData,
       }),
     }),
+    getClassPerformance: builder.query({
+      query: ({ level, period, classId }) => {
+        const params = new URLSearchParams({
+          level,
+          period,
+        });
+
+        if (classId) {
+          params.append("class-id", String(classId));
+        }
+
+        return {
+          url: `/api/v1/ai-insights/classes-performance?${params.toString()}`,
+          method: "GET",
+        };
+      },
+    }),
+
   }),
 });
 
@@ -67,4 +85,5 @@ export const {
   useCreateClasssMutation,
   useGetClassByIdQuery,
   useUpdateClasssMutation,
+  useGetClassPerformanceQuery
 } = classApi;

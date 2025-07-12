@@ -141,6 +141,7 @@ const Schedule = () => {
       skip: !selectedTeacherId,
     },
   );
+  console.log("🚀 ~ Schedule ~ data:", data)
 
   const [deleteEvent] = useDeleteSchedualMutation();
 

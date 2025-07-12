@@ -190,7 +190,7 @@ const Participation = () => {
           </Link>
         </div>
         <div className="mb-6 rounded-xl bg-bgPrimary">
-          <div className="flex flex-col items-center justify-between gap-4 rounded-lg px-4 py-4 md:flex-row">
+          <div className="flex flex-col md:items-center justify-between gap-4 rounded-lg px-4 py-4 md:flex-row">
             <div
               dir={currentLanguage === "ar" ? "rtl" : "ltr"}
               className="relative w-full max-w-md"

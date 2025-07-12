@@ -74,8 +74,8 @@ const Parent = () => {
       toast.success(`Parent with ID ${id} Locked successfully`);
       void refetch();
     } catch (err) {
-                  toast.error((err as { data: { message: string } }).data?.message);
-                }
+      toast.error((err as { data: { message: string } }).data?.message);
+    }
   };
 
   const [isLoadingDownload, setIsLoadingDownload] = useState<boolean>(false);
@@ -129,8 +129,8 @@ const Parent = () => {
       window.URL.revokeObjectURL(url);
       document.body.removeChild(a);
     } catch (err) {
-                  toast.error((err as { data: { message: string } }).data?.message);
-                } finally {
+      toast.error((err as { data: { message: string } }).data?.message);
+    } finally {
       setIsLoadingDownload(false); // End loading regardless of success or failure
     }
   };
@@ -217,6 +217,7 @@ const Parent = () => {
   const [progress, setProgress] = useState(0);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [sheetNumber, setSheetNumber] = useState("");
+  const [filePreviewUrl, setFilePreviewUrl] = useState<string | null>(null);
 
   const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
@@ -227,6 +228,7 @@ const Parent = () => {
   const handleFile = (selectedFile: File) => {
     if (selectedFile) {
       setFile(selectedFile);
+      setFilePreviewUrl(URL.createObjectURL(selectedFile));
       // Simulate progress
       setProgress(0);
       const interval = setInterval(() => {
@@ -243,6 +245,7 @@ const Parent = () => {
 
   const handleDeleteFile = () => {
     setFile(null);
+    setFilePreviewUrl(null);
     setProgress(0);
     if (fileInputRef.current) {
       fileInputRef.current.value = "";
@@ -286,8 +289,8 @@ const Parent = () => {
       handleCloseModal();
       void refetch();
     } catch (err) {
-                  toast.error((err as { data: { message: string } }).data?.message);
-                }
+      toast.error((err as { data: { message: string } }).data?.message);
+    }
   };
 
   const getAgeFromBirthDate = (birthDate: string | null) => {
@@ -332,8 +335,8 @@ const Parent = () => {
             <button
               onClick={() =>
                 handleExport({
-                  size: 0,
-                  page: 1000000,
+                  size: 1000000,
+                  page: 0,
                   archived: false,
                   graduated: false,
                 })
@@ -396,7 +399,7 @@ const Parent = () => {
           <div className="flex justify-center">
             <Link
               href="/user-management/parent/add-new-parent"
-              className="mx-3 mb-5 w-fit whitespace-nowrap rounded-xl bg-primary px-4 py-2 text-[18px] font-semibold text-white duration-300 ease-in hover:bg-hover hover:shadow-xl"
+              className="mx-3 mb-5 self-end whitespace-nowrap rounded-xl bg-primary px-4 py-2 text-[18px] font-semibold text-white hover:bg-hover hover:shadow-xl"
             >
               {currentLanguage === "en"
                 ? "+ New Parent"
@@ -501,7 +504,7 @@ const Parent = () => {
         </p>
         <form onSubmit={handleUploadEvent} className="space-y-4">
           <div
-            className="rounded-lg border-2 border-dashed border-purple-300 bg-purple-50 p-6"
+            className="rounded-lg border-2 border-dashed border-borderPrimary bg-bgPrimary p-6"
             onDragOver={e => e.preventDefault()}
             onDrop={handleDrop}
           >
@@ -554,7 +557,18 @@ const Parent = () => {
                     <Trash2 className="h-5 w-5" />
                   </button>
                 </div>
-                <div className="relative h-2 w-full overflow-hidden rounded-full bg-gray-200">
+                 <div className="flex justify-end">
+                  {filePreviewUrl && (
+                    <a
+                      href={filePreviewUrl}
+                      download={file.name}
+                      className="text-blue-600 hover:underline text-sm text-end"
+                    >
+                      Download
+                    </a>
+                  )}
+                </div>
+                <div className="relative h-2 w-full overflow-hidden rounded-full bg-bgSecondary">
                   <div
                     className="absolute left-0 top-0 h-full bg-primary transition-all duration-300"
                     style={{ width: `${progress}%` }}
@@ -571,7 +585,7 @@ const Parent = () => {
             type="number"
             value={sheetNumber}
             onChange={e => setSheetNumber(e.target.value)}
-            className="w-full rounded-lg border border-borderPrimary p-2"
+            className="w-full rounded-lg bg-bgPrimary border border-borderPrimary p-2"
             required
           />
           <button

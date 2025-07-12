@@ -60,7 +60,19 @@ const scheduleSchema = z
       message: "End Time must be after Start Time",
       path: ["endTime"],
     },
-  );
+  )
+  .refine(
+    data => {
+      const start = parseTime(data.startTime);
+      const end = parseTime(data.endTime);
+      const duration = end - start;
+      return duration >= 30 && duration <= 120;
+    },
+    {
+      message: "Duration must be between 30 minutes and 2 hours",
+      path: ["endTime"],
+    }
+  )
 
 function parseTime(timeStr: string) {
   const [hours, minutes] = timeStr.split(":").map(Number);
@@ -156,15 +168,14 @@ const AddSchedule = () => {
       <form
         dir={currentLanguage === "ar" ? "rtl" : "ltr"}
         onSubmit={handleSubmit(onSubmitCreateSchedule)}
-        className={`${
-          currentLanguage === "ar"
+        className={`${currentLanguage === "ar"
             ? booleanValue
               ? "lg:mr-[100px]"
               : "lg:mr-[270px]"
             : booleanValue
               ? "lg:ml-[100px]"
               : "lg:ml-[270px]"
-        } mx-3 mt-5 space-y-4`}
+          } mx-3 mt-5 space-y-4`}
       >
         <Box>
           <div>
@@ -374,9 +385,8 @@ const AddSchedule = () => {
           <div className="flex justify-end">
             <button
               type="submit"
-              className={`mt-5 rounded bg-blue-500 px-4 py-2 text-white ${
-                isCreating ? "opacity-50" : ""
-              }`}
+              className={`mt-5 rounded bg-blue-500 px-4 py-2 text-white ${isCreating ? "opacity-50" : ""
+                }`}
               disabled={isCreating}
             >
               {isCreating

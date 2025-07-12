@@ -72,6 +72,10 @@ const UpdateEvent = ({ params }: Props) => {
         .nonempty({ message: "This field is required" }),
       startTime: z.string().nonempty({ message: "This field is required" }),
       endTime: z.string().nonempty({ message: "This field is required" }),
+      max_attendees: z
+        .number({ invalid_type_error: "This field must be a number" })
+        .min(1, { message: "This field is required" }),
+
     })
     .refine(data => new Date(data.startTime) <= new Date(data.endTime), {
       message: "Start Time must be before End Time",
@@ -105,6 +109,7 @@ const UpdateEvent = ({ params }: Props) => {
         description_fr: eventData.data.description,
         startTime: eventData.data.startDate,
         endTime: eventData.data.endDate,
+        max_attendees: eventData.data.max_attendees,
       });
     }
   }, [eventData, reset]);
@@ -374,6 +379,27 @@ const UpdateEvent = ({ params }: Props) => {
                   </span>
                 )}
               </label>
+              <label htmlFor="max_attendees" className="grid text-[18px] font-semibold">
+                {currentLanguage === "en"
+                  ? "Max Attendees"
+                  : currentLanguage === "ar"
+                    ? "الحد الأقصى للحضور"
+                    : currentLanguage === "fr"
+                      ? "Nombre maximum de participants"
+                      : "Max Attendees"}
+                <input
+                  id="max_attendees"
+                  {...register("max_attendees", { valueAsNumber: true })}
+                  type="number"
+                  className="w-full rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-3 outline-none max-[471px]:w-[350px]"
+                />
+                {errors.max_attendees && (
+                  <span className="text-error">
+                    {getErrorMessage(errors.max_attendees.message || "")}
+                  </span>
+                )}
+              </label>
+
               {/* Active */}
             </div>
             <div className="flex justify-center text-center">

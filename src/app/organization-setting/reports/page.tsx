@@ -45,8 +45,8 @@ const Report = () => {
       toast.success(`report deleted successfully`);
       void refetch();
     } catch (err) {
-                  toast.error((err as { data: { message: string } }).data?.message);
-                }
+      toast.error((err as { data: { message: string } }).data?.message);
+    }
   };
 
   const { language: currentLanguage, loading } = useSelector(
@@ -137,13 +137,17 @@ const Report = () => {
                   </th>
                   <td className="px-6 py-4">
                     <div className="flex w-[300px]">
-                      <img src={report.viewAttachment} alt="#" />
+                      <audio controls className="w-full">
+                        <source src={report.viewAttachment} type="audio/mpeg" />
+                        Your browser does not support the audio element.
+                      </audio>
                     </div>
                   </td>
                   <td className="px-6 py-4">
-                    <div className="grid grid-cols-1 gap-3">
+                    <div className="max-w-xs truncate break-words whitespace-normal">
                       {report.message}
                     </div>
+
                   </td>
                   <td className="px-6 py-4">
                     <div className="grid grid-cols-2 gap-3">

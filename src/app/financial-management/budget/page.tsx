@@ -1,6 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 "use client";
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import dynamic from "next/dynamic";
 import { useSelector } from "react-redux";
 import { RootState } from "@/GlobalRedux/store";
@@ -18,87 +18,8 @@ import {
 } from "@/components/Table";
 import { Skeleton } from "@/components/Skeleton";
 import SeeMoreButton from "@/components/SeeMoreButton";
-import { useGetBudgetSummaryQuery } from "@/features/Financial/budgetApi";
-const ReactApexChart = dynamic(() => import("react-apexcharts"), {
-  ssr: false,
-});
-
-const ApexChart = () => {
-  const [series, setSeries] = useState([
-    {
-      name: "Expense",
-      data: [31, 40, 28, 51, 42, 109, 100],
-    },
-  ]);
-
-  const [options, setOptions] = useState({
-    series: [
-      {
-        name: "Desktops",
-        data: [10, 41, 35, 51, 49, 62, 69, 91, 148],
-      },
-    ],
-    options: {
-      chart: {
-        height: 350,
-        type: "line",
-        zoom: {
-          enabled: false,
-        },
-      },
-      dataLabels: {
-        enabled: false,
-      },
-      stroke: {
-        curve: "straight",
-      },
-      title: {
-        text: "Product Trends by Month",
-        align: "left",
-      },
-      grid: {
-        row: {
-          colors: ["#f3f3f3", "transparent"], // takes an array which will be repeated on columns
-          opacity: 0.5,
-        },
-      },
-      xaxis: {
-        tooltip: {
-          theme: "dark",
-          x: {
-            format: "dd/MM/yy HH:mm",
-          },
-        },
-        categories: [
-          "Jan",
-          "Feb",
-          "Mar",
-          "Apr",
-          "May",
-          "Jun",
-          "Jul",
-          "Aug",
-          "Sep",
-        ],
-      },
-    },
-  });
-
-  return (
-    <div>
-      <div id="chart">
-        <ReactApexChart
-          options={options}
-          series={series}
-          type="line"
-          height={350}
-          width={800}
-        />
-      </div>
-      <div id="html-dist"></div>
-    </div>
-  );
-};
+import { useGetBudgetSummaryQuery, useGetSchoolYearsQuery } from "@/features/Financial/budgetApi";
+import BudgetChart from "@/components/BudgetChart";
 
 const Budget = () => {
   const breadcrumbs = [
@@ -122,7 +43,16 @@ const Budget = () => {
     },
   ];
   const { data: budgetData, isLoading: isData, isError } = useGetBudgetSummaryQuery(null);
+  const {
+    data: yearsData,
+    isLoading: isYearsLoading,
+    isError: isYearsError,
+  } = useGetSchoolYearsQuery(null);
 
+
+  const [selectedYear, setSelectedYear] = React.useState<number>(
+    new Date().getFullYear(),
+  );
   const { language: currentLanguage } = useSelector(
     (state: RootState) => state.language,
   );
@@ -314,25 +244,31 @@ const Budget = () => {
           </div>
         </div>
 
-        <div className="mb-6 grid w-full grid-cols-1 justify-center gap-10 overflow-x-auto 2xl:flex">
-          <div className="flex overflow-x-auto">
-            <div
-              id="chart"
-              className="w-[850px] overflow-x-auto rounded-xl bg-bgPrimary p-2 shadow-xl"
-            >
-              <p className="text-[18px] font-semibold">
-                {currentLanguage === "en"
-                  ? "School Finance"
-                  : currentLanguage === "ar"
-                    ? "المالية المدرسية"
-                    : "Finance scolaire"}
-              </p>
+        <div
+          id="chart"
+          className="relative mb-6 w-full overflow-x-auto rounded-xl bg-bgPrimary p-2 shadow-xl"
+        >
+          <select
+            value={selectedYear}
+            onChange={e => setSelectedYear(Number(e.target.value))}
+            className="rounded-lg border px-3 py-1 absolute right-20 top-2 z-[10] text-sm shadow-sm focus:outline-none dark:bg-bgPrimary dark:border-gray-600"
+          >
+            {isYearsLoading ? (
+              <option disabled>Loading...</option>
+            ) : isYearsError || !yearsData?.data?.length ? (
+              <option disabled>No years found</option>
+            ) : (
+              yearsData?.data?.map((y: string) => (
+                <option key={y} value={y}>
+                  {y}
+                </option>
+              ))
+            )}
+          </select>
 
-              <ApexChart />
-            </div>
-          </div>
+          <BudgetChart year={selectedYear} />
         </div>
-        <div className="grid w-full rounded-xl bg-bgPrimary p-5">
+        <div className="grid w-full mb-6 rounded-xl bg-bgPrimary p-5">
           <div className="relative overflow-auto bg-bgPrimary shadow-md sm:rounded-lg">
             <Table>
               <TableHeader>

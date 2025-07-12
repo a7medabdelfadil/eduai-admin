@@ -21,7 +21,7 @@ export default function BusTrackingPage() {
             placeholder="Enter Bus ID"
             value={busId}
             onChange={e => setBusId(e.target.value)}
-            className="w-1/3 rounded-md border p-2"
+            className="w-1/3 bg-bgPrimary rounded-md border border-borderPrimary p-2"
           />
         </div>
         <MapComponent busId={busId} />

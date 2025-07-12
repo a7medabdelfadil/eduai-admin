@@ -169,7 +169,7 @@ const EmployeePermission = () => {
           </Link>
         </div>
         <div className="max-w-screen overflow-x-hidden rounded-xl bg-bgPrimary">
-          <div className="flex flex-col items-center justify-between gap-4 rounded-lg px-4 py-4 md:flex-row">
+          <div className="flex flex-col md:items-center justify-between gap-4 rounded-lg px-4 py-4 md:flex-row">
             {/* Search Input */}
             <div
               dir={currentLanguage === "ar" ? "rtl" : "ltr"}

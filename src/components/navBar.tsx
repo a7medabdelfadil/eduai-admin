@@ -27,8 +27,14 @@ import Switch from "./Switch";
 import { IoIosArrowDown, IoMdNotificationsOutline } from "react-icons/io";
 import { BiSearchAlt } from "react-icons/bi";
 import { RiWechatLine } from "react-icons/ri";
-import { FaClock, FaMoneyBillWave, FaMapMarkedAlt } from "react-icons/fa";
-
+import { FaClock, FaMoneyBillWave, FaMapMarkedAlt, FaQuoteLeft, FaQuestion } from "react-icons/fa";
+import { DropdownMenu } from "@radix-ui/react-dropdown-menu";
+import { HiOutlineNewspaper } from "react-icons/hi";
+import { SiGnuprivacyguard } from "react-icons/si";
+import { FcSupport } from "react-icons/fc";
+import { useGetAllNotificationsQuery } from "@/features/communication/notficationsApi";
+import { useUnreadNotificationsCount } from "@/hooks/useUnreadNotificationsCount";
+import { useNotificationsSocket } from "@/hooks/useGetAllNotifications";
 const NavBar = () => {
   const { language: currentLanguage, loading } = useSelector(
     (state: RootState) => state.language,
@@ -98,7 +104,24 @@ const NavBar = () => {
   );
 
   const userId = useSelector((state: RootState) => state.user?.id) || null;
-  const { notificationsCount } = useNotificationsWebSocket(userId);
+  const userIdToNotify = userData?.data?.id ?? null;
+
+  useNotificationsSocket(userIdToNotify);
+  
+  const { notificationsCount } = useNotificationsWebSocket(userIdToNotify);
+  const { unreadCount, isLoading: isNotifications, refetch: refetchNotifications } = useUnreadNotificationsCount();
+
+  useEffect(() => {
+    const handleNewNotification = () => {
+      refetchNotifications();
+    };
+
+    window.addEventListener("new-notification", handleNewNotification);
+
+    return () => {
+      window.removeEventListener("new-notification", handleNewNotification);
+    };
+  }, [refetchNotifications]);
   const [small, setSmall] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [profile, setProfile] = useState(false);
@@ -205,31 +228,19 @@ const NavBar = () => {
               className="mx-auto flex w-full basis-full items-center px-4 sm:px-6"
               aria-label="Global"
             >
-              <div className="mb-3 hidden md:block">
-                <label htmlFor="icon" className="sr-only">
-                  Search
-                </label>
-                <div className="relative min-w-72 md:min-w-80">
-                  <div className="pointer-events-none absolute inset-y-0 start-0 z-20 flex items-center ps-4">
-                    <BiSearchAlt className="text-secondary" size={18} />
-                  </div>
-
-                  <input
-                    onChange={e => setSearch(e.target.value)}
-                    type="text"
-                    id="icon"
-                    name="icon"
-                    className="block w-full rounded-lg border-none bg-transparent px-4 py-2 ps-11 text-lg outline-none focus:border-blue-500 focus:ring-blue-500 disabled:pointer-events-none disabled:opacity-50"
-                    placeholder={
-                      currentLanguage === "ar"
-                        ? "ابحث عن أي شيء"
-                        : currentLanguage === "fr"
-                          ? "Rechercher n'importe quoi"
-                          : "Search anything"
-                    }
+              {data?.data?.hasLogo && (
+                <div className="mb-3 hidden md:flex items-center gap-4 min-w-72 md:min-w-80">
+                  <img
+                    src={data.data.logoLink}
+                    alt="School Logo"
+                    className="h-10 w-10 rounded-full object-cover"
                   />
+                  <span className="text-lg font-bold text-textPrimary whitespace-nowrap">
+                    {data.data.name}
+                  </span>
                 </div>
-              </div>
+              )}
+
 
               <div className="ms-auto flex w-full items-center justify-end sm:order-3 sm:justify-between sm:gap-x-3">
                 <div className="hidden sm:block"></div>
@@ -246,12 +257,16 @@ const NavBar = () => {
                     className="relative inline-flex h-[2.375rem] w-[2.375rem] items-center justify-center gap-x-2 rounded-full border border-transparent text-sm font-semibold text-textPrimary hover:bg-bgSecondary disabled:pointer-events-none disabled:opacity-50"
                   >
                     <IoMdNotificationsOutline className="size-24 text-secondary md:size-40" />
-
-                    {notificationsCount > 0 && (
+                    {isNotifications ? (
+                      <div className="absolute left-5 top-4 flex h-4 w-4 items-center justify-center">
+                        <div className="h-3 w-3 animate-spin rounded-full border-2 border-white border-t-transparent" />
+                      </div>
+                    ) : unreadCount > 0 && (
                       <div className="absolute left-5 top-4 flex h-4 w-4 items-center justify-center rounded-full bg-sky-500 text-center text-sm text-white">
-                        <span>{notificationsCount}</span>
+                        <span>{unreadCount}</span>
                       </div>
                     )}
+
                   </Link>
 
                   {isClient && (
@@ -409,6 +424,41 @@ const NavBar = () => {
                                   : currentLanguage === "fr"
                                     ? "Profil"
                                     : "Profile"}
+                            </Link>
+                            <Link
+                              className="flex items-center gap-x-3.5 rounded-lg border-none px-3 py-2 text-sm text-textPrimary outline-none hover:bg-bgSecondary"
+                              href="/about"
+                            >
+                              <FaQuoteLeft />
+                              About Us
+                            </Link>
+                            <Link
+                              className="flex items-center gap-x-3.5 rounded-lg border-none px-3 py-2 text-sm text-textPrimary outline-none hover:bg-bgSecondary"
+                              href="/faq"
+                            >
+                              <FaQuestion />
+                              FAQ
+                            </Link>
+                            <Link
+                              className="flex items-center gap-x-3.5 rounded-lg border-none px-3 py-2 text-sm text-textPrimary outline-none hover:bg-bgSecondary"
+                              href="/terms"
+                            >
+                              <HiOutlineNewspaper />
+                              Terms and Conditions
+                            </Link>
+                            <Link
+                              className="flex items-center gap-x-3.5 rounded-lg border-none px-3 py-2 text-sm text-textPrimary outline-none hover:bg-bgSecondary"
+                              href="/privacy"
+                            >
+                              <SiGnuprivacyguard />
+                              Privacy Policy
+                            </Link>
+                            <Link
+                              className="flex items-center gap-x-3.5 rounded-lg border-none px-3 py-2 text-sm text-textPrimary outline-none hover:bg-bgSecondary"
+                              href="/support"
+                            >
+                              <FcSupport />
+                              Support
                             </Link>
                             <a
                               className="block rounded-md px-3 py-2 text-sm text-textPrimary hover:bg-error hover:text-white"
@@ -581,62 +631,62 @@ const NavBar = () => {
                 </div>
 
                 {navigationItems.map(item => (
-                      <li
-                        key={item.id}
-                        className={item.isDropdown ? "group relative" : ""}
-                      >
-                        {item.isDropdown ? (
-                          <>
-                            <button
-                              onClick={() => toggleDropdown(item.id)}
-                              className={`flex ${!small ? "w-full" : ""} text-md group mt-4 items-center gap-x-3.5 rounded-lg px-2.5 py-2 font-bold text-secondary hover:bg-bgSecondary hover:text-primary`}
-                            >
-                              {item.icon}
-                              {!small && (
-                                <p>
-                                  {item.translations[
-                                    currentLanguage as "en" | "ar" | "fr"
-                                  ] || item.translations.en}
-                                </p>
-                              )}
-                            </button>
-                            {openDropdowns[item.id] && (
-                              <ul
-                                className={`${small ? "hidden w-fit translate-x-5 rounded-xl bg-bgPrimary p-2 group-hover:grid" : ""} mx-9 mt-2 grid gap-2 whitespace-nowrap text-nowrap text-[14px] font-semibold`}
-                              >
-                                {item.submenu.map(subItem => (
-                                  <Link
-                                    onClick={() => setIsOpen(false)}
-                                    key={subItem.id}
-                                    className={`hover:text-primary ${url === subItem.path ? "text-primary" : ""}`}
-                                    href={subItem.path}
-                                  >
-                                    {subItem.translations[
-                                      currentLanguage as "en" | "ar" | "fr"
-                                    ] || subItem.translations.en}
-                                  </Link>
-                                ))}
-                              </ul>
-                            )}
-                          </>
-                        ) : (
-                          <Link
-                            onClick={() => setIsOpen(false)}
-                            className={`flex ${small ? "w-[40px]" : ""} text-md group mt-4 items-center gap-x-3.5 rounded-lg px-2.5 py-2 font-bold ${url === item.path ? "bg-bgSecondary text-primary" : "text-secondary"} hover:bg-bgSecondary hover:text-primary`}
-                            href={item.path}
+                  <li
+                    key={item.id}
+                    className={item.isDropdown ? "group relative" : ""}
+                  >
+                    {item.isDropdown ? (
+                      <>
+                        <button
+                          onClick={() => toggleDropdown(item.id)}
+                          className={`flex ${!small ? "w-full" : ""} text-md group mt-4 items-center gap-x-3.5 rounded-lg px-2.5 py-2 font-bold text-secondary hover:bg-bgSecondary hover:text-primary`}
+                        >
+                          {item.icon}
+                          {!small && (
+                            <p>
+                              {item.translations[
+                                currentLanguage as "en" | "ar" | "fr"
+                              ] || item.translations.en}
+                            </p>
+                          )}
+                        </button>
+                        {openDropdowns[item.id] && (
+                          <ul
+                            className={`${small ? "hidden w-fit translate-x-5 rounded-xl bg-bgPrimary p-2 group-hover:grid" : ""} mx-9 mt-2 grid gap-2 whitespace-nowrap text-nowrap text-[14px] font-semibold`}
                           >
-                            {item.icon}
-                            {!small && (
-                              <p>
-                                {item.translations[
+                            {item.submenu.map(subItem => (
+                              <Link
+                                onClick={() => setIsOpen(false)}
+                                key={subItem.id}
+                                className={`hover:text-primary ${url === subItem.path ? "text-primary" : ""}`}
+                                href={subItem.path}
+                              >
+                                {subItem.translations[
                                   currentLanguage as "en" | "ar" | "fr"
-                                ] || item.translations.en}
-                              </p>
-                            )}
-                          </Link>
+                                ] || subItem.translations.en}
+                              </Link>
+                            ))}
+                          </ul>
                         )}
-                      </li>
-                    ))}
+                      </>
+                    ) : (
+                      <Link
+                        onClick={() => setIsOpen(false)}
+                        className={`flex ${small ? "w-[40px]" : ""} text-md group mt-4 items-center gap-x-3.5 rounded-lg px-2.5 py-2 font-bold ${url === item.path ? "bg-bgSecondary text-primary" : "text-secondary"} hover:bg-bgSecondary hover:text-primary`}
+                        href={item.path}
+                      >
+                        {item.icon}
+                        {!small && (
+                          <p>
+                            {item.translations[
+                              currentLanguage as "en" | "ar" | "fr"
+                            ] || item.translations.en}
+                          </p>
+                        )}
+                      </Link>
+                    )}
+                  </li>
+                ))}
               </ul>
             </nav>
           </div>

@@ -125,8 +125,8 @@ const Position = () => {
       toast.success(`Position with ID ${id} deleted successfully`);
       refetch();
     } catch (err) {
-                  toast.error((err as { data: { message: string } }).data?.message);
-                }
+      toast.error((err as { data: { message: string } }).data?.message);
+    }
   };
 
   const formatTransactionDate = (dateString: string | number | Date) => {
@@ -167,7 +167,7 @@ const Position = () => {
           </h1>
         </div>
         <div className="max-w-screen overflow-x-hidden rounded-xl bg-bgPrimary">
-          <div className="flex flex-col items-center justify-between gap-4 rounded-lg px-4 py-4 md:flex-row">
+          <div className="flex flex-col md:items-center justify-between gap-4 rounded-lg px-4 py-4 md:flex-row">
             {/* Search Input */}
             <div
               dir={currentLanguage === "ar" ? "rtl" : "ltr"}

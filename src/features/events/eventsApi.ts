@@ -86,6 +86,14 @@ export const eventsApi = createApi({
         body: formData,
       }),
     }),
+    // 
+    uploadStudents: builder.mutation({
+      query: formData => ({
+        url: `/api/v1/upload-data/students/excel`,
+        method: "POST",
+        body: formData,
+      }),
+    }),
     //
     uploadClassrooms: builder.mutation({
       query: formData => ({
@@ -122,4 +130,5 @@ export const {
   useCreateEventsMutation,
   useGetEventByIdQuery,
   useUpdateEventsMutation,
+  useUploadStudentsMutation,
 } = eventsApi;

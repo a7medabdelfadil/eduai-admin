@@ -1,7 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 "use client";
 import Link from "next/link";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import {
   useDeleteStudentsMutation,
   useGetAllStudentsQuery,
@@ -15,7 +15,7 @@ import { baseUrl } from "@/components/BaseURL";
 import { BiSearchAlt } from "react-icons/bi";
 import { MdEdit } from "react-icons/md";
 import { Text } from "@/components/Text";
-import { HiDownload } from "react-icons/hi";
+import { HiDownload, HiUpload } from "react-icons/hi";
 import Container from "@/components/Container";
 import {
   Table,
@@ -27,6 +27,9 @@ import {
 } from "@/components/Table";
 import { Skeleton } from "@/components/Skeleton";
 import SeeMoreButton from "@/components/SeeMoreButton";
+import { useUploadStudentsMutation } from "@/features/events/eventsApi";
+import { Trash2 } from "lucide-react";
+import Modal from "@/components/model";
 
 const Student = () => {
   const breadcrumbs = [
@@ -69,6 +72,16 @@ const Student = () => {
   type Student = Record<string, any>;
   const [search, setSearch] = useState("");
 
+  const [isModalOpen, setModalOpen] = useState(false);
+  const [file, setFile] = useState<File | null>(null);
+  const [progress, setProgress] = useState(0);
+  const [filePreviewUrl, setFilePreviewUrl] = useState<string | null>(null);
+  const [sheetNumber, setSheetNumber] = useState("");
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const [uploadStudents, { isLoading: isUploading }] = useUploadStudentsMutation();
+
+
   // New states to hold selected values of gender & classroom
   const [selectedGender, setSelectedGender] = useState("");
   const [selectedClassroom, setSelectedClassroom] = useState("");
@@ -82,6 +95,73 @@ const Student = () => {
     gender: selectedGender.toUpperCase(),
     classRoom: selectedClassroom,
   });
+
+  const handleUploadStudent = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (!file) return toast.error("Please select a file");
+
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("sheetNumber", sheetNumber);
+
+    try {
+      await uploadStudents(formData).unwrap();
+      toast.success("Students uploaded successfully");
+      handleCloseModal();
+      void refetch();
+    } catch (err) {
+      toast.error("Upload failed");
+    }
+  };
+
+  const handleFile = (selectedFile: File) => {
+    if (selectedFile) {
+      setFile(selectedFile);
+      setFilePreviewUrl(URL.createObjectURL(selectedFile));
+      setProgress(0);
+      const interval = setInterval(() => {
+        setProgress(prev => {
+          if (prev >= 100) {
+            clearInterval(interval);
+            return 100;
+          }
+          return prev + 10;
+        });
+      }, 200);
+    }
+  };
+
+  const handleDeleteFile = () => {
+    setFile(null);
+    setFilePreviewUrl(null);
+    setProgress(0);
+    if (fileInputRef.current) {
+      fileInputRef.current.value = "";
+    }
+  };
+
+  const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    const droppedFile = e.dataTransfer.files[0];
+    handleFile(droppedFile);
+  };
+
+  const formatFileSize = (bytes: number) => {
+    if (bytes === 0) return "0 B";
+    const k = 1024;
+    const sizes = ["B", "KB", "MB", "GB"];
+    const i = Math.floor(Math.log(bytes) / Math.log(k));
+    return `${parseFloat((bytes / Math.pow(k, i)).toFixed(1))} ${sizes[i]}`;
+  };
+
+  const handleCloseModal = () => {
+    setModalOpen(false);
+    setFile(null);
+    setFilePreviewUrl(null);
+    setProgress(0);
+    setSheetNumber("");
+  };
+
 
   const [isLoadingDownload, setIsLoadingDownload] = useState<boolean>(false);
 
@@ -235,33 +315,50 @@ const Student = () => {
                   : "Graduate Student"}
             </Link>
           </div>
-          <button
-            onClick={() =>
-              handleExport({
-                size: 0,
-                page: 1000000,
-                archived: false,
-                graduated: false,
-              })
-            }
-            className="mx-3 flex w-fit justify-center whitespace-nowrap rounded-xl border border-primary bg-bgPrimary p-4 text-sm text-primary duration-300 ease-in hover:shadow-xl"
-          >
-            <HiDownload
-              size={20}
-              className={`${currentLanguage == "ar" ? "ml-2" : "mr-2"}`}
-            />
-            {isLoadingDownload
-              ? currentLanguage === "ar"
-                ? "جارٍ التنزيل..."
+          <div className="flex items-center gap-3">
+            <button
+              onClick={() => setModalOpen(true)}
+              className="mx-3 flex w-fit justify-center whitespace-nowrap rounded-xl border border-primary bg-bgPrimary p-4 text-sm text-primary duration-300 ease-in hover:shadow-xl"
+            >
+              <HiUpload
+                size={20}
+                className={`${currentLanguage == "ar" ? "ml-2" : "mr-2"}`}
+              />
+              {currentLanguage === "ar"
+                ? "رفع ملف"
                 : currentLanguage === "fr"
-                  ? "Téléchargement..."
-                  : "Downloading..."
-              : currentLanguage === "en"
-                ? "Download All Student"
-                : currentLanguage === "ar"
-                  ? "تصدير البيانات"
-                  : "Exporter les données"}
-          </button>
+                  ? "Téléverser un fichier"
+                  : "Upload File"}
+            </button>
+
+            <button
+              onClick={() =>
+                handleExport({
+                  size: 1000000,
+                  page: 0,
+                  archived: false,
+                  graduated: false,
+                })
+              }
+              className="flex w-fit justify-center whitespace-nowrap rounded-xl border border-primary bg-bgPrimary p-4 text-sm text-primary duration-300 ease-in hover:shadow-xl"
+            >
+              <HiDownload
+                size={20}
+                className={`${currentLanguage == "ar" ? "ml-2" : "mr-2"}`}
+              />
+              {isLoadingDownload
+                ? currentLanguage === "ar"
+                  ? "جارٍ التنزيل..."
+                  : currentLanguage === "fr"
+                    ? "Téléchargement..."
+                    : "Downloading..."
+                : currentLanguage === "en"
+                  ? "Download All Student"
+                  : currentLanguage === "ar"
+                    ? "تصدير البيانات"
+                    : "Exporter les données"}
+            </button>
+          </div>
         </div>
       </Container>
 
@@ -361,7 +458,10 @@ const Student = () => {
               <select
                 id="classroomFilter"
                 value={selectedClassroom}
-                onChange={e => setSelectedClassroom(e.target.value)}
+                onChange={e => {
+                  setSelectedClassroom(e.target.value);
+                  void refetch();
+                }}
                 className="w-40 rounded-md border border-borderPrimary bg-bgPrimary px-2 py-2 text-sm outline-none focus:border-blue-500 focus:ring-blue-500"
               >
                 <option value="">
@@ -494,6 +594,108 @@ const Student = () => {
           )}
         </div>
       </Container>
+      <Modal isOpen={isModalOpen} onClose={handleCloseModal}>
+        <h1 className="text-lg font-semibold">Upload File</h1>
+        <p className="mb-4 font-light text-secondary">
+          Please upload files in Excel format and make sure the file size is
+          under 25 MB.
+        </p>
+        <form onSubmit={handleUploadStudent} className="space-y-4">
+          <div
+            className="rounded-lg border-2 border-dashed border-borderPrimary bg-bgPrimary p-6"
+            onDragOver={e => e.preventDefault()}
+            onDrop={handleDrop}
+          >
+            {!file ? (
+              <div className="text-center">
+                <div className="mb-4">Drop file or Browse</div>
+                <input
+                  type="file"
+                  ref={fileInputRef}
+                  onChange={e =>
+                    e.target.files && handleFile(e.target.files[0])
+                  }
+                  className="hidden"
+                  accept=".xlsx,.xls"
+                />
+                <button
+                  type="button"
+                  onClick={() => fileInputRef.current?.click()}
+                  className="rounded-lg bg-primary px-4 py-2 text-white hover:bg-hover"
+                >
+                  Browse
+                </button>
+              </div>
+            ) : (
+              <div className="space-y-4">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center space-x-3">
+                    <div className="text-purple-600">
+                      <svg
+                        className="h-8 w-8"
+                        viewBox="0 0 24 24"
+                        fill="currentColor"
+                      >
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6zm4 18H6V4h7v5h5v11z" />
+                      </svg>
+                    </div>
+                    <div>
+                      <div className="font-medium">{file.name}</div>
+                      <div className="text-sm text-gray-500">
+                        Format: {file.type || "Excel"} file size:{" "}
+                        {formatFileSize(file.size)}
+                      </div>
+                    </div>
+                  </div>
+
+                  <button
+                    type="button"
+                    onClick={handleDeleteFile}
+                    className="text-gray-500 hover:text-red-500"
+                  >
+                    <Trash2 className="h-5 w-5" />
+                  </button>
+                </div>
+                <div className="flex justify-end">
+                  {filePreviewUrl && (
+                    <a
+                      href={filePreviewUrl}
+                      download={file.name}
+                      className="text-blue-600 hover:underline text-sm text-end"
+                    >
+                      Download
+                    </a>
+                  )}
+                </div>
+                <div className="relative h-2 w-full overflow-hidden rounded-full bg-bgSecondary">
+                  <div
+                    className="absolute left-0 top-0 h-full bg-primary transition-all duration-300"
+                    style={{ width: `${progress}%` }}
+                  />
+                </div>
+                <div className="text-right text-sm text-gray-500">
+                  {progress}%
+                </div>
+              </div>
+            )}
+          </div>
+          <input
+            placeholder="Sheet Number"
+            type="number"
+            value={sheetNumber}
+            onChange={e => setSheetNumber(e.target.value)}
+            className="w-full rounded-lg bg-bgPrimary border border-borderPrimary p-2"
+            required
+          />
+          <button
+            type="submit"
+            className="w-full rounded-xl bg-primary px-4 py-2 text-white hover:bg-hover"
+            disabled={!file}
+          >
+            {isUploading ? "uploading..." : "Upload"}
+          </button>
+        </form>
+      </Modal>
       {showModal && selectedStudent && (
         <div
           onClick={() => setShowModal(false)}

@@ -98,6 +98,7 @@ const ClassDetails: React.FC<ClassDetailsProps> = ({ params }) => {
   const router = useRouter()
   const booleanValue = useSelector((state: RootState) => state.boolean.value);
   const { data, isLoading } = useGetClassByIdQuery(params.classId);
+  console.log("🚀 ~ data:", data)
   const [updateClass, { isLoading: isUpdating }] = useUpdateClasssMutation();
   const { language: currentLanguage, loading } = useSelector(
     (state: RootState) => state.language,

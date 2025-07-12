@@ -70,8 +70,8 @@ const GraduateStudent = () => {
       toast.success(`Student with ID ${id} Locked successfully`);
       void refetch();
     } catch (err) {
-                  toast.error((err as { data: { message: string } }).data?.message);
-                }
+      toast.error((err as { data: { message: string } }).data?.message);
+    }
   };
 
   const filteredData = data?.data.content?.filter((student: any) =>
@@ -99,7 +99,7 @@ const GraduateStudent = () => {
           </Link>
         </div>
         <div className="max-w-screen overflow-x-hidden rounded-xl bg-bgPrimary">
-          <div className="flex flex-col items-center justify-between gap-4 rounded-lg px-4 py-4 md:flex-row">
+          <div className="flex flex-col md:items-center justify-between gap-4 rounded-lg px-4 py-4 md:flex-row">
             <div
               dir={currentLanguage === "ar" ? "rtl" : "ltr"}
               className="relative w-full max-w-md"

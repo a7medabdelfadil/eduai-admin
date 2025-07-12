@@ -22,13 +22,6 @@ export const useNotificationsSocket = (userId: string | null) => {
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [isConnected, setIsConnected] = useState<boolean>(false);
   const stompClientRef = useRef<Client | null>(null);
-  const audioRef = useRef<HTMLAudioElement | null>(null);
-
-  // Preload notification sound
-  useEffect(() => {
-    audioRef.current = new Audio("/notifi.mp3");
-    audioRef.current.preload = "auto";
-  }, []);
 
   // Reset notifications method
   const resetNotifications = () => {
@@ -65,13 +58,6 @@ export const useNotificationsSocket = (userId: string | null) => {
           try {
             // Parse the notification from the message
             const newNotification: Notification = JSON.parse(message.body);
-
-            // Play notification sound
-            if (audioRef.current) {
-              audioRef.current.play().catch(error => {
-                console.error("Error playing notification sound:", error);
-              });
-            }
 
             // Update notifications state
             setNotifications(prevNotifications => {

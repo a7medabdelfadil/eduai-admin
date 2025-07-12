@@ -186,7 +186,7 @@ const SendNotifications = () => {
                     ? "Titre"
                     : "Title"}
                 <input
-                  className="rounded-xl border border-borderPrimary px-4 py-2 outline-none"
+                  className="rounded-xl border border-borderPrimary bg-bgPrimary px-4 py-2 outline-none"
                   placeholder={
                     currentLanguage === "ar"
                       ? "اكتب العنوان هنا..."

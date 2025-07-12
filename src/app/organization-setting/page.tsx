@@ -171,12 +171,12 @@ const OrganizationSettings = () => {
               : "Plainte", // Default to English
       description:
         currentLanguage === "en"
-          ? "Some Information about the complaint each parent and teacher"
+          ? "Manage and Review Complaints"
           : currentLanguage === "ar"
-            ? "بعض المعلومات حول الشكوى لكل ولي أمر ومعلم"
+            ? "إدارة ومراجعة الشكاوى"
             : currentLanguage === "fr"
-              ? "Quelques informations sur la plainte de chaque parent et enseignant"
-              : "All Annual Leave", // Default to English
+              ? "Gérer et examiner les plaintes"
+              : "Manage and Review Complaints", // Default to English
     },
     {
       href: "/organization-setting/payment",
@@ -191,12 +191,12 @@ const OrganizationSettings = () => {
               : "Date d'échéance du paiement", // Default to English
       description:
         currentLanguage === "en"
-          ? "Payment due date for tuition ,activity ,transport ,uniform and Material"
+          ? "Monitor All Payment Dates"
           : currentLanguage === "ar"
-            ? "تاريخ استحقاق الدفع للرسوم الدراسية، النشاط، النقل، الزي الرسمي، والمواد"
+            ? "مراقبة جميع تواريخ الدفع"
             : currentLanguage === "fr"
-              ? "Date d'échéance du paiement pour les frais de scolarité, l'activité, le transport, l'uniforme et le matériel"
-              : "All Annual Leave", // Default to English
+              ? "Surveiller toutes les dates de paiement"
+              : "Monitor All Payment Dates", // Default to English
     },
     {
       href: "/organization-setting/exams",
@@ -251,15 +251,14 @@ const OrganizationSettings = () => {
       <BreadCrumbs breadcrumbs={breadcrumbs} />
       <div
         dir={currentLanguage === "ar" ? "rtl" : "ltr"}
-        className={`${
-          currentLanguage === "ar"
+        className={`${currentLanguage === "ar"
             ? booleanValue
               ? "lg:mr-[40px]"
               : "lg:mr-[290px]"
             : booleanValue
               ? "lg:ml-[40px]"
               : "lg:ml-[290px]"
-        } my-12 grid justify-center`}
+          } my-12 grid justify-center`}
       >
         <div className="grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
           {settings.map((item, index) => (

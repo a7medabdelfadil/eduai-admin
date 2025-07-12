@@ -19,7 +19,6 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/Table";
-import { MdDelete } from "react-icons/md";
 import { Skeleton } from "@/components/Skeleton";
 import { BiSearchAlt, BiTrash } from "react-icons/bi";
 import SeeMoreButton from "@/components/SeeMoreButton";
@@ -67,8 +66,8 @@ const Certificate = () => {
       search.trim() === ""
         ? true
         : certificate.studentName
-            ?.toLowerCase()
-            ?.includes(search.trim().toLowerCase()),
+          ?.toLowerCase()
+          ?.includes(search.trim().toLowerCase()),
   );
   const [visibleCount, setVisibleCount] = useState(20);
   const visibleData = filteredData?.slice(0, visibleCount);
@@ -136,7 +135,7 @@ const Certificate = () => {
           </Link>
         </div>
         <div className="mb-6 rounded-xl bg-bgPrimary">
-          <div className="flex flex-col items-center justify-between gap-4 rounded-lg px-4 py-4 md:flex-row">
+          <div className="flex flex-col md:items-center justify-between gap-4 rounded-lg px-4 py-4 md:flex-row">
             {/* Search Input */}
             <div
               dir={currentLanguage === "ar" ? "rtl" : "ltr"}

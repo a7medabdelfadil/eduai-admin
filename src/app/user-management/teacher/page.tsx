@@ -74,8 +74,8 @@ const Teacher = () => {
       toast.success(`Teacher with ID ${id} Locked successfully`);
       void refetch();
     } catch (err) {
-                  toast.error((err as { data: { message: string } }).data?.message);
-                }
+      toast.error((err as { data: { message: string } }).data?.message);
+    }
   };
 
   const [isLoadingDownload, setIsLoadingDownload] = useState<boolean>(false);
@@ -129,8 +129,8 @@ const Teacher = () => {
       window.URL.revokeObjectURL(url);
       document.body.removeChild(a);
     } catch (err) {
-                  toast.error((err as { data: { message: string } }).data?.message);
-                } finally {
+      toast.error((err as { data: { message: string } }).data?.message);
+    } finally {
       setIsLoadingDownload(false); // End loading regardless of success or failure
     }
   };
@@ -152,9 +152,12 @@ const Teacher = () => {
     handleFile(droppedFile);
   };
 
+  const [filePreviewUrl, setFilePreviewUrl] = useState<string | null>(null);
+
   const handleFile = (selectedFile: File) => {
     if (selectedFile) {
       setFile(selectedFile);
+      setFilePreviewUrl(URL.createObjectURL(selectedFile));
       // Simulate progress
       setProgress(0);
       const interval = setInterval(() => {
@@ -172,6 +175,7 @@ const Teacher = () => {
   const handleDeleteFile = () => {
     setFile(null);
     setProgress(0);
+    setFilePreviewUrl(null);
     if (fileInputRef.current) {
       fileInputRef.current.value = "";
     }
@@ -214,8 +218,8 @@ const Teacher = () => {
       handleCloseModal();
       void refetch();
     } catch (err) {
-                  toast.error((err as { data: { message: string } }).data?.message);
-                }
+      toast.error((err as { data: { message: string } }).data?.message);
+    }
   };
 
   const getAgeFromBirthDate = (birthDate: string | null) => {
@@ -341,8 +345,8 @@ const Teacher = () => {
             <button
               onClick={() =>
                 handleExport({
-                  size: 0,
-                  page: 1000000,
+                  size: 1000000,
+                  page: 0,
                   archived: false,
                   graduated: false,
                 })
@@ -512,7 +516,7 @@ const Teacher = () => {
         </p>
         <form onSubmit={handleUploadEvent} className="space-y-4">
           <div
-            className="rounded-lg border-2 border-dashed border-purple-300 bg-purple-50 p-6"
+            className="rounded-lg border-2 border-dashed border-borderPrimary bg-bgPrimary p-6"
             onDragOver={e => e.preventDefault()}
             onDrop={handleDrop}
           >
@@ -565,7 +569,18 @@ const Teacher = () => {
                     <Trash2 className="h-5 w-5" />
                   </button>
                 </div>
-                <div className="relative h-2 w-full overflow-hidden rounded-full bg-gray-200">
+                 <div className="flex justify-end">
+                  {filePreviewUrl && (
+                    <a
+                      href={filePreviewUrl}
+                      download={file.name}
+                      className="text-blue-600 hover:underline text-sm text-end"
+                    >
+                      Download
+                    </a>
+                  )}
+                </div>
+                <div className="relative h-2 w-full overflow-hidden rounded-full bg-bgSecondary">
                   <div
                     className="absolute left-0 top-0 h-full bg-primary transition-all duration-300"
                     style={{ width: `${progress}%` }}
@@ -582,7 +597,7 @@ const Teacher = () => {
             type="number"
             value={sheetNumber}
             onChange={e => setSheetNumber(e.target.value)}
-            className="w-full rounded-lg border border-borderPrimary p-2"
+            className="w-full rounded-lg bg-bgPrimary border border-borderPrimary p-2"
             required
           />
           <button

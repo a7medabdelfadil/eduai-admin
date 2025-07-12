@@ -229,7 +229,7 @@ const Login = () => {
                         ? "Entrez votre email"
                         : "Enter Your Email"
                   }
-                  className={`w-full rounded-xl border p-4 text-textPrimary outline-none transition-all duration-200 md:w-[450px] ${
+                  className={`w-full rounded-xl border p-4 text-textPrimary bg-bgPrimary outline-none transition-all duration-200 md:w-[450px] ${
                     errors.username
                       ? "border-warning"
                       : emailFocused

@@ -2,6 +2,8 @@
 import { RootState } from "@/GlobalRedux/store";
 import Link from "next/link";
 import React, { useState, useEffect, useRef } from "react";
+import { AiOutlineClockCircle } from "react-icons/ai";
+import { FaChalkboardTeacher } from "react-icons/fa";
 import { useSelector } from "react-redux";
 
 interface Schedule {
@@ -36,8 +38,6 @@ const timeSlots = [
   "16:00",
 ];
 
-const START_TIME = "07:00";
-const END_TIME = "16:00";
 
 const isTimeInRange = (time: string): boolean => {
   const [hours, minutes] = time.split(":").map(Number);
@@ -150,13 +150,13 @@ const TimeTable = ({
           </div>
 
           {/* Time slots and events */}
-          <div className="relative mt-4 flex h-[540px]">
+          <div className="relative mt-4 flex h-[1250px]">
             {/* Time labels */}
             <div className="flex flex-col">
               {timeSlots.map((time, idx) => (
                 <div
                   key={idx}
-                  className={`h-[54px] pr-4 text-right font-medium ${time == "08:00" ? "-translate-y-1" : time == "07:00" ? "-translate-y-2" : time == "10:00" ? "translate-y-1" : time == "11:00" ? "translate-y-2" : time == "12:00" ? "translate-y-4" : time == "13:00" ? "translate-y-6" : time == "14:00" ? "translate-y-7" : time == "15:00" ? "translate-y-8" : time == "16:00" ? "translate-y-9" : ""}`}
+                  className={`h-[125px] pr-4 text-right font-medium ${time == "08:00" ? "-translate-y-1" : time == "07:00" ? "-translate-y-2" : time == "10:00" ? "translate-y-1" : time == "11:00" ? "translate-y-2" : time == "12:00" ? "translate-y-4" : time == "13:00" ? "translate-y-6" : time == "14:00" ? "translate-y-7" : time == "15:00" ? "translate-y-8" : time == "16:00" ? "translate-y-9" : ""}`}
                 >
                   {time}
                 </div>
@@ -193,6 +193,18 @@ const TimeTable = ({
                         event.startTime,
                         event.endTime,
                       );
+                      const [startHour, startMinute] = event.startTime.split(":").slice(0, 2).map(Number);
+                      const [endHour, endMinute] = event.endTime.split(":").slice(0, 2).map(Number);
+                      const start = startHour * 60 + startMinute;
+                      const end = endHour * 60 + endMinute;
+                      const duration = end - start;
+
+                      let fontSize = "text-sm";
+                      if (duration >= 60) fontSize = "text-xl";
+                      else if (duration >= 40) fontSize = "text-lg";
+                      else if (duration >= 25) fontSize = "text-base";
+
+
                       const overlappingEvents = findOverlappingEvents(
                         event,
                         dayEvents.filter(isEventVisible),
@@ -202,15 +214,14 @@ const TimeTable = ({
                       return (
                         <React.Fragment key={event.id}>
                           <div
-                            className={`absolute left-0 right-0 overflow-auto rounded-lg border-l-4 border-primary bg-thead p-4 text-primary shadow-lg transition-all duration-200 ${
-                              hasOverlap ? "hover:z-40 hover:scale-105" : ""
-                            } ${hoveredEvent === event.id ? "z-50 scale-105" : ""}`}
+                            className={`absolute left-0 right-0 overflow-hidden rounded-lg border-l-4 border-primary bg-thead ${duration >= 40 ? "p-4" : "p-2"} text-primary shadow-lg transition-all duration-200 ${hasOverlap ? "hover:z-40 hover:scale-105" : ""
+                              } ${hoveredEvent === event.id ? "z-50 scale-105" : ""}`}
                             style={{
                               top: `${top}%`,
                               height: `${height}%`,
                               opacity:
                                 hoveredEvent === null ||
-                                hoveredEvent === event.id
+                                  hoveredEvent === event.id
                                   ? 1
                                   : 0.5,
                             }}
@@ -218,7 +229,7 @@ const TimeTable = ({
                             onMouseLeave={() => setHoveredEvent(null)}
                           >
                             <div className="relative flex items-start justify-end gap-2">
-                              <div className="absolute -right-2 -top-2 flex items-center gap-2">
+                              <div className="absolute -right-2 -top-0 flex items-center gap-2">
                                 <button
                                   ref={el => {
                                     buttonRefs.current[event.id] = el;
@@ -241,9 +252,25 @@ const TimeTable = ({
                                 </button>
                               </div>
                             </div>
-                            <div className="font-bold">{event.courseName}</div>
-                            <div className="text-sm">{`${event.startTime} - ${event.endTime}`}</div>
-                            <div className="text-xs">{event.classroomName}</div>
+                            <div className="mb-1 flex flex-col items-start leading-tight">
+                              <span className={`font-semibold ${fontSize} truncate w-full`}>
+                                {event.courseName}
+                              </span>
+
+                              <span
+                                className={`flex items-center gap-1 ${duration >= 60 ? "text-sm" : duration >= 40 ? "text-xs" : "text-[10px]"
+                                  }`}
+                              >
+                                <AiOutlineClockCircle /> {event.startTime.slice(0, 5)} - {event.endTime.slice(0, 5)}
+                              </span>
+
+                              <span
+                                className={`flex items-center gap-1 ${duration >= 60 ? "text-sm" : duration >= 40 ? "text-xs" : "text-[10px]"
+                                  }`}
+                              >
+                                <FaChalkboardTeacher /> {event.classroomName}
+                              </span>
+                            </div>
 
                             {hasOverlap && hoveredEvent === event.id && (
                               <div className="absolute left-full top-0 mt-2 w-48 rounded-lg bg-bgPrimary p-2 shadow-lg">

@@ -42,7 +42,7 @@ const FeesManagement = () => {
       nameEn: "Fees Management",
       nameAr: "إدارة المستندات",
       nameFr: "Gestion des documents",
-      href: "/fees-management",
+      href: "/financial-management/fees-management",
     },
   ];
 
@@ -117,7 +117,7 @@ const FeesManagement = () => {
           </h1>
         </div>
         <div className="max-w-screen overflow-x-hidden rounded-xl bg-bgPrimary">
-          <div className="flex flex-col items-center justify-between gap-4 rounded-lg px-4 py-4 md:flex-row">
+          <div className="flex flex-col md:items-center justify-between gap-4 rounded-lg px-4 py-4 md:flex-row">
             <div
               dir={currentLanguage === "ar" ? "rtl" : "ltr"}
               className="relative w-full max-w-md"
@@ -139,8 +139,8 @@ const FeesManagement = () => {
             </div>
 
             <Link
-              href="/fees-management/new-invoice"
-              className="mx-3 whitespace-nowrap rounded-xl bg-primary px-4 py-2 text-[18px] font-semibold text-white hover:bg-hover hover:shadow-xl"
+              href="/financial-management/fees-management/new-invoice"
+              className="mx-3 self-end whitespace-nowrap rounded-xl bg-primary px-4 py-2 text-[18px] font-semibold text-white hover:bg-hover hover:shadow-xl"
             >
               {currentLanguage === "en"
                 ? "+ Add Invoices"
@@ -263,7 +263,7 @@ const FeesManagement = () => {
                             </svg>
                           </button>
                           <Link
-                            href={`/fees-management/${invoice.id}`}
+                            href={`/financial-management/fees-management/${invoice.id}`}
                             className="font-medium text-blue-600 hover:underline"
                           >
                             <svg
